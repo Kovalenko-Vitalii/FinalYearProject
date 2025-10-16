@@ -15,7 +15,8 @@ public class CanvasSwitcher : MonoBehaviour
 
     public enum SubMenuType
     {
-        Inventory
+        Inventory,
+        Character
     }
 
     [System.Serializable]
@@ -140,7 +141,7 @@ public class CanvasSwitcher : MonoBehaviour
     private void UpdatePlayerState()
     {
         bool menuOpen = menuStack.Count > 0;
-        //PauseManager.Instance.SetPlayerControl(!menuOpen);
+        PauseManager.Instance.SetPlayerControl(!menuOpen);
     }
 
 }
