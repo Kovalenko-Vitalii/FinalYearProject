@@ -54,7 +54,7 @@ public class InventoryItemUI : MonoBehaviour
 		SetHighlight(true);
 
 		var uiManager = Object.FindAnyObjectByType<CanvasSwitcher>();
-		var infoUI = Object.FindAnyObjectByType<InfoUI>();
+		var infoUI = Object.FindAnyObjectByType<ItemInfoUI>();
 		if (uiManager != null)
 		{
 			if (infoUI != null)

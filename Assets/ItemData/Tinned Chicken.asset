@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3304003a5fccb1847a25c6ce8353c657, type: 3}
   m_Name: Tinned Chicken
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
-  id: 
-  itemName: 
-  icon: {fileID: 0}
-  maxStack: 0
-  description: 
-  weight: 0
-  hpRestore: 0
-  hungerRestore: 0
-  hydrationRestore: 0
+  id: 004
+  itemName: Tinned Chicken
+  icon: {fileID: 21300000, guid: c50802f52fdb2ee48b6cfc80879f6697, type: 3}
+  maxStack: 1
+  description: Chicken with salt and pepper, yummy...
+  weight: 0.5
+  hpRestore: 5
+  hungerRestore: 20
+  hydrationRestore: -5
   temperatureRestore: 0
-  durability: 0
+  durability: 4

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   id: 001
   itemName: Tinned Beef
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 36cde3e77c1ac644ebe51d10ca075114, type: 3}
   maxStack: 1
   description: Some old tin with supposenly beef chunks inside.
   weight: 0.5

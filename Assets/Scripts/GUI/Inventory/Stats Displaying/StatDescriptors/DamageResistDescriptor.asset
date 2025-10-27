@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63fbf29d7d9573449b1a3720e34eb89, type: 3}
+  m_Name: DamageResistDescriptor
+  m_EditorClassIdentifier: Assembly-CSharp::StatDescriptor
+  id: 1
+  icon: {fileID: 21300000, guid: c0ac87b07736fbb43a0e310c8727cf7f, type: 3}
+  unit: 
+  priority: 0
+  hideIfZero: 1

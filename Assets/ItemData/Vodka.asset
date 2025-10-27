@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3304003a5fccb1847a25c6ce8353c657, type: 3}
   m_Name: Vodka
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
-  id: 
-  itemName: 
-  icon: {fileID: 0}
-  maxStack: 0
-  description: 
-  weight: 0
-  hpRestore: 0
-  hungerRestore: 0
+  id: 003
+  itemName: Bottle of vodka
+  icon: {fileID: 21300000, guid: b2ae5469291b0c44cb319aa644f6c33f, type: 3}
+  maxStack: 1
+  description: Classic russian vodka, maybe if I drink it warm me up.
+  weight: 1
+  hpRestore: -3
+  hungerRestore: 15
   hydrationRestore: 0
-  temperatureRestore: 0
-  durability: 0
+  temperatureRestore: 1.5
+  durability: 10
