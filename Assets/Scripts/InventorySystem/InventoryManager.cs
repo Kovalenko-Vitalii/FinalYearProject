@@ -125,6 +125,14 @@ public class Equipment
         PlayerStatManager.Instance.ApplyGear(old, -1);
         slots[slot] = null;
     }
+
+    public GearData GetEquipped(GearData.GearSlot slot)
+    {
+        if (slots.TryGetValue(slot, out var equipped))
+            return equipped;
+        return null;
+    }
+
 }
 
 

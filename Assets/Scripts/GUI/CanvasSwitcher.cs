@@ -16,7 +16,8 @@ public class CanvasSwitcher : MonoBehaviour
     public enum SubMenuType
     {
         Inventory,
-        Character
+        Character,
+        GearSelection
     }
 
     [System.Serializable]

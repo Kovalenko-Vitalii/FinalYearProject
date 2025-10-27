@@ -10,6 +10,8 @@ public class ItemInfoUI : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private TextMeshProUGUI itemDescription;
+    [SerializeField] private Button buttonEquip;
+    [SerializeField] private Button buttonDelete;
 
     [Header("Stats UI")]
     [SerializeField] private Transform statRoot;
@@ -27,10 +29,8 @@ public class ItemInfoUI : MonoBehaviour
         itemName.text = data.itemName;
         itemDescription.text = data.description;
 
-        // очищаем пул
         foreach (var w in pool) w.gameObject.SetActive(false);
 
-        // собираем статы
         var provider = data as IStatProvider;
         if (provider == null) return;
 
@@ -40,7 +40,6 @@ public class ItemInfoUI : MonoBehaviour
             .OrderBy(t => t.desc.priority)
             .ToList();
 
-        // база для сравнения (например, надето)
         var baseline = provider.GetBaselineForCompare().ToDictionary(x => x.id, x => x.value);
 
         foreach (var t in current)
@@ -52,6 +51,45 @@ public class ItemInfoUI : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)statRoot);
+
+        if (buttonDelete != null)
+        {
+            buttonDelete.onClick.RemoveAllListeners();
+            buttonDelete.onClick.AddListener(() => {
+                source.RemoveItem(invItem.data, invItem.amount);
+                var ui = Object.FindAnyObjectByType<InventoryUI>();
+                if (ui != null) ui.Refresh();
+
+                var gearUI = FindAnyObjectByType<GearUI>();
+                if (gearUI != null) gearUI.Refresh();
+            });      
+        }
+        if (buttonEquip != null)
+        {
+            buttonEquip.onClick.RemoveAllListeners();
+            buttonEquip.onClick.AddListener(() => {
+                var inventoryManager = InventoryManager.Instance;
+
+                if (invItem.data is GearData gearData)
+                {
+                    var oldGear = inventoryManager.playerEquipment.Equip(gearData);
+
+                    source.RemoveItem(invItem.data, 1);
+
+                    if (oldGear != null)
+                        source.AddItem(oldGear, 1);
+
+                    var gearUI = FindAnyObjectByType<GearUI>();
+                    if (gearUI != null)
+                        gearUI.Refresh();
+
+                    foreach (var invUI in FindObjectsByType<InventoryUI>(FindObjectsSortMode.None))
+                    {
+                        invUI.Refresh();
+                    }
+                }
+            });
+        }
     }
 
     StatWidget Get()
@@ -60,4 +98,6 @@ public class ItemInfoUI : MonoBehaviour
         if (w == null) { w = Instantiate(statPrefab, statRoot); pool.Add(w); }
         return w;
     }
+
+
 }
