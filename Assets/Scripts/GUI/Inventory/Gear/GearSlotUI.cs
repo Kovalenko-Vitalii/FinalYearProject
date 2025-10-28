@@ -55,17 +55,8 @@ public class GearSlotUI : MonoBehaviour
 
     private void OnItemClicked()
     {
-        var uiManager = Object.FindAnyObjectByType<CanvasSwitcher>();
-        //var gearSelectionUI = Object.FindAnyObjectByType<GearSelectionUI>();
-
-        if (uiManager != null)
-        {
-            uiManager.OpenTabSubMenu(CanvasSwitcher.SubMenuType.GearSelection);
-
-            /*
-            if (gearSelectionUI != null)
-                gearSelectionUI.Set(ToGearSlot());
-            */
-        }
+        var selection = Object.FindAnyObjectByType<GearSelectionUI>();
+        if (selection != null)
+            selection.Open(ToGearSlot());
     }
 }
