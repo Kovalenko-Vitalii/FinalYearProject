@@ -105,7 +105,7 @@ public class GearSelectionUI : MonoBehaviour
     }
 
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         bool hasList = options.Count > 0 && index >= 0;
         if (leftBtn) leftBtn.interactable = hasList && index > 0;
