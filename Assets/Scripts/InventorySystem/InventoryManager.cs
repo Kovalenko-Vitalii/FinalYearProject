@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -6,6 +7,8 @@ public class Inventory
 {
     public List<InventoryItem> items = new List<InventoryItem>();
     private IInventoryPolicy policy;
+
+    public event Action OnChanged;
 
     public Inventory(IInventoryPolicy policy)
     {
@@ -28,6 +31,8 @@ public class Inventory
             return;
 
         policy.AddItem(this, data, amount);
+
+        OnChanged?.Invoke();
     }
 
     public void RemoveItem(ItemData data, int amount)
@@ -39,6 +44,8 @@ public class Inventory
 
             if (existing.amount <= 0)
                 items.Remove(existing);
+
+            OnChanged?.Invoke();
         }
     }
 }
@@ -94,6 +101,8 @@ public class StorageInventoryPolicy : IInventoryPolicy
 
 public class Equipment
 {
+    public event Action<GearData.GearSlot, GearData, GearData> OnChanged;
+
     private readonly System.Collections.Generic.Dictionary<GearData.GearSlot, GearData> slots =
         new System.Collections.Generic.Dictionary<GearData.GearSlot, GearData>
         {
@@ -114,6 +123,7 @@ public class Equipment
         slots[slot] = newGear;
         PlayerStatManager.Instance.ApplyGear(newGear, +1);
 
+        OnChanged?.Invoke(slot, old, newGear);
         return old;
     }
 
@@ -124,6 +134,8 @@ public class Equipment
 
         PlayerStatManager.Instance.ApplyGear(old, -1);
         slots[slot] = null;
+
+        OnChanged?.Invoke(slot, old, null);
     }
 
     public GearData GetEquipped(GearData.GearSlot slot)
@@ -156,6 +168,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private ItemData[] testItems;
     [SerializeField] private int[] testAmounts;
 
+    public event Action OnPlayerInventoryChanged;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -168,6 +183,8 @@ public class InventoryManager : MonoBehaviour
         playerInventory = new Inventory(new PlayerInventoryPolicy(playerSlotLimit));
         storageInventory = new Inventory(new StorageInventoryPolicy());
         playerEquipment = new Equipment();
+
+        playerInventory.OnChanged += () => OnPlayerInventoryChanged?.Invoke();
     }
 
     private void Start()

@@ -38,8 +38,11 @@ public class GearSelectionUI : MonoBehaviour
     private Inventory playerInv;
     private Equipment playerEq;
 
+    private bool subscribed;
+
     private void Awake()
     {
+        // Adding listeners
         if (leftBtn) leftBtn.onClick.AddListener(OnLeft);
         if (rightBtn) rightBtn.onClick.AddListener(OnRight);
         if (equipBtn) equipBtn.onClick.AddListener(OnEquip);
@@ -56,6 +59,9 @@ public class GearSelectionUI : MonoBehaviour
 
         BuildOptions();
         UpdateUI();
+
+        Subscribe();
+        RebuildAndRefresh();
     }
 
 
@@ -79,23 +85,18 @@ public class GearSelectionUI : MonoBehaviour
 
         var selected = options[index];
 
-        // Нажали на уже надетый – ничего не делаем
-        if (equipped == selected)
-            return;
+        if (equipped == selected) return;
 
-        // Перемещение: из инвентаря -> в слот
-        playerInv.RemoveItem(selected, 1);   // убрать из инвентаря
+        playerInv.RemoveItem(selected, 1);
 
-        var oldGear = playerEq.Equip(selected); // надеть выбранный
+        var oldGear = playerEq.Equip(selected);
         if (oldGear != null)
-            playerInv.AddItem(oldGear, 1);      // старый вернуть в инвентарь
+            playerInv.AddItem(oldGear, 1);
 
-        equipped = selected; // теперь это надетый
+        equipped = selected;
 
-        // Пересобрать список (первым – надетый, остальное – то, что осталось в инвентаре)
         BuildOptions();
 
-        // Обновить остальной UI
         var gearUI = Object.FindAnyObjectByType<GearUI>();
         if (gearUI) gearUI.Refresh();
         foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None))
@@ -115,11 +116,11 @@ public class GearSelectionUI : MonoBehaviour
         {
             SetImage(centerIcon, equipped?.icon, Color.white);
             nameText.text = equipped != null ? equipped.itemName : "Nothing equipped";
-            descText.text = equipped != null ? equipped.description : "Нет доступных предметов.";
+            descText.text = equipped != null ? equipped.description : "";
             SetImage(leftPreviewIcon, null, previewHiddenColor);
             SetImage(rightPreviewIcon, null, previewHiddenColor);
             if (centerHighlight) centerHighlight.SetActive(equipped != null);
-            RenderStats(equipped); // статы экипнутого
+            RenderStats(equipped);
             return;
         }
 
@@ -140,7 +141,6 @@ public class GearSelectionUI : MonoBehaviour
 
         if (centerHighlight) centerHighlight.SetActive(equipped != null && ReferenceEquals(sel, equipped));
 
-        // статы выбранного в центре
         RenderStats(sel);
     }
 
@@ -152,10 +152,8 @@ public class GearSelectionUI : MonoBehaviour
         img.enabled = sprite != null || tint.a > 0f;
     }
 
-    // ----- СТАТЫ (без сравнения) -----
     private void RenderStats(ItemData itemData)
     {
-        // скрыть все виджеты из пула
         foreach (var w in statPool) w.gameObject.SetActive(false);
 
         if (itemData is not IStatProvider provider || statRoot == null || statPrefab == null || statLibrary == null)
@@ -174,7 +172,7 @@ public class GearSelectionUI : MonoBehaviour
         {
             var w = GetStatWidget();
             var formatted = t.desc.Format(t.s.value) + (string.IsNullOrEmpty(t.desc.unit) ? "" : $" {t.desc.unit}");
-            float? diff = null; // без сравнения
+            float? diff = null;
             w.Bind(t.desc.icon, formatted, diff, positiveColor, negativeColor);
         }
 
@@ -200,19 +198,54 @@ public class GearSelectionUI : MonoBehaviour
 
     private void BuildOptions()
     {
-        // первым – экипнутый (если есть)
         options = new List<GearData>();
         if (equipped != null && equipped.slot == activeSlot)
             options.Add(equipped);
 
-        // далее – все подходящие из инвентаря (можно оставить Distinct, либо развернуть по amount)
         var fromInv = playerInv.items
             .Where(i => i.data is GearData g && g.slot == activeSlot)
             .Select(i => (GearData)i.data)
-            .Where(g => g != equipped); // не дублируем экипнутый
+            .Where(g => g != equipped);
 
         options.AddRange(fromInv.Distinct());
         index = options.Count > 0 ? 0 : -1;
     }
+
+    private void Subscribe()
+    {
+        if (subscribed) return;
+        if (playerInv != null) InventoryManager.Instance.OnPlayerInventoryChanged += OnInventoryChanged;
+        if (playerEq != null) playerEq.OnChanged += OnEquipmentChanged;
+        subscribed = true;
+    }
+
+    private void Unsubscribe()
+    {
+        if (!subscribed) return;
+        if (InventoryManager.Instance != null)
+            InventoryManager.Instance.OnPlayerInventoryChanged -= OnInventoryChanged;
+        if (playerEq != null)
+            playerEq.OnChanged -= OnEquipmentChanged;
+        subscribed = false;
+    }
+
+    private void OnInventoryChanged()
+    {
+        RebuildAndRefresh();
+    }
+
+    private void OnEquipmentChanged(GearData.GearSlot slot, GearData oldGear, GearData newGear)
+    {
+        if (slot != activeSlot) return;
+        equipped = newGear;
+        RebuildAndRefresh();
+    }
+
+    private void RebuildAndRefresh()
+    {
+        BuildOptions();
+        UpdateUI();
+    }
+
 
 }

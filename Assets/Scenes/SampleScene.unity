@@ -4886,7 +4886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1458749056
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6563,7 +6563,7 @@ MonoBehaviour:
   statLibrary: {fileID: 11400000, guid: 7a8a59eeecc73c64f979eb1f20c374b1, type: 2}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
-  defaultIcon: {fileID: 0}
+  defaultIcon: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   defaultName: "\u2014"
   defaultDescription: 
 --- !u!114 &1848771770
