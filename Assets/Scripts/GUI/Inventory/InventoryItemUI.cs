@@ -30,7 +30,13 @@ public class InventoryItemUI : MonoBehaviour
 			itemName.text = item.data.itemName;
 
 		if (amountText != null)
-			amountText.text = item.amount.ToString();
+			if (item.amount > 1)
+			{
+				amountText.text = item.amount.ToString();
+			}
+			else amountText.text = "";
+
+
 
 		if (selectionHighlight != null)
 			selectionHighlight.SetActive(false);

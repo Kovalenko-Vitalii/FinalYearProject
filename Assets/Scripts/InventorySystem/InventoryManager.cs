@@ -67,16 +67,42 @@ public class PlayerInventoryPolicy : IInventoryPolicy
 
     public bool CanAddItem(Inventory inventory, ItemData data, int amount)
     {
-        return inventory.items.Count + amount <= maxSlots;
+        var existing = inventory.items.Find(i => i.data == data);
+        if (existing != null)
+        {
+            return existing.amount + amount <= data.maxStack
+                   || inventory.items.Count < maxSlots;
+        }
+        else
+        {
+            return inventory.items.Count + 1 <= maxSlots;
+        }
     }
 
     public void AddItem(Inventory inventory, ItemData data, int amount)
     {
-        for (int i = 0; i < amount; i++)
+        var existing = inventory.items.Find(i => i.data == data);
+        if (existing != null)
         {
-            if (inventory.items.Count >= maxSlots)
-                break;
-            inventory.items.Add(new InventoryItem(data, 1));
+            int canPut = Mathf.Min(amount, data.maxStack - existing.amount);
+            existing.amount += canPut;
+            int left = amount - canPut;
+
+            while (left > 0 && inventory.items.Count < maxSlots)
+            {
+                int put = Mathf.Min(left, data.maxStack);
+                inventory.items.Add(new InventoryItem(data, put));
+                left -= put;
+            }
+        }
+        else
+        {
+            while (amount > 0 && inventory.items.Count < maxSlots)
+            {
+                int put = Mathf.Min(amount, data.maxStack);
+                inventory.items.Add(new InventoryItem(data, put));
+                amount -= put;
+            }
         }
     }
 }

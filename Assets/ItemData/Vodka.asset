@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 003
   itemName: Bottle of vodka
   icon: {fileID: 21300000, guid: b2ae5469291b0c44cb319aa644f6c33f, type: 3}
-  maxStack: 1
+  maxStack: 5
   description: Classic russian vodka, maybe if I drink it warm me up.
   weight: 1
   hpRestore: -3
