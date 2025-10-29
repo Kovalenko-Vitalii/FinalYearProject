@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff65ecac85d55c946ad97d6a1d082924, type: 3}
+  m_Name: RedJacket
+  m_EditorClassIdentifier: Assembly-CSharp::GearData
+  id: 011
+  itemName: Red Jacket
+  icon: {fileID: 21300000, guid: 8efb2c34cd8dc6c40b75304ac1630938, type: 3}
+  maxStack: 1
+  description: Canada Goose can`t be miss.
+  weight: 1.1
+  temperatureResist: 14
+  damageResist: 6
+  slot: 1
