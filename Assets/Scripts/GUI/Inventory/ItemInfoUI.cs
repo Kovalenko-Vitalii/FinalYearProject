@@ -20,9 +20,9 @@ public class ItemInfoUI : MonoBehaviour
     [SerializeField] private Color positiveColor = Color.green;
     [SerializeField] private Color negativeColor = Color.red;
 
-    [Header("Defaults (для пустого слота)")]
+    [Header("Defaults")]
     [SerializeField] private Sprite defaultIcon;
-    [SerializeField] private string defaultName = "—";
+    [SerializeField] private string defaultName = "";
     [SerializeField] [TextArea] private string defaultDescription = "";
 
     readonly List<StatWidget> pool = new();
@@ -77,7 +77,7 @@ public class ItemInfoUI : MonoBehaviour
             buttonDelete.onClick.RemoveAllListeners();
             buttonDelete.onClick.AddListener(() =>
             {
-                source.RemoveItem(invItem.data, invItem.amount);
+                source.RemoveItem(invItem.data, 1);
 
                 var ui = Object.FindAnyObjectByType<InventoryUI>();
                 if (ui != null) ui.Refresh();

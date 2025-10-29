@@ -10,28 +10,18 @@ public class Inventory
 
     public event Action OnChanged;
 
-    public Inventory(IInventoryPolicy policy)
-    {
-        this.policy = policy;
-    }
+    public Inventory(IInventoryPolicy policy) { this.policy = policy; }
 
-    public void SetPolicy(IInventoryPolicy policy)
-    {
-        this.policy = policy;
-    }
+    public void SetPolicy(IInventoryPolicy policy) { this.policy = policy; }
 
     public void AddItem(ItemData data, int amount)
     {
-        if (policy == null)
-        {
-            Debug.LogError("No policy set!");
-            return;
-        }
-        if (!policy.CanAddItem(this, data, amount))
-            return;
+        if (policy == null) { Debug.LogError("No policy set!"); return; }
+        if (!policy.CanAddItem(this, data, amount)) return;
 
         policy.AddItem(this, data, amount);
 
+        CompactStacks(data);
         OnChanged?.Invoke();
     }
 
@@ -39,16 +29,54 @@ public class Inventory
     {
         var existing = items.Find(i => i.data == data);
         if (existing != null)
+            RemoveFromStack(existing, amount);
+    }
+
+    public void RemoveFromStack(InventoryItem stack, int amount)
+    {
+        int idx = items.IndexOf(stack);
+        if (idx < 0) return;
+
+        int remove = Mathf.Min(amount, stack.amount);
+        stack.amount -= remove;
+
+        if (stack.amount <= 0)
+            items.RemoveAt(idx);
+
+        CompactStacks(stack.data);
+
+        OnChanged?.Invoke();
+    }
+
+    private void CompactStacks(ItemData data)
+    {
+        if (data == null) return;
+        int max = data.maxStack;
+
+        for (int i = 0; i < items.Count; i++)
         {
-            existing.amount -= amount;
+            var a = items[i];
+            if (a.data != data || a.amount >= max) continue;
 
-            if (existing.amount <= 0)
-                items.Remove(existing);
+            for (int j = i + 1; j < items.Count && a.amount < max; j++)
+            {
+                var b = items[j];
+                if (b.data != data) continue;
 
-            OnChanged?.Invoke();
+                int transfer = Mathf.Min(max - a.amount, b.amount);
+                a.amount += transfer;
+                b.amount -= transfer;
+
+                if (b.amount <= 0)
+                {
+                    items.RemoveAt(j);
+                    j--;
+                }
+            }
         }
     }
 }
+
 
 public interface IInventoryPolicy
 {
