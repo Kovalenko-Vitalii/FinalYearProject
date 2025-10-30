@@ -4,10 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/GearData")]
 public class GearData : ItemData, IStatProvider
 {
-#if UNITY_EDITOR
-    private void OnValidate() => EnsureTag(ItemTag.Gear);
-#endif
-
     public float temperatureResist = 0;
     public float damageResist = 0;
 

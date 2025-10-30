@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[CreateAssetMenu(menuName = "Items/ItemData")]
 public class ItemData : ScriptableObject {
 
     [System.Flags]

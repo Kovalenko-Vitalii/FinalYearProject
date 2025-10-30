@@ -30,7 +30,7 @@ public class InventoryItemUI : MonoBehaviour
 			itemName.text = item.data.itemName;
 
 		if (weightText != null)
-			weightText.text = item.data.weight.ToString() + " kg";
+			weightText.text = (item.data.weight * item.amount).ToString() + " kg";
 
 		if (amountText != null)
 			if (item.amount > 1)

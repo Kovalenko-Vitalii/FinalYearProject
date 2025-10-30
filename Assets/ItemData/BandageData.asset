@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3304003a5fccb1847a25c6ce8353c657, type: 3}
-  m_Name: Vodka
+  m_Name: BandageData
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
-  id: 003
-  itemName: Bottle of vodka
-  icon: {fileID: 21300000, guid: b2ae5469291b0c44cb319aa644f6c33f, type: 3}
-  maxStack: 1
-  weight: 1
-  description: Classic russian vodka, maybe if I drink it warm me up.
-  tags: 1
-  hpRestore: -3
-  hungerRestore: 15
+  id: 016
+  itemName: Bandage
+  icon: {fileID: 21300000, guid: d3f94f1fdf2e7824b8b9c2b1f1e85d80, type: 3}
+  maxStack: 3
+  weight: 0.1
+  description: Mado of cotton, can stop bleed and heal wounds.
+  tags: 4
+  hpRestore: 10
+  hungerRestore: 0
   hydrationRestore: 0
-  temperatureRestore: 1.5
-  durability: 10
+  temperatureRestore: 0
+  durability: 1
