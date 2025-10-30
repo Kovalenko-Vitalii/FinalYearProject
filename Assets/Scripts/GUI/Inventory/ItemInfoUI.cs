@@ -27,6 +27,12 @@ public class ItemInfoUI : MonoBehaviour
 
     readonly List<StatWidget> pool = new();
 
+    private Inventory trackedSource;
+    private ItemData trackedItem;
+    private int trackedCount;
+
+    private bool subscribed;
+
     void Awake()
     {
         ShowDefault();
@@ -39,6 +45,10 @@ public class ItemInfoUI : MonoBehaviour
             ShowDefault();
             return;
         }
+
+        trackedSource = source;
+        trackedItem = invItem.data;
+        trackedCount = CountInInventory(trackedSource, trackedItem);
 
         var data = invItem.data;
         icon.sprite = data.icon != null ? data.icon : defaultIcon;
@@ -94,13 +104,11 @@ public class ItemInfoUI : MonoBehaviour
             buttonEquip.onClick.RemoveAllListeners();
             buttonEquip.onClick.AddListener(() =>
             {
-                var inventoryManager = InventoryManager.Instance;
-
-                if (invItem.data is GearData gearData)
+                var im = InventoryManager.Instance;
+                if (trackedItem is GearData gearData)
                 {
-                    var oldGear = inventoryManager.playerEquipment.Equip(gearData);
-
-                    source.RemoveItem(invItem.data, 1);
+                    var oldGear = im.playerEquipment.Equip(gearData);
+                    source.RemoveItem(trackedItem, 1);
                     if (oldGear != null) source.AddItem(oldGear, 1);
 
                     var gearUI = Object.FindAnyObjectByType<GearUI>();
@@ -108,10 +116,16 @@ public class ItemInfoUI : MonoBehaviour
 
                     foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None))
                         invUI.Refresh();
-                    ShowDefault();
+
+                    trackedCount = CountInInventory(trackedSource, trackedItem);
+                    UpdateEquipButtonState();
+                    if (trackedCount == 0) ShowDefault();
                 }
             });
         }
+
+        UpdateEquipButtonState();
+        Subscribe();
     }
 
     public void ShowDefault()
@@ -125,6 +139,10 @@ public class ItemInfoUI : MonoBehaviour
 
         if (buttonEquip) buttonEquip.gameObject.SetActive(false);
         if (buttonDelete) buttonDelete.gameObject.SetActive(false);
+
+        trackedSource = null;
+        trackedItem = null;
+        trackedCount = 0;
     }
 
     StatWidget Get()
@@ -133,5 +151,89 @@ public class ItemInfoUI : MonoBehaviour
         if (w == null) { w = Instantiate(statPrefab, statRoot); pool.Add(w); }
         w.gameObject.SetActive(true);
         return w;
+    }
+
+    private static int CountInInventory(Inventory inv, ItemData data)
+       => inv?.items.Where(i => i.data == data).Sum(i => i.amount) ?? 0;
+
+    private static bool IsInInventory(Inventory inv, ItemData data)
+        => CountInInventory(inv, data) > 0;
+
+    private void Subscribe()
+    {
+        if (subscribed) return;
+        var im = InventoryManager.Instance;
+        if (im != null)
+        {
+            im.OnPlayerInventoryChanged += OnInventoryChanged;
+            if (im.playerEquipment != null)
+                im.playerEquipment.OnChanged += OnEquipmentChanged;
+            subscribed = true;
+        }
+    }
+
+    private void Unsubscribe()
+    {
+        if (!subscribed) return;
+        var im = InventoryManager.Instance;
+        if (im != null)
+        {
+            im.OnPlayerInventoryChanged -= OnInventoryChanged;
+            if (im.playerEquipment != null)
+                im.playerEquipment.OnChanged -= OnEquipmentChanged;
+        }
+        subscribed = false;
+    }
+
+    private void OnDestroy() => Unsubscribe();
+
+    private void OnInventoryChanged()
+    {
+        if (trackedSource == null || trackedItem == null) return;
+
+        int current = CountInInventory(trackedSource, trackedItem);
+
+        if (current == 0)
+        {
+            ShowDefault();
+            return;
+        }
+
+        if (current != trackedCount)
+        {
+            trackedCount = current;
+            UpdateEquipButtonState();
+        }
+    }
+
+    private void OnEquipmentChanged(GearData.GearSlot slot, GearData oldGear, GearData newGear)
+    {
+        if (trackedItem is not GearData g) return;
+        if (g.slot != slot) return;
+
+        if (ReferenceEquals(newGear, trackedItem) && !IsInInventory(trackedSource, trackedItem))
+        {
+            ShowDefault();
+            return;
+        }
+
+        trackedCount = CountInInventory(trackedSource, trackedItem);
+        UpdateEquipButtonState();
+    }
+
+    private void UpdateEquipButtonState()
+    {
+        if (buttonEquip == null) return;
+
+        if (trackedItem is GearData g)
+        {
+            var eq = InventoryManager.Instance.playerEquipment.GetEquipped(g.slot);
+            bool canEquip = !ReferenceEquals(eq, trackedItem) && trackedCount > 0;
+            buttonEquip.interactable = canEquip;
+        }
+        else
+        {
+            buttonEquip.gameObject.SetActive(false);
+        }
     }
 }
