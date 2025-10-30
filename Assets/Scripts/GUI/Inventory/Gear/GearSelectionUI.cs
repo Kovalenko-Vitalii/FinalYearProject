@@ -98,7 +98,9 @@ public class GearSelectionUI : MonoBehaviour
         BuildOptions();
 
         var gearUI = Object.FindAnyObjectByType<GearUI>();
+        var inventoryUI = Object.FindAnyObjectByType<ItemInfoUI>();
         if (gearUI) gearUI.Refresh();
+        
         foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None))
             invUI.Refresh();
 

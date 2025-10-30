@@ -4,6 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/ConsumableData")]
 public class ConsumableData : ItemData, IStatProvider
 {
+#if UNITY_EDITOR
+    private void OnValidate() => EnsureTag(ItemTag.Food);
+#endif
+
     public float hpRestore = 0;
     public float hungerRestore = 0;
     public float hydrationRestore = 0;
@@ -22,7 +26,6 @@ public class ConsumableData : ItemData, IStatProvider
 
     public IEnumerable<StatValue> GetBaselineForCompare()
     {
-        // расходнику обычно не с чем сравниваться
         return System.Array.Empty<StatValue>();
     }
 }

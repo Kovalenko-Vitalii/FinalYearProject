@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/InteractableData")]
 public class InteractableData : ItemData
 {
+#if UNITY_EDITOR
+	private void OnValidate() => EnsureTag(ItemTag.Quest);
+#endif
 	public float hpRestore = 0;
 	public float hungerRestore = 0;
 	public float hydrationRestore = 0;
