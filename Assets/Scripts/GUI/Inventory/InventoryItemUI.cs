@@ -7,7 +7,7 @@ public class InventoryItemUI : MonoBehaviour
 	[SerializeField] private Image icon;
 	[SerializeField] private TextMeshProUGUI itemName;
 	[SerializeField] private TextMeshProUGUI amountText;
-	[SerializeField] private TextMeshProUGUI priceText;
+	[SerializeField] private TextMeshProUGUI weightText;
 	[SerializeField] private Button button;
 
 	[Header("Highlight")]
@@ -28,6 +28,9 @@ public class InventoryItemUI : MonoBehaviour
 
 		if (itemName != null)
 			itemName.text = item.data.itemName;
+
+		if (weightText != null)
+			weightText.text = item.data.weight.ToString() + " kg";
 
 		if (amountText != null)
 			if (item.amount > 1)
