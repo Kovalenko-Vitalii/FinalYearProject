@@ -133,13 +133,8 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (OnSlope(out Vector3 slopeDir, out float slopeAngle))
-        {
-            controller.Move(slopeDir * slideForce * Time.deltaTime);
-        }
-        else
-        {
+       
             controller.Move(moveDirection * Time.deltaTime);
-        }
+        
     }
 }
