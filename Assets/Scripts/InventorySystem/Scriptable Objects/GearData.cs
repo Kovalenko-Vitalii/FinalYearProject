@@ -10,15 +10,9 @@ public class GearData : ItemData, IStatProvider
     public enum GearSlot { Head, Chest, Legs, Boots }
     public GearSlot slot;
 
-    public IEnumerable<StatValue> GetStats()
+    public override IEnumerable<StatValue> GetStats()
     {
         if (temperatureResist != 0) yield return new StatValue { id = StatId.TemperatureResist, value = temperatureResist };
         if (damageResist != 0) yield return new StatValue { id = StatId.DamageResist, value = damageResist };
-        if (weight != 0) yield return new StatValue { id = StatId.Weight, value = weight }; 
-    }
-
-    public IEnumerable<StatValue> GetBaselineForCompare()
-    {
-        return System.Array.Empty<StatValue>();
     }
 }

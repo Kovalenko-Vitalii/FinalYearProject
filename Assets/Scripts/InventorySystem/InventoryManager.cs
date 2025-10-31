@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -137,21 +138,56 @@ public class PlayerInventoryPolicy : IInventoryPolicy
 
 public class StorageInventoryPolicy : IInventoryPolicy
 {
+    private readonly int maxSlots;
+    private readonly HashSet<string> allowTags;
+
+    public StorageInventoryPolicy(int maxSlots = -1, IEnumerable<string> allowTags = null)
+    {
+        this.maxSlots = maxSlots;
+        this.allowTags = allowTags != null ? new HashSet<string>(allowTags) : null;
+    }
+
     public bool CanAddItem(Inventory inventory, ItemData data, int amount)
     {
-        return true;
+        if (allowTags != null && data is ITagsProvider tp)
+        {
+            bool ok = tp.Tags.Any(t => allowTags.Contains(t));
+            if (!ok) return false;
+        }
+
+        if (maxSlots < 0) return true;
+
+        var existing = inventory.items.Find(i => i.data == data);
+        if (existing != null)
+        {
+            return existing.amount + amount <= data.maxStack
+                   || inventory.items.Count < maxSlots;
+        }
+        else
+        {
+            return inventory.items.Count + 1 <= maxSlots;
+        }
     }
 
     public void AddItem(Inventory inventory, ItemData data, int amount)
     {
         var existing = inventory.items.Find(i => i.data == data);
-
         if (existing != null)
+        {
             existing.amount += amount;
+        }
         else
+        {
             inventory.items.Add(new InventoryItem(data, amount));
+        }
     }
 }
+
+public interface ITagsProvider
+{
+    IEnumerable<string> Tags { get; }
+}
+
 
 public class Equipment
 {
@@ -207,7 +243,6 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance { get; private set; }
 
     public Inventory playerInventory;
-    public Inventory storageInventory;
 
     public InventoryItem SelectedItem { get; private set; }
     public Inventory SourceInventory { get; private set; }
@@ -223,6 +258,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int[] testAmounts;
 
     public event Action OnPlayerInventoryChanged;
+    public readonly List<WorldContainer> containers = new();
 
 
     private void Awake()
@@ -235,7 +271,6 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
 
         playerInventory = new Inventory(new PlayerInventoryPolicy(playerSlotLimit));
-        storageInventory = new Inventory(new StorageInventoryPolicy());
         playerEquipment = new Equipment();
 
         playerInventory.OnChanged += () => OnPlayerInventoryChanged?.Invoke();
@@ -255,14 +290,23 @@ public class InventoryManager : MonoBehaviour
 
     public void MoveItem(Inventory from, Inventory to, ItemData data, int amount)
     {
-        var existing = from.items.Find(i => i.data == data);
-        if (existing == null)
-            return;
+        if (from == null || to == null || data == null || amount <= 0) return;
 
-        int moveAmount = Mathf.Min(existing.amount, amount);
-        from.RemoveItem(data, moveAmount);
-        to.AddItem(data, moveAmount);
+        var src = from.items.Find(i => i.data == data);
+        if (src == null || src.amount <= 0) return;
+
+        int canMove = Mathf.Min(src.amount, amount);
+
+        int beforeToCount = to.items.Where(i => i.data == data).Sum(i => i.amount);
+        to.AddItem(data, canMove);
+        int afterToCount = to.items.Where(i => i.data == data).Sum(i => i.amount);
+
+        int accepted = Mathf.Clamp(afterToCount - beforeToCount, 0, canMove);
+        if (accepted <= 0) return;
+
+        from.RemoveItem(data, accepted);
     }
+
 
     public void SelectItem(InventoryItem item, Inventory source)
     {
@@ -275,6 +319,19 @@ public class InventoryManager : MonoBehaviour
         SelectedItem = null;
         SourceInventory = null;
     }
+
+    public void Register(WorldContainer c)
+    {
+        if (c != null && !containers.Contains(c)) containers.Add(c);
+    }
+
+    public void Unregister(WorldContainer c)
+    {
+        containers.Remove(c);
+    }
+
+    public Inventory GetContainerInventory(WorldContainer c) => c?.Inventory;
+
 }
 
 

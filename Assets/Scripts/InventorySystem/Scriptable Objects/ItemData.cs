@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/ItemData")]
-public class ItemData : ScriptableObject {
-
+public class ItemData : ScriptableObject, IStatProvider
+{
     [System.Flags]
     public enum ItemTag
     {
@@ -16,22 +17,27 @@ public class ItemData : ScriptableObject {
     }
 
     [Header("Base")]
-    public string id;       
+    public string id;
     public string itemName;
     public Sprite icon;
     public int maxStack;
     public float weight;
     [TextArea] public string description;
-    
 
     [Header("Tags")]
     [SerializeField] private ItemTag tags = ItemTag.None;
     public ItemTag Tags => tags;
-
     public bool HasTag(ItemTag tag) => (tags & tag) != 0;
 
 #if UNITY_EDITOR
     protected void EnsureTag(ItemTag tag) => tags |= tag;
 #endif
-}
 
+    public virtual IEnumerable<StatValue> GetStats()
+    {
+        if (weight != 0) yield return new StatValue { id = StatId.Weight, value = weight };
+    }
+
+    public virtual IEnumerable<StatValue> GetBaselineForCompare()
+        => System.Array.Empty<StatValue>();
+}

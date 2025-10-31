@@ -9,9 +9,6 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform content;
     [SerializeField] private GameObject itemPrefab;
 
-    [SerializeField] private bool isPlayerInventory = true;
-    [SerializeField] private bool isStorageInventory = false;
-
     [Header("Filter Buttons")]
     [SerializeField] private Button buttonAll;
     [SerializeField] private Button buttonComsumable;
@@ -48,13 +45,7 @@ public class InventoryUI : MonoBehaviour
         if (InventoryManager.Instance == null)
             return null;
 
-        if (isPlayerInventory)
-            return InventoryManager.Instance.playerInventory;
-
-        if (isStorageInventory)
-            return InventoryManager.Instance.storageInventory;
-
-        return null;
+        return InventoryManager.Instance.playerInventory;
     }
 
     private void OnEnable()
