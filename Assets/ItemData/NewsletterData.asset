@@ -19,3 +19,5 @@ MonoBehaviour:
   weight: 0.1
   description: Black and white soviet newsletter, something about gardening.
   tags: 16
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

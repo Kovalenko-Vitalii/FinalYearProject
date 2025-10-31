@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Blue Jeans
   icon: {fileID: 21300000, guid: ef05fdf72cf47184f8c3ae1aa2d56239, type: 3}
   maxStack: 1
-  description: Become a fashion demon with this grail.
   weight: 0.4
+  description: Become a fashion demon with this grail.
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
   temperatureResist: 4
   damageResist: 1
   slot: 2

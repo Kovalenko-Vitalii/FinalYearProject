@@ -19,6 +19,9 @@ MonoBehaviour:
   weight: 1
   description: Classic russian vodka, maybe if I drink it warm me up.
   tags: 1
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: 67c0d938799617f4d8cd35f328b54f6a, type: 2}
   hpRestore: -3
   hungerRestore: 15
   hydrationRestore: 0

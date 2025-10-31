@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Snow Boots
   icon: {fileID: 21300000, guid: 61375029fe28c244dae847ba0c42b59a, type: 3}
   maxStack: 1
-  description: Durable boots suitable for working in snow.
   weight: 2.2
+  description: Durable boots suitable for working in snow.
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
   temperatureResist: 15
   damageResist: 7
   slot: 3

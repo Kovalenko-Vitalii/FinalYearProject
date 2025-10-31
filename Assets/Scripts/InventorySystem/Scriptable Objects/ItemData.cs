@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/ItemData")]
-public class ItemData : ScriptableObject, IStatProvider
+public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
 {
     [System.Flags]
     public enum ItemTag
@@ -29,6 +29,9 @@ public class ItemData : ScriptableObject, IStatProvider
     public ItemTag Tags => tags;
     public bool HasTag(ItemTag tag) => (tags & tag) != 0;
 
+    [Header("Action Modules")]
+    [SerializeField] private List<ActionModule> modules = new();
+
 #if UNITY_EDITOR
     protected void EnsureTag(ItemTag tag) => tags |= tag;
 #endif
@@ -40,4 +43,12 @@ public class ItemData : ScriptableObject, IStatProvider
 
     public virtual IEnumerable<StatValue> GetBaselineForCompare()
         => System.Array.Empty<StatValue>();
+
+    public virtual IEnumerable<ItemAction> GetActions(ItemActionContext ctx)
+    {
+        foreach (var m in modules)
+            if (m != null)
+                foreach (var a in m.GetActions(ctx))
+                    yield return a;
+    }
 }

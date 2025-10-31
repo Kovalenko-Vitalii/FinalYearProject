@@ -19,6 +19,9 @@ MonoBehaviour:
   weight: 0.1
   description: Mado of cotton, can stop bleed and heal wounds.
   tags: 4
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: b3f7fe1031153804d8be1d7aaf811704, type: 2}
   hpRestore: 10
   hungerRestore: 0
   hydrationRestore: 0

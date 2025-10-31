@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Tinned Beef
   icon: {fileID: 21300000, guid: 36cde3e77c1ac644ebe51d10ca075114, type: 3}
   maxStack: 1
-  description: Some old tin with supposenly beef chunks inside.
   weight: 0.5
+  description: Some old tin with supposenly beef chunks inside.
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: 75390d67569527e43a2e803501360450, type: 2}
   hpRestore: 10
   hungerRestore: 60
   hydrationRestore: 0

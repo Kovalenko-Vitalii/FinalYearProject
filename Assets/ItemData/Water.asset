@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Bottle of Water
   icon: {fileID: 21300000, guid: 7b68998701fd2e047a5796e192698cc3, type: 3}
   maxStack: 1
-  description: How it didn`t freeze here !?!
   weight: 1
+  description: How it didn`t freeze here !?!
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: 67c0d938799617f4d8cd35f328b54f6a, type: 2}
   hpRestore: 1
   hungerRestore: 0
   hydrationRestore: 20

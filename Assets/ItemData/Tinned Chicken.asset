@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Tinned Chicken
   icon: {fileID: 21300000, guid: c50802f52fdb2ee48b6cfc80879f6697, type: 3}
   maxStack: 1
-  description: Chicken with salt and pepper, yummy...
   weight: 0.5
+  description: Chicken with salt and pepper, yummy...
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: 75390d67569527e43a2e803501360450, type: 2}
   hpRestore: 5
   hungerRestore: 20
   hydrationRestore: -5

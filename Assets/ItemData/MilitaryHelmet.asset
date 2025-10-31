@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Military Helmet
   icon: {fileID: 21300000, guid: cc18611b75795fc448f3540ec882fec6, type: 3}
   maxStack: 1
-  description: Real metal helmet, can stop bullet unless it is m61 haha
   weight: 1.5
+  description: Real metal helmet, can stop bullet unless it is m61 haha
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
   temperatureResist: -4
   damageResist: 15
   slot: 0

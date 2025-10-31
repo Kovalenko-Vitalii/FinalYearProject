@@ -12,6 +12,7 @@ public class ItemInfoUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI itemDescription;
     [SerializeField] private Button buttonEquip;
     [SerializeField] private Button buttonDelete;
+    [SerializeField] private Button buttonActions;
 
     [Header("Stats UI")]
     [SerializeField] private Transform statRoot;
@@ -57,6 +58,7 @@ public class ItemInfoUI : MonoBehaviour
 
         if (buttonEquip) buttonEquip.gameObject.SetActive(true);
         if (buttonDelete) buttonDelete.gameObject.SetActive(true);
+        if (buttonActions) buttonActions.gameObject.SetActive(true);
 
         foreach (var w in pool) w.gameObject.SetActive(false);
 
@@ -82,49 +84,8 @@ public class ItemInfoUI : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)statRoot);
 
-        if (buttonDelete != null)
-        {
-            buttonDelete.onClick.RemoveAllListeners();
-            buttonDelete.onClick.AddListener(() =>
-            {
-                source.RemoveItem(invItem.data, 1);
+        BindFixedButtons(invItem, source);
 
-                var ui = Object.FindAnyObjectByType<InventoryUI>();
-                if (ui != null) ui.Refresh();
-
-                var gearUI = Object.FindAnyObjectByType<GearUI>();
-                if (gearUI != null) gearUI.Refresh();
-
-                ShowDefault();
-            });
-        }
-
-        if (buttonEquip != null)
-        {
-            buttonEquip.onClick.RemoveAllListeners();
-            buttonEquip.onClick.AddListener(() =>
-            {
-                var im = InventoryManager.Instance;
-                if (trackedItem is GearData gearData)
-                {
-                    var oldGear = im.playerEquipment.Equip(gearData);
-                    source.RemoveItem(trackedItem, 1);
-                    if (oldGear != null) source.AddItem(oldGear, 1);
-
-                    var gearUI = Object.FindAnyObjectByType<GearUI>();
-                    if (gearUI != null) gearUI.Refresh();
-
-                    foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None))
-                        invUI.Refresh();
-
-                    trackedCount = CountInInventory(trackedSource, trackedItem);
-                    UpdateEquipButtonState();
-                    if (trackedCount == 0) ShowDefault();
-                }
-            });
-        }
-
-        UpdateEquipButtonState();
         Subscribe();
     }
 
@@ -202,7 +163,9 @@ public class ItemInfoUI : MonoBehaviour
         if (current != trackedCount)
         {
             trackedCount = current;
-            UpdateEquipButtonState();
+
+            var item = trackedSource.items.FirstOrDefault(i => i.data == trackedItem);
+            if (item != null) BindFixedButtons(item, trackedSource);
         }
     }
 
@@ -218,22 +181,56 @@ public class ItemInfoUI : MonoBehaviour
         }
 
         trackedCount = CountInInventory(trackedSource, trackedItem);
-        UpdateEquipButtonState();
+
+        var item = trackedSource.items.FirstOrDefault(i => i.data == trackedItem);
+        if (item != null) BindFixedButtons(item, trackedSource);
     }
 
-    private void UpdateEquipButtonState()
+    private void BindFixedButtons(InventoryItem invItem, Inventory source)
     {
-        if (buttonEquip == null) return;
+        if (buttonDelete) { buttonDelete.onClick.RemoveAllListeners(); buttonDelete.gameObject.SetActive(false); }
+        if (buttonEquip) { buttonEquip.onClick.RemoveAllListeners(); buttonEquip.gameObject.SetActive(false); }
+        if (buttonActions) { buttonActions.onClick.RemoveAllListeners(); buttonActions.gameObject.SetActive(false); }
 
-        if (trackedItem is GearData g)
+        if (invItem.data is not IItemActionProvider provider) return;
+
+        var ctx = new ItemActionContext { source = source, item = invItem, equipment = InventoryManager.Instance.playerEquipment };
+        var actions = provider.GetActions(ctx).ToList();
+
+        var drop = actions.Where(a => a.slot == ActionSlot.Drop).FirstOrDefault();
+        if (buttonDelete && drop.execute != null)
         {
-            var eq = InventoryManager.Instance.playerEquipment.GetEquipped(g.slot);
-            bool canEquip = !ReferenceEquals(eq, trackedItem) && trackedCount > 0;
-            buttonEquip.interactable = canEquip;
+            buttonDelete.gameObject.SetActive(true);
+            buttonDelete.interactable = drop.interactable;
+            buttonDelete.onClick.AddListener(() => { drop.execute?.Invoke(); AfterActionRefresh(); });
         }
-        else
+
+        var primary = actions.Where(a => a.slot == ActionSlot.Use).FirstOrDefault();
+        if (buttonEquip && primary.execute != null)
         {
-            buttonEquip.gameObject.SetActive(false);
+            buttonEquip.gameObject.SetActive(true);
+            buttonEquip.interactable = primary.interactable;
+
+            var label = buttonEquip.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
+            if (label) label.text = string.IsNullOrEmpty(primary.label) ? "Use" : primary.label;
+
+            buttonEquip.onClick.AddListener(() => { primary.execute?.Invoke(); AfterActionRefresh(); });
         }
+    }
+
+
+    private void AfterActionRefresh()
+    {
+        if (trackedSource == null || trackedItem == null) { ShowDefault(); return; }
+
+        trackedCount = CountInInventory(trackedSource, trackedItem);
+        if (trackedCount == 0)
+        {
+            ShowDefault();
+            return;
+        }
+
+        var item = trackedSource.items.FirstOrDefault(i => i.data == trackedItem);
+        if (item != null) BindFixedButtons(item, trackedSource);
     }
 }

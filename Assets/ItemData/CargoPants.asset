@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Green Cargo Pants
   icon: {fileID: 21300000, guid: 72c827e343951264994382dc8ce5b5ac, type: 3}
   maxStack: 1
-  description: Arthur said it`s lit
   weight: 0.5
+  description: Arthur said it`s lit
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
   temperatureResist: 4
   damageResist: 1
   slot: 2

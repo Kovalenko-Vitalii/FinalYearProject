@@ -19,3 +19,5 @@ MonoBehaviour:
   weight: 0.01
   description: Some old key covered in rust, must unlock someones shelter
   tags: 64
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

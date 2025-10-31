@@ -16,8 +16,12 @@ MonoBehaviour:
   itemName: Rubber Boots
   icon: {fileID: 21300000, guid: 80e7a632c56358d469c8c2ab8e77cfe1, type: 3}
   maxStack: 1
-  description: Some old rubber boots probably used in garden.
   weight: 1
+  description: Some old rubber boots probably used in garden.
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
   temperatureResist: 0
   damageResist: 2
   slot: 3
