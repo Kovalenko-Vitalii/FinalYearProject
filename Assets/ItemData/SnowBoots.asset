@@ -18,7 +18,7 @@ MonoBehaviour:
   maxStack: 1
   weight: 2.2
   description: Durable boots suitable for working in snow.
-  tags: 0
+  tags: 8
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
