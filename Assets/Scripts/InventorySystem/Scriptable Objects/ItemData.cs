@@ -32,6 +32,8 @@ public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
     [Header("Action Modules")]
     [SerializeField] private List<ActionModule> modules = new();
 
+    public GameObject pickupPrefab;
+
 #if UNITY_EDITOR
     protected void EnsureTag(ItemTag tag) => tags |= tag;
 #endif

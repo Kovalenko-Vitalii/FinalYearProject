@@ -76,6 +76,25 @@ public class Inventory
             }
         }
     }
+
+    public int AddItemAndGetAccepted(ItemData data, int amount)
+    {
+        if (policy == null || data == null || amount <= 0) return 0;
+
+        int before = items.Where(i => i.data == data).Sum(i => i.amount);
+        int countBefore = items.Count;
+
+        if (!policy.CanAddItem(this, data, amount))
+            return 0;
+
+        policy.AddItem(this, data, amount);
+
+        CompactStacks(data);
+        OnChanged?.Invoke();
+
+        int after = items.Where(i => i.data == data).Sum(i => i.amount);
+        return Mathf.Clamp(after - before, 0, amount);
+    }
 }
 
 
@@ -260,6 +279,7 @@ public class InventoryManager : MonoBehaviour
     public event Action OnPlayerInventoryChanged;
     public readonly List<WorldContainer> containers = new();
 
+    public Transform playerDropOrigin;
 
     private void Awake()
     {

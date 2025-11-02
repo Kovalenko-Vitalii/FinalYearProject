@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Actions/Drop")]
 public class DropActionModule : ActionModule
 {
+    [SerializeField] private float dropImpulse = 3f;
+
     public override IEnumerable<ItemAction> GetActions(ItemActionContext ctx)
     {
         yield return new ItemAction
@@ -11,10 +13,16 @@ public class DropActionModule : ActionModule
             id = "drop",
             label = "Drop",
             slot = ActionSlot.Drop,
-            interactable = ctx.item.amount > 0,
+            interactable = ctx.item.amount > 0 && ctx.item.data != null && ctx.item.data.pickupPrefab != null,
             execute = () =>
             {
                 ctx.source.RemoveItem(ctx.item.data, 1);
+
+                var origin = InventoryManager.Instance.playerDropOrigin;
+                var pos = origin ? origin.position : Vector3.zero;
+                var impulse = origin ? origin.forward * dropImpulse : Vector3.zero;
+
+                WorldObjectSpawner.Instance.SpawnItem(ctx.item.data, 1, pos, impulse);
 
                 var ui = Object.FindAnyObjectByType<InventoryUI>();
                 if (ui != null) ui.Refresh();
