@@ -22,6 +22,7 @@ MonoBehaviour:
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: 67c0d938799617f4d8cd35f328b54f6a, type: 2}
+  pickupPrefab: {fileID: 5676821114242119214, guid: 5a0148a2726237f4b8b6b2f905da6982, type: 3}
   hpRestore: 1
   hungerRestore: 0
   hydrationRestore: 20

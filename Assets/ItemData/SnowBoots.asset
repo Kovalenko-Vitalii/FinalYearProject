@@ -22,6 +22,7 @@ MonoBehaviour:
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: f85ddec9e98683b418684011f13731d1, type: 2}
+  pickupPrefab: {fileID: 2301237298300920353, guid: 9829eadf9c63b8c43ba5c31aa9753c40, type: 3}
   temperatureResist: 15
   damageResist: 7
   slot: 3

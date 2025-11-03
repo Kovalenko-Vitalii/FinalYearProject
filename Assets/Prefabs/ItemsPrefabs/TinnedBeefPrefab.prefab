@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8473417036956293918}
   - component: {fileID: 3719175104453878698}
   m_Layer: 0
-  m_Name: VodkaPrefab
+  m_Name: TinnedBeefPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -689,5 +689,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab20f102aae54c64cb098f601ceb7208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldItem
-  data: {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
+  data: {fileID: 11400000, guid: e836465063413a141a10532f1d12fee2, type: 2}
   amount: 1
