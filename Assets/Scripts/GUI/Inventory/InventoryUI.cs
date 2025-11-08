@@ -6,6 +6,7 @@ using static ItemData;
 
 public class InventoryUI : MonoBehaviour
 {
+    [SerializeField] private Inventory targetInventory;
     [SerializeField] private Transform content;
     [SerializeField] private GameObject itemPrefab;
 
@@ -20,17 +21,46 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI selectedList;
 
+
     private ItemTag activeFilter = ItemTag.None;
-    private Inventory targetInventory => GetTargetInventory();
+    private Inventory overrideInventory;
+
+    private Inventory TargetInventory
+    {
+        get
+        {
+            if (overrideInventory != null)
+                return overrideInventory;
+
+            if (InventoryManager.Instance == null)
+                return null;
+
+            return InventoryManager.Instance.playerInventory;
+        }
+    }
+
+    public void SetTargetInventory(Inventory inventory)
+    {
+        overrideInventory = inventory;
+        if (isActiveAndEnabled)
+            Refresh();
+    }
+
     private void Awake()
     {
-        buttonAll.onClick.AddListener(() => SetFilter(ItemTag.None, "All"));
-        buttonComsumable.onClick.AddListener(() => SetFilter(ItemTag.Food, "Food"));
-        buttonMedicine.onClick.AddListener(() => SetFilter(ItemTag.Medicine, "Medicine"));
-        buttonGear.onClick.AddListener(() => SetFilter(ItemTag.Gear, "Cloth"));
-        buttonMaterials.onClick.AddListener(() => SetFilter(ItemTag.Material, "Materials"));
-        buttonTools.onClick.AddListener(() => SetFilter(ItemTag.Tool, "Tools"));
-        buttonQuestItems.onClick.AddListener(() => SetFilter(ItemTag.Quest, "Quest Items"));
+        AddFilterListener(buttonAll, ItemTag.None, "All");
+        AddFilterListener(buttonComsumable, ItemTag.Food, "Food");
+        AddFilterListener(buttonMedicine, ItemTag.Medicine, "Medicine");
+        AddFilterListener(buttonGear, ItemTag.Gear, "Cloth");
+        AddFilterListener(buttonMaterials, ItemTag.Material, "Materials");
+        AddFilterListener(buttonTools, ItemTag.Tool, "Tools");
+        AddFilterListener(buttonQuestItems, ItemTag.Quest, "Quest Items");
+    }
+
+    private void AddFilterListener(Button button, ItemTag tag, string label)
+    {
+        if (button == null) return;
+        button.onClick.AddListener(() => SetFilter(tag, label));
     }
 
     private void SetFilter(ItemTag tag, string label)
@@ -40,13 +70,6 @@ public class InventoryUI : MonoBehaviour
         Refresh();
     }
 
-    private Inventory GetTargetInventory()
-    {
-        if (InventoryManager.Instance == null)
-            return null;
-
-        return InventoryManager.Instance.playerInventory;
-    }
 
     private void OnEnable()
     {
@@ -55,12 +78,13 @@ public class InventoryUI : MonoBehaviour
 
     public void Refresh()
     {
-        if (targetInventory == null) return;
+        var inventory = TargetInventory;
+        if (inventory == null) return;
 
         foreach (Transform child in content)
             Destroy(child.gameObject);
 
-        var source = targetInventory.items.AsEnumerable();
+        var source = inventory.items.AsEnumerable();
 
         if (activeFilter != ItemTag.None)
         {
@@ -74,7 +98,8 @@ public class InventoryUI : MonoBehaviour
         foreach (var item in source)
         {
             var obj = Instantiate(itemPrefab, content);
-            obj.GetComponent<InventoryItemUI>().SetItem(item, targetInventory);
+            obj.GetComponent<InventoryItemUI>().SetItem(item, inventory);
         }
     }
+
 }

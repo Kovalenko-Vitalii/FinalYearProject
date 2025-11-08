@@ -7,7 +7,6 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable
     [SerializeField] private string displayName = "Box";
 
     private WorldContainer container;
-    private Transform player;
 
     private void Awake()
     {
@@ -22,11 +21,22 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable
 
     public bool Interact(PlayerInteractor interactor)
     {
-        if (container == null) return false;
+        if (container == null)
+            return false;
 
-        player = interactor.transform;
+        var ui = CanvasSwitcher.Instance;
+        if (ui == null)
+            return false;
 
-        CanvasSwitcher.Instance?.OpenContainer();
+        var containerRoot = ui.Container.Root;
+        var containerUI = containerRoot.GetComponent<ContainerUI>();
+        if (containerUI == null)
+            return false;
+
+        containerUI.ShowFor(container);
+
+        ui.OpenContainer();
+
         return true;
     }
 }
