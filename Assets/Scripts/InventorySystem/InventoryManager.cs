@@ -26,6 +26,14 @@ public class Inventory
         OnChanged?.Invoke();
     }
 
+    public bool CanAdd(ItemData data, int amount)
+    {
+        if (policy == null || data == null || amount <= 0)
+            return false;
+
+        return policy.CanAddItem(this, data, amount);
+    }
+
     public void RemoveItem(ItemData data, int amount)
     {
         var existing = items.Find(i => i.data == data);
@@ -277,7 +285,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int[] testAmounts;
 
     public event Action OnPlayerInventoryChanged;
-    public readonly List<WorldContainer> containers = new();
+
+    // 🔹 новое событие — кому важно, могут реагировать
+    public event Action<InventoryItem, Inventory> OnSelectionChanged;
 
     public Transform playerDropOrigin;
 
@@ -327,31 +337,20 @@ public class InventoryManager : MonoBehaviour
         from.RemoveItem(data, accepted);
     }
 
-
     public void SelectItem(InventoryItem item, Inventory source)
     {
         SelectedItem = item;
         SourceInventory = source;
+        OnSelectionChanged?.Invoke(item, source);
     }
 
     public void ClearSelection()
     {
         SelectedItem = null;
         SourceInventory = null;
+        OnSelectionChanged?.Invoke(null, null);
     }
-
-    public void Register(WorldContainer c)
-    {
-        if (c != null && !containers.Contains(c)) containers.Add(c);
-    }
-
-    public void Unregister(WorldContainer c)
-    {
-        containers.Remove(c);
-    }
-
-    public Inventory GetContainerInventory(WorldContainer c) => c?.Inventory;
-
 }
+
 
 
