@@ -6,6 +6,18 @@ public class DropActionModule : ActionModule
 {
     [SerializeField] private float dropImpulse = 3f;
 
+    private static Transform cachedDropOrigin;
+    private Transform GetDropOrigin()
+    {
+        if (cachedDropOrigin != null)
+            return cachedDropOrigin;
+
+        var go = GameObject.FindWithTag("PlayerDropOrigin");
+        if (go != null)
+            cachedDropOrigin = go.transform;
+
+        return cachedDropOrigin;
+    }
     public override IEnumerable<ItemAction> GetActions(ItemActionContext ctx)
     {
         yield return new ItemAction
@@ -18,9 +30,9 @@ public class DropActionModule : ActionModule
             {
                 ctx.source.RemoveItem(ctx.item.data, 1);
 
-                var origin = InventoryManager.Instance.playerDropOrigin;
-                var pos = origin ? origin.position : Vector3.zero;
-                var impulse = origin ? origin.forward * dropImpulse : Vector3.zero;
+                var origin = GetDropOrigin();
+                Vector3 pos = origin ? origin.position : Vector3.zero;
+                Vector3 impulse = origin ? origin.forward * dropImpulse : Vector3.zero;
 
                 WorldObjectSpawner.Instance.SpawnItem(ctx.item.data, 1, pos, impulse);
 

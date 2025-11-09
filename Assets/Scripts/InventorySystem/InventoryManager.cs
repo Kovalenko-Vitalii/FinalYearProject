@@ -286,10 +286,7 @@ public class InventoryManager : MonoBehaviour
 
     public event Action OnPlayerInventoryChanged;
 
-    // 🔹 новое событие — кому важно, могут реагировать
     public event Action<InventoryItem, Inventory> OnSelectionChanged;
-
-    public Transform playerDropOrigin;
 
     private void Awake()
     {

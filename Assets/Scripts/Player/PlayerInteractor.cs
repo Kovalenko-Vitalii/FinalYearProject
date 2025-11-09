@@ -138,5 +138,4 @@ public class PlayerInteractor : MonoBehaviour
     }
 
     public Inventory PlayerInventory => InventoryManager.Instance.playerInventory;
-    public Transform DropOrigin => InventoryManager.Instance.playerDropOrigin;
 }

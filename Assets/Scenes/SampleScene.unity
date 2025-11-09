@@ -2240,7 +2240,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2723f5e0e7ead5d40837bda2773921f3, type: 2}
   - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
   testAmounts: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000700000002000000
-  playerDropOrigin: {fileID: 2037897039}
 --- !u!1 &180715195
 GameObject:
   m_ObjectHideFlags: 0
@@ -13814,7 +13813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldContainerInteractable
   displayName: Box
   firstSearchDuration: 1.5
-  quickOpenDuration: 0.1
+  quickOpenDuration: 0.5
 --- !u!1 &1098228809
 GameObject:
   m_ObjectHideFlags: 0
@@ -25446,7 +25445,7 @@ GameObject:
   - component: {fileID: 2037897039}
   m_Layer: 0
   m_Name: HeadPosition
-  m_TagString: Untagged
+  m_TagString: PlayerDropOrigin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
