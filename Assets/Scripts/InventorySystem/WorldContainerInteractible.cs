@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(WorldContainer))]
-public class WorldContainerInteractable : MonoBehaviour, IInteractable
+public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInteractable
 {
     [Header("UX")]
     [SerializeField] private string displayName = "Box";
 
+    [Header("Search Settings")]
+    [SerializeField] private float firstSearchDuration = 1.5f;
+    [SerializeField] private float quickOpenDuration = 0.1f;
+
     private WorldContainer container;
+    private bool isSearched = false;
 
     private void Awake()
     {
@@ -17,6 +22,11 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable
     {
         prompt = $"Open {displayName}";
         return true;
+    }
+
+    public float GetInteractDuration(PlayerInteractor interactor)
+    {
+        return isSearched ? quickOpenDuration : firstSearchDuration;
     }
 
     public bool Interact(PlayerInteractor interactor)
@@ -34,8 +44,9 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable
             return false;
 
         containerUI.ShowFor(container);
-
         ui.OpenContainer();
+
+        isSearched = true;
 
         return true;
     }

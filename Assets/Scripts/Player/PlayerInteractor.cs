@@ -15,6 +15,10 @@ public class PlayerInteractor : MonoBehaviour
 
     private IInteractable current;
 
+    private IInteractable holdTarget;
+    private float holdTimer;
+    private float holdDuration;
+
     private void Awake()
     {
         if (!cam) cam = Camera.main;
@@ -23,25 +27,103 @@ public class PlayerInteractor : MonoBehaviour
     private void Update()
     {
         UpdateHover();
-
-        if (Input.GetKeyDown(interactKey) && current != null)
-        {
-            if (current.Interact(this))
-            {
-                //something happens (sound/anim)
-            }
-        }
+        HandleInteractInput();
     }
 
     private void UpdateHover()
     {
         string label = "";
 
-        current = RaycastForInteractable();
+        var newCurrent = RaycastForInteractable();
+        if (newCurrent != current)
+        {
+            current = newCurrent;
+            ResetHold();
+        }
+
         if (current != null && current.TryGetPrompt(this, out var prompt) && !string.IsNullOrEmpty(prompt))
             label = prompt;
 
         if (ui) ui.SetUnderCrosshairLabel(label);
+    }
+
+    private void HandleInteractInput()
+    {
+        if (current == null)
+        {
+            ResetHold();
+            return;
+        }
+
+        float required = GetInteractDuration(current);
+
+        if (required <= 0f)
+        {
+            SetRadial(0f, false);
+
+            if (Input.GetKeyDown(interactKey))
+            {
+                if (current.Interact(this))
+                {
+                    // SOMETHING CAN HAPPEN HERE ANIM/SOUND
+                }
+            }
+
+            return;
+        }
+
+        if (Input.GetKey(interactKey))
+        {
+            if (holdTarget != current)
+            {
+                holdTarget = current;
+                holdTimer = 0f;
+                holdDuration = required;
+            }
+
+            holdTimer += Time.deltaTime;
+            float t = Mathf.Clamp01(holdTimer / Mathf.Max(holdDuration, 0.0001f));
+            SetRadial(t, true);
+
+            if (holdTimer >= holdDuration)
+            {
+                if (holdTarget != null && holdTarget.Interact(this))
+                {
+                    
+                }
+                ResetHold();
+            }
+        }
+        else
+        {
+            
+            ResetHold();
+        }
+    }
+
+    private float GetInteractDuration(IInteractable interactable)
+    {
+        if (interactable is IHoldInteractable hold)
+            return Mathf.Max(hold.GetInteractDuration(this), 0f);
+
+        return 0f;
+    }
+
+    private void SetRadial(float value, bool visible)
+    {
+        if (ui == null || ui.radialProgressBar == null)
+            return;
+
+        ui.radialProgressBar.fillAmount = Mathf.Clamp01(value);
+        ui.radialProgressBar.gameObject.SetActive(visible && value > 0f);
+    }
+
+    private void ResetHold()
+    {
+        holdTarget = null;
+        holdTimer = 0f;
+        holdDuration = 0f;
+        SetRadial(0f, false);
     }
 
     private IInteractable RaycastForInteractable()
