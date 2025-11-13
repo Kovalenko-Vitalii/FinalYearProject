@@ -18,16 +18,16 @@ public class ModalStack
         screen.Root.SetActive(true);
         screen.OnOpen();
         _stack.Push(screen);
-        OnStackChanged?.Invoke(screen, AnyOpen);
+        OnStackChanged?.Invoke(Top, AnyOpen);
     }
 
     public void PopTop()
     {
         if (_stack.Count == 0) return;
-        var top = _stack.Pop();
-        top.OnClose();
-        top.Root.SetActive(false);
-        OnStackChanged?.Invoke(top, AnyOpen);
+        var closed = _stack.Pop();
+        closed.OnClose();
+        closed.Root.SetActive(false);
+        OnStackChanged?.Invoke(Top, AnyOpen);
     }
 
     public void Remove(IModalScreen screen)
@@ -49,9 +49,12 @@ public class ModalStack
             }
             temp.Push(s);
         }
-        while (temp.Count > 0) _stack.Push(temp.Pop());
 
-        if (removed) OnStackChanged?.Invoke(screen, AnyOpen);
+        while (temp.Count > 0)
+            _stack.Push(temp.Pop());
+
+        if (removed)
+            OnStackChanged?.Invoke(Top, AnyOpen);
     }
 
     public void Clear()
@@ -62,6 +65,7 @@ public class ModalStack
             s.OnClose();
             s.Root.SetActive(false);
         }
-        OnStackChanged?.Invoke(null, AnyOpen);
+        OnStackChanged?.Invoke(Top, AnyOpen);
     }
+
 }

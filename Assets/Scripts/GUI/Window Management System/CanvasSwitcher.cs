@@ -7,13 +7,14 @@ public class CanvasSwitcher : MonoBehaviour
     [Header("Screens")]
     [SerializeField] private MenuScreen escapeMenu;
     [SerializeField] private MenuScreen tabMenu;
-
     [SerializeField] private MenuScreen containerScreen;
 
-    public IModalScreen EscapeMenu => (IModalScreen)escapeMenu;
-    public IModalScreen TabMenu => (IModalScreen)tabMenu;
-    public IModalScreen Container => (IModalScreen)containerScreen;
+    public IModalScreen EscapeMenu => escapeMenu;
+    public IModalScreen TabMenu => tabMenu;
+    public IModalScreen Container => containerScreen;
+
     public bool AnyOpen => _stack.AnyOpen;
+    public IModalScreen Top => _stack.Top;
 
     private readonly ModalStack _stack = new();
 
@@ -28,34 +29,42 @@ public class CanvasSwitcher : MonoBehaviour
         Instance = this;
 
         foreach (var s in GetComponentsInChildren<MonoBehaviour>(true))
-            if (s is IModalScreen ms) ms.Root.SetActive(false);
+        {
+            if (s is IModalScreen ms)
+                ms.Root.SetActive(false);
+        }
 
         _stack.OnStackChanged += HandleStackChanged;
     }
 
     private void HandleStackChanged(IModalScreen changed, bool anyOpen)
     {
-        bool shouldBlock = _stack.Top != null && _stack.Top.BlocksGameplay;
+        bool shouldBlock = Top != null && Top.BlocksGameplay;
+
         PauseManager.Instance.SetPlayerControl(!shouldBlock);
+
         Cursor.lockState = shouldBlock ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = shouldBlock;
     }
 
-    public void ToggleEscape()
-    {
-        Toggle(TabMenu);
-        Toggle(EscapeMenu);
-    }
+    public bool IsOpen(IModalScreen screen) => screen.Root.activeSelf;
 
-    public void ToggleTab() => Toggle(TabMenu);
-
-    public void OpenContainer() => _stack.Push(Container);
-
+    public void Close(IModalScreen screen) => _stack.Remove(screen);
     public void CloseTop() => _stack.PopTop();
+    public void ClearAll() => _stack.Clear();
 
-    public void Toggle(IModalScreen screen)
+    public bool TryOpenMain(IModalScreen screen)
     {
-        if (screen.Root.activeSelf) _stack.Remove(screen);
-        else _stack.Push(screen);
+        if (screen == null) return false;
+
+        if (AnyOpen)
+            return false;
+
+        _stack.Push(screen);
+        return true;
     }
+
+    public bool TryOpenEscapeMain() => TryOpenMain(EscapeMenu);
+    public bool TryOpenTabMain() => TryOpenMain(TabMenu);
+    public bool TryOpenContainerMain() => TryOpenMain(Container);
 }

@@ -44,7 +44,7 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
             return false;
 
         containerUI.ShowFor(container);
-        ui.OpenContainer();
+        ui.TryOpenContainerMain();
 
         isSearched = true;
 

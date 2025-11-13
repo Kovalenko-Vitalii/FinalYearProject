@@ -9,12 +9,29 @@ public class UIInputRouter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (ui.AnyOpen)
+            {
                 ui.CloseTop();
+            }
             else
-                ui.ToggleEscape();
+            {
+                ui.TryOpenEscapeMain();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
-            ui.ToggleTab();
+        {
+            if (ui.IsOpen(ui.TabMenu))
+            {
+                ui.CloseTop();
+            }
+            else if (!ui.AnyOpen)
+            {
+                ui.TryOpenTabMain();
+            }
+            else
+            {
+
+            }
+        }
     }
 }
