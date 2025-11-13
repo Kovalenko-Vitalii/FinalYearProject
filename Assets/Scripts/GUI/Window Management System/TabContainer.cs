@@ -13,6 +13,28 @@ public class TabContainer : MonoBehaviour
     [SerializeField] private List<Tab> tabs;
     private string _current;
 
+    public string Current => _current;
+
+    private void OnEnable()
+    {
+        if (tabs == null || tabs.Count == 0)
+            return;
+
+        if (string.IsNullOrEmpty(_current))
+            ResetToDefault();
+        else
+            Show(_current);
+    }
+
+    public void ResetToDefault()
+    {
+        if (tabs == null || tabs.Count == 0)
+            return;
+
+        var first = tabs[0];
+        Show(first.id);
+    }
+
     public void Show(string id)
     {
         _current = id;
@@ -41,5 +63,4 @@ public class TabContainer : MonoBehaviour
             }
         }
     }
-
 }

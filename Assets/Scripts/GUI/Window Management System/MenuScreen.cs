@@ -8,6 +8,6 @@ public class MenuScreen : MonoBehaviour, IModalScreen
     public GameObject Root => root != null ? root : gameObject;
     public bool BlocksGameplay => blocksGameplay;
 
-    public void OnOpen() { }
-    public void OnClose() { }
+    public virtual void OnOpen() { }
+    public virtual void OnClose() { }
 }

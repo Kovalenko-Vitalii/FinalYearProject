@@ -24300,8 +24300,8 @@ GameObject:
   - component: {fileID: 1980501207}
   - component: {fileID: 1980501209}
   - component: {fileID: 1980501208}
-  - component: {fileID: 1980501211}
   - component: {fileID: 1980501210}
+  - component: {fileID: 1980501211}
   m_Layer: 0
   m_Name: TAB Menu
   m_TagString: Untagged
@@ -24397,11 +24397,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1980501206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39e09ef02e76f52449e3eebca2307a57, type: 3}
+  m_Script: {fileID: 11500000, guid: d613cb2359fd10f489c3f2ea5e8ae26d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuScreen
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryScreen
   blocksGameplay: 1
   root: {fileID: 0}
+  inventoryUI: {fileID: 1848771768}
+  gearUI: {fileID: 1848771770}
+  gearSelectionUI: {fileID: 1848771771}
+  itemInfoUI: {fileID: 1848771769}
+  defaultSlot: 0
 --- !u!1 &2005730855
 GameObject:
   m_ObjectHideFlags: 0
