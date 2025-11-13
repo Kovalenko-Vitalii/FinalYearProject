@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents a basic data object of the item
 [CreateAssetMenu(menuName = "Items/ItemData")]
 public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
 {
