@@ -26,6 +26,17 @@ public class PlayerInteractor : MonoBehaviour
 
     private void Update()
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+        {
+            if (current != null)
+            {
+                current = null;
+                ResetHold();
+                if (ui) ui.SetUnderCrosshairLabel("");
+            }
+            return;
+        }
+
         UpdateHover();
         HandleInteractInput();
     }

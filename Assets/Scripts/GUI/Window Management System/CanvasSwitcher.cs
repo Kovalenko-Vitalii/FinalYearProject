@@ -48,7 +48,6 @@ public class CanvasSwitcher : MonoBehaviour
     }
 
     public bool IsOpen(IModalScreen screen) => screen.Root.activeSelf;
-
     public void Close(IModalScreen screen) => _stack.Remove(screen);
     public void CloseTop() => _stack.PopTop();
     public void ClearAll() => _stack.Clear();
