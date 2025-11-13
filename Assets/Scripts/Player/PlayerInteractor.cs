@@ -19,7 +19,7 @@ public class PlayerInteractor : MonoBehaviour
     private float holdTimer;
     private float holdDuration;
 
-    private void Awake()
+    private void Awake() 
     {
         if (!cam) cam = Camera.main;
     }
@@ -48,6 +48,9 @@ public class PlayerInteractor : MonoBehaviour
         var newCurrent = RaycastForInteractable();
         if (newCurrent != current)
         {
+            if (holdTarget != null)
+                NotifyHoldCanceled();
+
             current = newCurrent;
             ResetHold();
         }
@@ -58,10 +61,12 @@ public class PlayerInteractor : MonoBehaviour
         if (ui) ui.SetUnderCrosshairLabel(label);
     }
 
+
     private void HandleInteractInput()
     {
         if (current == null)
         {
+            NotifyHoldCanceled();
             ResetHold();
             return;
         }
@@ -76,7 +81,7 @@ public class PlayerInteractor : MonoBehaviour
             {
                 if (current.Interact(this))
                 {
-                    // SOMETHING CAN HAPPEN HERE ANIM/SOUND
+
                 }
             }
 
@@ -87,9 +92,14 @@ public class PlayerInteractor : MonoBehaviour
         {
             if (holdTarget != current)
             {
+                NotifyHoldCanceled();
+
                 holdTarget = current;
                 holdTimer = 0f;
                 holdDuration = required;
+
+                if (holdTarget is IHoldFeedback fb)
+                    fb.OnHoldStart(this, holdDuration);
             }
 
             holdTimer += Time.deltaTime;
@@ -100,17 +110,26 @@ public class PlayerInteractor : MonoBehaviour
             {
                 if (holdTarget != null && holdTarget.Interact(this))
                 {
-                    
+
                 }
+
                 ResetHold();
             }
         }
         else
         {
-            
+            NotifyHoldCanceled();
             ResetHold();
         }
     }
+
+    private void NotifyHoldCanceled()
+    {
+        if (holdTarget is IHoldFeedback fb)
+            fb.OnHoldCanceled(this);
+    }
+
+
 
     private float GetInteractDuration(IInteractable interactable)
     {

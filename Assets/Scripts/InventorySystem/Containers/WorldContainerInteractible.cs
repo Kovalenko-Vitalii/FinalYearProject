@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(WorldContainer))]
-public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInteractable
+public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback
 {
     [Header("UX")]
     [SerializeField] private string displayName = "Box";
@@ -10,12 +10,29 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
     [SerializeField] private float firstSearchDuration = 1.5f;
     [SerializeField] private float quickOpenDuration = 0.1f;
 
-    private WorldContainer container;
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private string isOpenBoolName = "isOpen";
+
+    private bool isOpen = false;
     private bool isSearched = false;
+
+    private WorldContainer container;
 
     private void Awake()
     {
         container = GetComponent<WorldContainer>();
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+    }
+
+    private void SetOpen(bool value)
+    {
+        isOpen = value;
+
+        if (animator != null && !string.IsNullOrEmpty(isOpenBoolName))
+            animator.SetBool(isOpenBoolName, isOpen);
     }
 
     public bool TryGetPrompt(PlayerInteractor interactor, out string prompt)
@@ -43,11 +60,28 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
         if (containerUI == null)
             return false;
 
-        containerUI.ShowFor(container);
+        containerUI.ShowFor(container, this);
+
         ui.TryOpenContainerMain();
 
         isSearched = true;
 
         return true;
+    }
+
+    public void OnHoldStart(PlayerInteractor interactor, float duration)
+    {
+        SetOpen(true);
+    }
+
+    public void OnHoldCanceled(PlayerInteractor interactor)
+    {
+        if (!CanvasSwitcher.Instance.AnyOpen)
+            SetOpen(false);
+    }
+
+    public void CloseLid()
+    {
+        SetOpen(false);
     }
 }

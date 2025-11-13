@@ -13,6 +13,9 @@ public class ContainerUI : MonoBehaviour
 
     private Inventory containerInventory;
 
+    private WorldContainerInteractable sourceInteractable;
+
+
     private void Awake()
     {
         if (buttonPut != null)
@@ -36,12 +39,24 @@ public class ContainerUI : MonoBehaviour
         var mgr = InventoryManager.Instance;
         if (mgr != null)
             mgr.OnSelectionChanged -= HandleSelectionChanged;
+
+        if (sourceInteractable != null)
+        {
+            sourceInteractable.CloseLid();
+            sourceInteractable = null;
+        }
     }
 
     public void ShowFor(WorldContainer worldContainer)
     {
+        ShowFor(worldContainer, null);
+    }
+
+    public void ShowFor(WorldContainer worldContainer, WorldContainerInteractable source)
+    {
         if (worldContainer == null) return;
 
+        sourceInteractable = source;
         containerInventory = worldContainer.Inventory;
 
         if (playerInventoryUI != null)
