@@ -1,20 +1,25 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public class PlayerStatManager : MonoBehaviour
 {
     public static PlayerStatManager Instance { get; private set; }
 
-    [Header("Current Stats")]
+    [Header("Main Stats")]
     [SerializeField] private float currentHealth = 100f;
     [SerializeField] private float currentHunger = 100f;
     [SerializeField] private float currentHydration = 100f;
     [SerializeField] private float temperature = 36.6f;
 
+    [Header("Energy / Fatigue")]
+    [SerializeField] private float currentEnergy = 100f;
+    [SerializeField] private float energyCap = 100f;
+
+    [Header("Resistances")]
     [SerializeField] private float temperatureResist = 0;
     [SerializeField] private float damageResist = 0;
 
-    [Header("Stats Limmits")]
+    [Header("Limits")]
     [SerializeField] private float healthCap = 100f;
     [SerializeField] private float hungerCap = 100f;
     [SerializeField] private float hydrationCap = 100f;
@@ -23,11 +28,15 @@ public class PlayerStatManager : MonoBehaviour
     public event Action<float> OnHungerChanged;
     public event Action<float> OnHydrationChanged;
     public event Action<float> OnTemperatureChanged;
+    public event Action<float> OnEnergyChanged;
     public event Action<float> OnTemperatureResistChanged;
     public event Action<float> OnDamageResistChanged;
 
-    public float TemperatureResist => temperatureResist;
-    public float DamageResist => damageResist;
+    public float Health => currentHealth;
+    public float Hunger => currentHunger;
+    public float Hydration => currentHydration;
+    public float Temperature => temperature;
+    public float Energy => currentEnergy;
 
     private void Awake()
     {
@@ -46,7 +55,7 @@ public class PlayerStatManager : MonoBehaviour
         OnHungerChanged?.Invoke(currentHunger);
         OnHydrationChanged?.Invoke(currentHydration);
         OnTemperatureChanged?.Invoke(temperature);
-
+        OnEnergyChanged?.Invoke(currentEnergy);
         OnTemperatureResistChanged?.Invoke(temperatureResist);
         OnDamageResistChanged?.Invoke(damageResist);
     }
@@ -56,7 +65,6 @@ public class PlayerStatManager : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, healthCap);
         OnHealthChanged?.Invoke(currentHealth);
     }
-
 
     public void ChangeHunger(float amount)
     {
@@ -72,8 +80,14 @@ public class PlayerStatManager : MonoBehaviour
 
     public void ChangeTemperature(float amount)
     {
-        temperature = temperature + amount;
+        temperature += amount;
         OnTemperatureChanged?.Invoke(temperature);
+    }
+
+    public void ChangeEnergy(float amount)
+    {
+        currentEnergy = Mathf.Clamp(currentEnergy + amount, 0, energyCap);
+        OnEnergyChanged?.Invoke(currentEnergy);
     }
 
     public void ApplyGear(GearData gear, int sign)
