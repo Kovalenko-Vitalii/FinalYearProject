@@ -25,6 +25,12 @@ public class GearSelectionUI : MonoBehaviour
     [SerializeField] private Color previewDimColor = new Color(1, 1, 1, 0.35f);
     [SerializeField] private Color previewHiddenColor = new Color(1, 1, 1, 0f);
 
+    [Header("Defaults")]
+    [SerializeField] private Sprite defaultIcon;
+    [SerializeField] private string defaultName = "Nothing equipped";
+    [SerializeField, TextArea] private string defaultDescription = "You have no gear for this slot.";
+
+
     private System.Collections.Generic.List<GearData> options = new();
     private int index = -1;
 
@@ -78,20 +84,28 @@ public class GearSelectionUI : MonoBehaviour
         if (leftBtn) leftBtn.interactable = hasList && index > 0;
         if (rightBtn) rightBtn.interactable = hasList && index < options.Count - 1;
 
+        if (!hasList && equipped == null)
+        {
+            ShowDefault();
+            return;
+        }
+
         if (!hasList)
         {
-            SetImage(centerIcon, equipped ? equipped.icon : null, Color.white);
-            if (nameText) nameText.text = equipped != null ? equipped.itemName : "Nothing equipped";
-            if (descText) descText.text = equipped != null ? equipped.description : "";
+            SetImage(centerIcon, equipped ? equipped.icon : defaultIcon, Color.white);
+            if (nameText) nameText.text = equipped != null ? equipped.itemName : defaultName;
+            if (descText) descText.text = equipped != null ? equipped.description : defaultDescription;
 
             SetImage(leftPreviewIcon, null, previewHiddenColor);
             SetImage(rightPreviewIcon, null, previewHiddenColor);
-            if (centerHighlight) centerHighlight.SetActive(equipped != null);
 
+            if (centerHighlight) centerHighlight.SetActive(equipped != null);
             if (statPanel) statPanel.Render(equipped);
+
             BindEquipForSelected(null);
             return;
         }
+
 
         var sel = options[index];
 
@@ -110,11 +124,11 @@ public class GearSelectionUI : MonoBehaviour
             SetImage(rightPreviewIcon, null, previewHiddenColor);
 
         if (centerHighlight) centerHighlight.SetActive(equipped != null && ReferenceEquals(sel, equipped));
-
         if (statPanel) statPanel.Render(sel);
 
         BindEquipForSelected(sel);
     }
+
 
     private void SetImage(Image img, Sprite sprite, Color tint)
     {
@@ -133,7 +147,9 @@ public class GearSelectionUI : MonoBehaviour
 
         if (selected == null)
         {
-            buttonEquip.gameObject.SetActive(false);
+            if (buttonEquip) buttonEquip.gameObject.SetActive(false);
+            if (buttonDrop) buttonDrop.gameObject.SetActive(false);
+            if (buttonActions) buttonActions.gameObject.SetActive(false);
             return;
         }
 
@@ -153,6 +169,7 @@ public class GearSelectionUI : MonoBehaviour
             primaryFallbackLabel: "Equip"
         );
     }
+
 
     private void BuildOptions()
     {
@@ -204,4 +221,23 @@ public class GearSelectionUI : MonoBehaviour
         BuildOptions();
         UpdateUI();
     }
+
+    private void ShowDefault()
+    {
+        SetImage(centerIcon, defaultIcon, Color.white);
+        if (nameText) nameText.text = defaultName;
+        if (descText) descText.text = defaultDescription;
+
+        SetImage(leftPreviewIcon, null, previewHiddenColor);
+        SetImage(rightPreviewIcon, null, previewHiddenColor);
+
+        if (centerHighlight) centerHighlight.SetActive(false);
+
+        if (statPanel) statPanel.Clear();
+
+        if (buttonEquip) buttonEquip.gameObject.SetActive(false);
+        if (buttonDrop) buttonDrop.gameObject.SetActive(false);
+        if (buttonActions) buttonActions.gameObject.SetActive(false);
+    }
+
 }

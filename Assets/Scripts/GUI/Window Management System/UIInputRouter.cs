@@ -34,4 +34,13 @@ public class UIInputRouter : MonoBehaviour
             }
         }
     }
+
+    public void CloseCurrent()
+    {
+        if (ui.AnyOpen)
+        {
+            ui.CloseTop();
+        }
+    }
+
 }
