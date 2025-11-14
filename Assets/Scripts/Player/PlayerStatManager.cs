@@ -15,6 +15,11 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float currentEnergy = 100f;
     [SerializeField] private float energyCap = 100f;
 
+    [Header("Carried Weight")]
+    [SerializeField] private float baseWeight = 0f;        // базовый вес тела/экипы, если хочешь
+    [SerializeField] private float currentWeight = 0f;     // динамический вес (инвентарь + шмот)
+    [SerializeField] private float maxCarryWeight = 35f;   // лимит переноса (для дебаффов и UI)
+
     [Header("Resistances")]
     [SerializeField] private float temperatureResist = 0;
     [SerializeField] private float damageResist = 0;
@@ -24,6 +29,11 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float hungerCap = 100f;
     [SerializeField] private float hydrationCap = 100f;
 
+    [Header("Temperature Limits")]
+    [SerializeField] private float minTemperature = 30f;
+    [SerializeField] private float maxTemperature = 42f;
+
+    // Events
     public event Action<float> OnHealthChanged;
     public event Action<float> OnHungerChanged;
     public event Action<float> OnHydrationChanged;
@@ -31,12 +41,24 @@ public class PlayerStatManager : MonoBehaviour
     public event Action<float> OnEnergyChanged;
     public event Action<float> OnTemperatureResistChanged;
     public event Action<float> OnDamageResistChanged;
+    public event Action<float> OnWeightChanged;    // <- один параметр: текущий вес (с учётом baseWeight)
 
     public float Health => currentHealth;
     public float Hunger => currentHunger;
     public float Hydration => currentHydration;
     public float Temperature => temperature;
     public float Energy => currentEnergy;
+
+    public float Weight => currentWeight + baseWeight;
+    public float CurrentWeight => Weight;          // для удобства в UI, если хочешь
+    public float MaxCarryWeight => maxCarryWeight;
+
+    public float HealthMax => healthCap;
+    public float HungerMax => hungerCap;
+    public float HydrationMax => hydrationCap;
+    public float EnergyMax => energyCap;
+    public float TemperatureMin => minTemperature;
+    public float TemperatureMax => maxTemperature;
 
     private void Awake()
     {
@@ -51,6 +73,15 @@ public class PlayerStatManager : MonoBehaviour
 
     private void Start()
     {
+        var invMgr = InventoryManager.Instance;
+        if (invMgr != null)
+        {
+            invMgr.OnPlayerInventoryChanged += HandleInventoryChanged;
+
+            if (invMgr.playerEquipment != null)
+                invMgr.playerEquipment.OnChanged += HandleEquipmentChanged;
+        }
+
         OnHealthChanged?.Invoke(currentHealth);
         OnHungerChanged?.Invoke(currentHunger);
         OnHydrationChanged?.Invoke(currentHydration);
@@ -58,36 +89,60 @@ public class PlayerStatManager : MonoBehaviour
         OnEnergyChanged?.Invoke(currentEnergy);
         OnTemperatureResistChanged?.Invoke(temperatureResist);
         OnDamageResistChanged?.Invoke(damageResist);
+
+        RecalculateWeight();
+    }
+
+    private void OnDestroy()
+    {
+        var invMgr = InventoryManager.Instance;
+        if (invMgr != null)
+        {
+            invMgr.OnPlayerInventoryChanged -= HandleInventoryChanged;
+
+            if (invMgr.playerEquipment != null)
+                invMgr.playerEquipment.OnChanged -= HandleEquipmentChanged;
+        }
     }
 
     public void ChangeHealth(float amount)
     {
+        float old = currentHealth;
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, healthCap);
-        OnHealthChanged?.Invoke(currentHealth);
+        if (!Mathf.Approximately(old, currentHealth))
+            OnHealthChanged?.Invoke(currentHealth);
     }
 
     public void ChangeHunger(float amount)
     {
+        float old = currentHunger;
         currentHunger = Mathf.Clamp(currentHunger + amount, 0, hungerCap);
-        OnHungerChanged?.Invoke(currentHunger);
+        if (!Mathf.Approximately(old, currentHunger))
+            OnHungerChanged?.Invoke(currentHunger);
     }
 
     public void ChangeHydration(float amount)
     {
+        float old = currentHydration;
         currentHydration = Mathf.Clamp(currentHydration + amount, 0, hydrationCap);
-        OnHydrationChanged?.Invoke(currentHydration);
+        if (!Mathf.Approximately(old, currentHydration))
+            OnHydrationChanged?.Invoke(currentHydration);
     }
 
     public void ChangeTemperature(float amount)
     {
-        temperature += amount;
-        OnTemperatureChanged?.Invoke(temperature);
+        float old = temperature;
+        temperature = Mathf.Clamp(temperature + amount, minTemperature, maxTemperature);
+        if (!Mathf.Approximately(old, temperature))
+            OnTemperatureChanged?.Invoke(temperature);
     }
 
     public void ChangeEnergy(float amount)
     {
+        float old = currentEnergy;
         currentEnergy = Mathf.Clamp(currentEnergy + amount, 0, energyCap);
-        OnEnergyChanged?.Invoke(currentEnergy);
+        if (!Mathf.Approximately(old, currentEnergy))
+            OnEnergyChanged?.Invoke(currentEnergy);
     }
 
     public void ApplyGear(GearData gear, int sign)
@@ -105,5 +160,55 @@ public class PlayerStatManager : MonoBehaviour
             damageResist += gear.damageResist * sign;
             OnDamageResistChanged?.Invoke(damageResist);
         }
+    }
+
+    private void HandleInventoryChanged()
+    {
+        RecalculateWeight();
+    }
+
+    private void HandleEquipmentChanged(GearData.GearSlot slot, GearData oldGear, GearData newGear)
+    {
+        RecalculateWeight();
+    }
+
+    private void RecalculateWeight()
+    {
+        float total = 0f;
+
+        var invMgr = InventoryManager.Instance;
+        if (invMgr != null)
+        {
+            var inv = invMgr.playerInventory;
+            if (inv != null && inv.items != null)
+            {
+                foreach (var item in inv.items)
+                {
+                    if (item?.data == null) continue;
+                    total += item.data.weight * item.amount;
+                }
+            }
+
+            var eq = invMgr.playerEquipment;
+            if (eq != null)
+            {
+                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Head), ref total);
+                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Chest), ref total);
+                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Legs), ref total);
+                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Boots), ref total);
+            }
+        }
+
+        float old = currentWeight;
+        currentWeight = Mathf.Max(0f, total);
+
+        if (!Mathf.Approximately(old, currentWeight))
+            OnWeightChanged?.Invoke(Weight);
+    }
+
+    private void AddGearWeightIfNotNull(GearData gear, ref float total)
+    {
+        if (gear != null)
+            total += gear.weight;
     }
 }

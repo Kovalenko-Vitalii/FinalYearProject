@@ -9041,7 +9041,6 @@ MonoBehaviour:
   hydrationBar: {fileID: 1633992426}
   energyBar: {fileID: 1100308753}
   hpBar: {fileID: 1670723100}
-  hpRadialBar: {fileID: 942025207}
   stats: {fileID: 791129613}
 --- !u!43 &373157355
 Mesh:
@@ -15225,7 +15224,7 @@ GameObject:
   - component: {fileID: 942025208}
   - component: {fileID: 942025207}
   m_Layer: 0
-  m_Name: Image(Health)
+  m_Name: Image(HungerBar) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21918,7 +21917,6 @@ MonoBehaviour:
   hydrationBar: {fileID: 993996587}
   energyBar: {fileID: 67256071}
   hpBar: {fileID: 0}
-  hpRadialBar: {fileID: 0}
   stats: {fileID: 791129613}
 --- !u!1 &1508465838
 GameObject:
