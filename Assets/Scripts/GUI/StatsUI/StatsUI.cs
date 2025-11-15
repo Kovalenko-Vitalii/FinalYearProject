@@ -13,8 +13,15 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private Slider hpBar;
     [SerializeField] private Image hpRadialBar;
 
+    [Header("Colors")]
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color warningColor = Color.yellow;
+    [SerializeField] private Color criticalColor = Color.red;
+
     [Header("Refs")]
     [SerializeField] private PlayerStatManager stats;
+
+
 
     private void Awake()
     {
@@ -76,31 +83,47 @@ public class StatsUI : MonoBehaviour
         }
     }
 
+    private Color GetStatColor(float t)
+    {
+        if (t < 0.33f) return criticalColor;
+        if (t < 0.66f) return warningColor;
+        return normalColor;
+    }
+
+
     private void HandleHungerChanged(float value)
     {
         if (!hungerBar || stats == null) return;
+
         float t = Mathf.InverseLerp(0f, stats.HungerMax, value);
         hungerBar.fillAmount = t;
+        hungerBar.color = GetStatColor(t);
     }
 
     private void HandleHydrationChanged(float value)
     {
         if (!hydrationBar || stats == null) return;
+
         float t = Mathf.InverseLerp(0f, stats.HydrationMax, value);
         hydrationBar.fillAmount = t;
+        hydrationBar.color = GetStatColor(t);
     }
 
     private void HandleEnergyChanged(float value)
     {
         if (!energyBar || stats == null) return;
+
         float t = Mathf.InverseLerp(0f, stats.EnergyMax, value);
         energyBar.fillAmount = t;
+        energyBar.color = GetStatColor(t);
     }
 
     private void HandleTemperatureChanged(float value)
     {
         if (!temperatureBar || stats == null) return;
+
         float t = Mathf.InverseLerp(stats.TemperatureMin, stats.TemperatureMax, value);
         temperatureBar.fillAmount = t;
+        temperatureBar.color = GetStatColor(t);
     }
 }
