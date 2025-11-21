@@ -1,11 +1,9 @@
-using UnityEngine;
-
 public class BleedingEffect : StatusEffect
 {
     private readonly float damagePerSecond;
 
-    public BleedingEffect(float duration, float damagePerSecond)
-        : base(StatusEffectId.Bleeding, duration)
+    public BleedingEffect(float duration, float damagePerSecond, BodyPart? targetPart = null)
+        : base(StatusEffectId.Bleeding, duration, targetPart)
     {
         this.damagePerSecond = damagePerSecond;
     }
@@ -16,4 +14,3 @@ public class BleedingEffect : StatusEffect
         stats.ChangeHealth(-damagePerSecond * deltaTime);
     }
 }
-

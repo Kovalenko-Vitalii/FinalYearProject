@@ -16,9 +16,9 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float energyCap = 100f;
 
     [Header("Carried Weight")]
-    [SerializeField] private float baseWeight = 0f;        // базовый вес тела/экипы, если хочешь
-    [SerializeField] private float currentWeight = 0f;     // динамический вес (инвентарь + шмот)
-    [SerializeField] private float maxCarryWeight = 35f;   // лимит переноса (для дебаффов и UI)
+    [SerializeField] private float baseWeight = 0f;
+    [SerializeField] private float currentWeight = 0f;
+    [SerializeField] private float maxCarryWeight = 35f;
 
     [Header("Resistances")]
     [SerializeField] private float temperatureResist = 0;
@@ -33,6 +33,26 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float minTemperature = 30f;
     [SerializeField] private float maxTemperature = 42f;
 
+    [Header("Natural Change Rates (per second)")]
+    [SerializeField] private float healthRegenPerSecond = 0f;      // реген хп
+    [SerializeField] private float healthDegenerationPerSecond = 0f; // если хочешь чтобы хп само падало
+
+    [SerializeField] private float hungerDrainPerSecond = 0.2f;     // сколько голода уходит в секунду
+    [SerializeField] private float hydrationDrainPerSecond = 0.3f;  // сколько воды уходит в секунду
+
+    [SerializeField] private float energyDrainPerSecond = 1f;       // базовый расход выносливости
+    [SerializeField] private float energyRegenPerSecond = 5f;       // реген выносливости, когда игрок отдыхает
+
+    [SerializeField] private float temperatureChangeTowardsNormalPerSecond = 0.1f; // скорость возвращения к 36.6
+    [SerializeField] private float normalTemperature = 36.6f;
+
+    [Header("Rate Multipliers (runtime)")]
+    [SerializeField] private float hungerRateMultiplier = 1f;
+    [SerializeField] private float hydrationRateMultiplier = 1f;
+    [SerializeField] private float energyRateMultiplier = 1f;
+    [SerializeField] private float healthRegenMultiplier = 1f;
+    [SerializeField] private float temperatureRateMultiplier = 1f;
+
     // Events
     public event Action<float> OnHealthChanged;
     public event Action<float> OnHungerChanged;
@@ -41,7 +61,7 @@ public class PlayerStatManager : MonoBehaviour
     public event Action<float> OnEnergyChanged;
     public event Action<float> OnTemperatureResistChanged;
     public event Action<float> OnDamageResistChanged;
-    public event Action<float> OnWeightChanged;    // <- один параметр: текущий вес (с учётом baseWeight)
+    public event Action<float> OnWeightChanged;
 
     public float Health => currentHealth;
     public float Hunger => currentHunger;
@@ -50,7 +70,7 @@ public class PlayerStatManager : MonoBehaviour
     public float Energy => currentEnergy;
 
     public float Weight => currentWeight + baseWeight;
-    public float CurrentWeight => Weight;          // для удобства в UI, если хочешь
+    public float CurrentWeight => Weight;
     public float MaxCarryWeight => maxCarryWeight;
 
     public float HealthMax => healthCap;
@@ -104,6 +124,13 @@ public class PlayerStatManager : MonoBehaviour
                 invMgr.playerEquipment.OnChanged -= HandleEquipmentChanged;
         }
     }
+
+    private void Update()
+    {
+        float dt = Time.deltaTime;
+        TickNaturalStats(dt);
+    }
+
 
     public void ChangeHealth(float amount)
     {
@@ -211,4 +238,96 @@ public class PlayerStatManager : MonoBehaviour
         if (gear != null)
             total += gear.weight;
     }
+
+    public float HungerRateMultiplier
+    {
+        get => hungerRateMultiplier;
+        set => hungerRateMultiplier = Mathf.Max(0f, value);
+    }
+
+    public float HydrationRateMultiplier
+    {
+        get => hydrationRateMultiplier;
+        set => hydrationRateMultiplier = Mathf.Max(0f, value);
+    }
+
+    public float EnergyRateMultiplier
+    {
+        get => energyRateMultiplier;
+        set => energyRateMultiplier = Mathf.Max(0f, value);
+    }
+
+    public float HealthRegenMultiplier
+    {
+        get => healthRegenMultiplier;
+        set => healthRegenMultiplier = Mathf.Max(0f, value);
+    }
+
+    public float TemperatureRateMultiplier
+    {
+        get => temperatureRateMultiplier;
+        set => temperatureRateMultiplier = Mathf.Max(0f, value);
+    }
+
+    private void TickNaturalStats(float dt)
+    {
+        // --- ГОЛОД ---
+        if (hungerDrainPerSecond > 0f && currentHunger > 0f)
+        {
+            float hungerDelta = -hungerDrainPerSecond * hungerRateMultiplier * dt;
+            ChangeHunger(hungerDelta);
+        }
+
+        // --- ЖАЖДА ---
+        if (hydrationDrainPerSecond > 0f && currentHydration > 0f)
+        {
+            float hydrationDelta = -hydrationDrainPerSecond * hydrationRateMultiplier * dt;
+            ChangeHydration(hydrationDelta);
+        }
+
+        // --- ВЫНОСЛИВОСТЬ ---
+        // Здесь можно сделать два режима: игрок бежит / стоит.
+        // Для примера считаем, что если энергию ниже макса — регеним.
+        if (currentEnergy < energyCap && energyRegenPerSecond > 0f)
+        {
+            float energyDelta = energyRegenPerSecond * energyRateMultiplier * dt;
+            ChangeEnergy(energyDelta);
+        }
+
+        // А если хочешь постоянный расход (например, за перегруз):
+        if (energyDrainPerSecond > 0f && currentEnergy > 0f)
+        {
+            float energyDrain = -energyDrainPerSecond * energyRateMultiplier * dt;
+            ChangeEnergy(energyDrain);
+        }
+
+        // --- ХП ---
+        // Регенерация, если, например, не голоден/не обезвожен
+        if (healthRegenPerSecond > 0f && currentHealth < healthCap)
+        {
+            // пример: хп регенится только если голод и вода выше 50
+            if (currentHunger > hungerCap * 0.5f && currentHydration > hydrationCap * 0.5f)
+            {
+                float hpDelta = healthRegenPerSecond * healthRegenMultiplier * dt;
+                ChangeHealth(hpDelta);
+            }
+        }
+
+        // Дегенерация хп от голода/жажды/температуры можешь тоже сюда добавить
+        if (healthDegenerationPerSecond > 0f)
+        {
+            float hpLose = -healthDegenerationPerSecond * dt;
+            ChangeHealth(hpLose);
+        }
+
+        // --- ТЕМПЕРАТУРА ---
+        // Плавно тянем температуру к нормальной
+        if (!Mathf.Approximately(temperature, normalTemperature))
+        {
+            float dir = Mathf.Sign(normalTemperature - temperature); // +1 или -1
+            float tempDelta = dir * temperatureChangeTowardsNormalPerSecond * temperatureRateMultiplier * dt;
+            ChangeTemperature(tempDelta);
+        }
+    }
+
 }

@@ -1,15 +1,15 @@
-﻿using UnityEngine;
-
-public abstract class StatusEffect
+﻿public abstract class StatusEffect
 {
     public StatusEffectId Id { get; }
     public float Duration { get; protected set; }
     public bool IsFinished => Duration <= 0f;
+    public BodyPart? TargetPart { get; }
 
-    protected StatusEffect(StatusEffectId id, float duration)
+    protected StatusEffect(StatusEffectId id, float duration, BodyPart? targetPart = null)
     {
         Id = id;
         Duration = duration;
+        TargetPart = targetPart;
     }
 
     public virtual void OnApply(PlayerStatManager stats) { }

@@ -77,3 +77,14 @@ public class StatusEffectManager : MonoBehaviour
 
     public bool HasEffect(StatusEffectId id) => effects.Any(e => e.Id == id);
 }
+
+public enum BodyPart
+{
+    Head,
+    Torso,
+    LeftArm,
+    RightArm,
+    LeftLeg,
+    RightLeg
+}
+
