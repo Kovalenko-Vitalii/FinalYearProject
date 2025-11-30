@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -44,30 +44,45 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void AddEffect(StatusEffect effect, bool replaceSame = true)
+    public void AddEffect(StatusEffect effect, bool replaceSameOnSamePart = true)
     {
         if (effect == null) return;
         var stats = PlayerStatManager.Instance;
         if (stats == null) return;
 
-        if (replaceSame)
-            RemoveEffect(effect.Id);
+        if (!StatusEffectRules.CanApplyTo(effect.Id, effect.TargetPart))
+            return;
+
+        if (replaceSameOnSamePart)
+        {
+            for (int i = effects.Count - 1; i >= 0; i--)
+            {
+                if (effects[i].Id == effect.Id &&
+                    effects[i].TargetPart == effect.TargetPart)
+                {
+                    var existing = effects[i];
+                    existing.OnExpire(stats);
+                    effects.RemoveAt(i);
+                    OnEffectRemoved?.Invoke(existing);
+                }
+            }
+        }
 
         effects.Add(effect);
         effect.OnApply(stats);
         OnEffectAdded?.Invoke(effect);
     }
 
-    public void RemoveEffect(StatusEffectId id)
+    public void RemoveEffect(StatusEffectId id, BodyPart? part = null)
     {
         var stats = PlayerStatManager.Instance;
         if (stats == null) return;
 
         for (int i = effects.Count - 1; i >= 0; i--)
         {
-            if (effects[i].Id == id)
+            var e = effects[i];
+            if (e.Id == id && (part == null || e.TargetPart == part))
             {
-                var e = effects[i];
                 e.OnExpire(stats);
                 effects.RemoveAt(i);
                 OnEffectRemoved?.Invoke(e);
@@ -75,7 +90,27 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+
     public bool HasEffect(StatusEffectId id) => effects.Any(e => e.Id == id);
+
+    public IReadOnlyList<StatusEffect> GetEffectsForPart(BodyPart part)
+    {
+        return effects.Where(e => e.TargetPart == part).ToList();
+    }
+
+    public IReadOnlyList<StatusEffect> GetGlobalEffects()
+    {
+        return effects.Where(e => !e.TargetPart.HasValue).ToList();
+    }
+
+    public IEnumerable<BodyPart> GetBodyPartsWithEffects()
+    {
+        return effects
+            .Where(e => e.TargetPart.HasValue)
+            .Select(e => e.TargetPart.Value)
+            .Distinct();
+    }
+
 }
 
 public enum BodyPart

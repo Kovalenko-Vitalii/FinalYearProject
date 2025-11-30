@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Actions/Use Consumable")]
@@ -21,9 +21,22 @@ public class UseConsumableActionModule : ActionModule
             interactable = ctx.item.amount > 0,
             execute = () =>
             {
+                var stats = PlayerStatManager.Instance;
+                if (stats != null)
+                {
+                    stats.ApplyConsumable(cd);
+                }
+                else
+                {
+                    Debug.LogWarning("PlayerStatManager.Instance == null, не к кому применить расходник!");
+                }
+
                 ctx.source.RemoveItem(cd, 1);
-                var ui = Object.FindAnyObjectByType<InventoryUI>(); if (ui) ui.Refresh();
+
+                var ui = Object.FindAnyObjectByType<InventoryUI>();
+                if (ui) ui.Refresh();
             }
         };
     }
+
 }

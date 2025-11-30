@@ -34,16 +34,16 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float maxTemperature = 42f;
 
     [Header("Natural Change Rates (per second)")]
-    [SerializeField] private float healthRegenPerSecond = 0f;      // реген хп
-    [SerializeField] private float healthDegenerationPerSecond = 0f; // если хочешь чтобы хп само падало
+    [SerializeField] private float healthRegenPerSecond = 0f; 
+    [SerializeField] private float healthDegenerationPerSecond = 0f;
 
-    [SerializeField] private float hungerDrainPerSecond = 0.2f;     // сколько голода уходит в секунду
-    [SerializeField] private float hydrationDrainPerSecond = 0.3f;  // сколько воды уходит в секунду
+    [SerializeField] private float hungerDrainPerSecond = 0.2f;
+    [SerializeField] private float hydrationDrainPerSecond = 0.3f;
 
-    [SerializeField] private float energyDrainPerSecond = 1f;       // базовый расход выносливости
-    [SerializeField] private float energyRegenPerSecond = 5f;       // реген выносливости, когда игрок отдыхает
+    [SerializeField] private float energyDrainPerSecond = 1f;
+    [SerializeField] private float energyRegenPerSecond = 5f;
 
-    [SerializeField] private float temperatureChangeTowardsNormalPerSecond = 0.1f; // скорость возвращения к 36.6
+    [SerializeField] private float temperatureChangeTowardsNormalPerSecond = 0.1f; 
     [SerializeField] private float normalTemperature = 36.6f;
 
     [Header("Rate Multipliers (runtime)")]
@@ -129,6 +129,23 @@ public class PlayerStatManager : MonoBehaviour
     {
         float dt = Time.deltaTime;
         TickNaturalStats(dt);
+    }
+
+    public void ApplyConsumable(ConsumableData cd)
+    {
+        if (cd == null) return;
+
+        if (cd.hpRestore != 0)
+            ChangeHealth(cd.hpRestore);
+
+        if (cd.hungerRestore != 0)
+            ChangeHunger(cd.hungerRestore);
+
+        if (cd.hydrationRestore != 0)
+            ChangeHydration(cd.hydrationRestore);
+
+        if (cd.temperatureRestore != 0)
+            ChangeTemperature(cd.temperatureRestore);
     }
 
 
@@ -271,41 +288,32 @@ public class PlayerStatManager : MonoBehaviour
 
     private void TickNaturalStats(float dt)
     {
-        // --- ГОЛОД ---
         if (hungerDrainPerSecond > 0f && currentHunger > 0f)
         {
             float hungerDelta = -hungerDrainPerSecond * hungerRateMultiplier * dt;
             ChangeHunger(hungerDelta);
         }
 
-        // --- ЖАЖДА ---
         if (hydrationDrainPerSecond > 0f && currentHydration > 0f)
         {
             float hydrationDelta = -hydrationDrainPerSecond * hydrationRateMultiplier * dt;
             ChangeHydration(hydrationDelta);
         }
 
-        // --- ВЫНОСЛИВОСТЬ ---
-        // Здесь можно сделать два режима: игрок бежит / стоит.
-        // Для примера считаем, что если энергию ниже макса — регеним.
         if (currentEnergy < energyCap && energyRegenPerSecond > 0f)
         {
             float energyDelta = energyRegenPerSecond * energyRateMultiplier * dt;
             ChangeEnergy(energyDelta);
         }
 
-        // А если хочешь постоянный расход (например, за перегруз):
         if (energyDrainPerSecond > 0f && currentEnergy > 0f)
         {
             float energyDrain = -energyDrainPerSecond * energyRateMultiplier * dt;
             ChangeEnergy(energyDrain);
         }
 
-        // --- ХП ---
-        // Регенерация, если, например, не голоден/не обезвожен
         if (healthRegenPerSecond > 0f && currentHealth < healthCap)
         {
-            // пример: хп регенится только если голод и вода выше 50
             if (currentHunger > hungerCap * 0.5f && currentHydration > hydrationCap * 0.5f)
             {
                 float hpDelta = healthRegenPerSecond * healthRegenMultiplier * dt;
@@ -313,18 +321,15 @@ public class PlayerStatManager : MonoBehaviour
             }
         }
 
-        // Дегенерация хп от голода/жажды/температуры можешь тоже сюда добавить
         if (healthDegenerationPerSecond > 0f)
         {
             float hpLose = -healthDegenerationPerSecond * dt;
             ChangeHealth(hpLose);
         }
 
-        // --- ТЕМПЕРАТУРА ---
-        // Плавно тянем температуру к нормальной
         if (!Mathf.Approximately(temperature, normalTemperature))
         {
-            float dir = Mathf.Sign(normalTemperature - temperature); // +1 или -1
+            float dir = Mathf.Sign(normalTemperature - temperature);
             float tempDelta = dir * temperatureChangeTowardsNormalPerSecond * temperatureRateMultiplier * dt;
             ChangeTemperature(tempDelta);
         }
