@@ -21,6 +21,7 @@
     }
 
     public virtual void ApplyTo(ref StatusEffectsSnapshot snapshot) { }
+    public virtual bool TryMerge(StatusEffect other) => false;
 }
 
 

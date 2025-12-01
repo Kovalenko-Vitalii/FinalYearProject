@@ -61,12 +61,6 @@ public class StatusEffectManager : MonoBehaviour
             e.ApplyTo(ref snapshot);
         }
 
-        if (snapshot.PainSuppressed)
-        {
-            snapshot.HasPain = false;
-            snapshot.PainIntensity = 0f;
-        }
-
         CurrentSnapshot = snapshot;
         OnSnapshotUpdated?.Invoke(CurrentSnapshot);
     }
@@ -80,14 +74,20 @@ public class StatusEffectManager : MonoBehaviour
         if (!StatusEffectRules.CanApplyTo(effect.Id, effect.TargetPart))
             return;
 
-        if (replaceSameOnSamePart)
+        for (int i = effects.Count - 1; i >= 0; i--)
         {
-            for (int i = effects.Count - 1; i >= 0; i--)
+            var existing = effects[i];
+
+            if (existing.Id == effect.Id &&
+                existing.TargetPart == effect.TargetPart)
             {
-                if (effects[i].Id == effect.Id &&
-                    effects[i].TargetPart == effect.TargetPart)
+                if (existing.TryMerge(effect))
                 {
-                    var existing = effects[i];
+                    return;
+                }
+
+                if (replaceSameOnSamePart)
+                {
                     existing.OnExpire(stats);
                     effects.RemoveAt(i);
                     OnEffectRemoved?.Invoke(existing);
@@ -99,6 +99,7 @@ public class StatusEffectManager : MonoBehaviour
         effect.OnApply(stats);
         OnEffectAdded?.Invoke(effect);
     }
+
 
     public void RemoveEffect(StatusEffectId id, BodyPart? part = null)
     {

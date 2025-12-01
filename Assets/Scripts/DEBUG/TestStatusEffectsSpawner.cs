@@ -22,7 +22,7 @@ public class TestStatusEffectsSpawner : MonoBehaviour
         {
             var effect = new PainkillerEffect(
                 duration: 999f,
-                painSuppression: 0.8f,
+                suppression: 0.2f,
                 target: BodyPart.Head
             );
 

@@ -24736,10 +24736,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraEffectManager
   volume: {fileID: 330585549}
-  maxVignetteFromSnapshot: 0.45
+  maxVignetteFromSnapshot: 0.8
   maxBlurStrength: 1
-  maxChromaticFromSnapshot: 0.7
-  pulseSpeed: 5
+  maxChromaticFromSnapshot: 0.9
+  pulseSpeed: 3
 --- !u!1 &1596640233
 GameObject:
   m_ObjectHideFlags: 0

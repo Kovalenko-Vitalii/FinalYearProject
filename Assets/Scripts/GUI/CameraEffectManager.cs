@@ -12,11 +12,11 @@ public class CameraEffectManager : MonoBehaviour
     private ChromaticAberration chromaticAberration;
     private LensDistortion lensDistortion;
 
-    [Header("Настройки чувствительности")]
-    public float maxVignetteFromSnapshot = 0.45f;
-    public float maxBlurStrength = 1f;
-    public float maxChromaticFromSnapshot = 0.7f;
-    public float pulseSpeed = 5f;
+    [Header("Sensitivity")]
+    public float maxVignetteFromSnapshot;
+    public float maxBlurStrength;
+    public float maxChromaticFromSnapshot;
+    public float pulseSpeed;
 
     private void Awake()
     {
@@ -42,17 +42,18 @@ public class CameraEffectManager : MonoBehaviour
 
         var snapshot = mgr.CurrentSnapshot;
 
-        float pain = snapshot.PainSuppressed ? 0f : snapshot.PainIntensity;
+        float effectivePain = snapshot.PainIntensity * (1f - snapshot.PainSuppression);
+        effectivePain = Mathf.Clamp01(effectivePain);
 
         if (vignette != null)
         {
-            float baseVignette = snapshot.VignetteIntensity * maxVignetteFromSnapshot;
+            float baseVignette = effectivePain * maxVignetteFromSnapshot;
 
             float pulseFactor = 1f;
-            if (snapshot.PulseIntensity > 0f)
+            if (effectivePain > 0f)
             {
                 float pulse = (Mathf.Sin(Time.time * pulseSpeed) + 1f) * 0.5f;
-                pulseFactor = 1f + pulse * 0.3f * snapshot.PulseIntensity;
+                pulseFactor = 1f + pulse * 0.3f * effectivePain;
             }
 
             vignette.intensity.value = baseVignette * pulseFactor;
@@ -60,7 +61,7 @@ public class CameraEffectManager : MonoBehaviour
 
         if (depthOfField != null)
         {
-            float blur = snapshot.ScreenBlur * maxBlurStrength;
+            float blur = effectivePain * maxBlurStrength;
 
             depthOfField.active = blur > 0.01f;
             depthOfField.gaussianStart.value = Mathf.Lerp(10f, 2f, blur);
@@ -69,9 +70,9 @@ public class CameraEffectManager : MonoBehaviour
 
         if (chromaticAberration != null)
         {
-            float dv = snapshot.DoubleVision * maxChromaticFromSnapshot;
+            float dv = effectivePain * maxChromaticFromSnapshot;
 
-            if (snapshot.PulseIntensity > 0f)
+            if (effectivePain > 0f)
             {
                 float pulse = (Mathf.Sin(Time.time * pulseSpeed * 0.9f) + 1f) * 0.5f;
                 dv *= Mathf.Lerp(0.8f, 1.2f, pulse);
@@ -83,12 +84,17 @@ public class CameraEffectManager : MonoBehaviour
 
         if (lensDistortion != null)
         {
-            float strongPain = Mathf.Clamp01(pain * 1.2f);
+            float strongPain = Mathf.Clamp01(effectivePain * 1.2f);
+
+            float strength = 0f;
             if (strongPain > 0.01f)
             {
-                float pulse = Mathf.Sin(Time.time * (pulseSpeed * 0.7f));
-                float strength = strongPain * 0.2f * pulse;
+                float pulse = (Mathf.Sin(Time.time * (pulseSpeed * 0.7f)) + 1f) * 0.5f;
+                pulse *= pulse;
 
+                strength = strongPain * 0.2f * pulse;
+
+                lensDistortion.active = true;
                 lensDistortion.intensity.value = strength;
             }
             else
@@ -97,5 +103,7 @@ public class CameraEffectManager : MonoBehaviour
                 lensDistortion.active = false;
             }
         }
+
     }
+
 }
