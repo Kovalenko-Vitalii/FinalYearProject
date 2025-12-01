@@ -20,6 +20,7 @@ MonoBehaviour:
   description: Classic russian vodka, maybe if I drink it warm me up.
   hasDurability: 1
   maxDurability: 10
+  useDuration: 2
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

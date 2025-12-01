@@ -29,6 +29,8 @@ public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
     public bool hasDurability = false;
     public float maxDurability = 0f;
 
+    public float useDuration = 0f;
+
     [Header("Tags")]
     [SerializeField] private ItemTag tags = ItemTag.None;
     public ItemTag Tags => tags;

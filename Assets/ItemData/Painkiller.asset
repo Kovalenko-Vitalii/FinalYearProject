@@ -20,6 +20,7 @@ MonoBehaviour:
   description: Opioid painkiller, shuts down any pain. When abused can cause addiction.
   hasDurability: 1
   maxDurability: 10
+  useDuration: 2
   tags: 4
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

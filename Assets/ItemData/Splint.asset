@@ -20,6 +20,7 @@ MonoBehaviour:
   description: One time use splint, can fix broken arm or leg.
   hasDurability: 1
   maxDurability: 3
+  useDuration: 10
   tags: 4
   modules:
   - {fileID: 11400000, guid: b3f7fe1031153804d8be1d7aaf811704, type: 2}

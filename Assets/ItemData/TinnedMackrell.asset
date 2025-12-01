@@ -20,6 +20,7 @@ MonoBehaviour:
   description: Strange tin with "Sultanka" written on it, must be some sort of fish.
   hasDurability: 1
   maxDurability: 2
+  useDuration: 3
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

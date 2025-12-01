@@ -51,8 +51,31 @@ public static class ActionBinder
                 var label = primaryButton.GetComponentInChildren<TextMeshProUGUI>(true);
                 if (label) label.text = string.IsNullOrEmpty(primary.label) ? primaryFallbackLabel : primary.label;
 
-                primaryButton.onClick.AddListener(() => { primary.execute?.Invoke(); afterActionRefresh?.Invoke(); });
+                var itemData = invItem.data as ItemData;
+                float duration = itemData != null ? itemData.useDuration : 0f;
+
+                var hold = primaryButton.GetComponent<HoldToUse>();
+
+                primaryButton.onClick.RemoveAllListeners();
+
+                if (hold != null && duration > 0f)
+                {
+                    hold.Setup(duration, () =>
+                    {
+                        primary.execute?.Invoke();
+                        afterActionRefresh?.Invoke();
+                    });
+                }
+                else
+                {
+                    primaryButton.onClick.AddListener(() =>
+                    {
+                        primary.execute?.Invoke();
+                        afterActionRefresh?.Invoke();
+                    });
+                }
             }
         }
+
     }
 }

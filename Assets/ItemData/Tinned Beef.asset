@@ -20,6 +20,7 @@ MonoBehaviour:
   description: Some old tin with supposenly beef chunks inside.
   hasDurability: 1
   maxDurability: 3
+  useDuration: 4
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
