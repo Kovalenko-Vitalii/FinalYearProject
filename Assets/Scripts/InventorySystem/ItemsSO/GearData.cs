@@ -12,6 +12,7 @@ public class GearData : ItemData, IStatProvider
 
     public override IEnumerable<StatValue> GetStats()
     {
+        if (weight != 0) yield return new StatValue { id = StatId.Weight, value = weight };
         if (temperatureResist != 0) yield return new StatValue { id = StatId.TemperatureResist, value = temperatureResist };
         if (damageResist != 0) yield return new StatValue { id = StatId.DamageResist, value = damageResist };
     }

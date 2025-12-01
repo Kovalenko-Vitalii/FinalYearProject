@@ -25,10 +25,11 @@ public class UseConsumableActionModule : ActionModule
                 if (stats != null)
                 {
                     stats.ApplyConsumable(cd);
+                    ApplyStatusOps(cd);
                 }
                 else
                 {
-                    Debug.LogWarning("PlayerStatManager.Instance == null, не к кому применить расходник!");
+                    Debug.LogWarning("PlayerStatManager.Instance == null");
                 }
 
                 ctx.source.RemoveItem(cd, 1);
@@ -39,4 +40,46 @@ public class UseConsumableActionModule : ActionModule
         };
     }
 
+    private void ApplyStatusOps(ConsumableData cd)
+    {
+        if (cd.statusOps == null || cd.statusOps.Count == 0)
+            return;
+
+        var mgr = StatusEffectManager.Instance;
+        if (mgr == null)
+            return;
+
+        foreach (var op in cd.statusOps)
+        {
+            switch (op.opType)
+            {
+                case ConsumableStatusOp.OpType.AddEffect:
+                    AddEffect(op, mgr);
+                    break;
+
+                case ConsumableStatusOp.OpType.RemoveEffect:
+                    RemoveEffect(op, mgr);
+                    break;
+                case ConsumableStatusOp.OpType.None:
+                    break;
+            }
+        }
+    }
+
+    private void AddEffect(ConsumableStatusOp op, StatusEffectManager mgr)
+    {
+        BodyPart? part = op.affectAllParts ? null : op.targetPart;
+
+        var effect = StatusEffectFactory.Create(op.effectId, op.duration, op.magnitude, part);
+        if (effect != null)
+            mgr.AddEffect(effect);
+    }
+
+    private void RemoveEffect(ConsumableStatusOp op, StatusEffectManager mgr)
+    {
+        if (op.affectAllParts)
+            mgr.RemoveEffect(op.effectId, null);
+        else
+            mgr.RemoveEffect(op.effectId, op.targetPart);
+    }
 }

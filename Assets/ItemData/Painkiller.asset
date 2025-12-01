@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3304003a5fccb1847a25c6ce8353c657, type: 3}
-  m_Name: BandageData
+  m_Name: Painkiller
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
-  id: 016
-  itemName: Bandage
-  icon: {fileID: 21300000, guid: d3f94f1fdf2e7824b8b9c2b1f1e85d80, type: 3}
-  maxStack: 3
+  id: 017
+  itemName: Painkiller
+  icon: {fileID: 21300000, guid: fd4fca7aabeeb1e498368427252c3aa4, type: 3}
+  maxStack: 1
   weight: 0.1
-  description: Mado of cotton, can stop bleed and heal wounds.
+  description: Opioid painkiller, shuts down any pain. When abused can cause addiction.
   tags: 4
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: b3f7fe1031153804d8be1d7aaf811704, type: 2}
-  pickupPrefab: {fileID: 114344967145718534, guid: c82dca7b59728e5458c93eba236686af, type: 3}
-  hpRestore: 10
+  pickupPrefab: {fileID: 5676821114242119214, guid: dfb0b876a05d4f84cb73158e03fb5baf, type: 3}
+  hpRestore: 1
   hungerRestore: 0
   hydrationRestore: 0
   temperatureRestore: 0
-  durability: 1
+  durability: 10
   statusOps:
-  - opType: 2
-    effectId: 0
-    duration: 1
-    magnitude: 1
-    affectAllParts: 1
-    targetPart: 2
+  - opType: 1
+    effectId: 3
+    duration: 120
+    magnitude: 0.3
+    affectAllParts: 0
+    targetPart: 0
