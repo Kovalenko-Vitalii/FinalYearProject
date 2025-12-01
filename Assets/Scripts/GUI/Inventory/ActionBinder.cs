@@ -17,7 +17,8 @@ public static class ActionBinder
         if (primaryButton != null) { primaryButton.onClick.RemoveAllListeners(); primaryButton.gameObject.SetActive(false); }
         if (actionsButton != null) { actionsButton.onClick.RemoveAllListeners(); actionsButton.gameObject.SetActive(false); }
 
-        if (invItem.data is not IItemActionProvider provider) return;
+        if (invItem == null || invItem.data is not IItemActionProvider provider)
+            return;
 
         var ctx = new ItemActionContext
         {

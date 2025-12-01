@@ -26,6 +26,8 @@ public class ItemInfoUI : MonoBehaviour
     private int trackedCount;
     private bool subscribed;
 
+    private InventoryItem trackedInvItem;
+
     void Awake() => ShowDefault();
 
     public void SetItem(InventoryItem invItem, Inventory source)
@@ -38,6 +40,7 @@ public class ItemInfoUI : MonoBehaviour
 
         trackedSource = source;
         trackedItem = invItem.data;
+        trackedInvItem = invItem;
         trackedCount = InventoryUtil.Count(trackedSource, trackedItem);
 
         var data = invItem.data;
@@ -45,25 +48,25 @@ public class ItemInfoUI : MonoBehaviour
         if (itemName) itemName.text = string.IsNullOrEmpty(data.itemName) ? defaultName : data.itemName;
         if (itemDescription) itemDescription.text = string.IsNullOrEmpty(data.description) ? defaultDescription : data.description;
 
-        if (statPanel != null) statPanel.Render(data);
+        if (statPanel != null) statPanel.Render(trackedInvItem);
 
         if (buttonEquip) buttonEquip.gameObject.SetActive(true);
         if (buttonDelete) buttonDelete.gameObject.SetActive(true);
-
         if (buttonActions) buttonActions.gameObject.SetActive(false);
 
         ActionBinder.BindFixedButtons(
             dropButton: buttonDelete,
             primaryButton: buttonEquip,
             actionsButton: buttonActions,
-            invItem: InventoryUtil.MakeItem(source, data),
+            invItem: trackedInvItem,
             source: source,
             afterActionRefresh: AfterActionRefresh,
             primaryFallbackLabel: "Use"
         );
-     
+
         Subscribe();
     }
+
 
     public void ShowDefault()
     {
@@ -77,6 +80,7 @@ public class ItemInfoUI : MonoBehaviour
 
         trackedSource = null;
         trackedItem = null;
+        trackedInvItem = null;
         trackedCount = 0;
 
         statPanel.Clear();
@@ -162,19 +166,40 @@ public class ItemInfoUI : MonoBehaviour
 
     private void AfterActionRefresh()
     {
-        if (trackedSource == null || trackedItem == null) { ShowDefault(); return; }
+        if (trackedSource == null || trackedItem == null)
+        {
+            ShowDefault();
+            return;
+        }
 
         trackedCount = InventoryUtil.Count(trackedSource, trackedItem);
-        if (trackedCount == 0) { ShowDefault(); return; }
+        if (trackedCount == 0)
+        {
+            ShowDefault();
+            return;
+        }
+
+        var invItem = InventoryUtil.MakeItem(trackedSource, trackedItem);
+        if (invItem == null)
+        {
+            ShowDefault();
+            return;
+        }
+
+        trackedInvItem = invItem;
+
+        if (statPanel != null)
+            statPanel.Render(trackedInvItem);
 
         ActionBinder.BindFixedButtons(
             buttonDelete,
             buttonEquip,
             buttonActions,
-            InventoryUtil.MakeItem(trackedSource, trackedItem),
+            trackedInvItem,
             trackedSource,
             AfterActionRefresh,
             "Use"
         );
     }
+
 }

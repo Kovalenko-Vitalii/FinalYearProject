@@ -42,6 +42,52 @@ public class StatPanelRenderer : MonoBehaviour
         ForceRebuild();
     }
 
+    public void Render(InventoryItem invItem)
+    {
+        foreach (var w in pool) w.gameObject.SetActive(false);
+
+        if (invItem == null || invItem.data is not IStatProvider provider ||
+            statRoot == null || statPrefab == null || statLibrary == null)
+        {
+            ForceRebuild();
+            return;
+        }
+
+        var data = invItem.data;
+
+        var stats = provider.GetStats().ToList();
+
+        if (data.hasDurability && data.maxDurability > 0f)
+        {
+            float ratio = Mathf.Clamp01(invItem.currentDurability / data.maxDurability);
+            float percent = ratio * 100f;
+
+            stats.Add(new StatValue
+            {
+                id = StatId.Durability,
+                value = percent
+            });
+        }
+
+        var current = stats
+            .Select(s => (s, desc: statLibrary.Get(s.id)))
+            .Where(t => !(t.desc.hideIfZero && Mathf.Approximately(t.s.value, 0)))
+            .OrderBy(t => t.desc.priority)
+            .ToList();
+
+        var baseDict = new Dictionary<StatId, float>();
+
+        foreach (var t in current)
+        {
+            var widget = Get();
+            var formatted = t.desc.Format(t.s.value) + (string.IsNullOrEmpty(t.desc.unit) ? "" : $" {t.desc.unit}");
+            float? diff = baseDict.TryGetValue(t.s.id, out var oldVal) ? t.s.value - oldVal : (float?)null;
+            widget.Bind(t.desc.icon, formatted, diff, positiveColor, negativeColor);
+        }
+
+        ForceRebuild();
+    }
+
     private StatWidget Get()
     {
         var w = pool.FirstOrDefault(x => !x.gameObject.activeSelf);
@@ -63,5 +109,4 @@ public class StatPanelRenderer : MonoBehaviour
 
         ForceRebuild();
     }
-
 }

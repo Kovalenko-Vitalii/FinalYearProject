@@ -100,11 +100,27 @@ public class GearSelectionUI : MonoBehaviour
             SetImage(rightPreviewIcon, null, previewHiddenColor);
 
             if (centerHighlight) centerHighlight.SetActive(equipped != null);
-            if (statPanel) statPanel.Render(equipped);
+
+            if (statPanel)
+            {
+                if (equipped != null)
+                {
+                    var invItem = InventoryUtil.MakeItem(playerInv, equipped);
+                    if (invItem != null)
+                        statPanel.Render(invItem);
+                    else
+                        statPanel.Render(equipped);
+                }
+                else
+                {
+                    statPanel.Clear();
+                }
+            }
 
             BindEquipForSelected(null);
             return;
         }
+
 
 
         var sel = options[index];
@@ -124,9 +140,18 @@ public class GearSelectionUI : MonoBehaviour
             SetImage(rightPreviewIcon, null, previewHiddenColor);
 
         if (centerHighlight) centerHighlight.SetActive(equipped != null && ReferenceEquals(sel, equipped));
-        if (statPanel) statPanel.Render(sel);
+
+        if (statPanel)
+        {
+            var invItem = InventoryUtil.MakeItem(playerInv, sel);
+            if (invItem != null)
+                statPanel.Render(invItem);
+            else
+                statPanel.Render(sel);
+        }
 
         BindEquipForSelected(sel);
+
     }
 
 
