@@ -15,7 +15,6 @@ public class PainEffect : StatusEffect
         if (other is not PainEffect p || p.TargetPart != TargetPart)
             return false;
 
-        // накапливаем боль, но не выше 1
         Intensity = Mathf.Clamp01(Intensity + p.Intensity);
         Duration = Mathf.Max(Duration, p.Duration);
 
@@ -26,6 +25,5 @@ public class PainEffect : StatusEffect
     {
         s.HasPain = true;
         s.PainIntensity = Mathf.Max(s.PainIntensity, Intensity);
-        // никаких ScreenBlur / Vignette / DoubleVision здесь!
     }
 }

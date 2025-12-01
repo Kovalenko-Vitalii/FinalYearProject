@@ -18,6 +18,8 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.5
   description: Some old tin with supposenly beef chunks inside.
+  hasDurability: 1
+  maxDurability: 3
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -27,4 +29,4 @@ MonoBehaviour:
   hungerRestore: 60
   hydrationRestore: 0
   temperatureRestore: 0
-  durability: 4
+  statusOps: []

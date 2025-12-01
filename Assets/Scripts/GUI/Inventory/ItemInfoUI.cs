@@ -67,7 +67,6 @@ public class ItemInfoUI : MonoBehaviour
 
     public void ShowDefault()
     {
-        Debug.Log("22");
         if (icon) icon.sprite = defaultIcon;
         if (itemName) itemName.text = defaultName;
         if (itemDescription) itemDescription.text = defaultDescription;

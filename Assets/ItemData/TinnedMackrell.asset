@@ -18,6 +18,8 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.3
   description: Strange tin with "Sultanka" written on it, must be some sort of fish.
+  hasDurability: 1
+  maxDurability: 2
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -27,4 +29,4 @@ MonoBehaviour:
   hungerRestore: 30
   hydrationRestore: -5
   temperatureRestore: 0
-  durability: 2
+  statusOps: []

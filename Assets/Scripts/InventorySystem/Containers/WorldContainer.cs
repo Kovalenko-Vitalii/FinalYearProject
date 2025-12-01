@@ -20,7 +20,7 @@ public class WorldContainer : MonoBehaviour
             for (int i = 0; i < startItems.Length; i++)
             {
                 int amt = (startAmounts != null && i < startAmounts.Length) ? startAmounts[i] : 1;
-                Inventory.AddItem(startItems[i], amt);
+                Inventory.AddItem(startItems[i], amt, startItems[i].maxDurability);
             }
         }
     }

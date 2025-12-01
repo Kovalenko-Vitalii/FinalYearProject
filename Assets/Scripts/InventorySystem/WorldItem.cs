@@ -7,10 +7,13 @@ public class WorldItem : MonoBehaviour, IInteractable
     public ItemData data;
     public int amount = 1;
 
-    public void Init(ItemData d, int amt)
+    public float currentDurability;
+
+    public void Init(ItemData d, int amt, float currentDurability)
     {
         data = d;
         amount = Mathf.Max(amt, 0);
+        this.currentDurability = currentDurability;
     }
 
     public void AddAmount(int delta)
@@ -29,7 +32,7 @@ public class WorldItem : MonoBehaviour, IInteractable
             return 0;
 
         int toTake = Mathf.Min(desiredAmount, amount);
-        int accepted = target.AddItemAndGetAccepted(data, toTake);
+        int accepted = target.AddItemAndGetAccepted(data, toTake, currentDurability);
         if (accepted > 0) AddAmount(-accepted);
         return accepted;
     }

@@ -18,6 +18,8 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.1
   description: Opioid painkiller, shuts down any pain. When abused can cause addiction.
+  hasDurability: 1
+  maxDurability: 10
   tags: 4
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -27,7 +29,6 @@ MonoBehaviour:
   hungerRestore: 0
   hydrationRestore: 0
   temperatureRestore: 0
-  durability: 10
   statusOps:
   - opType: 1
     effectId: 3

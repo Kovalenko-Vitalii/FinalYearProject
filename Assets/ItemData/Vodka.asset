@@ -18,13 +18,15 @@ MonoBehaviour:
   maxStack: 1
   weight: 1
   description: Classic russian vodka, maybe if I drink it warm me up.
+  hasDurability: 1
+  maxDurability: 10
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: 67c0d938799617f4d8cd35f328b54f6a, type: 2}
   pickupPrefab: {fileID: 5676821114242119214, guid: 4d0125f9263a8f54c8ac598703c74274, type: 3}
   hpRestore: -3
-  hungerRestore: 15
-  hydrationRestore: 0
-  temperatureRestore: 1.5
-  durability: 10
+  hungerRestore: 5
+  hydrationRestore: -2
+  temperatureRestore: 0.2
+  statusOps: []

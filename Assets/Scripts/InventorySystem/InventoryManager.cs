@@ -22,6 +22,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private ItemData[] testItems;
     [SerializeField] private int[] testAmounts;
 
+
     public event Action OnPlayerInventoryChanged;
 
     public event Action<InventoryItem, Inventory> OnSelectionChanged;
@@ -48,12 +49,13 @@ public class InventoryManager : MonoBehaviour
             for (int i = 0; i < testItems.Length; i++)
             {
                 int amount = (testAmounts != null && i < testAmounts.Length) ? testAmounts[i] : 1;
-                playerInventory.AddItem(testItems[i], amount);
+                playerInventory.AddItem(testItems[i], amount, testItems[i].maxDurability);
+                Debug.Log(testItems[i].maxDurability);
             }
         }
     }
 
-    public void MoveItem(Inventory from, Inventory to, ItemData data, int amount)
+    public void MoveItem(Inventory from, Inventory to, ItemData data, int amount, float currentDurability)
     {
         if (from == null || to == null || data == null || amount <= 0) return;
 
@@ -63,7 +65,7 @@ public class InventoryManager : MonoBehaviour
         int canMove = Mathf.Min(src.amount, amount);
 
         int beforeToCount = to.items.Where(i => i.data == data).Sum(i => i.amount);
-        to.AddItem(data, canMove);
+        to.AddItem(data, canMove, currentDurability);
         int afterToCount = to.items.Where(i => i.data == data).Sum(i => i.amount);
 
         int accepted = Mathf.Clamp(afterToCount - beforeToCount, 0, canMove);

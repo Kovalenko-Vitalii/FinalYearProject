@@ -15,12 +15,12 @@ public class Inventory
 
     public void SetPolicy(IInventoryPolicy policy) { this.policy = policy; }
 
-    public void AddItem(ItemData data, int amount)
+    public void AddItem(ItemData data, int amount, float currentDurability)
     {
         if (policy == null) { Debug.LogError("No policy set!"); return; }
         if (!policy.CanAddItem(this, data, amount)) return;
 
-        policy.AddItem(this, data, amount);
+        policy.AddItem(this, data, amount, currentDurability);
 
         CompactStacks(data);
         OnChanged?.Invoke();
@@ -85,7 +85,7 @@ public class Inventory
         }
     }
 
-    public int AddItemAndGetAccepted(ItemData data, int amount)
+    public int AddItemAndGetAccepted(ItemData data, int amount, float currentDurability)
     {
         if (policy == null || data == null || amount <= 0) return 0;
 
@@ -95,7 +95,7 @@ public class Inventory
         if (!policy.CanAddItem(this, data, amount))
             return 0;
 
-        policy.AddItem(this, data, amount);
+        policy.AddItem(this, data, amount, currentDurability);
 
         CompactStacks(data);
         OnChanged?.Invoke();
@@ -109,7 +109,7 @@ public class Inventory
 public interface IInventoryPolicy
 {
     bool CanAddItem(Inventory inventory, ItemData data, int amount);
-    void AddItem(Inventory inventory, ItemData data, int amount);
+    void AddItem(Inventory inventory, ItemData data, int amount, float durability);
 }
 
 public class PlayerInventoryPolicy : IInventoryPolicy
@@ -135,7 +135,7 @@ public class PlayerInventoryPolicy : IInventoryPolicy
         }
     }
 
-    public void AddItem(Inventory inventory, ItemData data, int amount)
+    public void AddItem(Inventory inventory, ItemData data, int amount, float currentDurability)
     {
         var existing = inventory.items.Find(i => i.data == data);
         if (existing != null)
@@ -147,7 +147,7 @@ public class PlayerInventoryPolicy : IInventoryPolicy
             while (left > 0 && inventory.items.Count < maxSlots)
             {
                 int put = Mathf.Min(left, data.maxStack);
-                inventory.items.Add(new InventoryItem(data, put));
+                inventory.items.Add(new InventoryItem(data, put, currentDurability));
                 left -= put;
             }
         }
@@ -156,7 +156,7 @@ public class PlayerInventoryPolicy : IInventoryPolicy
             while (amount > 0 && inventory.items.Count < maxSlots)
             {
                 int put = Mathf.Min(amount, data.maxStack);
-                inventory.items.Add(new InventoryItem(data, put));
+                inventory.items.Add(new InventoryItem(data, put, currentDurability));
                 amount -= put;
             }
         }
@@ -196,7 +196,7 @@ public class StorageInventoryPolicy : IInventoryPolicy
         }
     }
 
-    public void AddItem(Inventory inventory, ItemData data, int amount)
+    public void AddItem(Inventory inventory, ItemData data, int amount, float currentDurability)
     {
         var existing = inventory.items.Find(i => i.data == data);
         if (existing != null)
@@ -205,7 +205,7 @@ public class StorageInventoryPolicy : IInventoryPolicy
         }
         else
         {
-            inventory.items.Add(new InventoryItem(data, amount));
+            inventory.items.Add(new InventoryItem(data, amount, currentDurability));
         }
     }
 }

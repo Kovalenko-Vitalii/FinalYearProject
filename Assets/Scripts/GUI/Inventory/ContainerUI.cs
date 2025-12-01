@@ -136,7 +136,7 @@ public class ContainerUI : MonoBehaviour
         var selected = mgr.SelectedItem;
         if (selected == null) return;
 
-        mgr.MoveItem(mgr.playerInventory, containerInventory, selected.data, selected.amount);
+        mgr.MoveItem(mgr.playerInventory, containerInventory, selected.data, selected.amount, selected.currentDurability);
 
         playerInventoryUI?.Refresh();
         containerInventoryUI?.Refresh();
@@ -153,7 +153,7 @@ public class ContainerUI : MonoBehaviour
         var selected = mgr.SelectedItem;
         if (selected == null) return;
 
-        mgr.MoveItem(containerInventory, mgr.playerInventory, selected.data, selected.amount);
+        mgr.MoveItem(containerInventory, mgr.playerInventory, selected.data, selected.amount, selected.currentDurability);
 
         playerInventoryUI?.Refresh();
         containerInventoryUI?.Refresh();

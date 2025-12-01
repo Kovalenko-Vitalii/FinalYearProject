@@ -7,6 +7,8 @@ public class UseConsumableActionModule : ActionModule
     public enum UseVerb { Use, Eat, Drink }
     public UseVerb verb = UseVerb.Use;
 
+    public float durabilityCost = 1f;
+
     public override IEnumerable<ItemAction> GetActions(ItemActionContext ctx)
     {
         if (ctx.item.data is not ConsumableData cd) yield break;
@@ -32,7 +34,20 @@ public class UseConsumableActionModule : ActionModule
                     Debug.LogWarning("PlayerStatManager.Instance == null");
                 }
 
-                ctx.source.RemoveItem(cd, 1);
+                var invItem = ctx.item;
+
+                if (invItem.HasDurability && durabilityCost > 0f)
+                {
+                    bool broken = invItem.Damage(durabilityCost);
+                    if (broken)
+                    {
+                        ctx.source.RemoveFromStack(invItem, 1);
+                    }
+                }
+                else
+                {
+                    ctx.source.RemoveItem(cd, 1);
+                }
 
                 var ui = Object.FindAnyObjectByType<InventoryUI>();
                 if (ui) ui.Refresh();

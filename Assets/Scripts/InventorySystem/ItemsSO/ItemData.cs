@@ -25,6 +25,10 @@ public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
     public float weight;
     [TextArea] public string description;
 
+    [Header("Durability")]
+    public bool hasDurability = false;
+    public float maxDurability = 0f;
+
     [Header("Tags")]
     [SerializeField] private ItemTag tags = ItemTag.None;
     public ItemTag Tags => tags;

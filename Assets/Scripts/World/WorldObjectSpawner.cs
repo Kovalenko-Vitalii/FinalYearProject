@@ -11,7 +11,7 @@ public class WorldObjectSpawner : MonoBehaviour
         Instance = this;
     }
 
-    public WorldItem SpawnItem(ItemData data, int amount, Vector3 pos, Vector3 impulse)
+    public WorldItem SpawnItem(ItemData data, int amount, float currentDurability, Vector3 pos, Vector3 impulse)
     {
         if (data == null || amount <= 0) return null;
 
@@ -30,7 +30,7 @@ public class WorldObjectSpawner : MonoBehaviour
             return null;
         }
 
-        wi.Init(data, amount);
+        wi.Init(data, amount, currentDurability);
 
         var rb = go.GetComponent<Rigidbody>();
         if (rb) rb.AddForce(impulse, ForceMode.Impulse);

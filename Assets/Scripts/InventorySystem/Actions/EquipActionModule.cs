@@ -11,6 +11,7 @@ public class EquipActionModule : ActionModule
         var im = InventoryManager.Instance;
         var eq = im.playerEquipment.GetEquipped(g.slot);
         bool isEquipped = ReferenceEquals(eq, g);
+        float currentDurability = ctx.item.currentDurability;
 
         if (!isEquipped)
         {
@@ -24,7 +25,7 @@ public class EquipActionModule : ActionModule
                 {
                     var old = im.playerEquipment.Equip(g);
                     ctx.source.RemoveItem(g, 1);
-                    if (old != null) ctx.source.AddItem(old, 1);
+                    if (old != null) ctx.source.AddItem(old, 1, currentDurability);
                     var gearUI = Object.FindAnyObjectByType<GearUI>(); if (gearUI) gearUI.Refresh();
                     foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None)) invUI.Refresh();
                 }
@@ -41,7 +42,7 @@ public class EquipActionModule : ActionModule
                 execute = () =>
                 {
                     im.playerEquipment.Unequip(g.slot);
-                    ctx.source.AddItem(g, 1);
+                    ctx.source.AddItem(g, 1, currentDurability);
                     var gearUI = Object.FindAnyObjectByType<GearUI>(); if (gearUI) gearUI.Refresh();
                     foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None)) invUI.Refresh();
                 }

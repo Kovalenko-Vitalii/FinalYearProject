@@ -6,5 +6,5 @@ public static class InventoryUtil
         => inv?.items.Where(i => i.data == data).Sum(i => i.amount) ?? 0;
 
     public static InventoryItem MakeItem(Inventory inv, ItemData data)
-        => new InventoryItem(data, Count(inv, data));
+        => inv?.items.FirstOrDefault(i => i.data == data);
 }
