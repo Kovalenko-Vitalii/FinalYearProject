@@ -19,7 +19,10 @@
     {
         Duration -= deltaTime;
     }
+
+    public virtual void ApplyTo(ref StatusEffectsSnapshot snapshot) { }
 }
+
 
 
 public enum StatusEffectId

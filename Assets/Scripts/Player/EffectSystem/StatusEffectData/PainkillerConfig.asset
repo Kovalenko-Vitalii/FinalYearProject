@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0ac67cb92039114cb9a1ef62e61ce55, type: 3}
-  m_Name: BleedingConfig
+  m_Name: PainkillerConfig
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectConfig
-  id: 0
-  displayName: Bleeding
-  description: Light bleed can be stopped with bandage or by itself over time.
-  icon: {fileID: 21300000, guid: c0ac87b07736fbb43a0e310c8727cf7f, type: 3}
+  id: 3
+  displayName: Pain Relief
+  description: Your opioid receptors are triggered by taken painkiller, it shouts
+    down any pain in your brain. Be careful, can create dependency and addiction.
+  icon: {fileID: 21300000, guid: df419239ef362a345bd678a8de641bf0, type: 3}
   isPositive: 0
-  allowedParts: 02000000030000000400000005000000
+  allowedParts: 00000000

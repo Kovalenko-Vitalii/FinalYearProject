@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     private float moveSpeed;
+
     public float walkSpeed;
     public float sprintSpeed;
     public float speedUpSmoothness;
@@ -38,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector3 MoveDirection => moveDirection;
     public MovementState CurrentState => state;
+
+    private StatusEffectsSnapshot effectsSnapshot;
 
     private bool OnSlope(out Vector3 slopeDirection, out float slopeAngle)
     {
@@ -78,33 +81,45 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = controller.isGrounded;
 
+        var mgr = StatusEffectManager.Instance;
+        effectsSnapshot = (mgr != null) ? mgr.CurrentSnapshot : StatusEffectsSnapshot.Default;
+
         StateHandler();
         MovePlayer();
     }
 
     private void StateHandler()
     {
-        // Mode - Sprinting
-        if (grounded && Input.GetKey(KeyCode.LeftShift) && verticalInput > 0)
+        if (grounded && effectsSnapshot.CanSprint && Input.GetKey(KeyCode.LeftShift) && verticalInput > 0)
         {
             state = MovementState.sprinting;
-            moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, Time.deltaTime * speedUpSmoothness);
+            float targetSpeed = sprintSpeed * effectsSnapshot.MoveSpeedMultiplier;
+            moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * speedUpSmoothness);
         }
-        // Mode - Walking
         else if (grounded)
         {
             state = MovementState.walking;
-            moveSpeed = verticalInput < 0 ? backwardSpeed : walkSpeed;
+
+            float baseSpeed = verticalInput < 0 ? backwardSpeed : walkSpeed;
+            float targetSpeed = baseSpeed * effectsSnapshot.MoveSpeedMultiplier;
+
+            moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * speedDownSmoothness);
         }
-        // Mode - Air
         else
         {
             state = MovementState.air;
+            moveSpeed = walkSpeed * effectsSnapshot.MoveSpeedMultiplier;
         }
     }
 
     private void MovePlayer()
     {
+        if (!canMove)
+        {
+            controller.Move(Vector3.zero);
+            return;
+        }
+
         if (grounded)
         {
             horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -127,14 +142,6 @@ public class PlayerMovement : MonoBehaviour
 
         moveDirection += playerVelocity;
 
-        if (!controller.isGrounded)
-        {
-            controller.Move(moveDirection * Time.deltaTime);
-            return;
-        }
-
-       
-            controller.Move(moveDirection * Time.deltaTime);
-        
+        controller.Move(moveDirection * Time.deltaTime);
     }
 }

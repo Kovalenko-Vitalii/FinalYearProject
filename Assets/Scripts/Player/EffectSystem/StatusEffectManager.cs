@@ -8,9 +8,11 @@ public class StatusEffectManager : MonoBehaviour
     public static StatusEffectManager Instance { get; private set; }
 
     private readonly List<StatusEffect> effects = new();
+    public StatusEffectsSnapshot CurrentSnapshot { get; private set; }
 
     public event Action<StatusEffect> OnEffectAdded;
     public event Action<StatusEffect> OnEffectRemoved;
+    public event Action<StatusEffectsSnapshot> OnSnapshotUpdated;
 
     private void Awake()
     {
@@ -26,7 +28,11 @@ public class StatusEffectManager : MonoBehaviour
     {
         var stats = PlayerStatManager.Instance;
         if (stats == null || effects.Count == 0)
+        {
+            CurrentSnapshot = StatusEffectsSnapshot.Default;
+            OnSnapshotUpdated?.Invoke(CurrentSnapshot);
             return;
+        }
 
         float dt = Time.deltaTime;
 
@@ -42,6 +48,27 @@ public class StatusEffectManager : MonoBehaviour
                 OnEffectRemoved?.Invoke(e);
             }
         }
+
+        RebuildSnapshot();
+    }
+
+    private void RebuildSnapshot()
+    {
+        var snapshot = StatusEffectsSnapshot.Default;
+
+        foreach (var e in effects)
+        {
+            e.ApplyTo(ref snapshot);
+        }
+
+        if (snapshot.PainSuppressed)
+        {
+            snapshot.HasPain = false;
+            snapshot.PainIntensity = 0f;
+        }
+
+        CurrentSnapshot = snapshot;
+        OnSnapshotUpdated?.Invoke(CurrentSnapshot);
     }
 
     public void AddEffect(StatusEffect effect, bool replaceSameOnSamePart = true)
