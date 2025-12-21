@@ -68,14 +68,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        controller = transform.GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();
         playerHeight = controller.height;
+
+        if (orientation == null)
+        {
+            var cam = Camera.main;
+            if (cam != null) orientation = cam.transform;
+        }
 
         canMove = true;
         moveSpeed = walkSpeed;
-
         Cursor.lockState = CursorLockMode.Locked;
     }
+
 
     private void Update()
     {

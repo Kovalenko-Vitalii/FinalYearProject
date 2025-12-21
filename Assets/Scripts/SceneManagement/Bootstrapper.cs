@@ -1,16 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Bootstrapper : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private IEnumerator Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        yield return SceneManager.LoadSceneAsync("Core", LoadSceneMode.Additive);
+        var orch = Object.FindFirstObjectByType<GameplayOrchestrator>();
+        orch.EnterMenu();
     }
 }
+
