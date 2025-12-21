@@ -56,7 +56,7 @@ public class PauseManager : MonoBehaviour
 				characterController = player.GetComponent<CharacterController>();
 
 			if (playerMovement == null)
-				playerMovement = player.GetComponent<MonoBehaviour>();
+				playerMovement = player.GetComponent<PlayerMovement>();
 		}
 		else
 		{

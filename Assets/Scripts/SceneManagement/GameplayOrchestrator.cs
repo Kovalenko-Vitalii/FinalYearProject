@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class GameplayOrchestrator : MonoBehaviour
 {
+    public static GameplayOrchestrator Instance { get; private set; }
+
+    public event Action OnGameplayReady;
+
     [SerializeField] private UIStateController uiState;
     [SerializeField] private string menuScene = "MainMenu";
     [SerializeField] private string firstLevel = "Level01";
@@ -12,6 +17,12 @@ public class GameplayOrchestrator : MonoBehaviour
 
     public enum GameState { Boot, MainMenu, Loading, Gameplay }
     public GameState State { get; private set; } = GameState.Boot;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+    }
 
     public void EnterMenu()
     {
@@ -35,6 +46,7 @@ public class GameplayOrchestrator : MonoBehaviour
     private IEnumerator LoadLocationRoutine(string sceneName)
     {
         State = GameState.Loading;
+
         uiState.EnterGameplay();
 
         yield return SceneLoader.Instance.LoadContent(sceneName);
@@ -42,17 +54,17 @@ public class GameplayOrchestrator : MonoBehaviour
         var sp = FindSpawn(_nextSpawnId) ?? FindSpawn(defaultSpawnId);
         if (sp) PlayerSpawner.Instance.SpawnOrMoveTo(sp.transform);
 
-        Object.FindFirstObjectByType<CinemachineBinder>()?.BindForActivePlayer();
+        UnityEngine.Object.FindFirstObjectByType<CinemachineBinder>()?.BindForActivePlayer();
 
         State = GameState.Gameplay;
+        OnGameplayReady?.Invoke();
     }
 
     private PlayerSpawnPoint FindSpawn(string id)
     {
-        var points = Object.FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
+        var points = UnityEngine.Object.FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
         foreach (var p in points)
             if (p.Id == id) return p;
-
         return null;
     }
 }

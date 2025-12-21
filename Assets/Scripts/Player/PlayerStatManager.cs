@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using static GameplayOrchestrator;
 
 public class PlayerStatManager : MonoBehaviour
 {
@@ -127,6 +128,9 @@ public class PlayerStatManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayOrchestrator.Instance.State != GameState.Gameplay) return;
+        if (PauseManager.Instance.IsPaused) return;
+
         float dt = Time.deltaTime;
         TickNaturalStats(dt);
     }
@@ -335,4 +339,24 @@ public class PlayerStatManager : MonoBehaviour
         }
     }
 
+    public PlayerStatsSave Capture()
+    {
+        return new PlayerStatsSave
+        {
+            health = Health,
+            hunger = Hunger,
+            hydration = Hydration,
+            energy = Energy,
+            temperature = Temperature
+        };
+    }
+
+    public void Restore(PlayerStatsSave s)
+    {
+        ChangeHealth(s.health - Health);
+        ChangeHunger(s.hunger - Hunger);
+        ChangeHydration(s.hydration - Hydration);
+        ChangeEnergy(s.energy - Energy);
+        ChangeTemperature(s.temperature - Temperature);
+    }
 }

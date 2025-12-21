@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using static GameplayOrchestrator;
 
 public class CameraEffectManager : MonoBehaviour
 {
@@ -36,6 +37,9 @@ public class CameraEffectManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayOrchestrator.Instance.State != GameState.Gameplay) return;
+        if (PauseManager.Instance.IsPaused) return;
+
         var mgr = StatusEffectManager.Instance;
         if (mgr == null || volume == null || volume.profile == null)
             return;

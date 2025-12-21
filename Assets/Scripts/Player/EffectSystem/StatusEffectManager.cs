@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static GameplayOrchestrator;
 
 public class StatusEffectManager : MonoBehaviour
-{
+{  
     public static StatusEffectManager Instance { get; private set; }
 
     private readonly List<StatusEffect> effects = new();
@@ -26,6 +27,9 @@ public class StatusEffectManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayOrchestrator.Instance.State != GameState.Gameplay) return;
+        if (PauseManager.Instance.IsPaused) return;
+
         var stats = PlayerStatManager.Instance;
         if (stats == null || effects.Count == 0)
         {
