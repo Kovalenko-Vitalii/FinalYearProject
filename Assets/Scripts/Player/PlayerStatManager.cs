@@ -359,4 +359,22 @@ public class PlayerStatManager : MonoBehaviour
         ChangeEnergy(s.energy - Energy);
         ChangeTemperature(s.temperature - Temperature);
     }
+
+    public void ResetToDefaults()
+    {
+        currentHealth = healthCap;
+        currentHunger = hungerCap;
+        currentHydration = hydrationCap;
+        currentEnergy = energyCap;
+        temperature = normalTemperature;
+
+        OnHealthChanged?.Invoke(currentHealth);
+        OnHungerChanged?.Invoke(currentHunger);
+        OnHydrationChanged?.Invoke(currentHydration);
+        OnEnergyChanged?.Invoke(currentEnergy);
+        OnTemperatureChanged?.Invoke(temperature);
+
+        RecalculateWeight();
+    }
+
 }

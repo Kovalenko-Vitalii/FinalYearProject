@@ -18,32 +18,67 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private Color warningColor = Color.yellow;
     [SerializeField] private Color criticalColor = Color.red;
 
-    [Header("Refs")]
-    [SerializeField] private PlayerStatManager stats;
-
-
-
-    private void Awake()
-    {
-        if (stats == null)
-            stats = PlayerStatManager.Instance;
-
-        if (stats != null && hpBar != null)
-        {
-            hpBar.minValue = 0f;
-            hpBar.maxValue = stats.HealthMax;
-        }
-    }
+    private PlayerStatManager stats;
 
     private void OnEnable()
     {
-        if (stats == null)
-            stats = PlayerStatManager.Instance;
-
-        if (stats == null)
+        var orch = GameplayOrchestrator.Instance;
+        if (orch != null)
         {
-            Debug.LogWarning("StatsUI: no PlayerStatManager found.");
-            return;
+            orch.OnPlayerSpawned += HandlePlayerSpawned;
+            orch.OnEnterMenu += HandleEnterMenu;
+            orch.OnGameplayReady += HandleGameplayReady;
+        }
+
+        TryBindNow();
+    }
+
+    private void OnDisable()
+    {
+        UnbindStats();
+
+        var orch = GameplayOrchestrator.Instance;
+        if (orch != null)
+        {
+            orch.OnPlayerSpawned -= HandlePlayerSpawned;
+            orch.OnEnterMenu -= HandleEnterMenu;
+            orch.OnGameplayReady -= HandleGameplayReady;
+        }
+    }
+
+    private void HandlePlayerSpawned(GameObject player)
+    {
+        TryBindNow();
+    }
+
+    private void HandleGameplayReady()
+    {
+        TryBindNow();
+    }
+
+    private void HandleEnterMenu()
+    {
+        UnbindStats();
+    }
+
+    private void TryBindNow()
+    {
+        if (stats != null) return;
+
+        stats = PlayerStatManager.Instance;
+        if (stats == null) return;
+
+        BindStats(stats);
+    }
+
+    private void BindStats(PlayerStatManager s)
+    {
+        stats = s;
+
+        if (hpBar != null)
+        {
+            hpBar.minValue = 0f;
+            hpBar.maxValue = stats.HealthMax;
         }
 
         stats.OnHealthChanged += HandleHealthChanged;
@@ -59,7 +94,7 @@ public class StatsUI : MonoBehaviour
         HandleTemperatureChanged(stats.Temperature);
     }
 
-    private void OnDisable()
+    private void UnbindStats()
     {
         if (stats == null) return;
 
@@ -68,13 +103,13 @@ public class StatsUI : MonoBehaviour
         stats.OnHydrationChanged -= HandleHydrationChanged;
         stats.OnEnergyChanged -= HandleEnergyChanged;
         stats.OnTemperatureChanged -= HandleTemperatureChanged;
-    }
 
+        stats = null;
+    }
 
     private void HandleHealthChanged(float value)
     {
-        if (hpBar)
-            hpBar.value = value;
+        if (hpBar) hpBar.value = value;
 
         if (hpRadialBar && stats != null)
         {
@@ -90,11 +125,9 @@ public class StatsUI : MonoBehaviour
         return normalColor;
     }
 
-
     private void HandleHungerChanged(float value)
     {
         if (!hungerBar || stats == null) return;
-
         float t = Mathf.InverseLerp(0f, stats.HungerMax, value);
         hungerBar.fillAmount = t;
         hungerBar.color = GetStatColor(t);
@@ -103,7 +136,6 @@ public class StatsUI : MonoBehaviour
     private void HandleHydrationChanged(float value)
     {
         if (!hydrationBar || stats == null) return;
-
         float t = Mathf.InverseLerp(0f, stats.HydrationMax, value);
         hydrationBar.fillAmount = t;
         hydrationBar.color = GetStatColor(t);
@@ -112,7 +144,6 @@ public class StatsUI : MonoBehaviour
     private void HandleEnergyChanged(float value)
     {
         if (!energyBar || stats == null) return;
-
         float t = Mathf.InverseLerp(0f, stats.EnergyMax, value);
         energyBar.fillAmount = t;
         energyBar.color = GetStatColor(t);
@@ -121,7 +152,6 @@ public class StatsUI : MonoBehaviour
     private void HandleTemperatureChanged(float value)
     {
         if (!temperatureBar || stats == null) return;
-
         float t = Mathf.InverseLerp(stats.TemperatureMin, stats.TemperatureMax, value);
         temperatureBar.fillAmount = t;
         temperatureBar.color = GetStatColor(t);

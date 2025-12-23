@@ -32,15 +32,29 @@ public class SaveGameData
     public string sceneName;
     public string spawnId;
 
+    public bool hasPlayerTransform;
     public PlayerTransformSave playerTransform;
+
+    public bool hasPlayerStats;
     public PlayerStatsSave playerStats;
+
+    public bool hasCameraState;
+    public CameraStateSave cameraState;
 }
+
 
 [Serializable]
 public struct PlayerTransformSave
 {
     public Vector3 position;
     public Quaternion rotation;
+}
+
+[Serializable]
+public struct CameraStateSave
+{
+    public float pan;
+    public float tilt;
 }
 
 [Serializable]

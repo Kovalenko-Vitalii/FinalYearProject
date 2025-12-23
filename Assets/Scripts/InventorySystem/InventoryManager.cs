@@ -50,7 +50,6 @@ public class InventoryManager : MonoBehaviour
             {
                 int amount = (testAmounts != null && i < testAmounts.Length) ? testAmounts[i] : 1;
                 playerInventory.AddItem(testItems[i], amount, testItems[i].maxDurability);
-                Debug.Log(testItems[i].maxDurability);
             }
         }
     }

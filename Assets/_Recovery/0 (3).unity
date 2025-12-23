@@ -163,8 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f8fd153e947cf49af7cdabe9f712bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bootstrapper
-  coreScene: Core
-  firstScene: MainMenu
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

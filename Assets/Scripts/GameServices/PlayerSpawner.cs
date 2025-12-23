@@ -17,19 +17,19 @@ public class PlayerSpawner : MonoBehaviour
 
     public GameObject SpawnOrMoveTo(Transform spawn)
     {
-        Debug.Log("-1");
+
         if (!spawn) return _player;
-        Debug.Log("-2");
+
         if (_player == null)
             _player = Instantiate(playerPrefab);
-        Debug.Log("-3");
+
         var cc = _player.GetComponent<CharacterController>();
         if (cc) cc.enabled = false;
-        Debug.Log("-4");
+ 
         _player.transform.SetPositionAndRotation(spawn.position, spawn.rotation);
 
         if (cc) cc.enabled = true;
-        Debug.Log("-5");
+
         return _player;
     }
 

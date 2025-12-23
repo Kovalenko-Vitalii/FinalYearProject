@@ -6,6 +6,7 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
+    public string CurrentSlotId { get; private set; }
 
     private const string SavesFolderName = "saves";
     private const string IndexFileName = "index.json";
@@ -16,6 +17,22 @@ public class SaveManager : MonoBehaviour
 
     private string SavesFolderPath => Path.Combine(Application.persistentDataPath, SavesFolderName);
     private string IndexPath => Path.Combine(SavesFolderPath, IndexFileName);
+    private void OnEnable()
+    {
+        StartCoroutine(BindOrchestratorWhenReady());
+    }
+
+    private System.Collections.IEnumerator BindOrchestratorWhenReady()
+    {
+        while (GameplayOrchestrator.Instance == null)
+            yield return null;
+
+        GameplayOrchestrator.Instance.OnGameplayReady -= OnGameplayReady;
+        GameplayOrchestrator.Instance.OnGameplayReady += OnGameplayReady;
+
+        Debug.Log("[Save] Bound to GameplayOrchestrator.OnGameplayReady");
+    }
+
 
     private void Awake()
     {
@@ -72,6 +89,42 @@ public class SaveManager : MonoBehaviour
         return id;
     }
 
+    public string CreateBlankSlot(string displayName, string sceneName, string spawnId)
+    {
+        LoadIndex();
+
+        var id = Guid.NewGuid().ToString("N");
+        var now = DateTime.UtcNow.Ticks;
+
+        var meta = new SaveSlotMeta
+        {
+            id = id,
+            displayName = string.IsNullOrWhiteSpace(displayName) ? "New Save" : displayName.Trim(),
+            createdUtcTicks = now,
+            updatedUtcTicks = now,
+            sceneName = sceneName,
+            spawnId = spawnId,
+            dataVersion = 1
+        };
+
+        _index.slots.Add(meta);
+        SaveIndexToDisk();
+
+        var data = new SaveGameData
+        {
+            version = 1,
+            slotId = id,
+            sceneName = sceneName,
+            spawnId = spawnId,
+            hasPlayerStats = false,
+            hasPlayerTransform = false
+        };
+
+        File.WriteAllText(GetSlotPath(id), JsonUtility.ToJson(data, true));
+        return id;
+    }
+
+
     public bool DeleteSlot(string slotId)
     {
         LoadIndex();
@@ -123,13 +176,34 @@ public class SaveManager : MonoBehaviour
             slotId = slotId,
             sceneName = meta.sceneName,
             spawnId = meta.spawnId,
+
+            hasPlayerTransform = true,
             playerTransform = new PlayerTransformSave
             {
                 position = player.transform.position,
                 rotation = player.transform.rotation
             },
+
+
+            hasPlayerStats = true,
             playerStats = stats.Capture()
         };
+
+        var vcam = UnityEngine.Object.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+        if (vcam != null)
+        {
+            var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
+            if (panTilt != null)
+            {
+                data.hasCameraState = true;
+                data.cameraState = new CameraStateSave
+                {
+                    pan = panTilt.PanAxis.Value,
+                    tilt = panTilt.TiltAxis.Value
+                };
+            }
+        }
+
 
         var json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSlotPath(slotId), json);
@@ -150,6 +224,9 @@ public class SaveManager : MonoBehaviour
         if (data == null) return false;
 
         _pendingLoad = data;
+        Debug.Log($"[Save] LoadSlot set pending. hasT={data.hasPlayerTransform} pos={data.playerTransform.position}");
+
+        CurrentSlotId = slotId;
 
         LoadIndex();
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
@@ -169,25 +246,48 @@ public class SaveManager : MonoBehaviour
 
     private void OnGameplayReady()
     {
+        Debug.Log($"[Save] OnGameplayReady CALLED. pending null? {(_pendingLoad == null)}");
+
         if (_pendingLoad == null) return;
 
         var player = PlayerSpawner.Instance != null ? PlayerSpawner.Instance.Player : null;
-        if (player != null)
+
+
+        if (player != null && _pendingLoad.hasPlayerTransform)
         {
             var cc = player.GetComponent<CharacterController>();
             if (cc) cc.enabled = false;
 
-            player.transform.SetPositionAndRotation(_pendingLoad.playerTransform.position, _pendingLoad.playerTransform.rotation);
+            player.transform.position = _pendingLoad.playerTransform.position;
+
+            if (_pendingLoad.hasCameraState)
+            {
+                var vcam = UnityEngine.Object.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+                if (vcam != null)
+                {
+                    var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
+                    if (panTilt != null)
+                    {
+                        panTilt.PanAxis.Value = _pendingLoad.cameraState.pan;
+                        panTilt.TiltAxis.Value = _pendingLoad.cameraState.tilt;
+                    }
+                }
+            }
+
 
             if (cc) cc.enabled = true;
         }
 
-        var stats = PlayerStatManager.Instance;
-        if (stats != null)
-            stats.Restore(_pendingLoad.playerStats);
+        if (_pendingLoad.hasPlayerStats)
+        {
+            var stats = PlayerStatManager.Instance;
+            if (stats != null)
+                stats.Restore(_pendingLoad.playerStats);
+        }
 
         _pendingLoad = null;
     }
+
 
     private void LoadIndex()
     {
@@ -211,4 +311,6 @@ public class SaveManager : MonoBehaviour
     }
 
     private string GetSlotPath(string slotId) => Path.Combine(SavesFolderPath, $"{slotId}.json");
+
+
 }

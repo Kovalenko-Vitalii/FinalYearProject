@@ -7,7 +7,6 @@ public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance { get; private set; }
 
-    [SerializeField] private string coreSceneName = "Core";
     private string _currentContentScene;
 
     private void Awake()

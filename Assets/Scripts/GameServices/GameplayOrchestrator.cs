@@ -6,6 +6,9 @@ public class GameplayOrchestrator : MonoBehaviour
 {
     public static GameplayOrchestrator Instance { get; private set; }
 
+    public event Action OnEnterMenu;
+    public event Action<string> OnLoadingStarted;
+    public event Action<GameObject> OnPlayerSpawned;
     public event Action OnGameplayReady;
 
     [SerializeField] private UIStateController uiState;
@@ -18,6 +21,11 @@ public class GameplayOrchestrator : MonoBehaviour
     public enum GameState { Boot, MainMenu, Loading, Gameplay }
     public GameState State { get; private set; } = GameState.Boot;
 
+    private void Start()
+    {
+        EnterMenu();
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -26,6 +34,7 @@ public class GameplayOrchestrator : MonoBehaviour
 
     public void EnterMenu()
     {
+        OnEnterMenu?.Invoke();
         State = GameState.MainMenu;
         uiState.EnterMainMenu();
         SceneLoader.Instance.LoadContent(menuScene);
@@ -45,19 +54,35 @@ public class GameplayOrchestrator : MonoBehaviour
 
     private IEnumerator LoadLocationRoutine(string sceneName)
     {
+        OnLoadingStarted?.Invoke(sceneName);
+
         State = GameState.Loading;
 
         uiState.EnterGameplay();
 
         yield return SceneLoader.Instance.LoadContent(sceneName);
 
+        Debug.Log($"[Orch] Loaded scene {sceneName}, nextSpawnId={_nextSpawnId}");
         var sp = FindSpawn(_nextSpawnId) ?? FindSpawn(defaultSpawnId);
-        if (sp) PlayerSpawner.Instance.SpawnOrMoveTo(sp.transform);
+        Debug.Log($"[Orch] SpawnPoint found? {(sp ? sp.name : "NULL")} pos={(sp ? sp.transform.position.ToString() : "n/a")}");
 
-        UnityEngine.Object.FindFirstObjectByType<CinemachineBinder>()?.BindForActivePlayer();
+        if (sp) { PlayerSpawner.Instance.SpawnOrMoveTo(sp.transform);
+            var player = PlayerSpawner.Instance.Player;
+            OnPlayerSpawned?.Invoke(player);
+        }
+
+        Debug.Log($"[Orch] After SpawnOrMoveTo, player pos={PlayerSpawner.Instance.Player.transform.position}");
+
+        var binder = UnityEngine.Object.FindFirstObjectByType<CinemachineBinder>();
+        Debug.Log($"[Orch] CinemachineBinder found? {(binder ? binder.name : "NULL")}");
+        binder?.BindForActivePlayer();
+        yield return null;
 
         State = GameState.Gameplay;
+        Debug.Log("[Orch] OnGameplayReady invoke");
         OnGameplayReady?.Invoke();
+
+
     }
 
     private PlayerSpawnPoint FindSpawn(string id)
