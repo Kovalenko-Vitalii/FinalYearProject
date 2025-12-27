@@ -82,7 +82,7 @@ public class StatusEffectUIRoot : MonoBehaviour
             ClearSelection();
     }
 
-    private void RefreshBodyPartButtons()
+    public void RefreshBodyPartButtons()
     {
         if (EffectManager == null) return;
 

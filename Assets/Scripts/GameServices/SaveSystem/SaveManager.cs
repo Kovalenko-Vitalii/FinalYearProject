@@ -170,6 +170,15 @@ public class SaveManager : MonoBehaviour
         var stats = PlayerStatManager.Instance;
         if (stats == null) return false;
 
+        var inventoryManager = InventoryManager.Instance;
+        if (inventoryManager == null) return false;
+
+        var statusEffectManager = StatusEffectManager.Instance;
+        if (statusEffectManager == null) return false;
+
+        var worldObjectSpawner = WorldObjectSpawner.Instance;
+        if (worldObjectSpawner == null) return false;
+
         var data = new SaveGameData
         {
             version = 1,
@@ -186,8 +195,15 @@ public class SaveManager : MonoBehaviour
 
 
             hasPlayerStats = true,
-            playerStats = stats.Capture()
-        };
+            playerStats = stats.Capture(),
+
+            inventoryData = inventoryManager.Capture(),
+
+            effectsData = statusEffectManager.CaptureAll(),
+
+            worldItemData = worldObjectSpawner.CaptureAllWorldItems()
+
+    };
 
         var vcam = UnityEngine.Object.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
         if (vcam != null)
@@ -285,6 +301,23 @@ public class SaveManager : MonoBehaviour
                 stats.Restore(_pendingLoad.playerStats);
         }
 
+        var inventoryManager = InventoryManager.Instance;
+        if (inventoryManager != null)
+        {
+            inventoryManager.Restore(_pendingLoad.inventoryData);
+        }
+
+        var statusEffectManager = StatusEffectManager.Instance;
+        if (statusEffectManager != null)
+        {
+            statusEffectManager.RestoreAll(_pendingLoad.effectsData);
+        }
+
+        var worldObjectSpawner = WorldObjectSpawner.Instance;
+        if (worldObjectSpawner != null)
+        {
+            worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
+        }
         _pendingLoad = null;
     }
 

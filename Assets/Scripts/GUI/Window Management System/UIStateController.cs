@@ -17,6 +17,9 @@ public class UIStateController : MonoBehaviour
 
     public void EnterGameplay()
     {
+        if (canvasSwitcher != null)
+            canvasSwitcher.ClearAll();
+
         if (mainMenuRoot) mainMenuRoot.SetActive(false);
         if (gameplayUiRoot) gameplayUiRoot.SetActive(true);
     }

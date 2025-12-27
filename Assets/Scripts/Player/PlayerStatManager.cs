@@ -2,7 +2,7 @@
 using System;
 using static GameplayOrchestrator;
 
-public class PlayerStatManager : MonoBehaviour
+public class PlayerStatManager : MonoBehaviour, IPlayerTick
 {
     public static PlayerStatManager Instance { get; private set; }
 
@@ -91,6 +91,17 @@ public class PlayerStatManager : MonoBehaviour
 
         Instance = this;
     }
+    private void OnEnable()
+    {
+        var tick = PlayerTickSystem.Instance;
+        if (tick != null) tick.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        var tick = PlayerTickSystem.Instance;
+        if (tick != null) tick.Unregister(this);
+    }
 
     private void Start()
     {
@@ -126,12 +137,8 @@ public class PlayerStatManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void Tick(float dt)
     {
-        if (GameplayOrchestrator.Instance.State != GameState.Gameplay) return;
-        if (PauseManager.Instance.IsPaused) return;
-
-        float dt = Time.deltaTime;
         TickNaturalStats(dt);
     }
 
@@ -376,5 +383,4 @@ public class PlayerStatManager : MonoBehaviour
 
         RecalculateWeight();
     }
-
 }

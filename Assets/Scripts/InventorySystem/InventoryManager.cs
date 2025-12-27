@@ -86,7 +86,50 @@ public class InventoryManager : MonoBehaviour
         SourceInventory = null;
         OnSelectionChanged?.Invoke(null, null);
     }
+
+    public SaveInventoryData Capture()
+    {
+        var gearList = new List<GearPair>();
+
+        foreach (var kv in playerEquipment.slots)
+        {
+            gearList.Add(new GearPair
+            {
+                slot = kv.Key,
+                gear = kv.Value
+            });
+        }
+
+        return new SaveInventoryData
+        {
+            inventoryItems = playerInventory.items,
+            gearSlots = gearList
+        };
+    }
+
+    public void Restore(SaveInventoryData data)
+    {
+        playerInventory.items = data.inventoryItems;
+
+        playerEquipment.Unequip(GearData.GearSlot.Head);
+        playerEquipment.Unequip(GearData.GearSlot.Chest);
+        playerEquipment.Unequip(GearData.GearSlot.Legs);
+        playerEquipment.Unequip(GearData.GearSlot.Boots);
+
+        if (data.gearSlots == null) return;
+
+        foreach (var p in data.gearSlots)
+        {
+            if (p?.gear != null)
+                playerEquipment.Equip(p.gear);
+        }
+    }
+
+
 }
+
+
+
 
 
 

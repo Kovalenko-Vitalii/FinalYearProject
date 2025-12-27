@@ -373,3 +373,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldItem
   data: {fileID: 11400000, guid: 36e3d4b7d9e9beb42914494a73ebaadc, type: 2}
   amount: 1
+  currentDurability: -1

@@ -13,8 +13,13 @@ public class WorldItem : MonoBehaviour, IInteractable
     {
         data = d;
         amount = Mathf.Max(amt, 0);
-        this.currentDurability = currentDurability;
+
+        if (currentDurability < 0f)
+            this.currentDurability = (d != null && d.hasDurability) ? d.maxDurability : 0f;
+        else
+            this.currentDurability = currentDurability;
     }
+
 
     public void AddAmount(int delta)
     {
@@ -57,4 +62,17 @@ public class WorldItem : MonoBehaviour, IInteractable
         int taken = TryPickupTo(interactor.PlayerInventory, desired);
         return taken > 0;
     }
+
+    public WorldItemSave Capture()
+    {
+        return new WorldItemSave
+        {
+            itemId = data.id,
+            position = transform.position,
+            rotation = transform.rotation,
+            amount = amount,
+            durability = currentDurability
+        };
+    }
+
 }

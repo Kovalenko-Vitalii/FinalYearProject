@@ -39,6 +39,7 @@ public class GameplayOrchestrator : MonoBehaviour
         uiState.EnterMainMenu();
         SceneLoader.Instance.LoadContent(menuScene);
         PlayerSpawner.Instance.Despawn();
+        PlayerTickSystem.Instance.SetEnabled(false);
     }
 
     public void StartGame()
@@ -82,7 +83,7 @@ public class GameplayOrchestrator : MonoBehaviour
         Debug.Log("[Orch] OnGameplayReady invoke");
         OnGameplayReady?.Invoke();
 
-
+        PlayerTickSystem.Instance.SetEnabled(true);
     }
 
     private PlayerSpawnPoint FindSpawn(string id)

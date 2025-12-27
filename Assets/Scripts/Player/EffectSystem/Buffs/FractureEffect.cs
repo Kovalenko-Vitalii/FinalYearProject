@@ -2,7 +2,7 @@
 
 public class FractureEffect : StatusEffect
 {
-    private readonly float speedMultiplier;
+    public float speedMultiplier;
 
     public FractureEffect(float duration, float speedMultiplier, BodyPart targetPart)
         : base(StatusEffectId.Fracture, duration, targetPart)

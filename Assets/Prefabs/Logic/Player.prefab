@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 3880035945573980862}
   - component: {fileID: 3775789981008255556}
   - component: {fileID: 7246548334658807191}
-  - component: {fileID: 76262235420205446}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -178,22 +177,3 @@ MonoBehaviour:
   state: 0
   maxSlopeAngle: 45
   slideForce: 5
---- !u!114 &76262235420205446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5801684083971527322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81bd676bd6704534bb25d2f6046d8aa3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerPickup
-  useDistance: 3
-  interactMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  interactKey: 101
-  cam: {fileID: 0}
-  ui: {fileID: 0}

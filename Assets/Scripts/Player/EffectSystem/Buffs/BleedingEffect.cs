@@ -1,6 +1,6 @@
 public class BleedingEffect : StatusEffect
 {
-    private readonly float damagePerSecond;
+    public float damagePerSecond;
 
     public BleedingEffect(float duration, float damagePerSecond, BodyPart? targetPart = null)
         : base(StatusEffectId.Bleeding, duration, targetPart)

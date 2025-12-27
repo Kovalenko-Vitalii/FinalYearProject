@@ -4,7 +4,7 @@ public class Equipment
 {
     public event Action<GearData.GearSlot, GearData, GearData> OnChanged;
 
-    private readonly System.Collections.Generic.Dictionary<GearData.GearSlot, GearData> slots =
+    public readonly System.Collections.Generic.Dictionary<GearData.GearSlot, GearData> slots =
         new System.Collections.Generic.Dictionary<GearData.GearSlot, GearData>
         {
             { GearData.GearSlot.Head,  null },

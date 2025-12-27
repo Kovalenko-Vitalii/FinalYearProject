@@ -208,9 +208,11 @@ public class StorageInventoryPolicy : IInventoryPolicy
             inventory.items.Add(new InventoryItem(data, amount, currentDurability));
         }
     }
+
 }
 
 public interface ITagsProvider
 {
     IEnumerable<string> Tags { get; }
 }
+ 

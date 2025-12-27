@@ -94,5 +94,7 @@ public class PauseManager : MonoBehaviour
 		Cursor.visible = !enabled;
 
 		IsPaused = !enabled;
+
+		PlayerTickSystem.Instance.SetEnabled(enabled);
 	}
 }

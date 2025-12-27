@@ -25,6 +25,11 @@ public class TabContainer : MonoBehaviour
         else
             Show(_current);
     }
+    private void OnDisable()
+    {
+        _current = null;
+    }
+
 
     public void ResetToDefault()
     {

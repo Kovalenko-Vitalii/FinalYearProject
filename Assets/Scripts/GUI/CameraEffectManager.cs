@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using static GameplayOrchestrator;
 
-public class CameraEffectManager : MonoBehaviour
+public class CameraEffectManager : MonoBehaviour, IPlayerTick
 {
     [Header("Volume")]
     [SerializeField] private Volume volume;
@@ -18,6 +18,18 @@ public class CameraEffectManager : MonoBehaviour
     public float maxBlurStrength;
     public float maxChromaticFromSnapshot;
     public float pulseSpeed;
+
+    private void OnEnable()
+    {
+        if (PlayerTickSystem.Instance != null)
+            PlayerTickSystem.Instance.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        if (PlayerTickSystem.Instance != null)
+            PlayerTickSystem.Instance.Unregister(this);
+    }
 
     private void Awake()
     {
@@ -35,11 +47,8 @@ public class CameraEffectManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void Tick(float dt)
     {
-        if (GameplayOrchestrator.Instance.State != GameState.Gameplay) return;
-        if (PauseManager.Instance.IsPaused) return;
-
         var mgr = StatusEffectManager.Instance;
         if (mgr == null || volume == null || volume.profile == null)
             return;
