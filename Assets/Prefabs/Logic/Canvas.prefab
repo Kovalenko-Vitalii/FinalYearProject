@@ -14593,6 +14593,8 @@ GameObject:
   - component: {fileID: 971480552718978664}
   - component: {fileID: 1249155783462566362}
   - component: {fileID: 4640773913103212963}
+  - component: {fileID: 281810862005446489}
+  - component: {fileID: 4888252847782071637}
   m_Layer: 0
   m_Name: LoadingScreen
   m_TagString: Untagged
@@ -14659,6 +14661,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &281810862005446489
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5797357693842480149}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &4888252847782071637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5797357693842480149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe5470d046761364aa27d828a2337c6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadingOverlay
+  group: {fileID: 281810862005446489}
+  progressBar: {fileID: 1380188645727656374}
+  pressAnyKeyRoot: {fileID: 6973250704699298880}
+  fadeTime: 0.2
 --- !u!1 &5834759550213193136
 GameObject:
   m_ObjectHideFlags: 0
@@ -17563,8 +17593,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000022888184, y: -272.90933}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.000022888184, y: -272.9093}
+  m_SizeDelta: {x: 329.0909, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5376937525271809847
 CanvasRenderer:
@@ -17594,9 +17624,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Loading...
-
-'
+  m_text: Press any key
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

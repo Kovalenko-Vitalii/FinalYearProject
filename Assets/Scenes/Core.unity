@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 281810862005446489, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_Alpha
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 330813442726681365, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -227,6 +231,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4888252847782071637, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: fadeTime
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888252847782071637, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: progressSlider
+      value: 
+      objectReference: {fileID: 1229894200}
     - target: {fileID: 5486978596813178206, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.00018262948
@@ -282,7 +294,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3551731674640883109, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1229894201}
   m_SourcePrefab: {fileID: 100100000, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
 --- !u!114 &10111943 stripped
 MonoBehaviour:
@@ -479,6 +494,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 352845219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1034200913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4888252847782071637, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+  m_PrefabInstance: {fileID: 10111942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe5470d046761364aa27d828a2337c6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadingOverlay
+--- !u!1 &1229894198 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3551731674640883109, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+  m_PrefabInstance: {fileID: 10111942}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1229894200 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1380188645727656374, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+  m_PrefabInstance: {fileID: 10111942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229894198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!222 &1229894201
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229894198}
+  m_CullTransparentMesh: 1
 --- !u!114 &1862068516 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6534118524575449431, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
@@ -1002,11 +1052,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83eb37b989a67047b732829835551c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameplayOrchestrator
+  loading: {fileID: 1034200913}
   uiState: {fileID: 10111943}
   menuScene: MainMenu
   firstLevel: Level01
   defaultSpawnId: level01
   _nextSpawnId: level01
+  minLoadingScreenTime: 5
+  requirePressAnyKey: 1
 --- !u!4 &4889554315954097007
 Transform:
   m_ObjectHideFlags: 0
