@@ -89,41 +89,89 @@ public class InventoryManager : MonoBehaviour
 
     public SaveInventoryData Capture()
     {
-        var gearList = new List<GearPair>();
+        var data = new SaveInventoryData();
 
-        foreach (var kv in playerEquipment.slots)
+        // inventory
+        foreach (var it in playerInventory.items)
         {
-            gearList.Add(new GearPair
+            if (it == null || it.data == null) continue;
+            if (it.amount <= 0) continue;
+
+            data.inventoryItems.Add(new InventoryItemSave
             {
-                slot = kv.Key,
-                gear = kv.Value
+                itemId = it.data.id,
+                amount = it.amount,
+                durability = it.currentDurability
             });
         }
 
-        return new SaveInventoryData
+        // gear
+        foreach (var kv in playerEquipment.slots)
         {
-            inventoryItems = playerInventory.items,
-            gearSlots = gearList
-        };
+            var gear = kv.Value;
+            if (gear == null) continue;
+
+            data.gearSlots.Add(new GearPairSave
+            {
+                slot = kv.Key,
+                gearId = gear.id,
+                durability = 0f
+            });
+        }
+
+        return data;
     }
+
 
     public void Restore(SaveInventoryData data)
     {
-        playerInventory.items = data.inventoryItems;
+        if (data == null) return;
+
+        playerInventory.items.Clear();
+
+        if (data.inventoryItems != null)
+        {
+            foreach (var s in data.inventoryItems)
+            {
+                var itemData = ItemResolver.Resolve(s.itemId);
+                if (itemData == null)
+                {
+                    Debug.LogWarning($"[Inventory] Unknown itemId '{s.itemId}'");
+                    continue;
+                }
+
+                playerInventory.AddItem(itemData, s.amount, s.durability);
+            }
+        }
 
         playerEquipment.Unequip(GearData.GearSlot.Head);
         playerEquipment.Unequip(GearData.GearSlot.Chest);
         playerEquipment.Unequip(GearData.GearSlot.Legs);
         playerEquipment.Unequip(GearData.GearSlot.Boots);
 
-        if (data.gearSlots == null) return;
-
-        foreach (var p in data.gearSlots)
+        if (data.gearSlots != null)
         {
-            if (p?.gear != null)
-                playerEquipment.Equip(p.gear);
+            foreach (var p in data.gearSlots)
+            {
+                if (string.IsNullOrWhiteSpace(p.gearId)) continue;
+
+                var item = ItemResolver.Resolve(p.gearId);
+                if (item == null)
+                {
+                    Debug.LogWarning($"[Inventory] Unknown gearId '{p.gearId}'");
+                    continue;
+                }
+                if (item is not GearData gear)
+                {
+                    Debug.LogWarning($"[Inventory] itemId '{p.gearId}' is not GearData (got {item.GetType().Name})");
+                    continue;
+                }
+                playerEquipment.Equip(gear);
+            }
         }
+
     }
+
 
 
 }

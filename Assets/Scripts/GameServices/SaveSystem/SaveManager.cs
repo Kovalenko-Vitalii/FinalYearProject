@@ -201,7 +201,9 @@ public class SaveManager : MonoBehaviour
 
             effectsData = statusEffectManager.CaptureAll(),
 
-            worldItemData = worldObjectSpawner.CaptureAllWorldItems()
+            worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
+
+            containersData = WorldContainerManager.CaptureAll()
 
     };
 
@@ -294,12 +296,7 @@ public class SaveManager : MonoBehaviour
             if (cc) cc.enabled = true;
         }
 
-        if (_pendingLoad.hasPlayerStats)
-        {
-            var stats = PlayerStatManager.Instance;
-            if (stats != null)
-                stats.Restore(_pendingLoad.playerStats);
-        }
+        
 
         var inventoryManager = InventoryManager.Instance;
         if (inventoryManager != null)
@@ -318,6 +315,19 @@ public class SaveManager : MonoBehaviour
         {
             worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
         }
+
+        if (_pendingLoad.hasPlayerStats)
+        {
+            var stats = PlayerStatManager.Instance;
+            if (stats != null)
+            {
+                stats.Restore(_pendingLoad.playerStats);
+                stats.RecalculateWeight();
+            }
+        }
+
+        WorldContainerManager.RestoreAll(_pendingLoad.containersData);
+
         _pendingLoad = null;
     }
 

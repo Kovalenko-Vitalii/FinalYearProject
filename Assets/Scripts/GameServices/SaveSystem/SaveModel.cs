@@ -45,23 +45,35 @@ public class SaveGameData
     public SaveEffectsData effectsData;
 
     public SaveWorldItemsData worldItemData;
+
+    public SaveWorldContainersData containersData;
 }
 
 // Saving player inventory and gear
 [Serializable]
 public class SaveInventoryData
 {
-    public List<InventoryItem> inventoryItems;
-
-    public List<GearPair> gearSlots;
+    public List<InventoryItemSave> inventoryItems = new();
+    public List<GearPairSave> gearSlots = new();
 }
 
 [Serializable]
-public class GearPair
+public struct InventoryItemSave
+{
+    public string itemId;
+    public int amount;
+    public float durability;
+}
+
+
+[Serializable]
+public struct GearPairSave
 {
     public GearData.GearSlot slot;
-    public GearData gear; 
+    public string gearId;
+    public float durability;
 }
+
 
 // Saving player position
 [Serializable]
@@ -103,6 +115,21 @@ public struct WorldItemSave
     public Quaternion rotation;
     public int amount;
     public float durability;
+}
+
+// Saving contanier`s content
+
+[Serializable]
+public class SaveWorldContainersData
+{
+    public List<ContainerSave> containers = new();
+}
+
+[Serializable]
+public class ContainerSave
+{
+    public string containerId;
+    public List<InventoryItemSave> items = new();
 }
 
 // Saving player`s effects

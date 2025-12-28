@@ -227,7 +227,7 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
         RecalculateWeight();
     }
 
-    private void RecalculateWeight()
+    public void RecalculateWeight()
     {
         float total = 0f;
 

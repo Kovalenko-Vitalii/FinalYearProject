@@ -10,6 +10,38 @@ public class WorldContainer : MonoBehaviour
     [SerializeField] private ItemData[] startItems;
     [SerializeField] private int[] startAmounts;
 
+    public string ContainerId => containerId;
+    [SerializeField] private string containerId;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (string.IsNullOrEmpty(containerId))
+        {
+            GenerateId();
+            return;
+        }
+
+        var all = FindObjectsByType<WorldContainer>(FindObjectsSortMode.None);
+        foreach (var c in all)
+        {
+            if (c == this) continue;
+            if (c.containerId == containerId)
+            {
+                GenerateId();
+                break;
+            }
+        }
+    }
+
+    private void GenerateId()
+    {
+        containerId = System.Guid.NewGuid().ToString("N");
+        UnityEditor.EditorUtility.SetDirty(this);
+    }
+#endif
+
+
     public Inventory Inventory { get; private set; }
 
     private void Awake()
