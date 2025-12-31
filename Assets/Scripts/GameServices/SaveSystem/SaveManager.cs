@@ -8,15 +8,20 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance { get; private set; }
     public string CurrentSlotId { get; private set; }
 
+    // Path and name for save
     private const string SavesFolderName = "saves";
     private const string IndexFileName = "index.json";
 
+    // List to file with saves
     private SaveIndex _index;
 
+    // Buffer with actual game data save
     private SaveGameData _pendingLoad;
 
     private string SavesFolderPath => Path.Combine(Application.persistentDataPath, SavesFolderName);
     private string IndexPath => Path.Combine(SavesFolderPath, IndexFileName);
+
+    private string GetSlotPath(string slotId) => Path.Combine(SavesFolderPath, $"{slotId}.json");
     private void OnEnable()
     {
         StartCoroutine(BindOrchestratorWhenReady());
@@ -36,7 +41,10 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this) { 
+            Destroy(gameObject); 
+            return; 
+        }
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
@@ -56,7 +64,30 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    // Loading list of slots
+    private void LoadIndex()
+    {
+        if (_index != null) return;
 
+        if (!File.Exists(IndexPath))
+        {
+            _index = new SaveIndex();
+            SaveIndexToDisk();
+            return;
+        }
+
+        var json = File.ReadAllText(IndexPath);
+        _index = JsonUtility.FromJson<SaveIndex>(json) ?? new SaveIndex();
+    }
+
+    // Saving list of slots
+    private void SaveIndexToDisk()
+    {
+        var json = JsonUtility.ToJson(_index, true);
+        File.WriteAllText(IndexPath, json);
+    }
+
+    // Return list of saved slots
     public SaveSlotMeta[] ListSlots()
     {
         LoadIndex();
@@ -65,13 +96,17 @@ public class SaveManager : MonoBehaviour
             .ToArray();
     }
 
+    // Creating save slot
     public string CreateSlot(string displayName, string sceneName, string spawnId)
     {
+        // Loading index from folder to buffer
         LoadIndex();
 
+        // Rettreiving new id and time
         var id = Guid.NewGuid().ToString("N");
         var now = DateTime.UtcNow.Ticks;
 
+        // Create a new metadata
         var meta = new SaveSlotMeta
         {
             id = id,
@@ -124,23 +159,28 @@ public class SaveManager : MonoBehaviour
         return id;
     }
 
-
+    // Deleting Save Slot
     public bool DeleteSlot(string slotId)
     {
+        // Loading list of slots to buffer
         LoadIndex();
 
+        // Finding slot by id
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta == null) return false;
 
+        // Removing slot from list (index)
         _index.slots.Remove(meta);
         SaveIndexToDisk();
 
+        // Removing slot file from folder
         var path = GetSlotPath(slotId);
         if (File.Exists(path)) File.Delete(path);
 
         return true;
     }
 
+    // Changing Save slot name (same as deleting pretty much)
     public bool RenameSlot(string slotId, string newName)
     {
         LoadIndex();
@@ -154,17 +194,24 @@ public class SaveManager : MonoBehaviour
         return true;
     }
 
+    // Saving game information to slot
     public bool SaveToSlot(string slotId)
     {
+        // Loading list of slots to buffer
         LoadIndex();
 
+        // Finding slot
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta == null) return false;
 
+        // Ensuring we have all necessary instances to gather save data from them
         var orch = GameplayOrchestrator.Instance;
         if (orch == null) return false;
 
-        var player = PlayerSpawner.Instance != null ? PlayerSpawner.Instance.Player : null;
+        var spawner = PlayerSpawner.Instance;
+        if (spawner == null) return false;
+
+        var player = spawner.Player;
         if (player == null) return false;
 
         var stats = PlayerStatManager.Instance;
@@ -179,6 +226,7 @@ public class SaveManager : MonoBehaviour
         var worldObjectSpawner = WorldObjectSpawner.Instance;
         if (worldObjectSpawner == null) return false;
 
+        // Creating new GameData and saving information to it
         var data = new SaveGameData
         {
             version = 1,
@@ -205,9 +253,10 @@ public class SaveManager : MonoBehaviour
 
             containersData = WorldContainerManager.CaptureAll()
 
-    };
+        };
 
-        var vcam = UnityEngine.Object.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+        // Setting up camera rotation if camera has this parameter on scene (I know it is poorly made :-)
+        var vcam = GameObject.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
         if (vcam != null)
         {
             var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
@@ -232,20 +281,24 @@ public class SaveManager : MonoBehaviour
         return true;
     }
 
+    // Loading data from slot to buffer and spawning to location 
     public bool LoadSlot(string slotId)
     {
+        // Getting path and checking if the file exist
         var path = GetSlotPath(slotId);
         if (!File.Exists(path)) return false;
 
+        // Gathering data
         var json = File.ReadAllText(path);
         var data = JsonUtility.FromJson<SaveGameData>(json);
         if (data == null) return false;
 
+        // Putting data into buffer and index
         _pendingLoad = data;
-        Debug.Log($"[Save] LoadSlot set pending. hasT={data.hasPlayerTransform} pos={data.playerTransform.position}");
-
         CurrentSlotId = slotId;
-
+        Debug.Log($"[Save] LoadSlot set pending. hasT={data.hasPlayerTransform} pos={data.playerTransform.position}");
+        
+        // Loading list of saves and updating time of slot has been changed
         LoadIndex();
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta != null)
@@ -257,72 +310,60 @@ public class SaveManager : MonoBehaviour
         var orch = GameplayOrchestrator.Instance;
         if (orch == null) return false;
 
+        // I`m not sure that this is really bad, but maybe this script should not trigger location loading
         orch.LoadLocation(data.sceneName, data.spawnId);
         return true;
     }
 
-
+    // Basically loading data from buffered save to game
     private void OnGameplayReady()
     {
         Debug.Log($"[Save] OnGameplayReady CALLED. pending null? {(_pendingLoad == null)}");
-
+        // Checking if there is stored data in buffer
         if (_pendingLoad == null) return;
-
-        var player = PlayerSpawner.Instance != null ? PlayerSpawner.Instance.Player : null;
-
-
-        if (player != null && _pendingLoad.hasPlayerTransform)
+      
+        
+        // Setting up cinemachine rotation
+        // --- I think teleporting player should be here
+        if (_pendingLoad.hasCameraState)
         {
-            var cc = player.GetComponent<CharacterController>();
-            if (cc) cc.enabled = false;
-
-            player.transform.position = _pendingLoad.playerTransform.position;
-
-            if (_pendingLoad.hasCameraState)
+            var vcam = GameObject.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+            if (vcam != null)
             {
-                var vcam = UnityEngine.Object.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
-                if (vcam != null)
+                var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
+                if (panTilt != null)
                 {
-                    var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
-                    if (panTilt != null)
-                    {
-                        panTilt.PanAxis.Value = _pendingLoad.cameraState.pan;
-                        panTilt.TiltAxis.Value = _pendingLoad.cameraState.tilt;
-                    }
+                    panTilt.PanAxis.Value = _pendingLoad.cameraState.pan;
+                    panTilt.TiltAxis.Value = _pendingLoad.cameraState.tilt;
                 }
             }
-
-
-            if (cc) cc.enabled = true;
         }
 
-        
+        // Restoring all necessary data
+        var playerSpawner = PlayerSpawner.Instance;
+        if (playerSpawner != null && _pendingLoad.hasPlayerTransform)
+            playerSpawner.SpawnOrMoveTo(_pendingLoad.playerTransform.position, Quaternion.identity);
 
         var inventoryManager = InventoryManager.Instance;
         if (inventoryManager != null)
-        {
             inventoryManager.Restore(_pendingLoad.inventoryData);
-        }
 
         var statusEffectManager = StatusEffectManager.Instance;
         if (statusEffectManager != null)
-        {
             statusEffectManager.RestoreAll(_pendingLoad.effectsData);
-        }
 
         var worldObjectSpawner = WorldObjectSpawner.Instance;
         if (worldObjectSpawner != null)
-        {
             worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
-        }
 
+
+        // --- Flags like hasPlayerStats should be removed i think
         if (_pendingLoad.hasPlayerStats)
         {
             var stats = PlayerStatManager.Instance;
             if (stats != null)
             {
                 stats.Restore(_pendingLoad.playerStats);
-                stats.RecalculateWeight();
             }
         }
 
@@ -330,30 +371,4 @@ public class SaveManager : MonoBehaviour
 
         _pendingLoad = null;
     }
-
-
-    private void LoadIndex()
-    {
-        if (_index != null) return;
-
-        if (!File.Exists(IndexPath))
-        {
-            _index = new SaveIndex();
-            SaveIndexToDisk();
-            return;
-        }
-
-        var json = File.ReadAllText(IndexPath);
-        _index = JsonUtility.FromJson<SaveIndex>(json) ?? new SaveIndex();
-    }
-
-    private void SaveIndexToDisk()
-    {
-        var json = JsonUtility.ToJson(_index, true);
-        File.WriteAllText(IndexPath, json);
-    }
-
-    private string GetSlotPath(string slotId) => Path.Combine(SavesFolderPath, $"{slotId}.json");
-
-
 }

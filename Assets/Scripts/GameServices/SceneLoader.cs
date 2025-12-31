@@ -6,11 +6,15 @@ public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance { get; private set; }
 
+    // Name of current loaded in content scene
     private string _currentContentScene;
+    // Async operation for paralel loading
     private AsyncOperation _activeLoadOp;
-    private string _pendingSceneName;
 
+    // Float that indicated loading progress, used mainly for UI
     public float Progress { get; private set; } = 0f;
+
+    // Shows if scene loading at the moment
     public bool IsLoading => _activeLoadOp != null && !_activeLoadOp.isDone;
 
     private void Awake()
@@ -20,20 +24,23 @@ public class SceneLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    // Load content scene and activate automatically when loaded
     public Coroutine LoadContent(string sceneName)
     {
-        _pendingSceneName = sceneName;
+        // Resetting load progress
         Progress = 0f;
 
+        // Adding loading process to async and activate it
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        
         _activeLoadOp.allowSceneActivation = true;
 
         return StartCoroutine(FinishSwapRoutine(sceneName));
     }
 
+    // Save as LoadContent but user can choose when to finally load scene
     public AsyncOperation LoadContentAsync(string sceneName, bool allowSceneActivation)
     {
-        _pendingSceneName = sceneName;
         Progress = 0f;
 
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -43,14 +50,17 @@ public class SceneLoader : MonoBehaviour
         return _activeLoadOp;
     }
 
+    // Trigger scene activation
     public void ActivateLoadedScene()
     {
         if (_activeLoadOp != null)
             _activeLoadOp.allowSceneActivation = true;
     }
 
+    // This method used to wait for scene load and than switch it with current one
     private IEnumerator FinishSwapRoutine(string sceneName)
     {
+        // Waiting for loading and updating progress
         while (_activeLoadOp != null && !_activeLoadOp.isDone)
         {
             float raw = _activeLoadOp.progress;
@@ -58,19 +68,21 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
+        // Making this scene active
         var loadedScene = SceneManager.GetSceneByName(sceneName);
         if (loadedScene.IsValid())
             SceneManager.SetActiveScene(loadedScene);
 
+        // Unloading previous scene
         if (!string.IsNullOrEmpty(_currentContentScene) && _currentContentScene != sceneName)
         {
             yield return SceneManager.UnloadSceneAsync(_currentContentScene);
         }
 
+        // Setting loaded scene as current, updating progress
         _currentContentScene = sceneName;
 
         Progress = 1f;
         _activeLoadOp = null;
-        _pendingSceneName = null;
     }
 }

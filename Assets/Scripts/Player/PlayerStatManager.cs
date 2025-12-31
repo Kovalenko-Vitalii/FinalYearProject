@@ -365,6 +365,8 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
         ChangeHydration(s.hydration - Hydration);
         ChangeEnergy(s.energy - Energy);
         ChangeTemperature(s.temperature - Temperature);
+
+        RecalculateWeight();
     }
 
     public void ResetToDefaults()

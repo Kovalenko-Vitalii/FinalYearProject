@@ -34,7 +34,7 @@ public class DropActionModule : ActionModule
                 Vector3 pos = origin ? origin.position : Vector3.zero;
                 Vector3 impulse = origin ? origin.forward * dropImpulse : Vector3.zero;
 
-                WorldObjectSpawner.Instance.SpawnItem(ctx.item.data, 1, ctx.item.currentDurability, pos, impulse);
+                WorldObjectSpawner.Instance.SpawnItem(ctx.item.data, 1, ctx.item.currentDurability, pos, Quaternion.identity, impulse);
 
                 var ui = Object.FindAnyObjectByType<InventoryUI>();
                 if (ui != null) ui.Refresh();

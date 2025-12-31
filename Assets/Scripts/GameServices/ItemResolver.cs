@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// Static script used for retrieving items scriptable objects from id
+// used during restoring items on map in WorldObjectSpawner
 public static class ItemResolver
 {
     private static Dictionary<string, ItemData> _cache;
@@ -9,12 +11,15 @@ public static class ItemResolver
     {
         if (_cache != null) return;
 
+        // Id and scriptable object
         _cache = new Dictionary<string, ItemData>();
 
+        // List of all scriptableObjects from resource folders
         var all = Resources.LoadAll<ItemData>("ItemSO");
 
         foreach (var it in all)
         {
+            // Filtering all that does not have content, have no or wrong id
             if (it == null) continue;
 
             if (string.IsNullOrWhiteSpace(it.id))
@@ -33,6 +38,7 @@ public static class ItemResolver
         }
     }
 
+    // Get itemData (ScriptableObject) by id from dictionary
     public static ItemData Resolve(string id)
     {
         if (string.IsNullOrWhiteSpace(id)) return null;
@@ -42,5 +48,6 @@ public static class ItemResolver
         return found;
     }
 
+    // Cleaning cache
     public static void ClearCache() => _cache = null;
 }

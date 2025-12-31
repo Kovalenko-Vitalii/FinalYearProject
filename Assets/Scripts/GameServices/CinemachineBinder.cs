@@ -5,6 +5,7 @@ public class CinemachineBinder : MonoBehaviour
 {
     [SerializeField] private string headPath = "HeadPosition";
 
+    // This method is used for finding a player`s position for head and bind cinemachine to it
     public void BindForActivePlayer()
     {
         var spawner = PlayerSpawner.Instance;
@@ -14,6 +15,7 @@ public class CinemachineBinder : MonoBehaviour
             return;
         }
 
+        // Getting a player from spawner and its head position (Empty object)
         var player = spawner.Player;
         var follow = player.transform.Find(headPath);
 
@@ -23,6 +25,7 @@ public class CinemachineBinder : MonoBehaviour
             return;
         }
 
+        // Finding a cinemachine camera
         var vcams = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
         if (vcams.Length == 0)
         {
@@ -30,6 +33,7 @@ public class CinemachineBinder : MonoBehaviour
             return;
         }
 
+        // Finally setting up a follow target for camera
         foreach (var vcam in vcams)
             vcam.Follow = follow;
 

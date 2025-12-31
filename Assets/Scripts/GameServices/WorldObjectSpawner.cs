@@ -3,18 +3,19 @@
 public class WorldObjectSpawner : MonoBehaviour
 {
     public static WorldObjectSpawner Instance { get; private set; }
-
-
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
     }
 
-    public WorldItem SpawnItem(ItemData data, int amount, float currentDurability, Vector3 pos, Vector3 impulse)
+    // Method used for spawning items on scene
+    public WorldItem SpawnItem(ItemData data, int amount, float currentDurability, Vector3 pos, Quaternion rotation, Vector3 impulse)
     {
+        // Checking if we have itemData at all
         if (data == null || amount <= 0) return null;
 
+        // Getting spawn prefab for item
         GameObject prefab = data.pickupPrefab;
         if (!prefab)
         {
@@ -22,7 +23,9 @@ public class WorldObjectSpawner : MonoBehaviour
             return null;
         }
 
-        var go = Instantiate(prefab, pos, Quaternion.identity);
+        // Instantiating prefab and giving it a postionion
+        var go = Instantiate(prefab, pos, rotation);
+        // Getting WorldItem component and setting up dynamic values
         var wi = go.GetComponent<WorldItem>();
         if (!wi)
         {
@@ -32,6 +35,7 @@ public class WorldObjectSpawner : MonoBehaviour
 
         wi.Init(data, amount, currentDurability);
 
+        // Applying impulse
         var rb = go.GetComponent<Rigidbody>();
         if (rb) rb.AddForce(impulse, ForceMode.Impulse);
 
@@ -40,10 +44,12 @@ public class WorldObjectSpawner : MonoBehaviour
 
     // ===== SAVE =====
 
+    // Capturing data about all items on location
     public SaveWorldItemsData CaptureAllWorldItems()
     {
         var data = new SaveWorldItemsData();
 
+        // Getting all items on scene, filtering and capturing to data object
         var all = Object.FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
         foreach (var wi in all)
         {
@@ -56,6 +62,7 @@ public class WorldObjectSpawner : MonoBehaviour
         return data;
     }
 
+    // Cleaning map from items before load
     public void ClearAllWorldItems()
     {
         var all = Object.FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
@@ -64,20 +71,24 @@ public class WorldObjectSpawner : MonoBehaviour
                 Destroy(wi.gameObject);
     }
 
+    // Loading items on map
     public void RestoreAllWorldItems(SaveWorldItemsData saved)
     {
+        // If there is no save info we dont touch anything
         if (saved == null || saved.items == null || saved.items.Count == 0)
             return;
 
+        // Cleaning
         ClearAllWorldItems();
 
+        // Adding items on map
         foreach (var s in saved.items)
         {
+            // Getting scriptable object by id from resolver (json can not serialize scriptableObjects)
             var itemData = ItemResolver.Resolve(s.itemId);
             if (itemData == null) continue;
-
-            var wi = SpawnItem(itemData, s.amount, s.durability, s.position, Vector3.zero);
-            if (wi != null) wi.transform.rotation = s.rotation;
+  
+            SpawnItem(itemData, s.amount, s.durability, s.position, s.rotation, Vector3.zero);
         }
     }
 

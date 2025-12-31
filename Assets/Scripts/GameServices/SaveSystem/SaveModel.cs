@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// List of save slots, used for quick retreiving list of slot`s meta data, just for visualisation
 [Serializable]
 public class SaveIndex
 {
@@ -9,29 +10,38 @@ public class SaveIndex
     public List<SaveSlotMeta> slots = new();
 }
 
+// Save slot meta data, linked to game data using same ID
 [Serializable]
 public class SaveSlotMeta
 {
+    // Foreign key
     public string id;
     public string displayName;
+    // Time mark for when created and last update
     public long createdUtcTicks;
     public long updatedUtcTicks;
 
+    // Name of scene and spawn Id
     public string sceneName;
     public string spawnId;
 
+    // Version for migration
     public int dataVersion = 1;
 }
 
+// Game data
 [Serializable]
 public class SaveGameData
 {
     public int version = 1;
 
+    // Foreign key
     public string slotId;
     public string sceneName;
     public string spawnId;
 
+    // --- I think that flags should be removed
+    // Other data parts
     public bool hasPlayerTransform;
     public PlayerTransformSave playerTransform;
 
@@ -42,6 +52,7 @@ public class SaveGameData
     public CameraStateSave cameraState;
 
     public SaveInventoryData inventoryData;
+
     public SaveEffectsData effectsData;
 
     public SaveWorldItemsData worldItemData;
@@ -65,7 +76,7 @@ public struct InventoryItemSave
     public float durability;
 }
 
-
+// --- this could be inherited from InventoryItemSave
 [Serializable]
 public struct GearPairSave
 {
@@ -107,6 +118,7 @@ public class SaveWorldItemsData
     public List<WorldItemSave> items = new();
 }
 
+// This could be inherited from InventoryItemSave
 [System.Serializable]
 public struct WorldItemSave
 {
@@ -140,6 +152,7 @@ public class SaveEffectsData
     public List<EffectSave> effectList = new();
 }
 
+// --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation
 [Serializable]
 public class EffectSave
 {
