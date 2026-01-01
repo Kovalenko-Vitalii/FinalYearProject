@@ -103,6 +103,18 @@ public class Inventory
         int after = items.Where(i => i.data == data).Sum(i => i.amount);
         return Mathf.Clamp(after - before, 0, amount);
     }
+
+    public bool HasItemById(string id)
+    {
+        foreach (var item in items)
+        {
+            if (item.data.id == id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 

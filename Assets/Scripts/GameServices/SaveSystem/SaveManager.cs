@@ -251,7 +251,9 @@ public class SaveManager : MonoBehaviour
 
             worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
 
-            containersData = WorldContainerManager.CaptureAll()
+            containersData = WorldContainerManager.CaptureAll(),
+
+            doorsData = DoorSaveSystem.CaptureAll()
 
         };
 
@@ -368,6 +370,7 @@ public class SaveManager : MonoBehaviour
         }
 
         WorldContainerManager.RestoreAll(_pendingLoad.containersData);
+        DoorSaveSystem.RestoreAll(_pendingLoad.doorsData);
 
         _pendingLoad = null;
     }

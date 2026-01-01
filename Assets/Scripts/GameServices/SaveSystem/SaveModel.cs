@@ -58,6 +58,8 @@ public class SaveGameData
     public SaveWorldItemsData worldItemData;
 
     public SaveWorldContainersData containersData;
+
+    public SaveDoorsData doorsData;
 }
 
 // Saving player inventory and gear
@@ -150,6 +152,21 @@ public class ContainerSave
 public class SaveEffectsData
 {
     public List<EffectSave> effectList = new();
+}
+
+// Saving doors
+[Serializable]
+public class SaveDoorsData
+{
+    public List<DoorSave> doors = new();
+}
+
+[Serializable]
+public struct DoorSave
+{
+    public string id;
+    public bool isOpen;
+    public bool isLocked;
 }
 
 // --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation
