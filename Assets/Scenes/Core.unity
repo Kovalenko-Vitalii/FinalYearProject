@@ -1058,7 +1058,7 @@ MonoBehaviour:
   firstLevel: Level01
   defaultSpawnId: level01
   _nextSpawnId: level01
-  minLoadingScreenTime: 3
+  minLoadingScreenTime: 2
 --- !u!4 &4889554315954097007
 Transform:
   m_ObjectHideFlags: 0
