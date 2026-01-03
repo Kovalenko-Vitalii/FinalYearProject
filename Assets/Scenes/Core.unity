@@ -310,6 +310,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05c0f60458781d49b8c2df7ea17ac6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIStateController
+--- !u!1 &219747584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 219747585}
+  - component: {fileID: 219747586}
+  m_Layer: 0
+  m_Name: StatsTicker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &219747585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219747584}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.2809, y: 0, z: 0.90727}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2864633078298414723}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &219747586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219747584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2b668fb412894468ec642332f354dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsTicker
 --- !u!1 &319002775
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,35 +867,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 696500cff818cde47b15c3156593859d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatManager
-  currentHealth: 95
-  currentHunger: 30
-  currentHydration: 20
+  currentHealth: 100
+  healthCap: 100
+  currentHunger: 100
+  hungerCap: 100
+  currentHydration: 100
+  hydrationCap: 100
   temperature: 36.6
-  currentEnergy: 100
+  minTemperature: 30
+  maxTemperature: 42
+  normalTemperature: 36.6
+  currentEnergy: 11
   energyCap: 100
   baseWeight: 0
   currentWeight: 0
   maxCarryWeight: 35
   temperatureResist: 0
   damageResist: 0
-  healthCap: 100
-  hungerCap: 100
-  hydrationCap: 100
-  minTemperature: 30
-  maxTemperature: 42
   healthRegenPerSecond: 0
   healthDegenerationPerSecond: 0
   hungerDrainPerSecond: 0.2
   hydrationDrainPerSecond: 0.3
   energyDrainPerSecond: 1
-  energyRegenPerSecond: 5
   temperatureChangeTowardsNormalPerSecond: 0.1
-  normalTemperature: 36.6
-  hungerRateMultiplier: 1
-  hydrationRateMultiplier: 1
-  energyRateMultiplier: 1
-  healthRegenMultiplier: 1
-  temperatureRateMultiplier: 1
 --- !u!1 &2097564500714957225
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,6 +978,7 @@ Transform:
   - {fileID: 8821758247249361818}
   - {fileID: 5953597338119252907}
   - {fileID: 8135241711166380691}
+  - {fileID: 219747585}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2895310075659697412
@@ -974,26 +1013,13 @@ MonoBehaviour:
   playerInventory:
     items: []
   playerSlotLimit: 25
-  testItems:
-  - {fileID: 11400000, guid: e836465063413a141a10532f1d12fee2, type: 2}
-  - {fileID: 11400000, guid: 3101b663ae926154dbaf5e2840d0c5ac, type: 2}
-  - {fileID: 11400000, guid: 5bce243d3a1b5b04287e103643742934, type: 2}
-  - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
-  - {fileID: 11400000, guid: 5a587e2015fb50f48b30d46a2e2e5ccf, type: 2}
-  - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
-  - {fileID: 11400000, guid: 36e3d4b7d9e9beb42914494a73ebaadc, type: 2}
-  - {fileID: 11400000, guid: 3851d54ed74291c4c9718147476bf1a0, type: 2}
-  - {fileID: 11400000, guid: c69d36e6c1ccd0847bae7183b35c6b27, type: 2}
-  - {fileID: 11400000, guid: 387ed71b16e371f4fba1b2acf13c8946, type: 2}
-  - {fileID: 11400000, guid: 3e38685841254354eb3e09abe0a94dee, type: 2}
-  - {fileID: 11400000, guid: bdb8a92f6b60b2e44b2ddf524e3a17d2, type: 2}
+  initialItems:
   - {fileID: 11400000, guid: 10d17342b827c564988bf2243ec4f5d1, type: 2}
-  - {fileID: 11400000, guid: 4ffe238acd9ef0d418e7f4ec593e06a1, type: 2}
-  - {fileID: 11400000, guid: 2723f5e0e7ead5d40837bda2773921f3, type: 2}
-  - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
-  - {fileID: 11400000, guid: 01be3ef2423a45c449de371f5caa33a8, type: 2}
-  - {fileID: 11400000, guid: bbc0ccbabcad0cf43bda3a7a06ffb830, type: 2}
-  testAmounts: 010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000007000000020000000100000001000000
+  - {fileID: 11400000, guid: 3e38685841254354eb3e09abe0a94dee, type: 2}
+  - {fileID: 11400000, guid: 3851d54ed74291c4c9718147476bf1a0, type: 2}
+  - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
+  - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
+  initialAmounts: 0100000001000000010000000100000001000000
 --- !u!1 &3461668549182550961
 GameObject:
   m_ObjectHideFlags: 0

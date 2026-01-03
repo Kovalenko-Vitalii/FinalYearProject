@@ -2,21 +2,34 @@
 using System;
 using static GameplayOrchestrator;
 
-public class PlayerStatManager : MonoBehaviour, IPlayerTick
+public class PlayerStatManager : MonoBehaviour
 {
     public static PlayerStatManager Instance { get; private set; }
 
-    [Header("Main Stats")]
+    // List of stats, include current, maximum
+    [Header("Health settings")]
     [SerializeField] private float currentHealth = 100f;
-    [SerializeField] private float currentHunger = 100f;
-    [SerializeField] private float currentHydration = 100f;
-    [SerializeField] private float temperature = 36.6f;
+    [SerializeField] private float healthCap = 100f;
 
-    [Header("Energy / Fatigue")]
+    [Header("Hunger settings")]
+    [SerializeField] private float currentHunger = 100f;
+    [SerializeField] private float hungerCap = 100f;
+
+    [Header("Hydration settings")]
+    [SerializeField] private float currentHydration = 100f;
+    [SerializeField] private float hydrationCap = 100f;
+
+    [Header("Temperature settings")]
+    [SerializeField] private float temperature = 36.6f;
+    [SerializeField] private float minTemperature = 30f;
+    [SerializeField] private float maxTemperature = 42f;
+    [SerializeField] private float normalTemperature = 36.6f;
+
+    [Header("Energy settings")]
     [SerializeField] private float currentEnergy = 100f;
     [SerializeField] private float energyCap = 100f;
 
-    [Header("Carried Weight")]
+    [Header("Weight settings")]
     [SerializeField] private float baseWeight = 0f;
     [SerializeField] private float currentWeight = 0f;
     [SerializeField] private float maxCarryWeight = 35f;
@@ -24,35 +37,16 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
     [Header("Resistances")]
     [SerializeField] private float temperatureResist = 0;
     [SerializeField] private float damageResist = 0;
-
-    [Header("Limits")]
-    [SerializeField] private float healthCap = 100f;
-    [SerializeField] private float hungerCap = 100f;
-    [SerializeField] private float hydrationCap = 100f;
-
-    [Header("Temperature Limits")]
-    [SerializeField] private float minTemperature = 30f;
-    [SerializeField] private float maxTemperature = 42f;
-
+    
+    // Regen parameters
     [Header("Natural Change Rates (per second)")]
     [SerializeField] private float healthRegenPerSecond = 0f; 
     [SerializeField] private float healthDegenerationPerSecond = 0f;
-
     [SerializeField] private float hungerDrainPerSecond = 0.2f;
     [SerializeField] private float hydrationDrainPerSecond = 0.3f;
-
     [SerializeField] private float energyDrainPerSecond = 1f;
-    [SerializeField] private float energyRegenPerSecond = 5f;
 
     [SerializeField] private float temperatureChangeTowardsNormalPerSecond = 0.1f; 
-    [SerializeField] private float normalTemperature = 36.6f;
-
-    [Header("Rate Multipliers (runtime)")]
-    [SerializeField] private float hungerRateMultiplier = 1f;
-    [SerializeField] private float hydrationRateMultiplier = 1f;
-    [SerializeField] private float energyRateMultiplier = 1f;
-    [SerializeField] private float healthRegenMultiplier = 1f;
-    [SerializeField] private float temperatureRateMultiplier = 1f;
 
     // Events
     public event Action<float> OnHealthChanged;
@@ -91,6 +85,9 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
 
         Instance = this;
     }
+
+    // Subscribing for tick
+    /*
     private void OnEnable()
     {
         var tick = PlayerTickSystem.Instance;
@@ -102,9 +99,11 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
         var tick = PlayerTickSystem.Instance;
         if (tick != null) tick.Unregister(this);
     }
+    */
 
     private void Start()
     {
+        // This subscription should be moved out
         var invMgr = InventoryManager.Instance;
         if (invMgr != null)
         {
@@ -137,11 +136,14 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
         }
     }
 
+    /*
     public void Tick(float dt)
     {
         TickNaturalStats(dt);
     }
+    */
 
+    // Applying consumable
     public void ApplyConsumable(ConsumableData cd)
     {
         if (cd == null) return;
@@ -159,7 +161,7 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
             ChangeTemperature(cd.temperatureRestore);
     }
 
-
+    // Changing stats according to cap rules and sends event if changed value is big enough (for optimisation)
     public void ChangeHealth(float amount)
     {
         float old = currentHealth;
@@ -200,6 +202,7 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
             OnEnergyChanged?.Invoke(currentEnergy);
     }
 
+    // Applying gear
     public void ApplyGear(GearData gear, int sign)
     {
         if (gear == null) return;
@@ -217,6 +220,7 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
         }
     }
 
+    // Recalculating weight when changed inventory or gear
     private void HandleInventoryChanged()
     {
         RecalculateWeight();
@@ -227,6 +231,7 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
         RecalculateWeight();
     }
 
+    // Recalculating weight based on inventory and gear list
     public void RecalculateWeight()
     {
         float total = 0f;
@@ -261,91 +266,26 @@ public class PlayerStatManager : MonoBehaviour, IPlayerTick
             OnWeightChanged?.Invoke(Weight);
     }
 
+    // tf is ts ???
     private void AddGearWeightIfNotNull(GearData gear, ref float total)
     {
         if (gear != null)
             total += gear.weight;
     }
 
-    public float HungerRateMultiplier
+
+
+    // Ticking stats (know it should be moved out here to snapshot)
+    public void TickNaturalStats(float dt, in StatusEffectsSnapshot s)
     {
-        get => hungerRateMultiplier;
-        set => hungerRateMultiplier = Mathf.Max(0f, value);
+        currentHunger -= hungerDrainPerSecond * s.HungerRateModifier * dt;
+
+        currentHydration -= hydrationDrainPerSecond * s.HydrationRateModifier * dt;
+
+        currentHealth += healthRegenPerSecond * s.HealthRegenModifier * dt;
     }
 
-    public float HydrationRateMultiplier
-    {
-        get => hydrationRateMultiplier;
-        set => hydrationRateMultiplier = Mathf.Max(0f, value);
-    }
-
-    public float EnergyRateMultiplier
-    {
-        get => energyRateMultiplier;
-        set => energyRateMultiplier = Mathf.Max(0f, value);
-    }
-
-    public float HealthRegenMultiplier
-    {
-        get => healthRegenMultiplier;
-        set => healthRegenMultiplier = Mathf.Max(0f, value);
-    }
-
-    public float TemperatureRateMultiplier
-    {
-        get => temperatureRateMultiplier;
-        set => temperatureRateMultiplier = Mathf.Max(0f, value);
-    }
-
-    private void TickNaturalStats(float dt)
-    {
-        if (hungerDrainPerSecond > 0f && currentHunger > 0f)
-        {
-            float hungerDelta = -hungerDrainPerSecond * hungerRateMultiplier * dt;
-            ChangeHunger(hungerDelta);
-        }
-
-        if (hydrationDrainPerSecond > 0f && currentHydration > 0f)
-        {
-            float hydrationDelta = -hydrationDrainPerSecond * hydrationRateMultiplier * dt;
-            ChangeHydration(hydrationDelta);
-        }
-
-        if (currentEnergy < energyCap && energyRegenPerSecond > 0f)
-        {
-            float energyDelta = energyRegenPerSecond * energyRateMultiplier * dt;
-            ChangeEnergy(energyDelta);
-        }
-
-        if (energyDrainPerSecond > 0f && currentEnergy > 0f)
-        {
-            float energyDrain = -energyDrainPerSecond * energyRateMultiplier * dt;
-            ChangeEnergy(energyDrain);
-        }
-
-        if (healthRegenPerSecond > 0f && currentHealth < healthCap)
-        {
-            if (currentHunger > hungerCap * 0.5f && currentHydration > hydrationCap * 0.5f)
-            {
-                float hpDelta = healthRegenPerSecond * healthRegenMultiplier * dt;
-                ChangeHealth(hpDelta);
-            }
-        }
-
-        if (healthDegenerationPerSecond > 0f)
-        {
-            float hpLose = -healthDegenerationPerSecond * dt;
-            ChangeHealth(hpLose);
-        }
-
-        if (!Mathf.Approximately(temperature, normalTemperature))
-        {
-            float dir = Mathf.Sign(normalTemperature - temperature);
-            float tempDelta = dir * temperatureChangeTowardsNormalPerSecond * temperatureRateMultiplier * dt;
-            ChangeTemperature(tempDelta);
-        }
-    }
-
+    // For storing and restoring stats
     public PlayerStatsSave Capture()
     {
         return new PlayerStatsSave

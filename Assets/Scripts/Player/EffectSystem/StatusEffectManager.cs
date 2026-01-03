@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static GameplayOrchestrator;
 
-public class StatusEffectManager : MonoBehaviour, IPlayerTick
+public class StatusEffectManager : MonoBehaviour
 {  
     public static StatusEffectManager Instance { get; private set; }
 
@@ -15,6 +15,7 @@ public class StatusEffectManager : MonoBehaviour, IPlayerTick
     public event Action<StatusEffect> OnEffectRemoved;
     public event Action<StatusEffectsSnapshot> OnSnapshotUpdated;
 
+    /*
     private void OnEnable()
     {
         if (PlayerTickSystem.Instance != null)
@@ -27,6 +28,8 @@ public class StatusEffectManager : MonoBehaviour, IPlayerTick
             PlayerTickSystem.Instance.Unregister(this);
     }
 
+    */
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,20 +40,9 @@ public class StatusEffectManager : MonoBehaviour, IPlayerTick
         Instance = this;
     }
 
-    public void Tick(float dt)
+    public void TickEffects(float dt, PlayerStatManager stats)
     {
-        var stats = PlayerStatManager.Instance;
-        if (stats == null)
-        {
-            SetSnapshot(StatusEffectsSnapshot.Default);
-            return;
-        }
-
-        if (effects.Count == 0)
-        {
-            SetSnapshot(StatusEffectsSnapshot.Default);
-            return;
-        }
+        if (stats == null) return;
 
         for (int i = effects.Count - 1; i >= 0; i--)
         {
@@ -65,9 +57,22 @@ public class StatusEffectManager : MonoBehaviour, IPlayerTick
                 OnEffectRemoved?.Invoke(e);
             }
         }
-
-        RebuildSnapshot();
     }
+
+    public StatusEffectsSnapshot BuildSnapshot(PlayerStatManager stats)
+    {
+        var snapshot = StatusEffectsSnapshot.Default;
+
+        // Если хочешь: сюда же можно добавить влияние самих статов (голод/энергия)
+        // StatInfluenceSystem.ApplyFromStats(stats, ref snapshot);
+
+        foreach (var e in effects)
+            e.ApplyTo(ref snapshot);
+
+        SetSnapshot(snapshot);
+        return snapshot;
+    }
+
 
     private void SetSnapshot(StatusEffectsSnapshot snapshot)
     {

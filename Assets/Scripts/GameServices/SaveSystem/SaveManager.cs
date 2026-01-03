@@ -347,7 +347,7 @@ public class SaveManager : MonoBehaviour
             playerSpawner.SpawnOrMoveTo(_pendingLoad.playerTransform.position, Quaternion.identity);
 
         var inventoryManager = InventoryManager.Instance;
-        if (inventoryManager != null)
+        if (inventoryManager != null && _pendingLoad.inventoryData.inventoryItems.Count > 0)
             inventoryManager.Restore(_pendingLoad.inventoryData);
 
         var statusEffectManager = StatusEffectManager.Instance;

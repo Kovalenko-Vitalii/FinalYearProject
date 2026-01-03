@@ -8,6 +8,11 @@
     public float StaminaDrainMultiplier;
 
     public float HealthRegenModifier;
+    public float HungerRateModifier;
+    public float HydrationRateModifier;
+    public float TemperatureRateModifier;
+    public float EnergyRateModifier;
+
     public float BleedDpsBonus;
 
     public bool CanSprint;
@@ -20,6 +25,10 @@
         PainIntensity = 0f,
         PainSuppression = 0f,
         HealthRegenModifier = 1f,
+        HungerRateModifier = 1f,
+        HydrationRateModifier = 1f,
+        TemperatureRateModifier = 1f,
+        EnergyRateModifier = 1f,
         BleedDpsBonus = 0f
     };
 }

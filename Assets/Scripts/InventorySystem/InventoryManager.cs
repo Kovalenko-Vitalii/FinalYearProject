@@ -19,8 +19,8 @@ public class InventoryManager : MonoBehaviour
     public Equipment playerEquipment { get; private set; }
 
     [Header("Test items")]
-    [SerializeField] private ItemData[] testItems;
-    [SerializeField] private int[] testAmounts;
+    [SerializeField] private ItemData[] initialItems;
+    [SerializeField] private int[] initialAmounts;
 
 
     public event Action OnPlayerInventoryChanged;
@@ -44,12 +44,18 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        if (testItems != null)
+        if (initialItems != null)
         {
-            for (int i = 0; i < testItems.Length; i++)
+            for (int i = 0; i < initialItems.Length; i++)
             {
-                int amount = (testAmounts != null && i < testAmounts.Length) ? testAmounts[i] : 1;
-                playerInventory.AddItem(testItems[i], amount, testItems[i].maxDurability);
+                int amount = (initialAmounts != null && i < initialAmounts.Length) ? initialAmounts[i] : 1;
+                if (initialItems[i] is GearData gearData)
+                {
+                    playerEquipment.Equip(gearData);
+                    continue;
+                }
+
+                playerInventory.AddItem(initialItems[i], amount, initialItems[i].maxDurability);
             }
         }
     }
@@ -169,15 +175,5 @@ public class InventoryManager : MonoBehaviour
                 playerEquipment.Equip(gear);
             }
         }
-
     }
-
-
-
 }
-
-
-
-
-
-
