@@ -275,15 +275,22 @@ public class PlayerStatManager : MonoBehaviour
 
 
 
-    // Ticking stats (know it should be moved out here to snapshot)
+    // Ticking stats (I know it should be optimised)
     public void TickNaturalStats(float dt, in StatusEffectsSnapshot s)
     {
-        currentHunger -= hungerDrainPerSecond * s.HungerRateModifier * dt;
+        // hunger drain
+        if (hungerDrainPerSecond > 0f && currentHunger > 0f)
+            ChangeHunger(-hungerDrainPerSecond * s.HungerRateModifier * dt);
 
-        currentHydration -= hydrationDrainPerSecond * s.HydrationRateModifier * dt;
+        // hydration drain
+        if (hydrationDrainPerSecond > 0f && currentHydration > 0f)
+            ChangeHydration(-hydrationDrainPerSecond * s.HydrationRateModifier * dt);
 
-        currentHealth += healthRegenPerSecond * s.HealthRegenModifier * dt;
+        // health regen
+        if (healthRegenPerSecond > 0f && currentHealth < healthCap)
+            ChangeHealth(+healthRegenPerSecond * s.HealthRegenModifier * dt);
     }
+
 
     // For storing and restoring stats
     public PlayerStatsSave Capture()

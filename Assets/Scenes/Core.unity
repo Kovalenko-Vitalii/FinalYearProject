@@ -496,7 +496,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SubtitleService
   view: {fileID: 10111944}
   audioSource: {fileID: 1585495644}
-  dontRepeatSameLineBackToBack: 1
 --- !u!1 &689708116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1065,7 +1064,7 @@ MonoBehaviour:
   minTemperature: 30
   maxTemperature: 42
   normalTemperature: 36.6
-  currentEnergy: 11
+  currentEnergy: 100
   energyCap: 100
   baseWeight: 0
   currentWeight: 0
