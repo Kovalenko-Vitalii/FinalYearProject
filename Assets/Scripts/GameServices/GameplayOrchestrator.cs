@@ -137,13 +137,19 @@ public class GameplayOrchestrator : MonoBehaviour
         while (SceneLoader.Instance.IsLoading)
             yield return null;
 
+        yield return null;
+
         // Finding spawn and spawn player
-        var sp = FindSpawn(_nextSpawnId) ?? FindSpawn(defaultSpawnId);
-        if (sp)
+        var spawn = SpawnPointRegistry.Instance
+        ? (SpawnPointRegistry.Instance.Get(_nextSpawnId) ?? SpawnPointRegistry.Instance.Get(defaultSpawnId))
+        : null;
+
+        if (spawn)
         {
-            PlayerSpawner.Instance.SpawnOrMoveTo(sp.transform);
+            PlayerSpawner.Instance.SpawnOrMoveTo(spawn);
             OnPlayerSpawned?.Invoke(PlayerSpawner.Instance.Player);
         }
+
 
         // Find cimenachineBinder and bind camera to headposition
         var binder = FindFirstObjectByType<CinemachineBinder>();

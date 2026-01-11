@@ -3,6 +3,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// I need to do something with this script, it is bed that it has similar responsibilities as game orchestrator
 public class PauseManager : MonoBehaviour
 {
 	public static PauseManager Instance { get; private set; }
