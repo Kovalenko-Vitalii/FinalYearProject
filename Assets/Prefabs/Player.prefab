@@ -162,18 +162,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   walkSpeed: 3
   sprintSpeed: 6
+  backwardSpeed: 3
   speedUpSmoothness: 3
   speedDownSmoothness: 3
-  backwardSpeed: 3
-  groundDrag: 3
-  playerHeight: 0
+  gravityForce: 5
+  groundedStickForce: 2
+  slideForce: 5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 4294967295
-  grounded: 0
-  gravityForce: 3
   orientation: {fileID: 0}
   controller: {fileID: 3775789981008255556}
-  state: 0
-  maxSlopeAngle: 45
-  slideForce: 5

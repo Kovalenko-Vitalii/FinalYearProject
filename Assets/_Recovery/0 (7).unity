@@ -452,51 +452,6 @@ Transform:
   - {fileID: 1568224889}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &567954555
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 567954557}
-  - component: {fileID: 567954556}
-  m_Layer: 0
-  m_Name: StatInfluenceProvider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &567954556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567954555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b72b8451d1a11ff4497d87ab4ceef422, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatInfluenceProvider
-  config: {fileID: 11400000, guid: 0ef3fbc535d231b4aa71826f18726b36, type: 2}
---- !u!4 &567954557
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567954555}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 659.2301, y: 0.00003, z: 618.67194}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &684434084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,7 +1104,7 @@ MonoBehaviour:
   healthCap: 100
   currentHunger: 100
   hungerCap: 100
-  currentHydration: 20
+  currentHydration: 100
   hydrationCap: 100
   temperature: 36.6
   minTemperature: 30
@@ -1157,8 +1112,6 @@ MonoBehaviour:
   normalTemperature: 36.6
   currentEnergy: 100
   energyCap: 100
-  currentStamina: 100
-  staminaCap: 100
   baseWeight: 0
   currentWeight: 0
   maxCarryWeight: 35
@@ -1169,26 +1122,7 @@ MonoBehaviour:
   hungerDrainPerSecond: 0.2
   hydrationDrainPerSecond: 0.3
   energyDrainPerSecond: 1
-  staminaRegenPerSecond: 18
-  staminaRegenDelayAfterUse: 0.75
-  minStaminaToStartSprint: 10
   temperatureChangeTowardsNormalPerSecond: 0.1
-  dbgSnapshot:
-    HealthDegenerationPerSecond: 0
-    HasPain: 0
-    PainIntensity: 0
-    PainSuppression: 0
-    MoveSpeedMultiplier: 0
-    StaminaDrainMultiplier: 0
-    StaminaRegenModifier: 0
-    StaminaCapMultiplier: 0
-    CanSprint: 0
-    HealthRegenModifier: 0
-    HungerRateModifier: 0
-    HydrationRateModifier: 0
-    TemperatureRateModifier: 0
-    EnergyRateModifier: 0
-    BleedDpsBonus: 0
 --- !u!1 &2097564500714957225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1711,4 +1645,3 @@ SceneRoots:
   - {fileID: 10111942}
   - {fileID: 2074301286}
   - {fileID: 566708489628069552}
-  - {fileID: 567954557}

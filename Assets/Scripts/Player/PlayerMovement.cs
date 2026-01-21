@@ -1,75 +1,59 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    private float moveSpeed;
+    [SerializeField] private float walkSpeed = 4f;
+    [SerializeField] private float sprintSpeed = 7f;
+    [SerializeField] private float backwardSpeed = 3f;
 
-    public float walkSpeed;
-    public float sprintSpeed;
-    public float speedUpSmoothness;
-    public float speedDownSmoothness;
-    public float backwardSpeed;
+    [Tooltip("How fast we accelerate to target speed")]
+    [SerializeField] private float speedUpSmoothness = 12f;
 
-    public float groundDrag;
+    [Tooltip("How fast we decelerate to target speed")]
+    [SerializeField] private float speedDownSmoothness = 16f;
 
-    [Header("Ground Check")]
-    public float playerHeight;
-    public LayerMask whatIsGround;
-    public bool grounded;
+    [Header("Stamina Sprint")]
+    [SerializeField] private float sprintStaminaDrainPerSecond = 14f;
+    [SerializeField] private float sprintRegenDelayAfterUse = 0.75f;
 
-    public float gravityForce;
 
-    [Header("===Links===")]
-    public Transform orientation;
-    public CharacterController controller;
-
-    [Header("===MOVING STATE===")]
-    public MovementState state;
-
-    float horizontalInput;
-    float verticalInput;
-    Vector3 moveDirection;
-    Vector3 playerVelocity;
-    public static bool canMove;
+    [Header("Gravity")]
+    [SerializeField] private float gravityForce = 25f;
+    [SerializeField] private float groundedStickForce = 2f;
 
     [Header("Slope Handling")]
-    public float maxSlopeAngle = 45f;
-    public float slideForce = 5f;
+    [SerializeField] private float slideForce = 5f;
 
-    public Vector3 MoveDirection => moveDirection;
-    public MovementState CurrentState => state;
+    [Header("Ground Check")]
+    [SerializeField] private LayerMask whatIsGround;
 
-    private StatusEffectsSnapshot effectsSnapshot;
+    [Header("Links")]
+    [SerializeField] private Transform orientation;
+    [SerializeField] private CharacterController controller;
 
-    private bool OnSlope(out Vector3 slopeDirection, out float slopeAngle)
-    {
-        slopeDirection = Vector3.zero;
-        slopeAngle = 0f;
+    public enum MovementState { Walking, Sprinting, Air }
+    public MovementState State { get; private set; }
 
-        if (Physics.SphereCast(transform.position, controller.radius, Vector3.down, out RaycastHit hit, playerHeight / 2 + 1f, whatIsGround))
-        {
-            slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-            if (slopeAngle > controller.slopeLimit)
-            {
-                slopeDirection = Vector3.ProjectOnPlane(Vector3.down, hit.normal).normalized;
-                return true;
-            }
-        }
-        return false;
-    }
+    public Vector3 MoveDirection => _moveDirection;
+    public static bool canMove = true;
 
-    public enum MovementState
-    {
-        walking,
-        sprinting,
-        air
-    }
+    private float _currentSpeed;
+    private float _horizontalInput;
+    private float _verticalInput;
 
-    private void Start()
+    private Vector3 _moveDirection;
+    private Vector3 _velocity;
+
+    private StatusEffectsSnapshot _effectsSnapshot;
+
+    public bool IsSprinting => State == MovementState.Sprinting;
+
+
+    private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        playerHeight = controller.height;
 
         if (orientation == null)
         {
@@ -77,77 +61,168 @@ public class PlayerMovement : MonoBehaviour
             if (cam != null) orientation = cam.transform;
         }
 
-        canMove = true;
-        moveSpeed = walkSpeed;
+        _currentSpeed = walkSpeed;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-
     private void Update()
     {
-        grounded = controller.isGrounded;
+        CacheStatusEffects();
 
-        var mgr = StatusEffectManager.Instance;
-        effectsSnapshot = (mgr != null) ? mgr.CurrentSnapshot : StatusEffectsSnapshot.Default;
-
-        StateHandler();
-        MovePlayer();
+        ReadInput();
+        HandleState();
+        ApplyGravity();
+        Move();
     }
 
-    private void StateHandler()
+    private void CacheStatusEffects()
     {
-        if (grounded && effectsSnapshot.CanSprint && Input.GetKey(KeyCode.LeftShift) && verticalInput > 0)
-        {
-            state = MovementState.sprinting;
-            float targetSpeed = sprintSpeed * effectsSnapshot.MoveSpeedMultiplier;
-            moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * speedUpSmoothness);
-        }
-        else if (grounded)
-        {
-            state = MovementState.walking;
-
-            float baseSpeed = verticalInput < 0 ? backwardSpeed : walkSpeed;
-            float targetSpeed = baseSpeed * effectsSnapshot.MoveSpeedMultiplier;
-
-            moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * speedDownSmoothness);
-        }
-        else
-        {
-            state = MovementState.air;
-            moveSpeed = walkSpeed * effectsSnapshot.MoveSpeedMultiplier;
-        }
+        var mgr = StatusEffectManager.Instance;
+        _effectsSnapshot = (mgr != null) ? mgr.CurrentSnapshot : StatusEffectsSnapshot.Default;
     }
 
-    private void MovePlayer()
+    private void ReadInput()
     {
         if (!canMove)
         {
-            controller.Move(Vector3.zero);
+            _horizontalInput = 0f;
+            _verticalInput = 0f;
             return;
         }
 
-        if (grounded)
+        _horizontalInput = Input.GetAxisRaw("Horizontal");
+        _verticalInput = Input.GetAxisRaw("Vertical");
+    }
+
+    private void HandleState()
+    {
+        bool grounded = controller.isGrounded;
+        var stats = PlayerStatManager.Instance;
+
+        bool sprintKey = grounded
+                         && _effectsSnapshot.CanSprint
+                         && Input.GetKey(KeyCode.LeftShift)
+                         && _verticalInput > 0f;
+
+        bool isSprintingNow = (State == MovementState.Sprinting);
+
+        bool allowedByStamina =
+            stats == null
+            || (isSprintingNow ? stats.CanKeepSprinting() : stats.CanStartSprint());
+
+        bool wantsSprint = sprintKey && allowedByStamina;
+
+        if (wantsSprint && stats != null)
         {
-            horizontalInput = Input.GetAxisRaw("Horizontal");
-            verticalInput = Input.GetAxisRaw("Vertical");
+            float drain = sprintStaminaDrainPerSecond
+                          * _effectsSnapshot.StaminaDrainMultiplier
+                          * Time.deltaTime;
+
+            float actualDrain = Mathf.Min(drain, stats.Stamina);
+            stats.TryConsumeStamina(actualDrain, sprintRegenDelayAfterUse);
         }
 
-        Vector3 cameraForward = orientation.forward;
-        cameraForward.y = 0;
+        float baseSpeed;
+        float smooth;
 
-        moveDirection = cameraForward.normalized * verticalInput + orientation.right * horizontalInput;
-
-        moveDirection *= moveSpeed;
-
-        transform.rotation = Quaternion.Euler(0, orientation.rotation.eulerAngles.y, 0);
-
-        if (!controller.isGrounded)
+        if (!grounded)
         {
-            playerVelocity.y -= gravityForce * Time.deltaTime;
+            State = MovementState.Air;
+            baseSpeed = walkSpeed;
+            smooth = speedDownSmoothness;
+        }
+        else if (wantsSprint)
+        {
+            State = MovementState.Sprinting;
+            baseSpeed = sprintSpeed;
+            smooth = speedUpSmoothness;
+        }
+        else
+        {
+            State = MovementState.Walking;
+            baseSpeed = (_verticalInput < 0f) ? backwardSpeed : walkSpeed;
+            smooth = speedDownSmoothness;
         }
 
-        moveDirection += playerVelocity;
+        float targetSpeed = baseSpeed * _effectsSnapshot.MoveSpeedMultiplier;
+        _currentSpeed = Mathf.Lerp(_currentSpeed, targetSpeed, Time.deltaTime * smooth);
+    }
 
-        controller.Move(moveDirection * Time.deltaTime);
+    private void ApplyGravity()
+    {
+        if (controller.isGrounded)
+        {
+            // keep player grounded
+            if (_velocity.y < 0f)
+                _velocity.y = -groundedStickForce;
+        }
+        else
+        {
+            _velocity.y -= gravityForce * Time.deltaTime;
+        }
+    }
+
+    private void Move()
+    {
+        if (!canMove)
+        {
+            // still apply gravity so you don't freeze mid-air if canMove toggles
+            controller.Move(_velocity * Time.deltaTime);
+            return;
+        }
+
+        Vector3 forward = orientation ? orientation.forward : transform.forward;
+        Vector3 right = orientation ? orientation.right : transform.right;
+
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 inputDir = (forward * _verticalInput + right * _horizontalInput);
+        if (inputDir.sqrMagnitude > 1f) inputDir.Normalize();
+
+        _moveDirection = inputDir * _currentSpeed;
+
+        // rotate player to camera yaw
+        if (orientation)
+            transform.rotation = Quaternion.Euler(0f, orientation.eulerAngles.y, 0f);
+
+        // slope slide if too steep
+        if (TryGetSteepSlopeSlide(out Vector3 slideDir))
+        {
+            _moveDirection += slideDir * slideForce;
+        }
+
+        Vector3 finalMove = _moveDirection;
+        finalMove.y = _velocity.y;
+
+        controller.Move(finalMove * Time.deltaTime);
+    }
+
+    private bool TryGetSteepSlopeSlide(out Vector3 slideDirection)
+    {
+        slideDirection = Vector3.zero;
+
+        // only relevant when grounded-ish
+        if (!controller.isGrounded) return false;
+
+        // spherecast from center down to detect normal
+        Vector3 origin = transform.position + Vector3.up * (controller.height * 0.5f);
+        float radius = controller.radius * 0.95f;
+
+        if (Physics.SphereCast(origin, radius, Vector3.down, out RaycastHit hit, controller.height * 0.6f, whatIsGround, QueryTriggerInteraction.Ignore))
+        {
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            if (slopeAngle > controller.slopeLimit)
+            {
+                // slide down along the slope
+                slideDirection = Vector3.ProjectOnPlane(Vector3.down, hit.normal).normalized;
+                return true;
+            }
+        }
+
+        return false;
     }
 }

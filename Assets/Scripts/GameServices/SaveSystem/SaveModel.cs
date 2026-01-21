@@ -109,7 +109,7 @@ public struct CameraStateSave
 [Serializable]
 public struct PlayerStatsSave
 {
-    public float health, hunger, hydration, energy, temperature;
+    public float health, hunger, hydration, energy, temperature, stamina;
 }
 
 // Saving items on location

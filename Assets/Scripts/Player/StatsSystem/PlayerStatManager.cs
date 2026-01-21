@@ -29,6 +29,12 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float currentEnergy = 100f;
     [SerializeField] private float energyCap = 100f;
 
+    [Header("Stamina settings")]
+    [SerializeField] private float currentStamina = 100f;
+    [SerializeField] private float staminaCap = 100f;
+
+
+
     [Header("Weight settings")]
     [SerializeField] private float baseWeight = 0f;
     [SerializeField] private float currentWeight = 0f;
@@ -45,7 +51,11 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float hungerDrainPerSecond = 0.2f;
     [SerializeField] private float hydrationDrainPerSecond = 0.3f;
     [SerializeField] private float energyDrainPerSecond = 1f;
+    [SerializeField] private float staminaRegenPerSecond = 18f;
+    [SerializeField] private float staminaRegenDelayAfterUse = 0.75f;
+    [SerializeField] private float minStaminaToStartSprint = 10f;
 
+    private float _staminaRegenBlockedUntil;
     [SerializeField] private float temperatureChangeTowardsNormalPerSecond = 0.1f; 
 
     // Events
@@ -57,6 +67,7 @@ public class PlayerStatManager : MonoBehaviour
     public event Action<float> OnTemperatureResistChanged;
     public event Action<float> OnDamageResistChanged;
     public event Action<float> OnWeightChanged;
+    public event Action<float> OnStaminaChanged;
 
     public float Health => currentHealth;
     public float Hunger => currentHunger;
@@ -75,6 +86,10 @@ public class PlayerStatManager : MonoBehaviour
     public float TemperatureMin => minTemperature;
     public float TemperatureMax => maxTemperature;
 
+    public float Stamina => currentStamina;
+    public float StaminaMax => staminaCap;
+    public float MinStaminaToStartSprint => minStaminaToStartSprint;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -84,6 +99,14 @@ public class PlayerStatManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    [Header("Runtime Debug (read only)")]
+    [SerializeField] private StatusEffectsSnapshot dbgSnapshot;
+
+    public void SetDebugSnapshot(in StatusEffectsSnapshot s)
+    {
+        dbgSnapshot = s;
     }
 
     // Subscribing for tick
@@ -113,6 +136,7 @@ public class PlayerStatManager : MonoBehaviour
                 invMgr.playerEquipment.OnChanged += HandleEquipmentChanged;
         }
 
+        OnStaminaChanged?.Invoke(currentStamina);
         OnHealthChanged?.Invoke(currentHealth);
         OnHungerChanged?.Invoke(currentHunger);
         OnHydrationChanged?.Invoke(currentHydration);
@@ -135,14 +159,6 @@ public class PlayerStatManager : MonoBehaviour
                 invMgr.playerEquipment.OnChanged -= HandleEquipmentChanged;
         }
     }
-
-    /*
-    public void Tick(float dt)
-    {
-        TickNaturalStats(dt);
-    }
-    */
-
     // Applying consumable
     public void ApplyConsumable(ConsumableData cd)
     {
@@ -201,6 +217,49 @@ public class PlayerStatManager : MonoBehaviour
         if (!Mathf.Approximately(old, currentEnergy))
             OnEnergyChanged?.Invoke(currentEnergy);
     }
+
+    // Stamina 
+    public void ChangeStamina(float amount)
+    {
+        float old = currentStamina;
+        currentStamina = Mathf.Clamp(currentStamina + amount, 0f, staminaCap);
+        if (!Mathf.Approximately(old, currentStamina))
+            OnStaminaChanged?.Invoke(currentStamina);
+    }
+
+    public bool HasStamina(float amount) => currentStamina >= amount;
+
+    public bool CanStartSprint()
+    {
+        return currentStamina >= minStaminaToStartSprint;
+    }
+
+    public bool CanKeepSprinting()
+    {
+        return currentStamina > 0f;
+    }
+
+
+    public bool TryConsumeStamina(float amount, float regenDelay)
+    {
+        if (amount <= 0f) return true;
+        if (currentStamina < amount) return false;
+
+        ChangeStamina(-amount);
+        _staminaRegenBlockedUntil = Time.time + Mathf.Max(0f, regenDelay);
+        return true;
+    }
+
+    public void TickStamina(float dt, in StatusEffectsSnapshot s, bool isSprinting)
+    {
+        if (isSprinting) return;
+        if (Time.time < _staminaRegenBlockedUntil) return;
+        if (staminaRegenPerSecond <= 0f) return;
+        if (currentStamina >= staminaCap) return;
+
+        ChangeStamina(staminaRegenPerSecond * s.StaminaRegenModifier * dt);
+    }
+
 
     // Applying gear
     public void ApplyGear(GearData gear, int sign)
@@ -276,7 +335,7 @@ public class PlayerStatManager : MonoBehaviour
 
 
     // Ticking stats (I know it should be optimised)
-    public void TickNaturalStats(float dt, in StatusEffectsSnapshot s)
+    public void TickNaturalStats(float dt, in StatusEffectsSnapshot s, bool isSprinting)
     {
         // hunger drain
         if (hungerDrainPerSecond > 0f && currentHunger > 0f)
@@ -289,6 +348,11 @@ public class PlayerStatManager : MonoBehaviour
         // health regen
         if (healthRegenPerSecond > 0f && currentHealth < healthCap)
             ChangeHealth(+healthRegenPerSecond * s.HealthRegenModifier * dt);
+
+        if (s.HealthDegenerationPerSecond > 0f)
+            ChangeHealth(-s.HealthDegenerationPerSecond * dt);
+
+        TickStamina(dt, s, isSprinting);
     }
 
 
@@ -301,6 +365,7 @@ public class PlayerStatManager : MonoBehaviour
             hunger = Hunger,
             hydration = Hydration,
             energy = Energy,
+            stamina = Stamina,
             temperature = Temperature
         };
     }
@@ -312,6 +377,7 @@ public class PlayerStatManager : MonoBehaviour
         ChangeHydration(s.hydration - Hydration);
         ChangeEnergy(s.energy - Energy);
         ChangeTemperature(s.temperature - Temperature);
+        ChangeStamina(s.stamina - Stamina);
 
         RecalculateWeight();
     }

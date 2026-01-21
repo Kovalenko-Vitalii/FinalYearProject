@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static GameplayOrchestrator;
 
+
 public class StatusEffectManager : MonoBehaviour
 {  
     public static StatusEffectManager Instance { get; private set; }
@@ -63,8 +64,7 @@ public class StatusEffectManager : MonoBehaviour
     {
         var snapshot = StatusEffectsSnapshot.Default;
 
-        // Если хочешь: сюда же можно добавить влияние самих статов (голод/энергия)
-        // StatInfluenceSystem.ApplyFromStats(stats, ref snapshot);
+        StatInfluenceSystem.ApplyFromStats(stats, ref snapshot);
 
         foreach (var e in effects)
             e.ApplyTo(ref snapshot);

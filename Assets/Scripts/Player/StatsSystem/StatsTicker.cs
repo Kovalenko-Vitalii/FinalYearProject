@@ -2,9 +2,11 @@
 
 public class StatsTicker : MonoBehaviour, IPlayerTick
 {
+    private PlayerMovement move;
     private void Start()
     {
         PlayerTickSystem.Instance.Register(this);
+        move = FindObjectOfType<PlayerMovement>();
     }
 
     private void OnDisable()
@@ -21,7 +23,12 @@ public class StatsTicker : MonoBehaviour, IPlayerTick
 
         effects.TickEffects(dt, stats);
         var snapshot = effects.BuildSnapshot(stats);
-        stats.TickNaturalStats(dt, snapshot);
+
+        bool sprinting = move != null && move.IsSprinting;
+        stats.TickNaturalStats(dt, snapshot, sprinting);
+
+        stats.SetDebugSnapshot(snapshot);
+
     }
 }
 
