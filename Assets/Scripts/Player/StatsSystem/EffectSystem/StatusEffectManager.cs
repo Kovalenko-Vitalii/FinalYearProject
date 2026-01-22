@@ -2,34 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static GameplayOrchestrator;
 
+public enum BodyPart
+{
+    Head,
+    Torso,
+    LeftArm,
+    RightArm,
+    LeftLeg,
+    RightLeg
+}
 
+// This class responsible for managing player`s buffs/effects
+// It holds list of various effects and ticks them
 public class StatusEffectManager : MonoBehaviour
 {  
     public static StatusEffectManager Instance { get; private set; }
 
+    // List of effects
     private readonly List<StatusEffect> effects = new();
+
+    //
     public StatusEffectsSnapshot CurrentSnapshot { get; private set; } = StatusEffectsSnapshot.Default;
 
+    // Actions for control
     public event Action<StatusEffect> OnEffectAdded;
     public event Action<StatusEffect> OnEffectRemoved;
     public event Action<StatusEffectsSnapshot> OnSnapshotUpdated;
 
-    /*
-    private void OnEnable()
-    {
-        if (PlayerTickSystem.Instance != null)
-            PlayerTickSystem.Instance.Register(this);
-    }
 
-    private void OnDisable()
-    {
-        if (PlayerTickSystem.Instance != null)
-            PlayerTickSystem.Instance.Unregister(this);
-    }
-
-    */
 
     private void Awake()
     {
@@ -41,16 +42,20 @@ public class StatusEffectManager : MonoBehaviour
         Instance = this;
     }
 
+    // This method ticks each effect
     public void TickEffects(float dt, PlayerStatManager stats)
     {
         if (stats == null) return;
 
+        // Iterating through each effect 
         for (int i = effects.Count - 1; i >= 0; i--)
         {
             var e = effects[i];
 
+            // tick effect
             e.Tick(stats, dt);
 
+            // if finished than remove
             if (e.IsFinished)
             {
                 e.OnExpire(stats);
@@ -60,116 +65,126 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+    // This method builds snapshot for later to be ticked
     public StatusEffectsSnapshot BuildSnapshot(PlayerStatManager stats)
     {
         var snapshot = StatusEffectsSnapshot.Default;
 
+        // installing all values for snapshot from stats using statInfluenceSystem
         StatInfluenceSystem.ApplyFromStats(stats, ref snapshot);
 
+        // installing values for snapshot from each effect
         foreach (var e in effects)
             e.ApplyTo(ref snapshot);
 
+        // setting snapshot as current
         SetSnapshot(snapshot);
         return snapshot;
     }
 
-
+    // Setting snapshot as current 
     private void SetSnapshot(StatusEffectsSnapshot snapshot)
     {
+        // Check if snapshot is equal to current one
         if (Equals(CurrentSnapshot, snapshot)) return;
 
         CurrentSnapshot = snapshot;
         OnSnapshotUpdated?.Invoke(CurrentSnapshot);
     }
 
-    private void RebuildSnapshot()
-    {
-        var snapshot = StatusEffectsSnapshot.Default;
-
-        foreach (var e in effects)
-        {
-            e.ApplyTo(ref snapshot);
-        }
-
-        CurrentSnapshot = snapshot;
-        OnSnapshotUpdated?.Invoke(CurrentSnapshot);
-    }
-
+    // Adding effect to list
     public void AddEffect(StatusEffect effect, bool replaceSameOnSamePart = true)
     {
+        // Checking if we have everything needed
         if (effect == null) return;
 
         var stats = PlayerStatManager.Instance;
         if (stats == null) return;
 
+        // Checking if we can apply effect
         if (!StatusEffectRules.CanApplyTo(effect.Id, effect.TargetPart))
             return;
 
+        // Iterating through each effect
         for (int i = effects.Count - 1; i >= 0; i--)
         {
             var existing = effects[i];
 
+            // Check if id and bodypart match
             if (existing.Id == effect.Id && existing.TargetPart == effect.TargetPart)
             {
+                // Try to merge
                 if (existing.TryMerge(effect))
                 {
-                    RebuildSnapshot();
                     return;
                 }
 
+                // Deleting if asked and stopping for cycle
                 if (replaceSameOnSamePart)
                 {
+                    /*
                     existing.OnExpire(stats);
                     effects.RemoveAt(i);
                     OnEffectRemoved?.Invoke(existing);
+                    */
+
+                    RemoveEffect(effect.Id, effect.TargetPart, true);
+                    break;
                 }
             }
         }
 
+        // If this code reached this means no suitable effect for merge was not found or replace is requested
+        // Simply adding new effect
         effects.Add(effect);
         effect.OnApply(stats);
         OnEffectAdded?.Invoke(effect);
-
-        RebuildSnapshot();
     }
 
 
-    public void RemoveEffect(StatusEffectId id, BodyPart? part = null)
+    // This method removes effect
+    public void RemoveEffect(StatusEffectId id, BodyPart? part = null, bool deleteOne = false)
     {
         var stats = PlayerStatManager.Instance;
         if (stats == null) return;
 
-        bool removedAny = false;
-
+        // Iterating
         for (int i = effects.Count - 1; i >= 0; i--)
         {
             var e = effects[i];
+            // If found with same Id and bodypart
             if (e.Id == id && (part == null || e.TargetPart == part))
             {
+                // Deleting
                 e.OnExpire(stats);
                 effects.RemoveAt(i);
                 OnEffectRemoved?.Invoke(e);
-                removedAny = true;
+
+                // Breaking cycke if asked
+                if (deleteOne) break;
             }
         }
 
-        if (removedAny)
-            RebuildSnapshot();
     }
 
-
+    // True if there is effect with specified id
     public bool HasEffect(StatusEffectId id) => effects.Any(e => e.Id == id);
 
+    // Getting all effects for specified body part
     public IReadOnlyList<StatusEffect> GetEffectsForPart(BodyPart part)
         => effects.Where(e => e.TargetPart == part).ToList();
 
+    // Getting all effects that are not specified with body part
     public IReadOnlyList<StatusEffect> GetGlobalEffects()
         => effects.Where(e => !e.TargetPart.HasValue).ToList();
 
+    // Getting list of bodyparts with any effects
     public IEnumerable<BodyPart> GetBodyPartsWithEffects()
         => effects.Where(e => e.TargetPart.HasValue)
                   .Select(e => e.TargetPart.Value)
                   .Distinct();
+
+    // Removing all effects
     private void ClearAllInternal()
     {
         var stats = PlayerStatManager.Instance;
@@ -183,9 +198,9 @@ public class StatusEffectManager : MonoBehaviour
         }
 
         effects.Clear();
-        RebuildSnapshot();
     }
 
+    // Capturing all effects for save
     public SaveEffectsData CaptureAll()
     {
         var data = new SaveEffectsData();
@@ -196,6 +211,7 @@ public class StatusEffectManager : MonoBehaviour
         return data;
     }
 
+    // Restoring all effects for save
     public void RestoreAll(SaveEffectsData data)
     {
         if (data?.effectList == null) return;
@@ -206,9 +222,12 @@ public class StatusEffectManager : MonoBehaviour
         {
             var effect = RestoreEffect(s);
             AddEffect(effect);
+
         }
     }
 
+    // Capturing effect
+    // I know it is not best approach
     public EffectSave CaptureEffect(StatusEffect e)
     {
         var baseSave = new EffectSave
@@ -240,8 +259,7 @@ public class StatusEffectManager : MonoBehaviour
         return baseSave;
     }
 
-
-
+    // Restoring effect for save
     public StatusEffect RestoreEffect(EffectSave e)
     {
         BodyPart? target = e.hasTarget ? e.target : (BodyPart?)null;
@@ -263,18 +281,5 @@ public class StatusEffectManager : MonoBehaviour
             default: return null;
         }
     }
-
-
-
-}
-
-public enum BodyPart
-{
-    Head,
-    Torso,
-    LeftArm,
-    RightArm,
-    LeftLeg,
-    RightLeg
 }
 

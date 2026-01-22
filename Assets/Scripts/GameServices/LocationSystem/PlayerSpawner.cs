@@ -65,4 +65,13 @@ public class PlayerSpawner : MonoBehaviour
         if (_player != null) Destroy(_player);
         _player = null;
     }
+
+    public GameObject EnsureSpawned()
+    {
+        if (_player == null)
+            _player = Instantiate(playerPrefab);
+
+        return _player;
+    }
+
 }

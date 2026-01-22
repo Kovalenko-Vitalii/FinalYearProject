@@ -5,6 +5,7 @@ using System.Collections;
 public class GameplayOrchestrator : MonoBehaviour
 {
     public static GameplayOrchestrator Instance { get; private set; }
+    private bool _isSaveLoad;
 
     // Loading screen UI
     [SerializeField] private LoadingOverlay loading;
@@ -78,9 +79,11 @@ public class GameplayOrchestrator : MonoBehaviour
     // Method used for loading location with defined player spawnpoint
     public void LoadLocation(string sceneName, string spawnId)
     {
-        _nextSpawnId = string.IsNullOrEmpty(spawnId) ? defaultSpawnId : spawnId;
+        _isSaveLoad = false;
+        _nextSpawnId = spawnId;
         StartCoroutine(LoadLocationRoutine(sceneName));
     }
+
 
     // Main method used for loading any location
     private IEnumerator LoadLocationRoutine(string sceneName)
@@ -139,16 +142,28 @@ public class GameplayOrchestrator : MonoBehaviour
 
         yield return null;
 
-        // Finding spawn and spawn player
-        var spawn = SpawnPointRegistry.Instance
-        ? (SpawnPointRegistry.Instance.Get(_nextSpawnId) ?? SpawnPointRegistry.Instance.Get(defaultSpawnId))
-        : null;
+        // 1) player should exist always
+        var player = PlayerSpawner.Instance.EnsureSpawned();
 
-        if (spawn)
+        // 2) if it is not saveLoad than we use spawnpoint registry
+        if (!_isSaveLoad)
         {
-            PlayerSpawner.Instance.SpawnOrMoveTo(spawn);
-            OnPlayerSpawned?.Invoke(PlayerSpawner.Instance.Player);
+            var spawn = SpawnPointRegistry.Instance
+                ? (SpawnPointRegistry.Instance.Get(_nextSpawnId) ?? SpawnPointRegistry.Instance.Get(defaultSpawnId))
+                : null;
+
+            if (spawn != null)
+                PlayerSpawner.Instance.SpawnOrMoveTo(spawn);
+            else
+                Debug.LogWarning($"[Load] Spawn not found: next='{_nextSpawnId}', default='{defaultSpawnId}' in scene '{sceneName}'");
         }
+
+        // 3) always invoke action
+        OnPlayerSpawned?.Invoke(player);
+
+        // 4) drop flag after spawn
+        _isSaveLoad = false;
+
 
 
         // Find cimenachineBinder and bind camera to headposition
@@ -174,4 +189,10 @@ public class GameplayOrchestrator : MonoBehaviour
             if (p.Id == id) return p;
         return null;
     }
+
+    public void MarkNextLoadAsSave()
+    {
+        _isSaveLoad = true;
+    }
+
 }

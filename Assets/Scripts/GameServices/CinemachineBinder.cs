@@ -1,42 +1,41 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
 
 public class CinemachineBinder : MonoBehaviour
 {
     [SerializeField] private string headPath = "HeadPosition";
 
-    // This method is used for finding a player`s position for head and bind cinemachine to it
     public void BindForActivePlayer()
     {
-        var spawner = PlayerSpawner.Instance;
-        if (spawner == null || spawner.Player == null)
+        var player = PlayerSpawner.Instance?.Player;
+        if (player == null)
         {
-            Debug.LogError("[CineBind] Bind called but PlayerSpawner/Player is null");
+            Debug.LogWarning("[CineBind] Player is null, skipping bind");
             return;
         }
 
-        // Getting a player from spawner and its head position (Empty object)
-        var player = spawner.Player;
         var follow = player.transform.Find(headPath);
-
         if (follow == null)
         {
-            Debug.LogError($"[CineBind] HeadPosition '{headPath}' not found under player '{player.name}'");
+            Debug.LogError($"[CineBind] '{headPath}' not found under player '{player.name}'");
             return;
         }
 
-        // Finding a cinemachine camera
-        var vcams = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
-        if (vcams.Length == 0)
+        var active = SceneManager.GetActiveScene();
+        var roots = active.GetRootGameObjects();
+
+        int bound = 0;
+        foreach (var r in roots)
         {
-            Debug.LogError("[CineBind] No CinemachineCamera found in scene");
-            return;
+            foreach (var vcam in r.GetComponentsInChildren<CinemachineCamera>(true))
+            {
+                vcam.Follow = follow;
+                bound++;
+            }
         }
 
-        // Finally setting up a follow target for camera
-        foreach (var vcam in vcams)
-            vcam.Follow = follow;
-
-        Debug.Log($"[CineBind] Bound {vcams.Length} cameras to {follow.name}");
+        if (bound == 0)
+            Debug.LogError("[CineBind] No CinemachineCamera found in ACTIVE scene");
     }
 }

@@ -2,11 +2,13 @@
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
     public string CurrentSlotId { get; private set; }
+
 
     // Path and name for save
     private const string SavesFolderName = "saves";
@@ -200,6 +202,13 @@ public class SaveManager : MonoBehaviour
         // Loading list of slots to buffer
         LoadIndex();
 
+        var currentScene = SceneLoader.Instance != null
+        ? SceneLoader.Instance.CurrentContentScene
+        : SceneManager.GetActiveScene().name;
+
+        if (string.IsNullOrEmpty(currentScene))
+            currentScene = SceneManager.GetActiveScene().name;
+
         // Finding slot
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta == null) return false;
@@ -231,8 +240,8 @@ public class SaveManager : MonoBehaviour
         {
             version = 1,
             slotId = slotId,
-            sceneName = meta.sceneName,
-            spawnId = meta.spawnId,
+            sceneName = currentScene,
+            spawnId = null,
 
             hasPlayerTransform = true,
             playerTransform = new PlayerTransformSave
@@ -313,7 +322,8 @@ public class SaveManager : MonoBehaviour
         if (orch == null) return false;
 
         // I`m not sure that this is really bad, but maybe this script should not trigger location loading
-        orch.LoadLocation(data.sceneName, data.spawnId);
+        orch.MarkNextLoadAsSave();
+        orch.LoadLocation(data.sceneName, null);
         return true;
     }
 
@@ -344,7 +354,20 @@ public class SaveManager : MonoBehaviour
         // Restoring all necessary data
         var playerSpawner = PlayerSpawner.Instance;
         if (playerSpawner != null && _pendingLoad.hasPlayerTransform)
-            playerSpawner.SpawnOrMoveTo(_pendingLoad.playerTransform.position, Quaternion.identity);
+            playerSpawner.SpawnOrMoveTo(
+                _pendingLoad.playerTransform.position,
+                _pendingLoad.playerTransform.rotation
+            );
+
+        var active = SceneManager.GetActiveScene();
+        CinemachineBinder binder = null;
+        foreach (var root in active.GetRootGameObjects())
+        {
+            binder = root.GetComponentInChildren<CinemachineBinder>(true);
+            if (binder) break;
+        }
+        binder?.BindForActivePlayer();
+
 
         var inventoryManager = InventoryManager.Instance;
         if (inventoryManager != null && _pendingLoad.inventoryData.inventoryItems.Count > 0)

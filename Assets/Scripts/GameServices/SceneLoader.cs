@@ -11,6 +11,8 @@ public class SceneLoader : MonoBehaviour
     // Async operation for paralel loading
     private AsyncOperation _activeLoadOp;
 
+    public string CurrentContentScene => _currentContentScene;
+
     // Float that indicated loading progress, used mainly for UI
     public float Progress { get; private set; } = 0f;
 
