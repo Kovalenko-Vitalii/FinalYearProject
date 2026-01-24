@@ -49,7 +49,7 @@ public class CameraEffectManager : MonoBehaviour, IPlayerTick
 
     public void Tick(float dt)
     {
-        var mgr = StatusEffectManager.Instance;
+        var mgr = PlayerStatManager.Instance;
         if (mgr == null || volume == null || volume.profile == null)
             return;
 

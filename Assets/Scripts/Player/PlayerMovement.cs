@@ -77,9 +77,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void CacheStatusEffects()
     {
-        var mgr = StatusEffectManager.Instance;
-        _effectsSnapshot = (mgr != null) ? mgr.CurrentSnapshot : StatusEffectsSnapshot.Default;
+        var stats = PlayerStatManager.Instance;
+        _effectsSnapshot = (stats != null) ? stats.CurrentSnapshot : StatusEffectsSnapshot.Default;
     }
+
 
     private void ReadInput()
     {

@@ -134,7 +134,15 @@ public class PlayerInteractor : MonoBehaviour
     private float GetInteractDuration(IInteractable interactable)
     {
         if (interactable is IHoldInteractable hold)
-            return Mathf.Max(hold.GetInteractDuration(this), 0f);
+        {
+            float mult = PlayerStatManager.Instance != null
+            ? PlayerStatManager.Instance.CurrentSnapshot.InteractionSpeedMultiplier
+            : 1f;
+
+            mult = Mathf.Max(mult, 0.05f);
+
+            return hold.GetInteractDuration(this) / mult;
+        }
 
         return 0f;
     }

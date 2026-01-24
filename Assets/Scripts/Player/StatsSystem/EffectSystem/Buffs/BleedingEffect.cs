@@ -8,9 +8,9 @@ public class BleedingEffect : StatusEffect
         this.damagePerSecond = damagePerSecond;
     }
 
-    public override void Tick(PlayerStatManager stats, float deltaTime)
+    public override void ApplyTo(ref StatusEffectsSnapshot s)
     {
-        base.Tick(stats, deltaTime);
-        stats.ChangeHealth(-damagePerSecond * deltaTime);
+        s.HealthDegenerationPerSecond += damagePerSecond;
     }
+
 }

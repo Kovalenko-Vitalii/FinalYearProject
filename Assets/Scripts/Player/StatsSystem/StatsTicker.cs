@@ -21,14 +21,11 @@ public class StatsTicker : MonoBehaviour, IPlayerTick
         var effects = StatusEffectManager.Instance;
         if (stats == null || effects == null) return;
 
-        effects.TickEffects(dt, stats);
-        var snapshot = effects.BuildSnapshot(stats);
+        effects.TickEffects(dt);
 
         bool sprinting = move != null && move.IsSprinting;
-        stats.TickNaturalStats(dt, snapshot, sprinting);
-
-        stats.SetDebugSnapshot(snapshot);
-
+        stats.Tick(dt, sprinting);
     }
+
 }
 

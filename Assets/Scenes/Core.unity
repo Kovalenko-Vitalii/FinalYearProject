@@ -1149,7 +1149,7 @@ MonoBehaviour:
   healthCap: 100
   currentHunger: 100
   hungerCap: 100
-  currentHydration: 20
+  currentHydration: 100
   hydrationCap: 100
   temperature: 36.6
   minTemperature: 30
@@ -1165,14 +1165,11 @@ MonoBehaviour:
   temperatureResist: 0
   damageResist: 0
   healthRegenPerSecond: 0
-  healthDegenerationPerSecond: 0
   hungerDrainPerSecond: 0.2
   hydrationDrainPerSecond: 0.3
-  energyDrainPerSecond: 1
+  energyDrainPerSecond: 0.5
   staminaRegenPerSecond: 18
-  staminaRegenDelayAfterUse: 0.75
   minStaminaToStartSprint: 10
-  temperatureChangeTowardsNormalPerSecond: 0.1
   dbgSnapshot:
     HealthDegenerationPerSecond: 0
     HasPain: 0
@@ -1181,14 +1178,13 @@ MonoBehaviour:
     MoveSpeedMultiplier: 0
     StaminaDrainMultiplier: 0
     StaminaRegenModifier: 0
-    StaminaCapMultiplier: 0
     CanSprint: 0
     HealthRegenModifier: 0
     HungerRateModifier: 0
     HydrationRateModifier: 0
     TemperatureRateModifier: 0
     EnergyRateModifier: 0
-    BleedDpsBonus: 0
+    InteractionSpeedMultiplier: 0
 --- !u!1 &2097564500714957225
 GameObject:
   m_ObjectHideFlags: 0

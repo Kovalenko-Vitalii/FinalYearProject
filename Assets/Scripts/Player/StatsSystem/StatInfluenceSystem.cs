@@ -12,7 +12,6 @@ public static class StatInfluenceSystem
 
         // Hunger influences
         s.StaminaRegenModifier *= cfg.hungerToStaminaRegen.Evaluate(hunger01);
-        s.StaminaCapMultiplier *= cfg.hungerToStaminaCap.Evaluate(hunger01);
         s.HealthDegenerationPerSecond += cfg.hungerToHealthDps.Evaluate(hunger01);
 
         // Hydration influences

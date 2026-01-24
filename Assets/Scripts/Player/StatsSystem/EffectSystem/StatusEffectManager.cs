@@ -22,15 +22,9 @@ public class StatusEffectManager : MonoBehaviour
     // List of effects
     private readonly List<StatusEffect> effects = new();
 
-    //
-    public StatusEffectsSnapshot CurrentSnapshot { get; private set; } = StatusEffectsSnapshot.Default;
-
     // Actions for control
     public event Action<StatusEffect> OnEffectAdded;
     public event Action<StatusEffect> OnEffectRemoved;
-    public event Action<StatusEffectsSnapshot> OnSnapshotUpdated;
-
-
 
     private void Awake()
     {
@@ -43,53 +37,26 @@ public class StatusEffectManager : MonoBehaviour
     }
 
     // This method ticks each effect
-    public void TickEffects(float dt, PlayerStatManager stats)
+    public void TickEffects(float dt)
     {
-        if (stats == null) return;
-
-        // Iterating through each effect 
         for (int i = effects.Count - 1; i >= 0; i--)
         {
             var e = effects[i];
+            e.Tick(dt);
 
-            // tick effect
-            e.Tick(stats, dt);
-
-            // if finished than remove
             if (e.IsFinished)
             {
-                e.OnExpire(stats);
+                e.OnExpire(PlayerStatManager.Instance);
                 effects.RemoveAt(i);
                 OnEffectRemoved?.Invoke(e);
             }
         }
     }
 
-    // This method builds snapshot for later to be ticked
-    public StatusEffectsSnapshot BuildSnapshot(PlayerStatManager stats)
+    public void ApplyAllTo(ref StatusEffectsSnapshot s)
     {
-        var snapshot = StatusEffectsSnapshot.Default;
-
-        // installing all values for snapshot from stats using statInfluenceSystem
-        StatInfluenceSystem.ApplyFromStats(stats, ref snapshot);
-
-        // installing values for snapshot from each effect
         foreach (var e in effects)
-            e.ApplyTo(ref snapshot);
-
-        // setting snapshot as current
-        SetSnapshot(snapshot);
-        return snapshot;
-    }
-
-    // Setting snapshot as current 
-    private void SetSnapshot(StatusEffectsSnapshot snapshot)
-    {
-        // Check if snapshot is equal to current one
-        if (Equals(CurrentSnapshot, snapshot)) return;
-
-        CurrentSnapshot = snapshot;
-        OnSnapshotUpdated?.Invoke(CurrentSnapshot);
+            e.ApplyTo(ref s);
     }
 
     // Adding effect to list

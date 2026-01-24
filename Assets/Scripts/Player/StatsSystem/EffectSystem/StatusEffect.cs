@@ -20,10 +20,7 @@ public abstract class StatusEffect
     public virtual void OnApply(PlayerStatManager stats) { }
     public virtual void OnExpire(PlayerStatManager stats) { }
 
-    public virtual void Tick(PlayerStatManager stats, float deltaTime)
-    {
-        Duration -= deltaTime;
-    }
+    public virtual void Tick(float dt) { Duration -= dt; }
 
     public virtual void ApplyTo(ref StatusEffectsSnapshot snapshot) { }
     public virtual bool TryMerge(StatusEffect other) => false;

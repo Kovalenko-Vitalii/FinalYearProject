@@ -11,7 +11,6 @@ public struct StatusEffectsSnapshot
     public float MoveSpeedMultiplier;
     public float StaminaDrainMultiplier;
     public float StaminaRegenModifier;
-    public float StaminaCapMultiplier;
     public bool CanSprint;
 
     // Rates
@@ -21,9 +20,7 @@ public struct StatusEffectsSnapshot
     public float TemperatureRateModifier;
     public float EnergyRateModifier;
 
-    // Damage
-    public float BleedDpsBonus;
-
+    public float InteractionSpeedMultiplier;
     public static StatusEffectsSnapshot Default => new StatusEffectsSnapshot
     {
         HealthDegenerationPerSecond = 0f,
@@ -31,7 +28,6 @@ public struct StatusEffectsSnapshot
         MoveSpeedMultiplier = 1f,
         StaminaDrainMultiplier = 1f,
         StaminaRegenModifier = 1f,
-        StaminaCapMultiplier = 1f,
         CanSprint = true,
 
         PainIntensity = 0f,
@@ -43,6 +39,6 @@ public struct StatusEffectsSnapshot
         TemperatureRateModifier = 1f,
         EnergyRateModifier = 1f,
 
-        BleedDpsBonus = 0f
+        InteractionSpeedMultiplier = 1f
     };
 }

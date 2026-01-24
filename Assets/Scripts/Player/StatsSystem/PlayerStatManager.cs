@@ -47,16 +47,17 @@ public class PlayerStatManager : MonoBehaviour
     // Regen parameters
     [Header("Natural Change Rates (per second)")]
     [SerializeField] private float healthRegenPerSecond = 0f; 
-    [SerializeField] private float healthDegenerationPerSecond = 0f;
     [SerializeField] private float hungerDrainPerSecond = 0.2f;
     [SerializeField] private float hydrationDrainPerSecond = 0.3f;
     [SerializeField] private float energyDrainPerSecond = 1f;
     [SerializeField] private float staminaRegenPerSecond = 18f;
-    [SerializeField] private float staminaRegenDelayAfterUse = 0.75f;
+    //[SerializeField] private float staminaRegenDelayAfterUse = 0.75f;
     [SerializeField] private float minStaminaToStartSprint = 10f;
 
     private float _staminaRegenBlockedUntil;
-    [SerializeField] private float temperatureChangeTowardsNormalPerSecond = 0.1f; 
+
+    [Header("Runtime Debug (read only)")]
+    [SerializeField] private StatusEffectsSnapshot dbgSnapshot;
 
     // Events
     public event Action<float> OnHealthChanged;
@@ -69,14 +70,16 @@ public class PlayerStatManager : MonoBehaviour
     public event Action<float> OnWeightChanged;
     public event Action<float> OnStaminaChanged;
 
+    public StatusEffectsSnapshot CurrentSnapshot { get; private set; } = StatusEffectsSnapshot.Default;
+
+
     public float Health => currentHealth;
     public float Hunger => currentHunger;
     public float Hydration => currentHydration;
     public float Temperature => temperature;
     public float Energy => currentEnergy;
 
-    public float Weight => currentWeight + baseWeight;
-    public float CurrentWeight => Weight;
+    public float CurrentWeight => currentWeight + baseWeight;
     public float MaxCarryWeight => maxCarryWeight;
 
     public float HealthMax => healthCap;
@@ -100,29 +103,6 @@ public class PlayerStatManager : MonoBehaviour
 
         Instance = this;
     }
-
-    [Header("Runtime Debug (read only)")]
-    [SerializeField] private StatusEffectsSnapshot dbgSnapshot;
-
-    public void SetDebugSnapshot(in StatusEffectsSnapshot s)
-    {
-        dbgSnapshot = s;
-    }
-
-    // Subscribing for tick
-    /*
-    private void OnEnable()
-    {
-        var tick = PlayerTickSystem.Instance;
-        if (tick != null) tick.Register(this);
-    }
-
-    private void OnDisable()
-    {
-        var tick = PlayerTickSystem.Instance;
-        if (tick != null) tick.Unregister(this);
-    }
-    */
 
     private void Start()
     {
@@ -322,7 +302,7 @@ public class PlayerStatManager : MonoBehaviour
         currentWeight = Mathf.Max(0f, total);
 
         if (!Mathf.Approximately(old, currentWeight))
-            OnWeightChanged?.Invoke(Weight);
+            OnWeightChanged?.Invoke(CurrentWeight);
     }
 
     // tf is ts ???
@@ -331,8 +311,6 @@ public class PlayerStatManager : MonoBehaviour
         if (gear != null)
             total += gear.weight;
     }
-
-
 
     // Ticking stats (I know it should be optimised)
     public void TickNaturalStats(float dt, in StatusEffectsSnapshot s, bool isSprinting)
@@ -349,10 +327,36 @@ public class PlayerStatManager : MonoBehaviour
         if (healthRegenPerSecond > 0f && currentHealth < healthCap)
             ChangeHealth(+healthRegenPerSecond * s.HealthRegenModifier * dt);
 
+        // energy regen
+        if (energyDrainPerSecond > 0f && currentEnergy > 0f)
+            ChangeEnergy(-energyDrainPerSecond * s.EnergyRateModifier * dt);
+
+        // health decreasing
         if (s.HealthDegenerationPerSecond > 0f)
             ChangeHealth(-s.HealthDegenerationPerSecond * dt);
 
+        // stamina ticking
         TickStamina(dt, s, isSprinting);
+    }
+
+    public void Tick(float dt, bool isSprinting)
+    {
+        var s = StatusEffectsSnapshot.Default;
+
+        // Influence of stats like low water - loosing hp etc.
+        StatInfluenceSystem.ApplyFromStats(this, ref s);
+
+        // Influence of stats
+        var effects = StatusEffectManager.Instance;
+        effects?.ApplyAllTo(ref s);
+
+        // Applying snapshot to stats
+        TickNaturalStats(dt, s, isSprinting);
+
+        CurrentSnapshot = s;
+
+        // debug
+        dbgSnapshot = s;
     }
 
 

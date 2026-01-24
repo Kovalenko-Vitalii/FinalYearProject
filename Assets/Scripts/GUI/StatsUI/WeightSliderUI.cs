@@ -34,7 +34,7 @@ public class WeightSliderUI : MonoBehaviour
 
         stats.OnWeightChanged += UpdateUI;
 
-        UpdateUI(stats.Weight);
+        UpdateUI(stats.CurrentWeight);
     }
 
     private void OnDisable()
