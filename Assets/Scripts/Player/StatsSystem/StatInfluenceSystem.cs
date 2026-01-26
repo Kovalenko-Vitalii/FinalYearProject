@@ -1,38 +1,68 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class StatInfluenceSystem
 {
     public static void ApplyFromStats(PlayerStatManager stats, ref StatusEffectsSnapshot s)
     {
         var cfg = StatInfluenceProvider.Instance != null ? StatInfluenceProvider.Instance.config : null;
-        if (cfg == null) return;
+        if (cfg == null || stats == null) return;
 
         float hunger01 = Safe01(stats.Hunger, stats.HungerMax);
         float hyd01 = Safe01(stats.Hydration, stats.HydrationMax);
 
-        // Hunger influences
-        s.StaminaRegenModifier *= cfg.hungerToStaminaRegen.Evaluate(hunger01);
-        s.HealthDegenerationPerSecond += cfg.hungerToHealthDps.Evaluate(hunger01);
+        // Hunger
+        s.StaminaRegenModifier *= EvalMinMult01(hunger01, cfg.hungerToStaminaRegen);
+        s.HealthDegenerationPerSecond += (1f - hunger01) * cfg.hungerToHealthDpsAtZero;
 
-        // Hydration influences
-        s.StaminaRegenModifier *= cfg.hydrationToStaminaRegen.Evaluate(hyd01);
-        s.StaminaDrainMultiplier *= cfg.hydrationToStaminaDrain.Evaluate(hyd01);
-        s.HealthDegenerationPerSecond += cfg.hydrationToHealthDps.Evaluate(hyd01);
+        // Hydration
+        s.StaminaRegenModifier *= EvalMinMult01(hyd01, cfg.hydrationToStaminaRegen);
+        s.StaminaDrainMultiplier *= EvalMaxMult01(hyd01, cfg.hydrationToStaminaDrain);
+        s.HealthDegenerationPerSecond += (1f - hyd01) * cfg.hydrationToHealthDpsAtZero;
 
-        // Temperature influences
+        // Temperature
         float delta = Mathf.Abs(stats.Temperature - cfg.normalTemp);
-        s.StaminaRegenModifier *= cfg.tempDeltaToStaminaRegen.Evaluate(delta);
-        s.StaminaDrainMultiplier *= cfg.tempDeltaToStaminaDrain.Evaluate(delta);
+        float tempT = Mathf.InverseLerp(cfg.tempPenaltyStartDelta, cfg.tempPenaltyFullDelta, delta); // 0..1
+
+        if (tempT > 0f)
+        {
+            s.StaminaRegenModifier *= Mathf.Lerp(1f, cfg.tempMinStaminaRegenMult, tempT);
+            s.StaminaDrainMultiplier *= Mathf.Lerp(1f, cfg.tempMaxStaminaDrainMult, tempT);
+        }
 
         if (stats.Temperature < cfg.noSprintBelow || stats.Temperature > cfg.noSprintAbove)
             s.CanSprint = false;
 
-        // Weight influences
+        // Weight 
         float load = stats.CurrentWeight / Mathf.Max(0.0001f, stats.MaxCarryWeight);
-        s.MoveSpeedMultiplier *= cfg.overloadToMoveSpeed.Evaluate(load);
-        s.StaminaDrainMultiplier *= cfg.overloadToStaminaDrain.Evaluate(load);
+        float loadT = Mathf.InverseLerp(cfg.overloadStart, cfg.overloadFull, load);
+
+        if (loadT > 0f)
+        {
+            s.MoveSpeedMultiplier *= Mathf.Lerp(1f, cfg.overloadMinMoveSpeedMult, loadT);
+            s.StaminaDrainMultiplier *= Mathf.Lerp(1f, cfg.overloadMaxStaminaDrainMult, loadT);
+        }
 
         if (load > 1f) s.CanSprint = false;
+    }
+
+    private static float EvalMinMult01(float value01, MinMultRule r)
+    {
+        value01 = Mathf.Clamp01(value01);
+        if (value01 >= r.start01) return 1f;
+
+        float t = value01 / Mathf.Max(r.start01, 0.0001f);
+        t = Mathf.Pow(t, Mathf.Max(0.1f, r.power));
+        return Mathf.Lerp(r.minMult, 1f, t);
+    }
+
+    private static float EvalMaxMult01(float value01, MaxMultRule r)
+    {
+        value01 = Mathf.Clamp01(value01);
+        if (value01 >= r.start01) return 1f;
+
+        float t = value01 / Mathf.Max(r.start01, 0.0001f);
+        t = Mathf.Pow(t, Mathf.Max(0.1f, r.power));
+        return Mathf.Lerp(r.maxMult, 1f, t);
     }
 
     private static float Safe01(float v, float max)
