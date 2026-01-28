@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 3880035945573980862}
   - component: {fileID: 3775789981008255556}
   - component: {fileID: 7246548334658807191}
+  - component: {fileID: 1858668464983379325}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -165,6 +166,8 @@ MonoBehaviour:
   backwardSpeed: 3
   speedUpSmoothness: 3
   speedDownSmoothness: 3
+  sprintStaminaDrainPerSecond: 14
+  sprintRegenDelayAfterUse: 0.75
   gravityForce: 5
   groundedStickForce: 2
   slideForce: 5
@@ -173,3 +176,16 @@ MonoBehaviour:
     m_Bits: 4294967295
   orientation: {fileID: 0}
   controller: {fileID: 3775789981008255556}
+--- !u!114 &1858668464983379325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801684083971527322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2b668fb412894468ec642332f354dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsTicker
+  move: {fileID: 7246548334658807191}

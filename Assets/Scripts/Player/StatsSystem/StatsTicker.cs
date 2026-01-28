@@ -2,17 +2,21 @@
 
 public class StatsTicker : MonoBehaviour, IPlayerTick
 {
-    private PlayerMovement move;
-    private void Start()
+    [SerializeField] private PlayerMovement move;
+
+    private void Awake()
     {
-        PlayerTickSystem.Instance.Register(this);
-        move = FindObjectOfType<PlayerMovement>();
+        if (!move) move = GetComponent<PlayerMovement>();
+    }
+
+    private void OnEnable()
+    {
+        PlayerTickSystem.Instance?.Register(this);
     }
 
     private void OnDisable()
     {
-        if (PlayerTickSystem.Instance != null)
-            PlayerTickSystem.Instance.Unregister(this);
+        PlayerTickSystem.Instance?.Unregister(this);
     }
 
     public void Tick(float dt)
@@ -26,6 +30,4 @@ public class StatsTicker : MonoBehaviour, IPlayerTick
         bool sprinting = move != null && move.IsSprinting;
         stats.Tick(dt, sprinting);
     }
-
 }
-

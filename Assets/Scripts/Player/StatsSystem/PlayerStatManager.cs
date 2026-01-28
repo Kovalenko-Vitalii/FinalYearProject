@@ -51,7 +51,6 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private float hydrationDrainPerSecond = 0.3f;
     [SerializeField] private float energyDrainPerSecond = 1f;
     [SerializeField] private float staminaRegenPerSecond = 18f;
-    //[SerializeField] private float staminaRegenDelayAfterUse = 0.75f;
     [SerializeField] private float minStaminaToStartSprint = 10f;
 
     private float _staminaRegenBlockedUntil;
