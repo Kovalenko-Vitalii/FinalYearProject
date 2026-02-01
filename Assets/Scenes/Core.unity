@@ -408,6 +408,7 @@ Transform:
   - {fileID: 1568224889}
   - {fileID: 1661255198}
   - {fileID: 567954557}
+  - {fileID: 960654731}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &567954555
@@ -556,6 +557,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb5c229fcbb03c40a1ffe477487f799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FPSUIManager
+--- !u!1 &960654730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 960654731}
+  - component: {fileID: 960654732}
+  m_Layer: 0
+  m_Name: LevelContextRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &960654731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960654730}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 18.09018, y: 0, z: -1043.1743}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 352845219}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &960654732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960654730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd434fa4fb85429488dc1cc1c4e701de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelContextRegistry
 --- !u!1 &1025221073
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,10 +897,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: debec08d65f346f4fa58c510af798ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
-  dayDurationSeconds: 12000
-  currentDaySeconds: 0
   currentDay: 1
-  dayDuration: 0
+  realMinutesPerDay: 2
+  startTimeHours: 9
+  sunriseTimeHours: 6.5
+  sunsetTimeHours: 18.5
+  sun: {fileID: 0}
+  sunAxis: {x: 1, y: 0, z: 0}
+  sunAngleOffset: -90
+  intensityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  currentMinutes: 0
 --- !u!114 &1862068516 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6534118524575449431, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
