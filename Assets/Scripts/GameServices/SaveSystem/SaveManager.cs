@@ -235,6 +235,9 @@ public class SaveManager : MonoBehaviour
         var worldObjectSpawner = WorldObjectSpawner.Instance;
         if (worldObjectSpawner == null) return false;
 
+        var dateWeatherManager = DateWeatherManager.Instance;
+        if (dateWeatherManager == null) return false;
+
         // Creating new GameData and saving information to it
         var data = new SaveGameData
         {
@@ -262,7 +265,9 @@ public class SaveManager : MonoBehaviour
 
             containersData = WorldContainerManager.CaptureAll(),
 
-            doorsData = DoorSaveSystem.CaptureAll()
+            doorsData = DoorSaveSystem.CaptureAll(),
+
+            dateWeatherSave = dateWeatherManager.Capture(),
 
         };
 
@@ -380,6 +385,10 @@ public class SaveManager : MonoBehaviour
         var worldObjectSpawner = WorldObjectSpawner.Instance;
         if (worldObjectSpawner != null)
             worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
+
+        var dateWeatherManager = DateWeatherManager.Instance;
+        if (dateWeatherManager != null)
+            dateWeatherManager.Restore(_pendingLoad.dateWeatherSave);
 
 
         // --- Flags like hasPlayerStats should be removed i think

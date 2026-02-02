@@ -164,4 +164,21 @@ public class DateWeatherManager : MonoBehaviour, IPlayerTick
         int m = total % (int)MinutesPerHour;
         return $"{h:00}:{m:00}";
     }
+
+    // For save
+
+    public DateWeatherSave Capture()
+    {
+        var saveData = new DateWeatherSave { };
+        saveData.day = currentDay;
+        saveData.minutes = currentMinutes;
+        Debug.Log(saveData.minutes + " " + saveData.day);
+        return saveData;
+    }
+
+    public void Restore(DateWeatherSave save)
+    {
+        currentMinutes = save.minutes;
+        currentDay = save.day;
+    }
 }

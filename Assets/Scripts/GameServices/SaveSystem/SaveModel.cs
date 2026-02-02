@@ -60,6 +60,8 @@ public class SaveGameData
     public SaveWorldContainersData containersData;
 
     public SaveDoorsData doorsData;
+
+    public DateWeatherSave dateWeatherSave;
 }
 
 // Saving player inventory and gear
@@ -167,6 +169,14 @@ public struct DoorSave
     public string id;
     public bool isOpen;
     public bool isLocked;
+}
+
+// Saving time and weather
+[Serializable]
+public struct DateWeatherSave
+{
+    public int day;
+    public float minutes;
 }
 
 // --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation
