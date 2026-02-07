@@ -18,6 +18,10 @@ public class ModalStack
         screen.Root.SetActive(true);
         screen.OnOpen();
         _stack.Push(screen);
+
+        if (screen is MenuScreen ms)
+            SoundManager.Instance?.PlayOneShot(ms.OpenSound, ms.SoundVolume);
+
         OnStackChanged?.Invoke(Top, AnyOpen);
     }
 
@@ -27,6 +31,10 @@ public class ModalStack
         var closed = _stack.Pop();
         closed.OnClose();
         closed.Root.SetActive(false);
+
+        if (closed is MenuScreen ms)
+            SoundManager.Instance?.PlayOneShot(ms.CloseSound, ms.SoundVolume);
+
         OnStackChanged?.Invoke(Top, AnyOpen);
     }
 
@@ -44,6 +52,10 @@ public class ModalStack
             {
                 s.OnClose();
                 s.Root.SetActive(false);
+
+                if (s is MenuScreen ms)
+                    SoundManager.Instance?.PlayOneShot(ms.CloseSound, ms.SoundVolume);
+
                 removed = true;
                 break;
             }

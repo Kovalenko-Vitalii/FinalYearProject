@@ -5648,6 +5648,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuScreen
   blocksGameplay: 1
   root: {fileID: 0}
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  soundVolume: 1
 --- !u!1 &2203049460156814554
 GameObject:
   m_ObjectHideFlags: 0
@@ -22061,6 +22064,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventoryScreen
   blocksGameplay: 1
   root: {fileID: 0}
+  openSound: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
+  closeSound: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
+  soundVolume: 1
   inventoryUI: {fileID: 4407355159934882099}
   gearUI: {fileID: 2856914606453125052}
   gearSelectionUI: {fileID: 5775455042826016847}
@@ -24927,6 +24933,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuScreen
   blocksGameplay: 1
   root: {fileID: 0}
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  soundVolume: 1
 --- !u!114 &5130626434401674652
 MonoBehaviour:
   m_ObjectHideFlags: 0
