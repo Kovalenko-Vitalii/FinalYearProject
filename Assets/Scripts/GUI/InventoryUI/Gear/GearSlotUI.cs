@@ -58,5 +58,6 @@ public class GearSlotUI : MonoBehaviour
         var selection = Object.FindAnyObjectByType<GearSelectionUI>();
         if (selection != null)
             selection.Open(ToGearSlot());
+        SoundManager.Instance.PlayUI(UISoundId.ItemClick, currentGearData.onClickSound);
     }
 }

@@ -14,11 +14,18 @@ public class HoldToUse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
     private bool isHolding;
     private float timer;
+    AudioClip sound;
+    UISoundId soundId;
 
-    public void Setup(float duration, Action onComplete)
+    public void Setup(float duration, Action onComplete, AudioClip sound, UISoundId soundId)
     {
         this.duration = duration;
         this.onComplete = onComplete;
+        this.sound = sound;
+        this.soundId = soundId;
+
+        Debug.Log($"[HoldToUse.Setup] duration={duration} sound={(sound ? sound.name : "NULL")} id={soundId}");
+
         ResetUI();
     }
 
@@ -26,6 +33,8 @@ public class HoldToUse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     {
         if (duration <= 0f || onComplete == null)
             return;
+
+        SoundManager.Instance?.PlayUI(soundId, sound);
 
         isHolding = true;
         timer = 0f;

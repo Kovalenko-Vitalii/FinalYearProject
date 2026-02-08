@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 7810073817172043294}
   - component: {fileID: 4911418768934326537}
   - component: {fileID: 2035952702815263828}
+  - component: {fileID: 1859982845634231886}
   m_Layer: 0
   m_Name: SaveSlotRow
   m_TagString: Untagged
@@ -274,6 +275,19 @@ MonoBehaviour:
   button: {fileID: 4911418768934326537}
   titleText: {fileID: 6331615145283604933}
   detailsText: {fileID: 1034792259234275418}
+--- !u!114 &1859982845634231886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5404330473489505431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &5722783475920064318
 GameObject:
   m_ObjectHideFlags: 0

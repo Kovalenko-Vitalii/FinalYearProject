@@ -21,6 +21,8 @@ public class UseConsumableActionModule : ActionModule
             label = label,
             slot = ActionSlot.Use,
             interactable = ctx.item.amount > 0,
+            holdStartSound = cd.onConsumeSound,
+            holdStartSoundId = UISoundId.ConsumeItem,
             execute = () =>
             {
                 var stats = PlayerStatManager.Instance;

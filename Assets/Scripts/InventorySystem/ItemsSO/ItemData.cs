@@ -26,6 +26,8 @@ public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
     [TextArea] public string description;
 
     public AudioClip onClickSound;
+    public AudioClip onPickupSound;
+    public AudioClip onDropSound;
 
     [Header("Durability")]
     public bool hasDurability = false;

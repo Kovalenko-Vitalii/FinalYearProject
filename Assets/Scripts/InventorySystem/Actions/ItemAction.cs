@@ -12,6 +12,9 @@ public struct ItemAction
     public Action execute;
 
     public ActionSlot slot;
+
+    public AudioClip holdStartSound;
+    public UISoundId holdStartSoundId;
 }
 
 public struct ItemActionContext

@@ -21,9 +21,6 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI selectedList;
 
-    private UIAudioPlayer audioPlayer;
-
-
     private ItemTag activeFilter = ItemTag.None;
     private Inventory overrideInventory;
 

@@ -371,6 +371,12 @@ MonoBehaviour:
   itemClick: {fileID: 8300000, guid: 045ed20d42c0c1746880dd24202b5093, type: 3}
   menuOpen: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
   menuClose: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
+  dropItem: {fileID: 8300000, guid: 741f151b297bdbb41a932102ee529811, type: 3}
+  equipItem: {fileID: 8300000, guid: 42ea3e2ce6c76ee458e823faa088f800, type: 3}
+  unequipItem: {fileID: 8300000, guid: 481f8b03b3e71a1439cda129bd7a51f0, type: 3}
+  consumeItem: {fileID: 8300000, guid: 5d602661373e9fb4b8f4d24caa51ed27, type: 3}
+  pickupItem: {fileID: 8300000, guid: 21c9a54bbf891dc4c8004b23b3082c50, type: 3}
+  rejectSound: {fileID: 8300000, guid: 481f8b03b3e71a1439cda129bd7a51f0, type: 3}
 --- !u!1 &319002775
 GameObject:
   m_ObjectHideFlags: 0

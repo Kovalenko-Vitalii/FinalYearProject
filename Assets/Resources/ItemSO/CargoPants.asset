@@ -18,8 +18,12 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.5
   description: Arthur said it`s lit
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
+  useDuration: 3
   tags: 8
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -27,4 +31,6 @@ MonoBehaviour:
   pickupPrefab: {fileID: 2301237298300920353, guid: a1b2c9da55d76d04899801ac8e5fb994, type: 3}
   temperatureResist: 4
   damageResist: 1
+  onEquipSound: {fileID: 0}
+  onUnequipSound: {fileID: 0}
   slot: 2

@@ -41,6 +41,9 @@ public class DropActionModule : ActionModule
 
                 var gearUI = Object.FindAnyObjectByType<GearUI>();
                 if (gearUI != null) gearUI.Refresh();
+
+                // Sound integration
+                SoundManager.Instance?.PlayUI(UISoundId.DropItem, ctx.item.data.onDropSound);
             }
         };
     }

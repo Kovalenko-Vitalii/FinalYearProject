@@ -33,12 +33,13 @@ public class WorldItem : MonoBehaviour, IInteractable
 
     public int TryPickupTo(Inventory target, int desiredAmount)
     {
-        if (target == null || data == null || amount <= 0 || desiredAmount <= 0)
-            return 0;
+        if (target == null || data == null || amount <= 0 || desiredAmount <= 0) { SoundManager.Instance?.PlayUI(UISoundId.RejectSound); return 0; }
 
         int toTake = Mathf.Min(desiredAmount, amount);
         int accepted = target.AddItemAndGetAccepted(data, toTake, currentDurability);
         if (accepted > 0) AddAmount(-accepted);
+        // Sound integration
+        SoundManager.Instance?.PlayUI(UISoundId.PickupSound, data.onPickupSound);
         return accepted;
     }
 

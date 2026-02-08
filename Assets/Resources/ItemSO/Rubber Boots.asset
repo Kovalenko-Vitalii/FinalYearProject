@@ -18,8 +18,12 @@ MonoBehaviour:
   maxStack: 1
   weight: 1
   description: Some old rubber boots probably used in garden.
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
+  useDuration: 3
   tags: 8
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -27,4 +31,6 @@ MonoBehaviour:
   pickupPrefab: {fileID: 2301237298300920353, guid: eac26eae9d50c684b869c32be47a16d8, type: 3}
   temperatureResist: 0
   damageResist: 2
+  onEquipSound: {fileID: 0}
+  onUnequipSound: {fileID: 0}
   slot: 3

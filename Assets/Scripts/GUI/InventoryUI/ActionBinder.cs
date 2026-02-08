@@ -36,7 +36,7 @@ public static class ActionBinder
             {
                 dropButton.gameObject.SetActive(true);
                 dropButton.interactable = drop.interactable;
-                dropButton.onClick.AddListener(() => { drop.execute?.Invoke(); afterActionRefresh?.Invoke(); });
+                dropButton.onClick.AddListener(() => { drop.execute?.Invoke(); afterActionRefresh?.Invoke();});
             }
         }
 
@@ -58,13 +58,16 @@ public static class ActionBinder
 
                 primaryButton.onClick.RemoveAllListeners();
 
+                
                 if (hold != null && duration > 0f)
                 {
                     hold.Setup(duration, () =>
                     {
                         primary.execute?.Invoke();
                         afterActionRefresh?.Invoke();
-                    });
+                    },
+                    primary.holdStartSound,
+                    primary.holdStartSoundId);
                 }
                 else
                 {

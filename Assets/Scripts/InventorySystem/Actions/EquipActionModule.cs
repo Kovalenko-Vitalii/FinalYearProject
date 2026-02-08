@@ -21,6 +21,8 @@ public class EquipActionModule : ActionModule
                 label = "Equip",
                 slot = ActionSlot.Use,
                 interactable = ctx.item.amount > 0,
+                holdStartSound = g.onEquipSound,
+                holdStartSoundId = UISoundId.EquipItem,
                 execute = () =>
                 {
                     var old = im.playerEquipment.Equip(g);
@@ -39,6 +41,8 @@ public class EquipActionModule : ActionModule
                 label = "Unequip",
                 slot = ActionSlot.Use,
                 interactable = true,
+                holdStartSound = g.onUnequipSound,
+                holdStartSoundId = UISoundId.UnequipItem,
                 execute = () =>
                 {
                     im.playerEquipment.Unequip(g.slot);
