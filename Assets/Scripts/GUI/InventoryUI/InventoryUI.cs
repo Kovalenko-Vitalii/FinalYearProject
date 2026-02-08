@@ -21,9 +21,12 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI selectedList;
 
+    private UIAudioPlayer audioPlayer;
+
 
     private ItemTag activeFilter = ItemTag.None;
     private Inventory overrideInventory;
+
 
     private Inventory TargetInventory
     {
@@ -67,6 +70,7 @@ public class InventoryUI : MonoBehaviour
     {
         activeFilter = tag;
         if (selectedList != null) selectedList.text = label;
+
         Refresh();
     }
 

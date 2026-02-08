@@ -25,6 +25,8 @@ public class ItemData : ScriptableObject, IStatProvider, IItemActionProvider
     public float weight;
     [TextArea] public string description;
 
+    public AudioClip onClickSound;
+
     [Header("Durability")]
     public bool hasDurability = false;
     public float maxDurability = 0f;

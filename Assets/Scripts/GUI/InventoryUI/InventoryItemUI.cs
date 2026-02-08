@@ -69,6 +69,9 @@ public class InventoryItemUI : MonoBehaviour
 			if (infoUI != null)
 				infoUI.SetItem(currentItem, sourceInventory);
 		}
+
+		// Sound integration
+		SoundManager.Instance?.PlayUI(UISoundId.ItemClick, currentItem.data.onClickSound);
 	}
 
 	public void SetHighlight(bool active)

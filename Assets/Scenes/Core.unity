@@ -365,8 +365,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b0fe74dd65dbae4591f63f3c159f4e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  audioSource: {fileID: 854153749}
-  sounds: []
+  uiSource: {fileID: 854153749}
+  volumeUI: 1
+  uiClick: {fileID: 8300000, guid: 0bcb08120ea75414aa3eda6558963449, type: 3}
+  itemClick: {fileID: 8300000, guid: 045ed20d42c0c1746880dd24202b5093, type: 3}
+  menuOpen: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
+  menuClose: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
 --- !u!1 &319002775
 GameObject:
   m_ObjectHideFlags: 0

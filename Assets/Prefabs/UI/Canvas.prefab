@@ -1284,6 +1284,7 @@ GameObject:
   - component: {fileID: 999609254470331191}
   - component: {fileID: 2890882195226326880}
   - component: {fileID: 5387983350416429107}
+  - component: {fileID: 6809542522155090894}
   m_Layer: 0
   m_Name: Button(All)
   m_TagString: Untagged
@@ -1393,6 +1394,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6809542522155090894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499858425705771166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &519178428706564784
 GameObject:
   m_ObjectHideFlags: 0
@@ -2839,6 +2853,7 @@ GameObject:
   - component: {fileID: 887846263811598162}
   - component: {fileID: 476558963802728173}
   - component: {fileID: 6425137900354756576}
+  - component: {fileID: 4074664143200081716}
   m_Layer: 5
   m_Name: Button(Back)
   m_TagString: Untagged
@@ -2948,6 +2963,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4074664143200081716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930272803890216942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &1012840300256629497
 GameObject:
   m_ObjectHideFlags: 0
@@ -3863,6 +3891,7 @@ GameObject:
   - component: {fileID: 2714489495821419665}
   - component: {fileID: 3282011685988588771}
   - component: {fileID: 3402855441016951812}
+  - component: {fileID: 783651938267150342}
   m_Layer: 5
   m_Name: Button(Play)
   m_TagString: Untagged
@@ -3984,6 +4013,19 @@ MonoBehaviour:
           m_StringArgument: SaveLoadMenu
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &783651938267150342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213141348377109584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &1273596361279866921
 GameObject:
   m_ObjectHideFlags: 0
@@ -4185,6 +4227,7 @@ GameObject:
   - component: {fileID: 1187230081340905579}
   - component: {fileID: 1931623663811702022}
   - component: {fileID: 3315056670960623377}
+  - component: {fileID: 5676822968145785957}
   m_Layer: 0
   m_Name: Button(Materials)
   m_TagString: Untagged
@@ -4294,6 +4337,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5676822968145785957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607990653533897575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &1725405717744394428
 GameObject:
   m_ObjectHideFlags: 0
@@ -5650,7 +5706,6 @@ MonoBehaviour:
   root: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
-  soundVolume: 1
 --- !u!1 &2203049460156814554
 GameObject:
   m_ObjectHideFlags: 0
@@ -6206,6 +6261,7 @@ GameObject:
   - component: {fileID: 1352897893847672527}
   - component: {fileID: 5473592252426044674}
   - component: {fileID: 1937641706329649936}
+  - component: {fileID: 4008979768598438427}
   m_Layer: 0
   m_Name: Button(Tools)
   m_TagString: Untagged
@@ -6315,6 +6371,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4008979768598438427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2414139744151653299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &2512932977631396982
 GameObject:
   m_ObjectHideFlags: 0
@@ -7221,6 +7290,7 @@ GameObject:
   - component: {fileID: 6969255715322888976}
   - component: {fileID: 4328243565691602833}
   - component: {fileID: 1489421629255961234}
+  - component: {fileID: 2204183029249097356}
   m_Layer: 0
   m_Name: Button(Quest Items)
   m_TagString: Untagged
@@ -7330,6 +7400,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2204183029249097356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2921576766008901500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &2928578004292578087
 GameObject:
   m_ObjectHideFlags: 0
@@ -8173,6 +8256,7 @@ GameObject:
   - component: {fileID: 1689982551018849477}
   - component: {fileID: 5980386738097545248}
   - component: {fileID: 3508545568960712996}
+  - component: {fileID: 1659854896093775343}
   m_Layer: 0
   m_Name: Button(Gear)
   m_TagString: Untagged
@@ -8282,6 +8366,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1659854896093775343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3273876923028493245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &3281164449697225872
 GameObject:
   m_ObjectHideFlags: 0
@@ -8430,6 +8527,7 @@ GameObject:
   - component: {fileID: 8017970653538994906}
   - component: {fileID: 2901114408028533321}
   - component: {fileID: 3217515555315192333}
+  - component: {fileID: 4474110032789149134}
   m_Layer: 5
   m_Name: Button(Back)
   m_TagString: Untagged
@@ -8551,6 +8649,19 @@ MonoBehaviour:
           m_StringArgument: Default
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4474110032789149134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3309994458186651051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &3395207548810011166
 GameObject:
   m_ObjectHideFlags: 0
@@ -10480,6 +10591,7 @@ GameObject:
   - component: {fileID: 8841519503364352179}
   - component: {fileID: 1969521463809196632}
   - component: {fileID: 8831884620555827797}
+  - component: {fileID: 6892898510721397424}
   m_Layer: 0
   m_Name: Button(Quests)
   m_TagString: Untagged
@@ -10612,6 +10724,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6892898510721397424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4066540631626009964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &4084681455824998549
 GameObject:
   m_ObjectHideFlags: 0
@@ -15074,6 +15199,7 @@ GameObject:
   - component: {fileID: 3510603610885280324}
   - component: {fileID: 4983746729780900943}
   - component: {fileID: 1587572699266537218}
+  - component: {fileID: 7183939339768540405}
   m_Layer: 0
   m_Name: Button(Gear)
   m_TagString: Untagged
@@ -15218,6 +15344,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7183939339768540405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6033359744125570197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &6051102268255947068
 GameObject:
   m_ObjectHideFlags: 0
@@ -15230,6 +15369,7 @@ GameObject:
   - component: {fileID: 2995060110803666538}
   - component: {fileID: 7229476508148181048}
   - component: {fileID: 122696754325678086}
+  - component: {fileID: 964612950009606991}
   m_Layer: 0
   m_Name: Button(Food)
   m_TagString: Untagged
@@ -15339,6 +15479,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &964612950009606991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6051102268255947068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &6195119960640361349
 GameObject:
   m_ObjectHideFlags: 0
@@ -17806,6 +17959,7 @@ GameObject:
   - component: {fileID: 5879094918652744478}
   - component: {fileID: 5058439639059048451}
   - component: {fileID: 8052751812266930398}
+  - component: {fileID: 4753286298657920715}
   m_Layer: 0
   m_Name: Button(Character)
   m_TagString: Untagged
@@ -17938,6 +18092,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4753286298657920715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7014436973113799083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &7053859438499204996
 GameObject:
   m_ObjectHideFlags: 0
@@ -18154,6 +18321,7 @@ GameObject:
   - component: {fileID: 1759435334501808075}
   - component: {fileID: 4544591057731798728}
   - component: {fileID: 5983360071693803917}
+  - component: {fileID: 3624149197106287754}
   m_Layer: 5
   m_Name: Button(Create)
   m_TagString: Untagged
@@ -18263,6 +18431,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3624149197106287754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7137489804026660334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &7204578067473582767
 GameObject:
   m_ObjectHideFlags: 0
@@ -20740,6 +20921,7 @@ GameObject:
   - component: {fileID: 818677105076789818}
   - component: {fileID: 2119527062926429612}
   - component: {fileID: 2490073942192126551}
+  - component: {fileID: 103770149345550618}
   m_Layer: 0
   m_Name: Button(Inventory)
   m_TagString: Untagged
@@ -20872,6 +21054,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &103770149345550618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7851630439310955271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &7873199358822975300
 GameObject:
   m_ObjectHideFlags: 0
@@ -20917,6 +21112,7 @@ GameObject:
   - component: {fileID: 3304273752400562781}
   - component: {fileID: 2265988536812201813}
   - component: {fileID: 9077099569209741687}
+  - component: {fileID: 1865892043209550446}
   m_Layer: 5
   m_Name: Button(Quit)
   m_TagString: Untagged
@@ -21026,6 +21222,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1865892043209550446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7941789049867529515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &7994934007778343303
 GameObject:
   m_ObjectHideFlags: 0
@@ -21038,6 +21247,7 @@ GameObject:
   - component: {fileID: 2716263099037696661}
   - component: {fileID: 1212309824901856031}
   - component: {fileID: 7146638766295556237}
+  - component: {fileID: 1328626645271494165}
   m_Layer: 5
   m_Name: Button(Settings)
   m_TagString: Untagged
@@ -21147,6 +21357,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1328626645271494165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994934007778343303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &8019869630512444487
 GameObject:
   m_ObjectHideFlags: 0
@@ -22066,7 +22289,6 @@ MonoBehaviour:
   root: {fileID: 0}
   openSound: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
   closeSound: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
-  soundVolume: 1
   inventoryUI: {fileID: 4407355159934882099}
   gearUI: {fileID: 2856914606453125052}
   gearSelectionUI: {fileID: 5775455042826016847}
@@ -23352,6 +23574,7 @@ GameObject:
   - component: {fileID: 3832278166135604139}
   - component: {fileID: 6716590724879576915}
   - component: {fileID: 6965042064843270590}
+  - component: {fileID: 8478548702925593152}
   m_Layer: 0
   m_Name: Button(Medicine)
   m_TagString: Untagged
@@ -23461,6 +23684,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8478548702925593152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8526794758423130423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &8565213571269154527
 GameObject:
   m_ObjectHideFlags: 0
@@ -24008,6 +24244,7 @@ GameObject:
   - component: {fileID: 5510184974450240517}
   - component: {fileID: 1730395300540097139}
   - component: {fileID: 1560045385498676918}
+  - component: {fileID: 200987240943329542}
   m_Layer: 0
   m_Name: Button(Craft)
   m_TagString: Untagged
@@ -24140,6 +24377,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &200987240943329542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746994801854480384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32336f8b1e809642bafba2f5a5497ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
+  soundId: 0
 --- !u!1 &8799285629165825620
 GameObject:
   m_ObjectHideFlags: 0
@@ -24935,7 +25185,6 @@ MonoBehaviour:
   root: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
-  soundVolume: 1
 --- !u!114 &5130626434401674652
 MonoBehaviour:
   m_ObjectHideFlags: 0

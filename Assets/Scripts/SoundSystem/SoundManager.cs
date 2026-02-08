@@ -5,29 +5,47 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
-    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioSource uiSource;
+    [SerializeField, Range(0f, 1f)] float volumeUI = 1f;
 
-    // List of sounds
-    [SerializeField] List<AudioClip> sounds;
+    [Header("Default Sounds")]
+    [SerializeField] private AudioClip uiClick;
+    [SerializeField] private AudioClip itemClick;
+    [SerializeField] private AudioClip menuOpen;
+    [SerializeField] private AudioClip menuClose;
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void PlaySound(string soundName)
+
+    public void PlayUI(UISoundId id, AudioClip overrideClip = null)
     {
-        foreach (var sound in sounds)
-        {
-            if (sound.name == soundName)
-                audioSource.PlayOneShot(sound);
-        }
+        if (uiSource == null) return;
+
+        var clip = overrideClip != null ? overrideClip : GetDefault(id);
+        if (clip == null) return;
+
+        uiSource.PlayOneShot(clip, volumeUI);
     }
 
-    public void PlayOneShot(AudioClip clip, float volume = 1f)
+    private AudioClip GetDefault(UISoundId id) => id switch
     {
-        if (audioSource == null || clip == null) return;
-        audioSource.PlayOneShot(clip, volume);
-    }
-
+        UISoundId.UIClick => uiClick,
+        UISoundId.ItemClick => itemClick,
+        UISoundId.MenuOpen => menuOpen,
+        UISoundId.MenuClose => menuClose,
+        _ => null
+    };
 }
+
+public enum UISoundId
+{
+    UIClick,
+    ItemClick,
+    MenuOpen,
+    MenuClose
+}
+

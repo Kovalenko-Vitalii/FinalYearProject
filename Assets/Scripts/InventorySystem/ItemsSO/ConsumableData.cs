@@ -31,6 +31,8 @@ public class ConsumableData : ItemData, IStatProvider
     public float hydrationRestore;
     public float temperatureRestore;
 
+    public AudioClip onConsumeSound;
+
     [Header("Status effect operations")]
     public List<ConsumableStatusOp> statusOps = new(); 
 

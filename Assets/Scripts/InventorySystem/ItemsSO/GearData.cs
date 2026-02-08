@@ -7,6 +7,9 @@ public class GearData : ItemData, IStatProvider
     public float temperatureResist = 0;
     public float damageResist = 0;
 
+    public AudioClip onEquipSound;
+    public AudioClip onUnequipSound;
+
     public enum GearSlot { Head, Chest, Legs, Boots }
     public GearSlot slot;
 
