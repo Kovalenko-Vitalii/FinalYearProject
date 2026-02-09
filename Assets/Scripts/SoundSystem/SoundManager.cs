@@ -5,8 +5,13 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
+    [Header("Audio Sources")]
     [SerializeField] AudioSource uiSource;
+    [SerializeField] AudioSource footstepSource;
+
+    [Header("Volumes")]
     [SerializeField, Range(0f, 1f)] float volumeUI = 1f;
+    [SerializeField, Range(0f, 1f)] float volumeFootstep = 1f;
 
     [Header("Default Sounds")]
     [SerializeField] private AudioClip uiClick;
@@ -36,6 +41,14 @@ public class SoundManager : MonoBehaviour
         if (clip == null) return;
 
         uiSource.PlayOneShot(clip, volumeUI);
+    }
+
+    public void PlayFootstep(AudioClip clip, float volumeMul = 1f, float pitch = 1f)
+    {
+        if (footstepSource == null || clip == null) return;
+
+        footstepSource.pitch = pitch;
+        footstepSource.PlayOneShot(clip, volumeFootstep * volumeMul);
     }
 
     private AudioClip GetDefault(UISoundId id) => id switch

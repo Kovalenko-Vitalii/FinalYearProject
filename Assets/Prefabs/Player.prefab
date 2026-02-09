@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 3775789981008255556}
   - component: {fileID: 7246548334658807191}
   - component: {fileID: 1858668464983379325}
+  - component: {fileID: 9032132783619480000}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -189,3 +190,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsTicker
   move: {fileID: 7246548334658807191}
+--- !u!114 &9032132783619480000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801684083971527322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03296c90b8ff46b4ea35d9a06d65125c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSounds
+  controller: {fileID: 3775789981008255556}
+  movement: {fileID: 7246548334658807191}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  walkStepDistance: 1.8
+  sprintStepDistance: 1.25
+  minStepInterval: 0.12
+  moveSpeedThreshold: 0.2
+  volumeJitter: {x: 0.85, y: 1}
+  pitchJitter: {x: 0.95, y: 1.05}
+  surfaceClips:
+  - type: 0
+    clips:
+    - {fileID: 8300000, guid: 7c858508a42654b41a15ed3b7c93358f, type: 3}
+    - {fileID: 8300000, guid: eb876c9b915861d4f9d9423b96629290, type: 3}
+    - {fileID: 8300000, guid: b3a86be38ee15bf4d96fcdd491397945, type: 3}
+    - {fileID: 8300000, guid: 62d4dfce4bf017a48bd1e269165e519e, type: 3}
+    - {fileID: 8300000, guid: 4b8e034d20b7ff040b7df44b6b2bd728, type: 3}
+    - {fileID: 8300000, guid: 6d58d1e5d02f28546b1cae7b1e2fd1a5, type: 3}
+    - {fileID: 8300000, guid: 44f8c6c98597c7d4cb5a4560cd573108, type: 3}
+    - {fileID: 8300000, guid: c1cf2b6c2a1c8094a9ca6d800ab41af7, type: 3}
+    - {fileID: 8300000, guid: 05b81da70109f0442ba9551c364ee49f, type: 3}
+    - {fileID: 8300000, guid: 2f168ed252692514f836f6e64fbc052f, type: 3}
+  terrainLayerToSurface: 0000000000000000
