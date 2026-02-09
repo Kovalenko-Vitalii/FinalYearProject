@@ -9,15 +9,8 @@ public class StatsTicker : MonoBehaviour, IPlayerTick
         if (!move) move = GetComponent<PlayerMovement>();
     }
 
-    private void OnEnable()
-    {
-        PlayerTickSystem.Instance?.Register(this);
-    }
-
-    private void OnDisable()
-    {
-        PlayerTickSystem.Instance?.Unregister(this);
-    }
+    void OnEnable() => PlayerTickSystem.Instance?.Register(this);
+    void OnDisable() => PlayerTickSystem.Instance?.Unregister(this);
 
     public void Tick(float dt)
     {
