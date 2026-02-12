@@ -154,7 +154,8 @@ public class SaveManager : MonoBehaviour
             sceneName = sceneName,
             spawnId = spawnId,
             hasPlayerStats = false,
-            hasPlayerTransform = false
+            hasPlayerTransform = false,
+            dateWeatherSave = new DateWeatherSave { day = 1, minutes = 1000f }, 
         };
 
         File.WriteAllText(GetSlotPath(id), JsonUtility.ToJson(data, true));

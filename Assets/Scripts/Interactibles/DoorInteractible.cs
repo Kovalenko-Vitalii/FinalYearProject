@@ -19,10 +19,17 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     [SerializeField] private string isOpenBoolName = "isOpen";
     [SerializeField] private string tryLockedTriggerName = "tryLocked";
 
+    [Header("Sound")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip openSound;
+    [SerializeField] AudioClip closeSound;
+    [SerializeField] AudioClip lockedSound;
+    [SerializeField] AudioClip unlockSound;
+
     [Header("Save")]
     [SerializeField] private string id;
     [SerializeField] private bool isOpen;
-    [SerializeField] private string keyId;
+    [SerializeField] ItemData key;
     private int isOpenHash;
     private int tryLockedHash;
 
@@ -104,8 +111,9 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     {
         if (isLocked && !isOpen)
         {
-            if (InventoryManager.Instance.playerInventory.HasItemById(keyId))
+            if (key != null && InventoryManager.Instance.playerInventory.HasItemById(key.id))
             {
+                PlayUnlockSound();
                 isLocked = false;
                 return false;
             }
@@ -127,8 +135,15 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     public void OnHoldStart(PlayerInteractor interactor, float duration)
     {
         if (isLocked && !isOpen)
-            PlayLockedTry();
+        {
+            bool hasKey = key != null && interactor != null && interactor.PlayerInventory != null
+                          && interactor.PlayerInventory.HasItemById(key.id);
+
+            if (!hasKey)
+                PlayLockedTry();
+        }
     }
+
 
     public void OnHoldCanceled(PlayerInteractor interactor)
     {
@@ -149,5 +164,30 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
 
         animator.ResetTrigger(tryLockedHash);
         animator.SetTrigger(tryLockedHash);
+    }
+
+    // Sound stuff
+    public void PlayOpenSound()
+    {
+        if (audioSource && openSound)
+            audioSource.PlayOneShot(openSound);
+    }
+
+    public void PlayCloseSound()
+    {
+        if (audioSource && closeSound)
+            audioSource.PlayOneShot(closeSound);
+    }
+
+    public void PlayLockedSound()
+    {
+        if (audioSource && lockedSound)
+            audioSource.PlayOneShot(lockedSound);
+    }
+
+    public void PlayUnlockSound()
+    {
+        if (audioSource && unlockSound)
+            audioSource.PlayOneShot(unlockSound);
     }
 }

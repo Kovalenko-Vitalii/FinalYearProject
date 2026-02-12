@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 7246548334658807191}
   - component: {fileID: 1858668464983379325}
   - component: {fileID: 9032132783619480000}
+  - component: {fileID: 8189382546002954932}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -217,6 +218,8 @@ MonoBehaviour:
     type: 1
   - layer: {fileID: 8574412962073106934, guid: 21922540f83bd7545ad2ce382e6cc584, type: 2}
     type: 4
+  - layer: {fileID: 8574412962073106934, guid: addb040bbbd21dd45b39b41fa2e530b8, type: 2}
+    type: 8
   surfaceClips:
   - type: 0
     clips:
@@ -249,3 +252,52 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c1cf2b6c2a1c8094a9ca6d800ab41af7, type: 3}
     - {fileID: 8300000, guid: 05b81da70109f0442ba9551c364ee49f, type: 3}
     - {fileID: 8300000, guid: 2f168ed252692514f836f6e64fbc052f, type: 3}
+  - type: 6
+    clips:
+    - {fileID: 8300000, guid: 86a9f3d90246a3241bfdf1cc1deed88b, type: 3}
+    - {fileID: 8300000, guid: 2b569e4c2de80f642b454dcdb749b5ce, type: 3}
+    - {fileID: 8300000, guid: 0d29ed4b868d2e841ad7793eeddafd39, type: 3}
+    - {fileID: 8300000, guid: 383cdc82ce9e2fb449ef3ca0439e5280, type: 3}
+  - type: 8
+    clips:
+    - {fileID: 8300000, guid: c26a308a0c409b44ebe2edd411a10815, type: 3}
+    - {fileID: 8300000, guid: 6b6b455ad6dd980459f023b245d21df0, type: 3}
+    - {fileID: 8300000, guid: db9be63e7ba935c449d732d766b0649c, type: 3}
+    - {fileID: 8300000, guid: 4898d4ca4ca4b6a44925abc4a9f13bb7, type: 3}
+    - {fileID: 8300000, guid: 093f078d6162c154bbc0aede55b11d70, type: 3}
+    - {fileID: 8300000, guid: d313d7a14af2f804ba4c6c2e77a3cc04, type: 3}
+    - {fileID: 8300000, guid: 6354b67827e88dd45afce104470db243, type: 3}
+    - {fileID: 8300000, guid: 20c01881f78f28641906414b265ec426, type: 3}
+    - {fileID: 8300000, guid: 4bbcc8641a403f242bbd0dfdd9229075, type: 3}
+    - {fileID: 8300000, guid: d956b8bae9e7bfa4cb324162c17485b6, type: 3}
+  - type: 5
+    clips:
+    - {fileID: 8300000, guid: c0923b00c09fb564e935a7e998def60a, type: 3}
+    - {fileID: 8300000, guid: a98dc6f062498d34db4aa3912e07efdc, type: 3}
+    - {fileID: 8300000, guid: f4c33b160b2459a47a3397f2bf13b257, type: 3}
+    - {fileID: 8300000, guid: 373a6b493fe732e4eb18943cbad173d9, type: 3}
+    - {fileID: 8300000, guid: c5553dcfec448b249ba8f6925f0bacc5, type: 3}
+    - {fileID: 8300000, guid: 0dac40c452bd7e14d852a9e0d7518dd5, type: 3}
+    - {fileID: 8300000, guid: 6a9855130f5fe6648aa81ff6c8eb5a89, type: 3}
+    - {fileID: 8300000, guid: cbe4f74576981db4a824ec8fb87a78ce, type: 3}
+--- !u!114 &8189382546002954932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801684083971527322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4192fde8e6287334c942c4a6ea54f19e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeadBobbing
+  cameraHolder: {fileID: 204727070692095074}
+  controller: {fileID: 3775789981008255556}
+  movement: {fileID: 7246548334658807191}
+  walkFrequency: 9
+  sprintFrequency: 12
+  walkHeight: 0.07
+  sprintHeight: 0.12
+  smoothReturnSpeed: 10
+  moveSpeedThreshold: 0.2

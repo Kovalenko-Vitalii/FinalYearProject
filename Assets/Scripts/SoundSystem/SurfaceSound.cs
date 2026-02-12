@@ -9,6 +9,7 @@ public enum SurfaceType {
     Metal, 
     Wood, 
     Dirt, 
+    Mud,
     CrackingWood,
 }
 

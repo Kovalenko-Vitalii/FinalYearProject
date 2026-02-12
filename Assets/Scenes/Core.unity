@@ -1086,7 +1086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
   currentDay: 1
-  realMinutesPerDay: 2
+  realMinutesPerDay: 20
   startTimeHours: 9
   sunriseTimeHours: 6.5
   sunsetTimeHours: 18.5
