@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 7246548334658807191}
   - component: {fileID: 1858668464983379325}
   - component: {fileID: 9032132783619480000}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -206,13 +206,17 @@ MonoBehaviour:
   movement: {fileID: 7246548334658807191}
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  walkStepDistance: 1.8
-  sprintStepDistance: 1.25
-  minStepInterval: 0.12
+    m_Bits: 1
+  walkInterval: 0.45
+  sprintInterval: 0.3
   moveSpeedThreshold: 0.2
-  volumeJitter: {x: 0.85, y: 1}
-  pitchJitter: {x: 0.95, y: 1.05}
+  terrainLayerSurfaces:
+  - layer: {fileID: 0}
+    type: 0
+  - layer: {fileID: 8574412962073106934, guid: ab57120695ff206419100a9960d780cb, type: 2}
+    type: 1
+  - layer: {fileID: 8574412962073106934, guid: 21922540f83bd7545ad2ce382e6cc584, type: 2}
+    type: 4
   surfaceClips:
   - type: 0
     clips:
@@ -226,4 +230,22 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c1cf2b6c2a1c8094a9ca6d800ab41af7, type: 3}
     - {fileID: 8300000, guid: 05b81da70109f0442ba9551c364ee49f, type: 3}
     - {fileID: 8300000, guid: 2f168ed252692514f836f6e64fbc052f, type: 3}
-  terrainLayerToSurface: 0000000000000000
+  - type: 1
+    clips:
+    - {fileID: 8300000, guid: c91895fd2a056514d8e300bd0b9bc5d7, type: 3}
+    - {fileID: 8300000, guid: 1a3c584e8b4fbc94f8d36747a71b4d5e, type: 3}
+    - {fileID: 8300000, guid: 1091a4373f64fbe4a849ebbe2fec4e91, type: 3}
+    - {fileID: 8300000, guid: 24b3d2c0292bbda4fb52ec1838200e02, type: 3}
+    - {fileID: 8300000, guid: ccf24ca52bfc9c945966067fb824d391, type: 3}
+  - type: 4
+    clips:
+    - {fileID: 8300000, guid: 7c858508a42654b41a15ed3b7c93358f, type: 3}
+    - {fileID: 8300000, guid: eb876c9b915861d4f9d9423b96629290, type: 3}
+    - {fileID: 8300000, guid: b3a86be38ee15bf4d96fcdd491397945, type: 3}
+    - {fileID: 8300000, guid: 62d4dfce4bf017a48bd1e269165e519e, type: 3}
+    - {fileID: 8300000, guid: 4b8e034d20b7ff040b7df44b6b2bd728, type: 3}
+    - {fileID: 8300000, guid: 6d58d1e5d02f28546b1cae7b1e2fd1a5, type: 3}
+    - {fileID: 8300000, guid: 44f8c6c98597c7d4cb5a4560cd573108, type: 3}
+    - {fileID: 8300000, guid: c1cf2b6c2a1c8094a9ca6d800ab41af7, type: 3}
+    - {fileID: 8300000, guid: 05b81da70109f0442ba9551c364ee49f, type: 3}
+    - {fileID: 8300000, guid: 2f168ed252692514f836f6e64fbc052f, type: 3}

@@ -1644,7 +1644,7 @@ MonoBehaviour:
   animator: {fileID: 3393988598353276674}
   isOpenBoolName: isOpen
   tryLockedTriggerName: tryLocked
-  id: e9eb0b125c3745618134afe52925cde7
+  id: 3bab5e07d5ba421081b88cd135aaea70
   isOpen: 0
   keyId: 
 --- !u!1 &7120069477796370120

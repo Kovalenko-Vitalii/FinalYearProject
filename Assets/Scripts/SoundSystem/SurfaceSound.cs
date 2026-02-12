@@ -1,6 +1,16 @@
 using UnityEngine;
 
-public enum SurfaceType { Default, Concrete, Wood, Grass, Metal, Water }
+public enum SurfaceType {
+    Default,
+    Snow, 
+    Ice, 
+    Concrete, 
+    Gravel, 
+    Metal, 
+    Wood, 
+    Dirt, 
+    CrackingWood,
+}
 
 public class SurfaceSound : MonoBehaviour
 {
