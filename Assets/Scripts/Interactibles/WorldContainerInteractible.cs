@@ -14,6 +14,11 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
     [SerializeField] private Animator animator;
     [SerializeField] private string isOpenBoolName = "isOpen";
 
+    [Header("Sound")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip openSound;
+    [SerializeField] AudioClip closeSound;
+
     private bool isOpen = false;
     private bool isSearched = false;
 
@@ -71,6 +76,7 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
 
     public void OnHoldStart(PlayerInteractor interactor, float duration)
     {
+        PlayOpenSound();
         SetOpen(true);
     }
 
@@ -82,6 +88,20 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
 
     public void CloseLid()
     {
+        PlayCloseSound();
         SetOpen(false);
+    }
+
+    // Sound stuff
+    public void PlayOpenSound()
+    {
+        if (audioSource && openSound)
+            audioSource.PlayOneShot(openSound);
+    }
+
+    public void PlayCloseSound()
+    {
+        if (audioSource && closeSound)
+            audioSource.PlayOneShot(closeSound);
     }
 }

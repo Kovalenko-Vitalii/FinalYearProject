@@ -430,7 +430,7 @@ MonoBehaviour:
   startItems:
   - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
   startAmounts: 03000000
-  containerId: c5c2f24761c44192bb754ecc2e4a5ab8
+  containerId: 503a99c67dbc486ab17543231a4d0dc4
 --- !u!114 &7844092604945487415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,6 +448,9 @@ MonoBehaviour:
   quickOpenDuration: 0.5
   animator: {fileID: 4377581392327095532}
   isOpenBoolName: isOpen
+  audioSource: {fileID: 0}
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
 --- !u!1 &7527663216066746082
 GameObject:
   m_ObjectHideFlags: 0

@@ -3302,7 +3302,7 @@ Transform:
   m_GameObject: {fileID: 992641050}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 416, y: 13, z: 449.83}
+  m_LocalPosition: {x: 432, y: 12, z: 456.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4524,7 +4524,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelContext
   directionalLight: {fileID: 1558921425}
-  cineBinder: {fileID: 0}
 --- !u!4 &1653689900
 Transform:
   m_ObjectHideFlags: 0

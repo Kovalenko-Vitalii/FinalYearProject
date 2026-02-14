@@ -7,7 +7,6 @@ public class SubtitleService : MonoBehaviour
     public static SubtitleService Instance { get; private set; }
 
     [SerializeField] private SubtitleView view;
-    [SerializeField] private AudioSource audioSource;
 
     private readonly Queue<LineRequest> queue = new();
     private Coroutine routine;
@@ -42,6 +41,37 @@ public class SubtitleService : MonoBehaviour
 
             float duration = req.line.duration;
 
+            var clip = req.line.voice;
+
+            if (clip)
+            {
+                SoundManager.Instance.PlaySubtitle(clip);
+                duration = Mathf.Max(0.05f, clip.length);
+            }
+
+            yield return new WaitForSeconds(duration);
+
+            view.Hide();
+        }
+
+        isPlaying = false;
+        routine = null;
+    }
+
+    /*
+    private IEnumerator PlayLoop()
+    {
+        isPlaying = true;
+
+        while (queue.Count > 0)
+        {
+            var req = queue.Dequeue();
+            if (req?.line == null) continue;
+
+            view.Show(req);
+
+            float duration = req.line.duration;
+
             if (audioSource != null)
             {
                 audioSource.Stop();
@@ -63,4 +93,6 @@ public class SubtitleService : MonoBehaviour
         isPlaying = false;
         routine = null;
     }
+    */
+
 }

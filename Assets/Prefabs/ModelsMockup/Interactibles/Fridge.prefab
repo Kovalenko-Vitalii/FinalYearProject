@@ -393,6 +393,9 @@ MonoBehaviour:
   quickOpenDuration: 0.5
   animator: {fileID: 2125562885999931803}
   isOpenBoolName: isOpen
+  audioSource: {fileID: 4595280798823593361}
+  openSound: {fileID: 8300000, guid: 741a141641da46c41868045d82d27236, type: 3}
+  closeSound: {fileID: 8300000, guid: 16eebe95c1b716742944060137179bf5, type: 3}
 --- !u!82 &4595280798823593361
 AudioSource:
   m_ObjectHideFlags: 0

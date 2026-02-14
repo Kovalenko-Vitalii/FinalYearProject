@@ -8,10 +8,12 @@ public class SoundManager : MonoBehaviour
     [Header("Audio Sources")]
     [SerializeField] AudioSource uiSource;
     [SerializeField] AudioSource footstepSource;
+    [SerializeField] AudioSource subtitleSource;
 
     [Header("Volumes")]
     [SerializeField, Range(0f, 1f)] float volumeUI = 1f;
     [SerializeField, Range(0f, 1f)] float volumeFootstep = 1f;
+    [SerializeField, Range(0f, 1f)] float volumeSubtitle = 1f;
 
     [Header("Default Sounds")]
     [SerializeField] private AudioClip uiClick;
@@ -51,6 +53,12 @@ public class SoundManager : MonoBehaviour
         footstepSource.PlayOneShot(clip, volumeFootstep * volumeMul);
     }
 
+    public void PlaySubtitle(AudioClip clip)
+    {
+        if (!subtitleSource || !clip) return;
+        subtitleSource.PlayOneShot(clip, volumeSubtitle);
+
+    }
     private AudioClip GetDefault(UISoundId id) => id switch
     {
         UISoundId.UIClick => uiClick,
