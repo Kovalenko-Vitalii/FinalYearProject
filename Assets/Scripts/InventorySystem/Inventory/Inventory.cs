@@ -36,10 +36,25 @@ public class Inventory
 
     public void RemoveItem(ItemData data, int amount)
     {
-        var existing = items.Find(i => i.data == data);
-        if (existing != null)
-            RemoveFromStack(existing, amount);
+        if (data == null || amount <= 0) return;
+
+        for (int i = items.Count - 1; i >= 0 && amount > 0; i--)
+        {
+            var stack = items[i];
+            if (stack.data != data) continue;
+
+            int take = Mathf.Min(amount, stack.amount);
+            stack.amount -= take;
+            amount -= take;
+
+            if (stack.amount <= 0)
+                items.RemoveAt(i);
+        }
+
+        CompactStacks(data);
+        OnChanged?.Invoke();
     }
+
 
     public void RemoveFromStack(InventoryItem stack, int amount)
     {
@@ -115,6 +130,30 @@ public class Inventory
         }
         return false;
     }
+
+    public InventoryItem GetInventoryItemById(string id)
+    {
+        foreach (var item in items)
+        {
+            if (item.data.id == id)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public int GetTotalAmountById(string id)
+    {
+        int total = 0;
+        foreach (var item in items)
+        {
+            if (item?.data != null && item.data.id == id)
+                total += item.amount;
+        }
+        return total;
+    }
+
 }
 
 

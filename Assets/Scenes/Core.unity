@@ -367,8 +367,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   uiSource: {fileID: 854153749}
   footstepSource: {fileID: 2138294831}
+  subtitleSource: {fileID: 0}
   volumeUI: 1
   volumeFootstep: 1
+  volumeSubtitle: 1
   uiClick: {fileID: 8300000, guid: 0bcb08120ea75414aa3eda6558963449, type: 3}
   itemClick: {fileID: 8300000, guid: 045ed20d42c0c1746880dd24202b5093, type: 3}
   menuOpen: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
@@ -560,7 +562,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubtitleService
   view: {fileID: 10111944}
-  audioSource: {fileID: 1585495644}
 --- !u!1 &689708116
 GameObject:
   m_ObjectHideFlags: 0

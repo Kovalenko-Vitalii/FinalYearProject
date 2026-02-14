@@ -165,6 +165,12 @@ public class DateWeatherManager : MonoBehaviour, IPlayerTick
         return $"{h:00}:{m:00}";
     }
 
+    public void AddTime(int hours, int minutes)
+    {
+        currentMinutes += Mathf.Repeat(hours * MinutesPerHour + minutes, MinutesPerDay);
+        ApplySun();
+    }
+
     // For save
 
     public DateWeatherSave Capture()

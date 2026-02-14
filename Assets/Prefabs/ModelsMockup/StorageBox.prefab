@@ -430,7 +430,7 @@ MonoBehaviour:
   startItems:
   - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
   startAmounts: 03000000
-  containerId: 503a99c67dbc486ab17543231a4d0dc4
+  containerId: bdd99dd30101441eaeffa680e9982704
 --- !u!114 &7844092604945487415
 MonoBehaviour:
   m_ObjectHideFlags: 0

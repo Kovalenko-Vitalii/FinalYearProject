@@ -28,4 +28,4 @@ MonoBehaviour:
   tags: 32
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
-  pickupPrefab: {fileID: 0}
+  pickupPrefab: {fileID: 5593405388829441404, guid: 213ad79df8d09bb4394be2878cfe4451, type: 3}
