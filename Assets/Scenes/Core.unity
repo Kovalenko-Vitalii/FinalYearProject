@@ -473,6 +473,8 @@ MonoBehaviour:
   consumeItem: {fileID: 8300000, guid: 5d602661373e9fb4b8f4d24caa51ed27, type: 3}
   pickupItem: {fileID: 8300000, guid: 21c9a54bbf891dc4c8004b23b3082c50, type: 3}
   rejectSound: {fileID: 8300000, guid: 481f8b03b3e71a1439cda129bd7a51f0, type: 3}
+  notePickupSound: {fileID: 8300000, guid: 06657f1213ea0014487434501425c298, type: 3}
+  noteClick: {fileID: 8300000, guid: d3a7890157d18b04da4a430a11fda7f5, type: 3}
 --- !u!1 &319002775
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,8 +1008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77594e6850d70f245bdbb62170ee7bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteManager
-  notes:
-  - {fileID: 11400000, guid: 5128cf4d6dd64bf4f82d6d3370e3b38e, type: 2}
+  notes: []
 --- !u!1 &1568224888
 GameObject:
   m_ObjectHideFlags: 0

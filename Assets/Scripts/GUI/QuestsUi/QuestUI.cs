@@ -2,9 +2,15 @@ using UnityEngine;
 
 public class QuestUI : MonoBehaviour
 {
-    [SerializeField] GameObject listItemPrefab;
+    [SerializeField] NoteQuestItemUI listItemPrefab;
     [SerializeField] Transform listContent;
-    
+    [SerializeField] private NoteDetailsUI detailsUI;
+    private void Start()
+    {
+        Refresh();
+        if (detailsUI != null) detailsUI.Hide();
+    }
+
     public void Refresh()
     {
         foreach (Transform child in listContent)
@@ -14,8 +20,15 @@ public class QuestUI : MonoBehaviour
 
         foreach (var note in notes)
         {
-            var obj = Instantiate(listItemPrefab, listContent);
-            obj.GetComponent<NoteQuestItemUI>().SetItem(note);
+            var item = Instantiate(listItemPrefab, listContent);
+            item.Bind(note, OnItemClicked);
         }
+    }
+
+    private void OnItemClicked(NoteData note)
+    {
+        if (detailsUI != null)
+            detailsUI.Show(note);
+        SoundManager.Instance.PlayUI(UISoundId.NoteClick, note.onClickSound);
     }
 }

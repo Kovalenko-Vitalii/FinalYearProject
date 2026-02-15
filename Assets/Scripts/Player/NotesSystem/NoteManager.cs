@@ -19,5 +19,5 @@ public class NoteManager : MonoBehaviour
 
     public void CollectNote(NoteData note) { notes.Add(note); }
        
-    public List<NoteData> GetNotes() { return notes; }
+    public IReadOnlyList<NoteData> GetNotes() { return notes; }
 }

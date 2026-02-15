@@ -16,16 +16,18 @@ public class SoundManager : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float volumeSubtitle = 1f;
 
     [Header("Default Sounds")]
-    [SerializeField] private AudioClip uiClick;
-    [SerializeField] private AudioClip itemClick;
-    [SerializeField] private AudioClip menuOpen;
-    [SerializeField] private AudioClip menuClose;
-    [SerializeField] private AudioClip dropItem;
-    [SerializeField] private AudioClip equipItem;
-    [SerializeField] private AudioClip unequipItem;
-    [SerializeField] private AudioClip consumeItem;
-    [SerializeField] private AudioClip pickupItem;
-    [SerializeField] private AudioClip rejectSound;
+    [SerializeField] AudioClip uiClick;
+    [SerializeField] AudioClip itemClick;
+    [SerializeField] AudioClip menuOpen;
+    [SerializeField] AudioClip menuClose;
+    [SerializeField] AudioClip dropItem;
+    [SerializeField] AudioClip equipItem;
+    [SerializeField] AudioClip unequipItem;
+    [SerializeField] AudioClip consumeItem;
+    [SerializeField] AudioClip pickupItem;
+    [SerializeField] AudioClip rejectSound;
+    [SerializeField] AudioClip notePickupSound;
+    [SerializeField] AudioClip noteClick;
 
     private void Awake()
     {
@@ -71,6 +73,8 @@ public class SoundManager : MonoBehaviour
         UISoundId.ConsumeItem => consumeItem,
         UISoundId.PickupSound => pickupItem,
         UISoundId.RejectSound => rejectSound,
+        UISoundId.NotePickupSound => notePickupSound,
+        UISoundId.NoteClick => noteClick,
         _ => null
     };
 }
@@ -86,6 +90,8 @@ public enum UISoundId
     UnequipItem,
     ConsumeItem,
     PickupSound,
-    RejectSound
+    RejectSound,
+    NotePickupSound,
+    NoteClick
 }
 
