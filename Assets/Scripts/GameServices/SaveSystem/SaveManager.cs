@@ -239,6 +239,10 @@ public class SaveManager : MonoBehaviour
         var dateWeatherManager = DateWeatherManager.Instance;
         if (dateWeatherManager == null) return false;
 
+        var noteManager = NoteManager.Instance;
+        if (noteManager == null) return false;
+
+
         // Creating new GameData and saving information to it
         var data = new SaveGameData
         {
@@ -270,7 +274,10 @@ public class SaveManager : MonoBehaviour
 
             dateWeatherSave = dateWeatherManager.Capture(),
 
-        };
+            obstacleListSave = ObstacleSaveSystem.CaptureAll(),
+
+            notesData = noteManager.Capture()
+    };
 
         // Setting up camera rotation if camera has this parameter on scene (I know it is poorly made :-)
         var vcam = GameObject.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
@@ -391,6 +398,11 @@ public class SaveManager : MonoBehaviour
         if (dateWeatherManager != null)
             dateWeatherManager.Restore(_pendingLoad.dateWeatherSave);
 
+        var noteManager = NoteManager.Instance;
+        if (noteManager != null)
+            noteManager.Restore(_pendingLoad.notesData);
+
+
 
         // --- Flags like hasPlayerStats should be removed i think
         if (_pendingLoad.hasPlayerStats)
@@ -404,6 +416,8 @@ public class SaveManager : MonoBehaviour
 
         WorldContainerManager.RestoreAll(_pendingLoad.containersData);
         DoorSaveSystem.RestoreAll(_pendingLoad.doorsData);
+
+        ObstacleSaveSystem.RestoreAll(_pendingLoad.obstacleListSave);
 
         _pendingLoad = null;
     }

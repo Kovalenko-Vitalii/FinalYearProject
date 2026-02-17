@@ -6,6 +6,15 @@ public class NoteInteractible : MonoBehaviour, IInteractable
     [SerializeField] NoteData noteData;
     public bool pickedUp = false;
 
+    public string Id => id;
+    public bool PickedUp => pickedUp;
+
+    public void ApplyStateImmediate(bool picked)
+    {
+        pickedUp = picked;
+        gameObject.SetActive(!pickedUp);
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
@@ -38,12 +47,10 @@ public class NoteInteractible : MonoBehaviour, IInteractable
     {
         NoteManager.Instance.CollectNote(noteData);
 
+        pickedUp = true;
         gameObject.SetActive(false);
 
         SoundManager.Instance.PlayUI(UISoundId.NotePickupSound, noteData.onPickupSound);
-
-        pickedUp = true;
-
         return true;
     }
 

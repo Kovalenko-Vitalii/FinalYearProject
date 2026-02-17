@@ -62,6 +62,11 @@ public class SaveGameData
     public SaveDoorsData doorsData;
 
     public DateWeatherSave dateWeatherSave;
+
+    public ObstacleListSave obstacleListSave;
+
+    public NotesSaveData notesData;
+
 }
 
 // Saving player inventory and gear
@@ -177,6 +182,35 @@ public struct DateWeatherSave
 {
     public int day;
     public float minutes;
+}
+
+// Saving obstacles
+[Serializable]
+public class ObstacleListSave
+{
+    public List<ObstacleSave> obstacles = new();
+}
+
+[Serializable]
+public struct ObstacleSave
+{
+    public string id;
+    public bool isActive;
+}
+
+// Saving notes on map
+[Serializable]
+public class NotesSaveData
+{
+    public List<NoteSave> worldNotes = new();
+    public List<string> collectedNoteIds = new();
+}
+
+[Serializable]
+public struct NoteSave
+{
+    public string id;
+    public bool pickedUp;
 }
 
 // --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation

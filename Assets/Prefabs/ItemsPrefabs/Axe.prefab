@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7649778569766867670}
   - component: {fileID: 5114422801797821976}
   - component: {fileID: 9048036624208226073}
-  - component: {fileID: 1362385518936735706}
   m_Layer: 0
   m_Name: Axe (1)
   m_TagString: Untagged
@@ -333,28 +332,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3378777257254409869}
   m_Mesh: {fileID: 0}
---- !u!64 &1362385518936735706
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3378777257254409869}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &5593405388829441404
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,8 +344,8 @@ GameObject:
   - component: {fileID: 5849154241174998350}
   - component: {fileID: 3597178502016834371}
   - component: {fileID: 5011188395833846345}
+  - component: {fileID: 768368457368896233}
   - component: {fileID: 4669552154188949288}
-  - component: {fileID: 4398252362211848434}
   - component: {fileID: 6804526008237017688}
   - component: {fileID: 3566685016142749853}
   m_Layer: 0
@@ -683,16 +660,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &4669552154188949288
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5593405388829441404}
-  m_Mesh: {fileID: 0}
---- !u!64 &4398252362211848434
-MeshCollider:
+--- !u!65 &768368457368896233
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -709,9 +678,16 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
+  serializedVersion: 3
+  m_Size: {x: 0.4191906, y: 0.04441404, z: 1.3947717}
+  m_Center: {x: -0.5472826, y: -0.477787, z: -0.19739288}
+--- !u!33 &4669552154188949288
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5593405388829441404}
   m_Mesh: {fileID: 0}
 --- !u!54 &6804526008237017688
 Rigidbody:
