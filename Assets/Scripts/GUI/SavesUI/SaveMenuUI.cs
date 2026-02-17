@@ -24,7 +24,7 @@ public class SaveMenuUI : MonoBehaviour
 
         if (createButton != null)
         {
-            createButton.onClick.RemoveListener(CreateBlankSave); // на всякий
+            createButton.onClick.RemoveListener(CreateBlankSave);
             createButton.onClick.AddListener(CreateBlankSave);
         }
 

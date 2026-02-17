@@ -4,20 +4,18 @@ using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
+    string debugName = "SceneLoader";
     public static SceneLoader Instance { get; private set; }
 
-    // Name of current loaded in content scene
-    private string _currentContentScene;
-    // Async operation for paralel loading
-    private AsyncOperation _activeLoadOp;
+    string _currentContentScene; // Name of current loaded in content scene
+ 
+    AsyncOperation _activeLoadOp; // Async operation for paralel loading
 
     public string CurrentContentScene => _currentContentScene;
 
-    // Float that indicated loading progress, used mainly for UI
-    public float Progress { get; private set; } = 0f;
+    public float Progress { get; private set; } = 0f; // Float that indicated loading progress, used mainly for UI
 
-    // Shows if scene loading at the moment
-    public bool IsLoading => _activeLoadOp != null && !_activeLoadOp.isDone;
+    public bool IsLoading => _activeLoadOp != null && !_activeLoadOp.isDone; // Shows if scene loading at the moment
 
     private void Awake()
     {
@@ -29,13 +27,12 @@ public class SceneLoader : MonoBehaviour
     // Load content scene and activate automatically when loaded
     public Coroutine LoadContent(string sceneName)
     {
-        // Resetting load progress
-        Progress = 0f;
-
-        // Adding loading process to async and activate it
-        _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        
+        Progress = 0f; // Resetting load progress
+      
+        _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive); // Adding loading process to async and activate it        
         _activeLoadOp.allowSceneActivation = true;
+
+        GameLog.Log(debugName, $"LoadContent '{sceneName}' additive");
 
         return StartCoroutine(FinishSwapRoutine(sceneName));
     }
@@ -48,6 +45,8 @@ public class SceneLoader : MonoBehaviour
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         _activeLoadOp.allowSceneActivation = allowSceneActivation;
 
+        GameLog.Log(debugName, $"LoadContentAsync '{sceneName}' allowActivation={allowSceneActivation}");
+
         StartCoroutine(FinishSwapRoutine(sceneName));
         return _activeLoadOp;
     }
@@ -56,7 +55,12 @@ public class SceneLoader : MonoBehaviour
     public void ActivateLoadedScene()
     {
         if (_activeLoadOp != null)
+        {
+            GameLog.Log(debugName, "ActivateLoadedScene()");
             _activeLoadOp.allowSceneActivation = true;
+        }
+        else
+            GameLog.Warning(debugName, "ActivateLoadedScene called but _activeLoadOp is null");
     }
 
     // This method used to wait for scene load and than switch it with current one
@@ -69,22 +73,24 @@ public class SceneLoader : MonoBehaviour
             Progress = Mathf.Clamp01(raw < 0.9f ? raw / 0.9f : 1f);
             yield return null;
         }
+  
+        var loadedScene = SceneManager.GetSceneByName(sceneName); // Making this scene active
 
-        // Making this scene active
-        var loadedScene = SceneManager.GetSceneByName(sceneName);
         if (loadedScene.IsValid())
             SceneManager.SetActiveScene(loadedScene);
+        else
+            GameLog.Log(debugName, "Loaded scene is not valid!");
 
         // Unloading previous scene
         if (!string.IsNullOrEmpty(_currentContentScene) && _currentContentScene != sceneName)
-        {
             yield return SceneManager.UnloadSceneAsync(_currentContentScene);
-        }
 
-        // Setting loaded scene as current, updating progress
-        _currentContentScene = sceneName;
+        
+        _currentContentScene = sceneName; // Setting loaded scene as current, updating progress
 
         Progress = 1f;
         _activeLoadOp = null;
+
+        GameLog.Log(debugName, $"SwapComplete current='{_currentContentScene}' active='{SceneManager.GetActiveScene().name}'");
     }
 }

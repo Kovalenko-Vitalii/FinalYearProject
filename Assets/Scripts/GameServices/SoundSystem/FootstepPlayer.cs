@@ -71,7 +71,6 @@ public class FootstepPlayer : MonoBehaviour, IPlayerTick
         timer = 0f;
 
         SurfaceType surface = GetSurface();
-        Debug.Log("Stepped on: " + surface);
         AudioClip clip = GetClipForSurface(surface);
         if (!clip) return;
 

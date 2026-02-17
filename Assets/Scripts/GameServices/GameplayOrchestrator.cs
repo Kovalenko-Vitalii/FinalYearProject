@@ -4,6 +4,7 @@ using System.Collections;
 
 public class GameplayOrchestrator : MonoBehaviour
 {
+    string TAG = "GameplayOrchestrator";
     public static GameplayOrchestrator Instance { get; private set; }
     private bool _isSaveLoad;
 
@@ -36,51 +37,83 @@ public class GameplayOrchestrator : MonoBehaviour
 
 
     // When entering the game - entering menu state
-    private void Start()
+    private void Start() 
     {
-        EnterMenu();
+        GameLog.Log(TAG, $"Start -> EnterMenu()");
+        EnterMenu();       
     }
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { 
+        GameLog.Log(TAG, $"Awake()");
+
+        if (Instance != null && Instance != this) {
+            GameLog.Warning(TAG, $"Duplicate instance detected -> destroying id={GetInstanceID()}");
             Destroy(gameObject); 
             return; 
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        GameLog.Log(TAG, $"Singleton set");
     }
 
     // Method used to enter menu state
     public void EnterMenu()
     {
-        // Hiding loading
-        loading?.Hide();
+        GameLog.Log(TAG, $"EnterMenu() from state={State} -> MainMenu. Will load '{menuScene}'");
+
+        loading?.Hide(); // Hiding loading ui
 
         // Calling action OnEnterMenu and setting game state
         OnEnterMenu?.Invoke();
         State = GameState.MainMenu;
 
         // Switching panels using uiState controller and loading menu scene
-        uiState.EnterMainMenu();
-        SceneLoader.Instance.LoadContent(menuScene);
-
         // Despawning player from the map and turning off ticking
-        PlayerSpawner.Instance.Despawn();
-        PlayerTickSystem.Instance.SetEnabled(false);
+        if (uiState == null)
+            GameLog.Warning(TAG, "uiState is NULL (cannot switch UI states)");
+        else
+            uiState.EnterMainMenu();
+
+        if (SceneLoader.Instance == null)
+            GameLog.Error(TAG, "SceneLoader.Instance is NULL (cannot load menu scene)");
+        else
+            SceneLoader.Instance.LoadContent(menuScene);
+
+        if (PlayerSpawner.Instance == null)
+            GameLog.Warning(TAG, "PlayerSpawner.Instance is NULL (cannot despawn)");
+        else
+            PlayerSpawner.Instance.Despawn();
+
+        if (PlayerTickSystem.Instance == null)
+            GameLog.Warning(TAG, "PlayerTickSystem.Instance is NULL (cannot disable ticking)");
+        else
+            PlayerTickSystem.Instance.SetEnabled(false);
     }
 
     // Method used to load initial location when fresh save created
-    public void StartGame()
+    public void StartGame() 
     {
-        LoadLocation(firstLevel, defaultSpawnId);
+        GameLog.Log(TAG, $"StartGame -> level='{firstLevel}' spawn='{defaultSpawnId}'");
+
+        LoadLocation(firstLevel, defaultSpawnId); 
     }
 
     // Method used for loading location with defined player spawnpoint
     public void LoadLocation(string sceneName, string spawnId)
     {
-        _isSaveLoad = false;
         _nextSpawnId = spawnId;
+
+        GameLog.Log(TAG, $"LoadLocation(scene='{sceneName}', spawn='{spawnId}') isSaveLoad={_isSaveLoad}");
+
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            GameLog.Error(TAG, "LoadLocation called with EMPTY sceneName");
+            return;
+        }
+
         StartCoroutine(LoadLocationRoutine(sceneName));
     }
 
@@ -88,8 +121,9 @@ public class GameplayOrchestrator : MonoBehaviour
     // Main method used for loading any location
     private IEnumerator LoadLocationRoutine(string sceneName)
     {
-        // Set game state to loading
-        State = GameState.Loading;
+        GameLog.Log(TAG, $"LoadLocationRoutine BEGIN scene='{sceneName}' isSaveLoad={_isSaveLoad}");
+
+        State = GameState.Loading; // Set game state to loading
 
         // Enable loading screen, set progress bar at 0 and deactivate PressAnyKey label
         loading?.Show();
@@ -103,8 +137,14 @@ public class GameplayOrchestrator : MonoBehaviour
         // =-=-=-=-=-=-=-=-=-=-=-=
         // --- This whole block does not belong here I know. WIP
         float startTime = Time.unscaledTime;
+        if (SceneLoader.Instance == null)
+        {
+            GameLog.Error(TAG, "SceneLoader.Instance is NULL inside LoadLocationRoutine");
+            yield break;
+        }
 
         var op = SceneLoader.Instance.LoadContentAsync(sceneName, allowSceneActivation: false);
+        GameLog.Log(TAG, $"Scene async load started (allowActivation=false)");
 
         float visual = 0f;
 
@@ -127,12 +167,13 @@ public class GameplayOrchestrator : MonoBehaviour
         loading?.SetProgress(1f);
 
         loading?.ShowPressAnyKey(true);
+        GameLog.Log(TAG, "Scene loaded to 0.9 -> waiting PressAnyKey");
 
         while (!Input.anyKeyDown)
             yield return null;
 
         loading?.ShowPressAnyKey(false);
-
+        GameLog.Log(TAG, "PressAnyKey received -> activating loaded scene");
         // =-=-=-=-=-=-=-=-=-=-=-=
 
         // ??? Wait till the scene loader prepare scene ???
@@ -142,20 +183,42 @@ public class GameplayOrchestrator : MonoBehaviour
 
         yield return null;
 
+        GameLog.Log(TAG, $"Scene swap finished. CurrentContentScene='{SceneLoader.Instance.CurrentContentScene}' activeScene='{UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}'");
+
         // 1) player should exist always
+        if (PlayerSpawner.Instance == null)
+        {
+            GameLog.Error(TAG, "PlayerSpawner.Instance is NULL (cannot EnsureSpawned)");
+            yield break;
+        }
         var player = PlayerSpawner.Instance.EnsureSpawned();
+        GameLog.Log(TAG, $"EnsureSpawned done");
 
         // 2) if it is not saveLoad than we use spawnpoint registry
         if (!_isSaveLoad)
         {
-            var spawn = SpawnPointRegistry.Instance
-                ? (SpawnPointRegistry.Instance.Get(_nextSpawnId) ?? SpawnPointRegistry.Instance.Get(defaultSpawnId))
-                : null;
-
-            if (spawn != null)
-                PlayerSpawner.Instance.SpawnOrMoveTo(spawn);
+            if (SpawnPointRegistry.Instance == null)
+            {
+                GameLog.Warning(TAG, "SpawnPointRegistry.Instance is NULL (cannot resolve spawnpoint)");
+            }
             else
-                Debug.LogWarning($"[Load] Spawn not found: next='{_nextSpawnId}', default='{defaultSpawnId}' in scene '{sceneName}'");
+            {
+                var spawn = SpawnPointRegistry.Instance.Get(_nextSpawnId) ?? SpawnPointRegistry.Instance.Get(defaultSpawnId);
+
+                if (spawn != null)
+                {
+                    PlayerSpawner.Instance.SpawnOrMoveTo(spawn);
+                    GameLog.Log(TAG, $"SpawnOrMoveTo spawnId='{spawn}' (next='{_nextSpawnId}', default='{defaultSpawnId}')");
+                }
+                else
+                {
+                    GameLog.Warning(TAG, $"Spawn NOT found (next='{_nextSpawnId}', default='{defaultSpawnId}') in scene='{sceneName}'");
+                }
+            }
+        }
+        else
+        {
+            GameLog.Log(TAG, "isSaveLoad=true -> spawnpoint move skipped (SaveManager will teleport player on OnGameplayReady)");
         }
 
         // 3) always invoke action
@@ -165,34 +228,37 @@ public class GameplayOrchestrator : MonoBehaviour
         _isSaveLoad = false;
 
 
-
         // Find cimenachineBinder and bind camera to headposition
         var binder = FindFirstObjectByType<CinemachineBinder>();
-        binder?.BindForActivePlayer();
+        if (binder == null)
+            GameLog.Warning(TAG, "CinemachineBinder NOT found");
+        else
+        {
+            binder.BindForActivePlayer();
+            GameLog.Log(TAG, "CinemachineBinder binded");
+        }
 
         // Show GUI, set game state and trigger action
-        uiState.EnterGameplay();
+        if (uiState == null)
+            GameLog.Warning(TAG, "uiState is NULL (cannot EnterGameplay)");
+        else
+            uiState.EnterGameplay();
+
         State = GameState.Gameplay;
+
+        GameLog.Log(TAG, "OnGameplayReady() invoke");
         OnGameplayReady?.Invoke();
 
         // Hide additionaly loading and resume ticking
         loading?.Hide();
         PlayerTickSystem.Instance.SetEnabled(true);
-    }
-
-    // --- This must be moved to playerspawner i guess
-    // Finding spawnpoint
-    private PlayerSpawnPoint FindSpawn(string id)
-    {
-        var points = GameObject.FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
-        foreach (var p in points)
-            if (p.Id == id) return p;
-        return null;
+        GameLog.Log(TAG, "LoadLocationRoutine END -> Gameplay (ticking enabled, loading hidden)");
     }
 
     public void MarkNextLoadAsSave()
     {
+        GameLog.Log(TAG, "MarkNextLoadAsSave() -> isSaveLoad=true");
+
         _isSaveLoad = true;
     }
-
 }
