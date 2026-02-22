@@ -1,29 +1,40 @@
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class NoteQuestItemUI : MonoBehaviour
 {
-    [SerializeField] private Image icon;
-    [SerializeField] private TextMeshProUGUI itemName;
-    [SerializeField] private Button button;
+    [SerializeField] Image icon;
+    [SerializeField] Sprite questIcon;
+    [SerializeField] Sprite noteIcon;
+    [SerializeField] TextMeshProUGUI itemName;
+    [SerializeField] Button button;
 
-    private NoteData data;
-    private Action<NoteData> onClick;
+    private Action onClick;
 
-    public void Bind(NoteData noteData, Action<NoteData> clickCallback)
+    public void BindNote(NoteData noteData, Action<NoteData> clickCallback)
     {
-        data = noteData;
-        onClick = clickCallback;
-
+        icon.sprite = noteIcon;
         itemName.text = noteData.NoteName;
-        if (icon != null) icon.sprite = noteData.Icon;
 
-        if (button != null)
-        {
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => onClick?.Invoke(data));
-        }
+        onClick = () => clickCallback?.Invoke(noteData);
+        WireButton();
+    }
+
+    public void BindQuest(QuestData questData, Action<QuestData> clickCallback)
+    {
+        icon.sprite = questIcon;
+        itemName.text = questData.title;
+
+        onClick = () => clickCallback?.Invoke(questData);
+        WireButton();
+    }
+
+    private void WireButton()
+    {
+        if (button == null) return;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => onClick?.Invoke());
     }
 }

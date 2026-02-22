@@ -15,5 +15,4 @@ public class LineData : ScriptableObject
 
     [Header("Timing (if no voice)")]
     public float duration = 1.2f;
-    
 }

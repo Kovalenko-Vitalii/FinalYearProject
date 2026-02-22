@@ -53,6 +53,8 @@ public class UseConsumableActionModule : ActionModule
 
                 var ui = Object.FindAnyObjectByType<InventoryUI>();
                 if (ui) ui.Refresh();
+
+                GameEvents.RaiseConsumed(ctx.item.data.id, ctx.item.data.Tags, 1);
             }
         };
     }

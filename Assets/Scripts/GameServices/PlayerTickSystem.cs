@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerTickSystem : MonoBehaviour
 {
+    private const string TAG = "TickSystem";
     public static PlayerTickSystem Instance { get; private set; }
 
     // List of actions to trigger each tick and for lateupdate too
@@ -13,8 +14,16 @@ public class PlayerTickSystem : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        GameLog.Log(TAG, $"Awake() initiated");
+
+        if (Instance != null && Instance != this) {
+            GameLog.Warning(TAG, $"Duplicate -> destroy id={GetInstanceID()}");
+            Destroy(gameObject); 
+            return; 
+        }
         Instance = this;
+
+        GameLog.Log(TAG, $"Awake() finished. Singleton set");
     }
 
     public void SetEnabled(bool enabled) => _enabled = enabled;

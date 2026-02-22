@@ -18,10 +18,6 @@ public class SaveMenuUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("[SaveMenuUI] OnEnable");
-
-        Debug.Log($"[SaveMenuUI] contentRoot={(contentRoot ? contentRoot.name : "NULL")}, slotPrefab={(slotPrefab ? slotPrefab.name : "NULL")}, createButton={(createButton ? createButton.name : "NULL")}");
-
         if (createButton != null)
         {
             createButton.onClick.RemoveListener(CreateBlankSave);
@@ -33,15 +29,12 @@ public class SaveMenuUI : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("[SaveMenuUI] OnDisable");
-
         if (createButton != null)
             createButton.onClick.RemoveListener(CreateBlankSave);
     }
 
     public void RefreshList()
     {
-        Debug.Log("[SaveMenuUI] RefreshList");
 
         if (contentRoot == null)
         {
@@ -55,7 +48,6 @@ public class SaveMenuUI : MonoBehaviour
         }
 
         // Clear
-        Debug.Log($"[SaveMenuUI] Clearing content children: {contentRoot.childCount}");
         for (int i = contentRoot.childCount - 1; i >= 0; i--)
             Destroy(contentRoot.GetChild(i).gameObject);
 
@@ -66,8 +58,7 @@ public class SaveMenuUI : MonoBehaviour
             return;
         }
 
-        var slots = sm.ListSlots();
-        Debug.Log($"[SaveMenuUI] ListSlots returned: {(slots == null ? "NULL" : slots.Length.ToString())}");
+        var slots = sm.ListSlots();    
 
         if (slots == null) return;
 
@@ -77,29 +68,21 @@ public class SaveMenuUI : MonoBehaviour
             var row = Instantiate(slotPrefab, contentRoot);
             row.Bind(meta, this);
         }
-
-        Debug.Log($"[SaveMenuUI] After populate, content children: {contentRoot.childCount}");
     }
 
     public void LoadSlot(string slotId)
     {
-        Debug.Log($"[SaveMenuUI] LoadSlot clicked: {slotId}");
-
         var sm = SaveManager.Instance;
         if (sm == null)
         {
-            Debug.LogError("[SaveMenuUI] SaveManager.Instance is NULL on LoadSlot");
             return;
         }
 
         bool ok = sm.LoadSlot(slotId);
-        Debug.Log($"[SaveMenuUI] LoadSlot result: {ok}");
     }
 
     private void CreateBlankSave()
     {
-        Debug.Log("[SaveMenuUI] CreateBlankSave clicked");
-
         var sm = SaveManager.Instance;
         if (sm == null)
         {
@@ -108,13 +91,11 @@ public class SaveMenuUI : MonoBehaviour
         }
 
         string displayName = (nameInput != null) ? nameInput.text : "";
-        Debug.Log($"[SaveMenuUI] nameInput={(nameInput ? "OK" : "NULL")}, text='{displayName}'");
 
         if (string.IsNullOrWhiteSpace(displayName))
             displayName = "New Save";
 
         string id = sm.CreateBlankSlot(displayName, startSceneName, startSpawnId);
-        Debug.Log($"[SaveMenuUI] Created blank slot id={id}");
 
         if (nameInput != null) nameInput.text = "";
 

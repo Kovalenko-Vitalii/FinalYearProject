@@ -347,5 +347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteQuestItemUI
   icon: {fileID: 3939648802962505612}
+  questIcon: {fileID: 21300000, guid: ef0d07de87f3e8c41bb365813317c43a, type: 3}
+  noteIcon: {fileID: 21300000, guid: ae657d4e5eea92d47b26a57b90216f48, type: 3}
   itemName: {fileID: 483217463042515176}
   button: {fileID: 82350881632058158}

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using UnityEngine;
 
@@ -61,7 +61,10 @@ public class ObstacleInteractible : MonoBehaviour, IInteractable, IHoldInteracta
         public float durabilityCost = 1;
     }
 
-    public float GetInteractDuration(PlayerInteractor interactor) => duration;
+    public float GetInteractDuration(PlayerInteractor interactor)
+    {
+        return HasRequiredItems() ? duration : 0f;
+    }
 
     public bool Interact(PlayerInteractor interactor)
     {
@@ -87,19 +90,47 @@ public class ObstacleInteractible : MonoBehaviour, IInteractable, IHoldInteracta
 
     public bool TryGetPrompt(PlayerInteractor interactor, out string prompt)
     {
-        if (!isActive)
-        {
-            prompt = "";
-            return false;
+        if (!isActive) 
+        { 
+            prompt = ""; 
+            return false; 
         }
 
         var parts = requiredItems
             .Where(x => x.data != null)
             .Select(x => $"{x.data.itemName} x({x.amount})");
 
-        prompt = "To break this obstacle you need: " + string.Join(", ", parts);
+        if (!HasRequiredItems())
+        {
+            prompt = "Need: " + string.Join(", ", parts);
+            return true;
+        }
+
+        prompt = "Hold to break. Need: " + string.Join(", ", parts);
         return true;
     }
+
+
+    private bool HasRequiredItems()
+    {
+        if (!isActive) return false;
+
+        var invMgr = InventoryManager.Instance;
+        if (invMgr == null || invMgr.playerInventory == null) return false;
+
+        var inv = invMgr.playerInventory;
+
+        foreach (var req in requiredItems)
+        {
+            if (req.data == null) return false;
+
+            int have = inv.GetTotalAmountById(req.data.id);
+            if (have < req.amount) return false;
+        }
+
+        return true;
+    }
+
 
     void WithdrawCost()
     {

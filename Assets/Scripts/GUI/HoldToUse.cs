@@ -24,8 +24,6 @@ public class HoldToUse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
         this.sound = sound;
         this.soundId = soundId;
 
-        Debug.Log($"[HoldToUse.Setup] duration={duration} sound={(sound ? sound.name : "NULL")} id={soundId}");
-
         ResetUI();
     }
 

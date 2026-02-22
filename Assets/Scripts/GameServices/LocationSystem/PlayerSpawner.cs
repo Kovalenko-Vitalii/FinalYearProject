@@ -2,6 +2,7 @@
 
 public class PlayerSpawner : MonoBehaviour
 {
+    string TAG = "PlayerSpawner";
     public static PlayerSpawner Instance { get; private set; }
 
     // Prefab of player bean
@@ -12,7 +13,14 @@ public class PlayerSpawner : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        GameLog.Log(TAG, $"Awake id={GetInstanceID()} hasPrefab={(playerPrefab ? playerPrefab.name : "NULL")}");
+
+        if (Instance != null && Instance != this) 
+        {
+            GameLog.Warning(TAG, "Duplicate -> destroy");
+            Destroy(gameObject); 
+            return; 
+        }
         Instance = this;
     }
 
@@ -23,7 +31,11 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject SpawnOrMoveTo(Transform spawn)
     {
         // Checking if there is everything needed for action
-        if (!spawn) return _player;
+        if (!spawn)
+        {
+            GameLog.Warning(TAG, "SpawnOrMoveTo called with NULL spawn transform");
+            return _player;
+        }
 
         if (_player == null)
             _player = Instantiate(playerPrefab);
@@ -39,7 +51,7 @@ public class PlayerSpawner : MonoBehaviour
         // Unparalise player
         if (cc) cc.enabled = true;
 
-        // Set player reference
+        GameLog.Log(TAG, $"SpawnOrMoveTo(Transform) -> pos={spawn.position} spawn='{spawn.name}'");
         return _player;
     }
 
@@ -55,6 +67,7 @@ public class PlayerSpawner : MonoBehaviour
 
         if (cc) cc.enabled = true;
 
+        GameLog.Log(TAG, $"SpawnOrMoveTo(Vector3) -> pos={position} rotY={rotation.eulerAngles.y:0.0}");
         return _player;
     }
 
@@ -62,14 +75,31 @@ public class PlayerSpawner : MonoBehaviour
     // Despawn player bean
     public void Despawn()
     {
-        if (_player != null) Destroy(_player);
+        if (_player == null)
+        {
+            GameLog.Log(TAG, "Despawn: player already null");
+            return;
+        }
+
+        GameLog.Log(TAG, $"Despawn destroying '{_player.name}' scene='{_player.scene.name}'");
+        Destroy(_player);
         _player = null;
     }
 
     public GameObject EnsureSpawned()
     {
         if (_player == null)
+        {
+            if (!playerPrefab)
+            {
+                GameLog.Error(TAG, "EnsureSpawned failed: playerPrefab is NULL");
+                return null;
+            }
             _player = Instantiate(playerPrefab);
+            GameLog.Log(TAG, $"Player instantiated name='{_player.name}' scene='{_player.scene.name}'");
+        }
+        else
+            GameLog.Log(TAG, $"EnsureSpawned: already exists name='{_player.name}' scene='{_player.scene.name}'");
 
         return _player;
     }

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
+    private const string TAG = "SaveManager";
+
     public static SaveManager Instance { get; private set; }
     public string CurrentSlotId { get; private set; }
 
@@ -37,13 +39,16 @@ public class SaveManager : MonoBehaviour
         GameplayOrchestrator.Instance.OnGameplayReady -= OnGameplayReady;
         GameplayOrchestrator.Instance.OnGameplayReady += OnGameplayReady;
 
-        Debug.Log("[Save] Bound to GameplayOrchestrator.OnGameplayReady");
+        GameLog.Log(TAG, "Bound to GameplayOrchestrator.OnGameplayReady");
     }
 
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { 
+        GameLog.Log(TAG, $"Awake() initiated");
+
+        if (Instance != null && Instance != this) {
+            GameLog.Warning(TAG, $"Duplicate -> destroy id={GetInstanceID()}");
             Destroy(gameObject); 
             return; 
         }
@@ -54,7 +59,13 @@ public class SaveManager : MonoBehaviour
         LoadIndex();
 
         if (GameplayOrchestrator.Instance != null)
+        {
+            GameplayOrchestrator.Instance.OnGameplayReady -= OnGameplayReady;
             GameplayOrchestrator.Instance.OnGameplayReady += OnGameplayReady;
+            GameLog.Log(TAG, "Orchestrator already exists -> subscribed OnGameplayReady");
+        }
+
+        GameLog.Log(TAG, $"Awake() finished. Singleton set");
     }
 
     private void OnDestroy()
@@ -75,11 +86,14 @@ public class SaveManager : MonoBehaviour
         {
             _index = new SaveIndex();
             SaveIndexToDisk();
+            GameLog.Log(TAG, "Index not found -> created new index.json");
             return;
         }
 
         var json = File.ReadAllText(IndexPath);
         _index = JsonUtility.FromJson<SaveIndex>(json) ?? new SaveIndex();
+
+        GameLog.Log(TAG, $"Index loaded. slots={_index.slots.Count}");
     }
 
     // Saving list of slots
@@ -123,6 +137,7 @@ public class SaveManager : MonoBehaviour
         _index.slots.Add(meta);
         SaveIndexToDisk();
 
+        GameLog.Log(TAG, $"Created slot id='{id}' name='{meta.displayName}' scene='{sceneName}' spawn='{spawnId}'");
         return id;
     }
 
@@ -155,7 +170,7 @@ public class SaveManager : MonoBehaviour
             spawnId = spawnId,
             hasPlayerStats = false,
             hasPlayerTransform = false,
-            dateWeatherSave = new DateWeatherSave { day = 1, minutes = 1000f }, 
+            dateWeatherSave = new DateWeatherSave { day = 1, minutes = 800f }, 
         };
 
         File.WriteAllText(GetSlotPath(id), JsonUtility.ToJson(data, true));
@@ -170,7 +185,11 @@ public class SaveManager : MonoBehaviour
 
         // Finding slot by id
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
-        if (meta == null) return false;
+        if (meta == null)
+        {
+            GameLog.Warning(TAG, $"DeleteSlot: not found slotId='{slotId}'"); 
+            return false; 
+        }
 
         // Removing slot from list (index)
         _index.slots.Remove(meta);
@@ -180,6 +199,7 @@ public class SaveManager : MonoBehaviour
         var path = GetSlotPath(slotId);
         if (File.Exists(path)) File.Delete(path);
 
+        GameLog.Log(TAG, $"Deleted slot slotId='{slotId}'");
         return true;
     }
 
@@ -189,11 +209,18 @@ public class SaveManager : MonoBehaviour
         LoadIndex();
 
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
-        if (meta == null) return false;
+        if (meta == null)
+        {
+            GameLog.Warning(TAG, $"RenameSlot: not found slotId='{slotId}'");
+            return false;
+        }
 
+        var old = meta.displayName;
         meta.displayName = string.IsNullOrWhiteSpace(newName) ? meta.displayName : newName.Trim();
         meta.updatedUtcTicks = DateTime.UtcNow.Ticks;
         SaveIndexToDisk();
+
+        GameLog.Log(TAG, $"RenameSlot slotId='{slotId}' '{old}' -> '{meta.displayName}'");
         return true;
     }
 
@@ -212,35 +239,41 @@ public class SaveManager : MonoBehaviour
 
         // Finding slot
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
-        if (meta == null) return false;
+        if (meta == null)
+        {
+            GameLog.Error(TAG, $"SaveToSlot failed: meta not found slotId='{slotId}'");
+            return false;
+        }
 
         // Ensuring we have all necessary instances to gather save data from them
         var orch = GameplayOrchestrator.Instance;
-        if (orch == null) return false;
+        if (orch == null) { GameLog.Error(TAG, "SaveToSlot failed: GameplayOrchestrator.Instance is NULL"); return false; }
 
         var spawner = PlayerSpawner.Instance;
-        if (spawner == null) return false;
+        if (spawner == null) { GameLog.Error(TAG, "SaveToSlot failed: PlayerSpawner.Instance is NULL"); return false; }
 
         var player = spawner.Player;
-        if (player == null) return false;
+        if (player == null) { GameLog.Error(TAG, "SaveToSlot failed: spawner.Player is NULL"); return false; }
 
         var stats = PlayerStatManager.Instance;
-        if (stats == null) return false;
+        if (stats == null) { GameLog.Error(TAG, "SaveToSlot failed: PlayerStatManager.Instance is NULL"); return false; }
 
         var inventoryManager = InventoryManager.Instance;
-        if (inventoryManager == null) return false;
+        if (inventoryManager == null) { GameLog.Error(TAG, "SaveToSlot failed: InventoryManager.Instance is NULL"); return false; }
 
         var statusEffectManager = StatusEffectManager.Instance;
-        if (statusEffectManager == null) return false;
+        if (statusEffectManager == null) { GameLog.Error(TAG, "SaveToSlot failed: StatusEffectManager.Instance is NULL"); return false; }
 
         var worldObjectSpawner = WorldObjectSpawner.Instance;
-        if (worldObjectSpawner == null) return false;
+        if (worldObjectSpawner == null) { GameLog.Error(TAG, "SaveToSlot failed: WorldObjectSpawner.Instance is NULL"); return false; }
 
         var dateWeatherManager = DateWeatherManager.Instance;
-        if (dateWeatherManager == null) return false;
+        if (dateWeatherManager == null) { GameLog.Error(TAG, "SaveToSlot failed: DateWeatherManager.Instance is NULL"); return false; }
 
         var noteManager = NoteManager.Instance;
-        if (noteManager == null) return false;
+        if (noteManager == null) { GameLog.Error(TAG, "SaveToSlot failed: NoteManager.Instance is NULL"); return false; }
+
+        GameLog.Log(TAG, $"SaveToSlot BEGIN slot='{slotId}' scene='{currentScene}'");
 
 
         // Creating new GameData and saving information to it
@@ -261,23 +294,15 @@ public class SaveManager : MonoBehaviour
 
             hasPlayerStats = true,
             playerStats = stats.Capture(),
-
             inventoryData = inventoryManager.Capture(),
-
             effectsData = statusEffectManager.CaptureAll(),
-
             worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
-
             containersData = WorldContainerManager.CaptureAll(),
-
             doorsData = DoorSaveSystem.CaptureAll(),
-
             dateWeatherSave = dateWeatherManager.Capture(),
-
             obstacleListSave = ObstacleSaveSystem.CaptureAll(),
-
             notesData = noteManager.Capture()
-    };
+        };
 
         // Setting up camera rotation if camera has this parameter on scene (I know it is poorly made :-)
         var vcam = GameObject.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
@@ -302,6 +327,7 @@ public class SaveManager : MonoBehaviour
         meta.updatedUtcTicks = DateTime.UtcNow.Ticks;
         SaveIndexToDisk();
 
+        GameLog.Log(TAG, $"SaveToSlot END slot='{slotId}' file='{GetSlotPath(slotId)}'");
         return true;
     }
 
@@ -310,18 +336,26 @@ public class SaveManager : MonoBehaviour
     {
         // Getting path and checking if the file exist
         var path = GetSlotPath(slotId);
-        if (!File.Exists(path)) return false;
+        if (!File.Exists(path))
+        {
+            GameLog.Error(TAG, $"LoadSlot failed: file not found '{path}'");
+            return false;
+        }
 
         // Gathering data
         var json = File.ReadAllText(path);
         var data = JsonUtility.FromJson<SaveGameData>(json);
-        if (data == null) return false;
+        if (data == null)
+        {
+            GameLog.Error(TAG, $"LoadSlot failed: JSON parse returned NULL slotId='{slotId}'");
+            return false;
+        }
 
         // Putting data into buffer and index
         _pendingLoad = data;
         CurrentSlotId = slotId;
-        Debug.Log($"[Save] LoadSlot set pending. hasT={data.hasPlayerTransform} pos={data.playerTransform.position}");
-        
+        GameLog.Log(TAG, $"LoadSlot set pending slot='{slotId}' scene='{data.sceneName}' hasT={data.hasPlayerTransform}");
+
         // Loading list of saves and updating time of slot has been changed
         LoadIndex();
         var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
@@ -332,22 +366,28 @@ public class SaveManager : MonoBehaviour
         }
 
         var orch = GameplayOrchestrator.Instance;
-        if (orch == null) return false;
+        if (orch == null)
+        {
+            GameLog.Error(TAG, "LoadSlot failed: GameplayOrchestrator.Instance is NULL");
+            return false;
+        }
 
         // I`m not sure that this is really bad, but maybe this script should not trigger location loading
         orch.MarkNextLoadAsSave();
         orch.LoadLocation(data.sceneName, null);
+
+        GameLog.Log(TAG, $"LoadSlot requested LoadLocation '{data.sceneName}' (save-load)");
         return true;
     }
 
     // Basically loading data from buffered save to game
     private void OnGameplayReady()
     {
-        Debug.Log($"[Save] OnGameplayReady CALLED. pending null? {(_pendingLoad == null)}");
         // Checking if there is stored data in buffer
         if (_pendingLoad == null) return;
-      
-        
+
+        GameLog.Log(TAG, $"ApplyPendingLoad BEGIN scene='{_pendingLoad.sceneName}'");
+
         // Setting up cinemachine rotation
         // --- I think teleporting player should be here
         if (_pendingLoad.hasCameraState)
@@ -416,9 +456,9 @@ public class SaveManager : MonoBehaviour
 
         WorldContainerManager.RestoreAll(_pendingLoad.containersData);
         DoorSaveSystem.RestoreAll(_pendingLoad.doorsData);
-
         ObstacleSaveSystem.RestoreAll(_pendingLoad.obstacleListSave);
 
         _pendingLoad = null;
+        GameLog.Log(TAG, "ApplyPendingLoad END (pending cleared)");
     }
 }

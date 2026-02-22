@@ -28,6 +28,20 @@ public class SubtitleService : MonoBehaviour
             routine = StartCoroutine(PlayLoop());
     }
 
+    public void PlaySequence(IEnumerable<LineData> lines)
+    {
+        if (lines == null) return;
+
+        foreach (var line in lines)
+        {
+            if (line == null) continue;
+            queue.Enqueue(new LineRequest(line));
+        }
+
+        if (!isPlaying)
+            routine = StartCoroutine(PlayLoop());
+    }
+
     private IEnumerator PlayLoop()
     {
         isPlaying = true;

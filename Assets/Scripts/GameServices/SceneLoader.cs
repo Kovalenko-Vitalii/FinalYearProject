@@ -4,7 +4,7 @@ using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
-    string debugName = "SceneLoader";
+    string TAG = "SceneLoader";
     public static SceneLoader Instance { get; private set; }
 
     string _currentContentScene; // Name of current loaded in content scene
@@ -19,20 +19,29 @@ public class SceneLoader : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        GameLog.Log(TAG, $"Awake() initiated");
+
+        if (Instance != null && Instance != this) 
+        {
+            GameLog.Warning(TAG, $"Duplicate SceneLoader -> destroying id={GetInstanceID()}");
+            Destroy(gameObject); 
+            return; 
+        }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        GameLog.Log(TAG, $"Awake() finished. Singleton set");
     }
 
     // Load content scene and activate automatically when loaded
     public Coroutine LoadContent(string sceneName)
     {
+        GameLog.Log(TAG, $"LoadContent('{sceneName}') initiated ");
+
         Progress = 0f; // Resetting load progress
       
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive); // Adding loading process to async and activate it        
         _activeLoadOp.allowSceneActivation = true;
-
-        GameLog.Log(debugName, $"LoadContent '{sceneName}' additive");
 
         return StartCoroutine(FinishSwapRoutine(sceneName));
     }
@@ -40,12 +49,12 @@ public class SceneLoader : MonoBehaviour
     // Save as LoadContent but user can choose when to finally load scene
     public AsyncOperation LoadContentAsync(string sceneName, bool allowSceneActivation)
     {
+        GameLog.Log(TAG, $"AsyncLoadContent('{sceneName}') initiated ");
+
         Progress = 0f;
 
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         _activeLoadOp.allowSceneActivation = allowSceneActivation;
-
-        GameLog.Log(debugName, $"LoadContentAsync '{sceneName}' allowActivation={allowSceneActivation}");
 
         StartCoroutine(FinishSwapRoutine(sceneName));
         return _activeLoadOp;
@@ -56,16 +65,18 @@ public class SceneLoader : MonoBehaviour
     {
         if (_activeLoadOp != null)
         {
-            GameLog.Log(debugName, "ActivateLoadedScene()");
+            GameLog.Log(TAG, "ActivateLoadedScene()");
             _activeLoadOp.allowSceneActivation = true;
         }
         else
-            GameLog.Warning(debugName, "ActivateLoadedScene called but _activeLoadOp is null");
+            GameLog.Warning(TAG, "ActivateLoadedScene called but _activeLoadOp is null");
     }
 
     // This method used to wait for scene load and than switch it with current one
     private IEnumerator FinishSwapRoutine(string sceneName)
     {
+        GameLog.Log(TAG, $"FinishSwapRoutine BEGIN target='{sceneName}' prev='{_currentContentScene}'");
+
         // Waiting for loading and updating progress
         while (_activeLoadOp != null && !_activeLoadOp.isDone)
         {
@@ -77,20 +88,26 @@ public class SceneLoader : MonoBehaviour
         var loadedScene = SceneManager.GetSceneByName(sceneName); // Making this scene active
 
         if (loadedScene.IsValid())
+        {
             SceneManager.SetActiveScene(loadedScene);
+            GameLog.Log(TAG, $"SetActiveScene '{sceneName}'");
+        }
         else
-            GameLog.Log(debugName, "Loaded scene is not valid!");
+            GameLog.Error(TAG, $"Loaded scene '{sceneName}' is NOT valid");
 
         // Unloading previous scene
         if (!string.IsNullOrEmpty(_currentContentScene) && _currentContentScene != sceneName)
+        {
+            GameLog.Log(TAG, $"Unloading previous content '{_currentContentScene}'");
             yield return SceneManager.UnloadSceneAsync(_currentContentScene);
+        }
 
-        
+
         _currentContentScene = sceneName; // Setting loaded scene as current, updating progress
 
         Progress = 1f;
         _activeLoadOp = null;
 
-        GameLog.Log(debugName, $"SwapComplete current='{_currentContentScene}' active='{SceneManager.GetActiveScene().name}'");
+        GameLog.Log(TAG, $"FinishSwapRoutine END currentContent='{_currentContentScene}' activeScene='{SceneManager.GetActiveScene().name}'");
     }
 }

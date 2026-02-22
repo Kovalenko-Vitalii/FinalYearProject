@@ -86,7 +86,7 @@ MonoBehaviour:
   closeSound: {fileID: 8300000, guid: 16eebe95c1b716742944060137179bf5, type: 3}
   lockedSound: {fileID: 8300000, guid: a2231f26f495d6c4d8c97e709b88e1bf, type: 3}
   unlockSound: {fileID: 8300000, guid: 26c09f5bc2e7683449bf39f3c75ce634, type: 3}
-  id: aaa8e773bca64073be138ca63eed7c23
+  id: e2455685505941a9bfcf7d4f372e3034
   isOpen: 0
   key: {fileID: 0}
 --- !u!82 &7494527515775212652

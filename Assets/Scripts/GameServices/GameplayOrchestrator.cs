@@ -45,7 +45,7 @@ public class GameplayOrchestrator : MonoBehaviour
 
     private void Awake()
     {
-        GameLog.Log(TAG, $"Awake()");
+        GameLog.Log(TAG, $"Awake() initiated");
 
         if (Instance != null && Instance != this) {
             GameLog.Warning(TAG, $"Duplicate instance detected -> destroying id={GetInstanceID()}");
@@ -56,7 +56,7 @@ public class GameplayOrchestrator : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        GameLog.Log(TAG, $"Singleton set");
+        GameLog.Log(TAG, $"Awake() finished. Singleton set");
     }
 
     // Method used to enter menu state
@@ -104,6 +104,7 @@ public class GameplayOrchestrator : MonoBehaviour
     // Method used for loading location with defined player spawnpoint
     public void LoadLocation(string sceneName, string spawnId)
     {
+        _isSaveLoad = false;
         _nextSpawnId = spawnId;
 
         GameLog.Log(TAG, $"LoadLocation(scene='{sceneName}', spawn='{spawnId}') isSaveLoad={_isSaveLoad}");
