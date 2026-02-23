@@ -18,8 +18,11 @@ MonoBehaviour:
   maxStack: 1
   weight: 20
   description: Old fuel can i think it is diesel.
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
   hasDurability: 0
-  maxDurability: 0
+  maxDurability: 100
   useDuration: 0
   tags: 32
   modules:

@@ -7,7 +7,7 @@ public static class ObstacleSaveSystem
     {
         var data = new ObstacleListSave();
 
-        var obstacles = Object.FindObjectsByType<ObstacleInteractible>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        var obstacles = Object.FindObjectsByType<ObjectInteractible>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         data.obstacles = obstacles
             .Where(o => !string.IsNullOrEmpty(o.Id))
@@ -25,7 +25,7 @@ public static class ObstacleSaveSystem
     {
         if (data == null) return;
 
-        var obstacles = Object.FindObjectsByType<ObstacleInteractible>(FindObjectsSortMode.None);
+        var obstacles = Object.FindObjectsByType<ObjectInteractible>(FindObjectsSortMode.None);
         var map = obstacles
             .Where(o => !string.IsNullOrEmpty(o.Id))
             .ToDictionary(o => o.Id, o => o);

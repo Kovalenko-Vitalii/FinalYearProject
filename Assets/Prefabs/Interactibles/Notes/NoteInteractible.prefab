@@ -368,6 +368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de62e61876169904181c41df0a6df9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteInteractible
-  id: 34c5aec8b3f04e1c9b4c491203c24ede
+  id: 17d827e6891541f7a404dc3b883606e9
   noteData: {fileID: 11400000, guid: 5128cf4d6dd64bf4f82d6d3370e3b38e, type: 2}
   pickedUp: 0

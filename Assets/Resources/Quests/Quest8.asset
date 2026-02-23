@@ -18,6 +18,8 @@ MonoBehaviour:
   steps:
   - type: 4
     description: Start boat
-    targetId: 
+    targetId: startedBoat
     amount: 1
+    requiredTag: 0
   nextQuest: {fileID: 0}
+  onCompleteLines: []

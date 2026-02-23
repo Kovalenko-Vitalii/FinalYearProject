@@ -14,12 +14,12 @@ public class QuestColliderTrigger : MonoBehaviour
         if (isUsed && questId != null) return;
         if (!other.CompareTag("Player")) return;
 
-        if (zoneId != null)
+        if (zoneId != null && zoneId != null)
         {
             GameEvents.RaiseZoneEntered(zoneId); // Triggering event
         }
             
-        if (questId != null)
+        if (questId != null && questId != "")
         {
             QuestManager.Instance.StartQuest(questId); // Giving quest
             isUsed = true;
