@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script keeps a list of spawnpoints and is always available 
+// Because it is singleton and always in core scene.
+// When content scene launches, spawnpoints that on that scene register themselfs here
 public class SpawnPointRegistry : MonoBehaviour
 {
     public static SpawnPointRegistry Instance { get; private set; }
@@ -27,6 +30,7 @@ public class SpawnPointRegistry : MonoBehaviour
             _points.Remove(point.Id);
     }
 
+    // Getting transform for id
     public Transform Get(string id)
     {
         if (string.IsNullOrEmpty(id)) return null;

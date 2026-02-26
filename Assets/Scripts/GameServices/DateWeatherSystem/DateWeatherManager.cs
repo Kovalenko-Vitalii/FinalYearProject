@@ -41,7 +41,7 @@ public class DateWeatherManager : MonoBehaviour, IPlayerTick
     public float TimeHours => currentMinutes / MinutesPerHour;         // 0..24
     public bool IsDaytime => IsInTimeWindow(TimeHours, sunriseTimeHours, sunsetTimeHours);
 
-    private float GameMinutesPerSecond => MinutesPerDay / (realMinutesPerDay * MinutesPerHour);
+    public float GameMinutesPerSecond => MinutesPerDay / (realMinutesPerDay * MinutesPerHour);
 
     private void Awake()
     {

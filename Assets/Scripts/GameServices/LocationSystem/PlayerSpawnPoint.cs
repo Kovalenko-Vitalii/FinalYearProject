@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This script represents a player spawnpoint, it register itself when enabled to registry
 public class PlayerSpawnPoint : MonoBehaviour
 {
     [SerializeField] private string id = "Start";

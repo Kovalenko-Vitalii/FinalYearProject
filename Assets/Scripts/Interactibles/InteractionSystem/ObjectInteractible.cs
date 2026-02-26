@@ -107,7 +107,7 @@ public class ObjectInteractible : MonoBehaviour, IInteractable, IHoldInteractabl
 
         if (!HasRequiredItems())
         {
-            prompt = label + " Need: " + string.Join(", ", parts);
+            prompt = label;
             return true;
         }
 
@@ -193,4 +193,21 @@ public class ObjectInteractible : MonoBehaviour, IInteractable, IHoldInteractabl
             action.Execute(ctx);
         }
     }
+}
+
+public sealed class InteractContext
+{
+    public ObjectInteractible interactable;
+    public PlayerInteractor interactor;
+
+    public InteractContext(ObjectInteractible interactable, PlayerInteractor interactor)
+    {
+        this.interactable = interactable;
+        this.interactor = interactor;
+    }
+}
+
+public abstract class InteractAction : ScriptableObject
+{
+    public abstract void Execute(InteractContext ctx);
 }

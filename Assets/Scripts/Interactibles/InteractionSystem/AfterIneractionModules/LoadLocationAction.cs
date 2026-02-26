@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This action module transits a player to another location
 [CreateAssetMenu(menuName = "InteractActions/Load Location")]
 public class LoadLocationAction : InteractAction
 {
