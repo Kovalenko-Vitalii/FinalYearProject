@@ -127,6 +127,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 246288708833966054, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 246288708833966054, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 246288708833966054, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 281810862005446489, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_Alpha
       value: 1
@@ -363,6 +375,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7013694538091175182, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7013694538091175182, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7013694538091175182, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7288356961366346752, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -487,14 +511,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   uiSource: {fileID: 854153749}
   footstepSource: {fileID: 2138294831}
-  subtitleSource: {fileID: 0}
+  subtitleSource: {fileID: 1585495644}
   volumeUI: 1
   volumeFootstep: 1
   volumeSubtitle: 1
   uiClick: {fileID: 8300000, guid: 0bcb08120ea75414aa3eda6558963449, type: 3}
   itemClick: {fileID: 8300000, guid: 045ed20d42c0c1746880dd24202b5093, type: 3}
-  menuOpen: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
-  menuClose: {fileID: 8300000, guid: b70690eb6d18ad54282fdb180e593b32, type: 3}
+  menuOpen: {fileID: 0}
+  menuClose: {fileID: 0}
   dropItem: {fileID: 8300000, guid: 741f151b297bdbb41a932102ee529811, type: 3}
   equipItem: {fileID: 8300000, guid: 42ea3e2ce6c76ee458e823faa088f800, type: 3}
   unequipItem: {fileID: 8300000, guid: 481f8b03b3e71a1439cda129bd7a51f0, type: 3}

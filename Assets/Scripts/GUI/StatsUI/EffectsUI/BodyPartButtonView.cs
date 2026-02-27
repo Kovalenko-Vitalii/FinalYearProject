@@ -24,8 +24,6 @@ public class BodyPartButtonView : MonoBehaviour
     {
         if (root == null) root = gameObject;
 
-        Debug.Log($"[BodyPartButtonView] {part} -> SetHasEffects({hasEffects}), root = {root.name}");
-
         root.SetActive(hasEffects);
     }
 

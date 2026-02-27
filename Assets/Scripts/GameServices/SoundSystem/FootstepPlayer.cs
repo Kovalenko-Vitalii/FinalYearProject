@@ -75,7 +75,10 @@ public class FootstepPlayer : MonoBehaviour, IPlayerTick
         if (!clip) return;
 
         lastClip = clip;
-        SoundManager.Instance.PlayFootstep(clip);
+
+        var volumeMul = 1 + PlayerStatManager.Instance.CurrentWeight / 100;
+        var pitch = 1 - PlayerStatManager.Instance.CurrentWeight / 100;
+        SoundManager.Instance.PlayFootstep(clip, volumeMul, pitch);
     }
 
     // This method gets random clip associated with provided surface 

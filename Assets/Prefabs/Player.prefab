@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 1858668464983379325}
   - component: {fileID: 9032132783619480000}
   - component: {fileID: 8189382546002954932}
+  - component: {fileID: 6181432501540392451}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -301,3 +302,26 @@ MonoBehaviour:
   sprintHeight: 0.12
   smoothReturnSpeed: 10
   moveSpeedThreshold: 0.2
+--- !u!114 &6181432501540392451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801684083971527322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81406382b7d0b5d4fb509d94fb96557a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FallInjurySystem
+  movement: {fileID: 7246548334658807191}
+  safeFallHeight: 2.5
+  fractureFallHeight: 4.5
+  hardFallHeight: 7
+  fractureImpactSpeed: 12
+  hardImpactSpeed: 16
+  fractureDuration: 180
+  fractureSpeedMultiplier: 0.55
+  painDuration: 30
+  painIntensityMin: 0.25
+  painIntensityMax: 0.85

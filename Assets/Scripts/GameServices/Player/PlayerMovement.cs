@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private CharacterController controller;
 
+    public float VerticalVelocity => _velocity.y;
+    public bool IsGrounded => controller.isGrounded;
     public enum MovementState { Walking, Sprinting, Air }
     public MovementState State { get; private set; }
 

@@ -115,6 +115,7 @@ public class StatsUI : MonoBehaviour
         {
             float t = Mathf.InverseLerp(0f, stats.HealthMax, value);
             hpRadialBar.fillAmount = t;
+            hpBar.fillRect.GetComponent<Image>().color = GetStatColor(t);
         }
     }
 
