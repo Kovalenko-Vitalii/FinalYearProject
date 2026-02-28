@@ -199,6 +199,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1647766765654339770, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1760499416479577996, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -351,9 +355,29 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0.00018262948
       objectReference: {fileID: 0}
+    - target: {fileID: 5618350689782267163, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4847737109006041937}
+    - target: {fileID: 5618350689782267163, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnterMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 5784421430396899391, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981472711545545156, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4847737109006041937}
+    - target: {fileID: 5981472711545545156, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReloadLastSave
+      objectReference: {fileID: 0}
+    - target: {fileID: 5981472711545545156, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameplayOrchestrator, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6144964672826479784, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1782,7 +1806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 696500cff818cde47b15c3156593859d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatManager
-  currentHealth: 100
+  currentHealth: 40
   healthCap: 100
   currentHunger: 100
   hungerCap: 100
@@ -1804,7 +1828,7 @@ MonoBehaviour:
   healthRegenPerSecond: 0
   hungerDrainPerSecond: 0.2
   hydrationDrainPerSecond: 0.3
-  energyDrainPerSecond: 0.5
+  energyDrainPerSecond: 0.1
   staminaRegenPerSecond: 18
   minStaminaToStartSprint: 10
   dbgSnapshot:
@@ -1949,7 +1973,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3e38685841254354eb3e09abe0a94dee, type: 2}
   - {fileID: 11400000, guid: 3851d54ed74291c4c9718147476bf1a0, type: 2}
   - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
-  - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
+  - {fileID: 11400000, guid: 4ffe238acd9ef0d418e7f4ec593e06a1, type: 2}
   initialAmounts: 0100000001000000010000000100000001000000
 --- !u!1 &3461668549182550961
 GameObject:

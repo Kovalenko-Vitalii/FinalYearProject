@@ -36,6 +36,22 @@ public class SceneLoader : MonoBehaviour
     // Load content scene and activate automatically when loaded
     public Coroutine LoadContent(string sceneName)
     {
+        if (_currentContentScene == sceneName)
+        {
+            var s = SceneManager.GetSceneByName(sceneName);
+            if (s.IsValid() && s.isLoaded)
+            {
+                SceneManager.SetActiveScene(s);
+                Progress = 1f;
+                return null;
+            }
+        }
+
+        if (IsLoading)
+        {
+            GameLog.Warning(TAG, $"LoadContent ignored: already loading");
+            return null;
+        }
         GameLog.Log(TAG, $"LoadContent('{sceneName}') initiated ");
 
         Progress = 0f; // Resetting load progress
@@ -49,6 +65,23 @@ public class SceneLoader : MonoBehaviour
     // Save as LoadContent but user can choose when to finally load scene
     public AsyncOperation LoadContentAsync(string sceneName, bool allowSceneActivation)
     {
+        if (_currentContentScene == sceneName)
+        {
+            var s = SceneManager.GetSceneByName(sceneName);
+            if (s.IsValid() && s.isLoaded)
+            {
+                SceneManager.SetActiveScene(s);
+                Progress = 1f;
+                return null;
+            }
+        }
+
+        if (IsLoading)
+        {
+            GameLog.Warning(TAG, $"LoadContentAsync ignored: already loading");
+            return _activeLoadOp;
+        }
+
         GameLog.Log(TAG, $"AsyncLoadContent('{sceneName}') initiated ");
 
         Progress = 0f;
@@ -75,22 +108,32 @@ public class SceneLoader : MonoBehaviour
     // This method used to wait for scene load and than switch it with current one
     private IEnumerator FinishSwapRoutine(string sceneName)
     {
+        var op = _activeLoadOp;
+
+        while (op != null && !op.isDone)
+        {
+            float raw = op.progress;
+            Progress = Mathf.Clamp01(raw < 0.9f ? raw / 0.9f : 1f);
+            yield return null;
+        }
+
         GameLog.Log(TAG, $"FinishSwapRoutine BEGIN target='{sceneName}' prev='{_currentContentScene}'");
 
         // Waiting for loading and updating progress
+        /*
         while (_activeLoadOp != null && !_activeLoadOp.isDone)
         {
             float raw = _activeLoadOp.progress;
             Progress = Mathf.Clamp01(raw < 0.9f ? raw / 0.9f : 1f);
             yield return null;
         }
-  
+        */
         var loadedScene = SceneManager.GetSceneByName(sceneName); // Making this scene active
 
         if (loadedScene.IsValid())
         {
             SceneManager.SetActiveScene(loadedScene);
-            GameLog.Log(TAG, $"SetActiveScene '{sceneName}'");
+            GameLog.Log(TAG, $"SetActiveScene '{sceneName}'"); 
         }
         else
             GameLog.Error(TAG, $"Loaded scene '{sceneName}' is NOT valid");

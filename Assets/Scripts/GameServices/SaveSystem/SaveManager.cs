@@ -461,4 +461,21 @@ public class SaveManager : MonoBehaviour
         _pendingLoad = null;
         GameLog.Log(TAG, "ApplyPendingLoad END (pending cleared)");
     }
+
+    public void LoadLastSlot()
+    {
+        LoadIndex();
+
+        var last = _index.slots
+            .OrderByDescending(s => s.updatedUtcTicks)
+            .FirstOrDefault();
+
+        if (last == null)
+        {
+            GameLog.Warning(TAG, "LoadLastSlot: no slots");
+            return;
+        }
+
+        LoadSlot(last.id);
+    }
 }

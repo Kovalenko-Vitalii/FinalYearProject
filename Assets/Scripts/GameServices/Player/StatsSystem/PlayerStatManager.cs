@@ -69,6 +69,10 @@ public class PlayerStatManager : MonoBehaviour
     public event Action<float> OnWeightChanged;
     public event Action<float> OnStaminaChanged;
 
+
+    public event Action OnDied;
+    public bool IsDead { get; private set; }
+
     public StatusEffectsSnapshot CurrentSnapshot { get; private set; } = StatusEffectsSnapshot.Default;
 
 
@@ -161,8 +165,19 @@ public class PlayerStatManager : MonoBehaviour
     {
         float old = currentHealth;
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, healthCap);
+
         if (!Mathf.Approximately(old, currentHealth))
             OnHealthChanged?.Invoke(currentHealth);
+
+        // death detect
+        if (!IsDead && currentHealth <= 0f)
+        {
+            IsDead = true;
+            OnDied?.Invoke();
+
+            if (GameplayOrchestrator.Instance != null)
+                GameplayOrchestrator.Instance.EnterDied();
+        }
     }
 
     public void ChangeHunger(float amount)
@@ -382,6 +397,8 @@ public class PlayerStatManager : MonoBehaviour
         ChangeTemperature(s.temperature - Temperature);
         ChangeStamina(s.stamina - Stamina);
 
+        IsDead = currentHealth <= 0f;
+
         RecalculateWeight();
     }
 
@@ -398,6 +415,8 @@ public class PlayerStatManager : MonoBehaviour
         OnHydrationChanged?.Invoke(currentHydration);
         OnEnergyChanged?.Invoke(currentEnergy);
         OnTemperatureChanged?.Invoke(temperature);
+
+        IsDead = false;
 
         RecalculateWeight();
     }

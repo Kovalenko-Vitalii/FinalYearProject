@@ -32,16 +32,8 @@ public class GameplayOrchestrator : MonoBehaviour
     [SerializeField] private float minLoadingScreenTime = 0.6f;
 
     // Game state for logic
-    public enum GameState { Boot, MainMenu, Loading, Gameplay }
+    public enum GameState { Boot, MainMenu, Loading, Gameplay, Died }
     public GameState State { get; private set; } = GameState.Boot;
-
-
-    // When entering the game - entering menu state
-    private void Start() 
-    {
-        GameLog.Log(TAG, $"Start -> EnterMenu()");
-        EnterMenu();       
-    }
 
     private void Awake()
     {
@@ -55,6 +47,8 @@ public class GameplayOrchestrator : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        EnterMenu();
 
         GameLog.Log(TAG, $"Awake() finished. Singleton set");
     }
@@ -104,6 +98,12 @@ public class GameplayOrchestrator : MonoBehaviour
     // Method used for loading location with defined player spawnpoint
     public void LoadLocation(string sceneName, string spawnId)
     {
+        if (State == GameState.Loading)
+        {
+            GameLog.Warning(TAG, "LoadLocation ignored: already loading");
+            return;
+        }
+
         _isSaveLoad = false;
         _nextSpawnId = spawnId;
 
@@ -261,5 +261,33 @@ public class GameplayOrchestrator : MonoBehaviour
         GameLog.Log(TAG, "MarkNextLoadAsSave() -> isSaveLoad=true");
 
         _isSaveLoad = true;
+    }
+
+    public void EnterDied()
+    {
+        if (State == GameState.Died) return;
+
+        GameLog.Log(TAG, $"EnterDied() from state={State}");
+
+        State = GameState.Died;
+
+        if (PlayerTickSystem.Instance != null)
+            PlayerTickSystem.Instance.SetEnabled(false);
+
+        // UI
+        uiState?.EnterDied();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void ReloadLastSave()
+    {
+        if (State == GameState.Loading) return;
+
+        loading?.Show();
+        PlayerTickSystem.Instance?.SetEnabled(false);
+
+        SaveManager.Instance?.LoadLastSlot();
     }
 }

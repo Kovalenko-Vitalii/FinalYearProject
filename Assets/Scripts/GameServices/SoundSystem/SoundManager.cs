@@ -47,6 +47,12 @@ public class SoundManager : MonoBehaviour
         uiSource.PlayOneShot(clip, volumeUI);
     }
 
+    public void PlayUI(AudioClip clip)
+    {
+        if (uiSource == null || !clip) return;
+        uiSource.PlayOneShot(clip, volumeUI);
+    }
+
     public void PlayFootstep(AudioClip clip, float volumeMul = 1f, float pitch = 1f)
     {
         if (footstepSource == null || clip == null) return;

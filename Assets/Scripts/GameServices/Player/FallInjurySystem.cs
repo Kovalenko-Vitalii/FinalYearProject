@@ -5,7 +5,7 @@
 public class FallInjurySystem : MonoBehaviour, IPlayerTick
 {
     [Header("Links")]
-    [SerializeField] private PlayerMovement movement;
+    [SerializeField] PlayerMovement movement;
 
     [Header("Fall thresholds")]
     [SerializeField] float safeFallHeight = 2.5f;
@@ -22,6 +22,8 @@ public class FallInjurySystem : MonoBehaviour, IPlayerTick
 
     [SerializeField] float painIntensityMin = 0.25f;
     [SerializeField] float painIntensityMax = 0.85f;
+
+    [SerializeField] AudioClip brokenBoneSound;
 
     CharacterController cc;
 
@@ -81,16 +83,17 @@ public class FallInjurySystem : MonoBehaviour, IPlayerTick
 
         float severity = Mathf.Clamp01(Mathf.Max(tHeight, tSpeed));
 
-        float painIntensity = Mathf.Lerp(painIntensityMin, painIntensityMax, severity);
-        StatusEffectManager.Instance.AddEffect(new PainEffect(
-            duration: injuryDuration,
-            intensity: painIntensity,
-            target: BodyPart.Head
-        ));
+        
 
         float fractureChance = Mathf.Lerp(0.25f, 1.0f, severity);
         if (Random.value < fractureChance)
-        {
+        {   
+            float painIntensity = Mathf.Lerp(painIntensityMin, painIntensityMax, severity);
+            StatusEffectManager.Instance.AddEffect(new PainEffect(
+                duration: injuryDuration,
+                intensity: painIntensity,
+                target: BodyPart.Head
+            ));
             BodyPart leg = (Random.value < 0.5f) ? BodyPart.LeftLeg : BodyPart.RightLeg;
 
             StatusEffectManager.Instance.AddEffect(new FractureEffect(
@@ -98,6 +101,9 @@ public class FallInjurySystem : MonoBehaviour, IPlayerTick
                 speedMultiplier: fractureSpeedMultiplier,
                 targetPart: leg
             ));
+
+            SoundManager.Instance.PlayUI(brokenBoneSound);
+            PlayerStatManager.Instance.ChangeHealth(severity * -100);
 
             if (severity > 0.9f && Random.value < 0.35f)
             {

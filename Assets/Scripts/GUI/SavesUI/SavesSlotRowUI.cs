@@ -7,7 +7,6 @@ public class SaveSlotRowUI : MonoBehaviour
 {
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private TextMeshProUGUI detailsText;
 
     private string _slotId;
     private SaveMenuUI _menu;
@@ -19,12 +18,6 @@ public class SaveSlotRowUI : MonoBehaviour
 
         if (titleText != null)
             titleText.text = meta.displayName;
-
-        if (detailsText != null)
-        {
-            var updated = new DateTime(meta.updatedUtcTicks, DateTimeKind.Utc).ToLocalTime();
-            detailsText.text = $"{updated:yyyy-MM-dd HH:mm} | {meta.sceneName} | {meta.spawnId}";
-        }
 
         if (button == null) button = GetComponent<Button>();
 
