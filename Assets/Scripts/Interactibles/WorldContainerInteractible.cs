@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(WorldContainer))]
-public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback
+public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback, ISaveable
 {
     [Header("UX")]
     [SerializeField] private string displayName = "Box";
@@ -15,14 +17,18 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
     [SerializeField] private string isOpenBoolName = "isOpen";
 
     [Header("Sound")]
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip openSound;
-    [SerializeField] AudioClip closeSound;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
+    [SerializeField] private AudioClip closeSound;
 
     private bool isOpen = false;
     private bool isSearched = false;
 
     private WorldContainer container;
+
+    public string SaveId => container != null ? container.Id : string.Empty;
+
+    private int isOpenHash;
 
     private void Awake()
     {
@@ -30,19 +36,89 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+
+        isOpenHash = (!string.IsNullOrEmpty(isOpenBoolName)) ? Animator.StringToHash(isOpenBoolName) : 0;
+
+        ApplyOpenImmediate(isOpen);
     }
 
-    private void SetOpen(bool value)
+    private void ApplyOpenImmediate(bool value)
     {
         isOpen = value;
-
-        if (animator != null && !string.IsNullOrEmpty(isOpenBoolName))
-            animator.SetBool(isOpenBoolName, isOpen);
+        if (animator != null && isOpenHash != 0)
+        {
+            animator.SetBool(isOpenHash, isOpen);
+            animator.Update(0f);
+        }
     }
+
+    public object CaptureState()
+    {
+        return new WorldContainerFullState
+        {
+            isSearched = isSearched,
+            items = CaptureContent()
+        };
+    }
+
+    public void RestoreState(object state)
+    {
+        if (state is not WorldContainerFullState s) return;
+
+        isSearched = s.isSearched;
+
+        RestoreContent(s.items);
+    }
+
+    private List<InventoryItemSave> CaptureContent()
+    {
+        var list = new List<InventoryItemSave>();
+
+        if (container?.Inventory?.items == null)
+            return list;
+
+        foreach (var it in container.Inventory.items)
+        {
+            if (it == null || it.data == null || it.amount <= 0) continue;
+
+            list.Add(new InventoryItemSave
+            {
+                itemId = it.data.id,
+                amount = it.amount,
+                durability = it.currentDurability
+            });
+        }
+
+        return list;
+    }
+
+    private void RestoreContent(List<InventoryItemSave> items)
+    {
+        if (container == null) return;
+
+        if (container.Inventory == null)
+            return;
+
+        container.Inventory.items.Clear();
+
+        if (items == null) return;
+
+        foreach (var it in items)
+        {
+            if (string.IsNullOrWhiteSpace(it.itemId) || it.amount <= 0) continue;
+
+            var data = ItemResolver.Resolve(it.itemId);
+            if (data == null) continue;
+
+            container.Inventory.AddItem(data, it.amount, it.durability);
+        }
+    }
+
+    // ----------------- INTERACT -----------------
 
     public bool TryGetPrompt(PlayerInteractor interactor, out string prompt)
     {
-        prompt = $"Open {displayName}";
+        prompt = isSearched ? $"Open {displayName}" : $"Search {displayName}";
         return true;
     }
 
@@ -66,30 +142,28 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
             return false;
 
         containerUI.ShowFor(container, this);
-
         ui.TryOpenContainerMain();
 
         isSearched = true;
-
         return true;
     }
 
     public void OnHoldStart(PlayerInteractor interactor, float duration)
     {
         PlayOpenSound();
-        SetOpen(true);
+        ApplyOpenImmediate(true);
     }
 
     public void OnHoldCanceled(PlayerInteractor interactor)
     {
         if (!CanvasSwitcher.Instance.AnyOpen)
-            SetOpen(false);
+            ApplyOpenImmediate(false);
     }
 
     public void CloseLid()
     {
         PlayCloseSound();
-        SetOpen(false);
+        ApplyOpenImmediate(false);
     }
 
     // Sound stuff
@@ -104,4 +178,11 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
         if (audioSource && closeSound)
             audioSource.PlayOneShot(closeSound);
     }
+}
+
+[System.Serializable]
+public struct WorldContainerFullState
+{
+    public bool isSearched;
+    public List<InventoryItemSave> items;
 }

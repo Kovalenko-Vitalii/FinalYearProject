@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 // List of save slots, used for quick retreiving list of slot`s meta data, just for visualisation
 [Serializable]
@@ -63,9 +64,13 @@ public class SaveGameData
 
     public DateWeatherSave dateWeatherSave;
 
-    public ObstacleListSave obstacleListSave;
+    public InteractibleListSave obstacleListSave;
 
     public NotesSaveData notesData;
+
+
+
+    public SaveWorldState worldState;
 
 }
 
@@ -184,15 +189,15 @@ public struct DateWeatherSave
     public float minutes;
 }
 
-// Saving obstacles
+// Saving interactibles
 [Serializable]
-public class ObstacleListSave
+public class InteractibleListSave
 {
-    public List<ObstacleSave> obstacles = new();
+    public List<InteractibleSave> interactibles = new();
 }
 
 [Serializable]
-public struct ObstacleSave
+public struct InteractibleSave
 {
     public string id;
     public bool isActive;
@@ -243,4 +248,79 @@ public class PainSave
 {
     public float intensity;
     public float buildup;
+}
+
+[System.Serializable]
+public class WorldStateEntry
+{
+    public string id;   // SaveId
+    public string type; // AssemblyQualifiedName
+    public string json; // JsonUtility.ToJson(state)
+}
+
+[System.Serializable]
+public class SaveWorldState
+{
+    public System.Collections.Generic.List<WorldStateEntry> entries = new();
+}
+
+public interface ISaveable
+{
+    string SaveId { get; }
+    object CaptureState();
+    void RestoreState(object state);
+}
+
+public static class SaveRegistry
+{
+    public static SaveWorldState CaptureAll()
+    {
+        var result = new SaveWorldState();
+
+        var saveables = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        ).OfType<ISaveable>();
+
+        foreach (var s in saveables)
+        {
+            if (string.IsNullOrWhiteSpace(s.SaveId)) continue;
+
+            var state = s.CaptureState();
+            if (state == null) continue;
+
+            result.entries.Add(new WorldStateEntry
+            {
+                id = s.SaveId,
+                type = state.GetType().AssemblyQualifiedName,
+                json = JsonUtility.ToJson(state)
+            });
+        }
+
+        return result;
+    }
+
+    public static void RestoreAll(SaveWorldState state)
+    {
+        if (state == null) return;
+
+        var saveables = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        ).OfType<ISaveable>()
+         .Where(s => !string.IsNullOrWhiteSpace(s.SaveId))
+         .ToDictionary(s => s.SaveId, s => s);
+
+        foreach (var e in state.entries)
+        {
+            if (string.IsNullOrWhiteSpace(e.id)) continue;
+            if (!saveables.TryGetValue(e.id, out var target)) continue;
+
+            var t = Type.GetType(e.type);
+            if (t == null) continue;
+
+            var payload = JsonUtility.FromJson(e.json, t);
+            target.RestoreState(payload);
+        }
+    }
 }

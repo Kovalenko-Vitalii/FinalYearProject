@@ -1,18 +1,22 @@
 ﻿using System;
 using UnityEngine;
 
-public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback
+public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback, ISaveable
 {
+    [SerializeField] string id;
+    [SerializeField] ItemData key;
+    public bool isOpen { get; private set; }
+
     [Header("UX")]
     [SerializeField] private string displayName = "Door";
 
     [Header("Hold Settings")]
     [SerializeField] private float openHoldDuration = 0.35f;
     [SerializeField] private float closeHoldDuration = 0.15f;
-    [SerializeField] private float lockedTryDuration = 0.15f; 
+    [SerializeField] private float lockedTryDuration = 0.15f;
 
     [Header("Lock")]
-    [SerializeField] private bool isLocked = false;
+    public bool isLocked { get; private set; }
 
     [Header("Animation")]
     [SerializeField] private Animator animator;
@@ -26,38 +30,24 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     [SerializeField] AudioClip lockedSound;
     [SerializeField] AudioClip unlockSound;
 
-    [Header("Save")]
-    [SerializeField] private string id;
-    [SerializeField] private bool isOpen;
-    [SerializeField] ItemData key;
     private int isOpenHash;
     private int tryLockedHash;
+    public string SaveId => id;
+
+    private void Reset()
+    {
+#if UNITY_EDITOR
+        SaveIdUtil.EnsureId(ref id, this);
+#else
+        if (string.IsNullOrWhiteSpace(id))
+            id = Guid.NewGuid().ToString("N");
+#endif
+    }
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            GenerateId();
-            return;
-        }
-
-        var all = FindObjectsByType<DoorInteractable>(FindObjectsSortMode.None);
-        foreach (var c in all)
-        {
-            if (c == this) continue;
-            if (c.id == id)
-            {
-                GenerateId();
-                break;
-            }
-        }
-    }
-
-    private void GenerateId()
-    {
-        id = System.Guid.NewGuid().ToString("N");
-        UnityEditor.EditorUtility.SetDirty(this);
+        SaveIdUtil.EnsureId(ref id, this);
     }
 #endif
 
@@ -72,10 +62,14 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
         ApplyStateImmediate(isOpen, isLocked);
     }
 
-    // --- Public API for save/load
-    public string Id => id;
-    public bool IsOpen => isOpen;
-    public bool IsLocked => isLocked;
+    // --- ISaveable
+    public object CaptureState() => new DoorState { isOpen = isOpen, isLocked = isLocked };
+
+    public void RestoreState(object state)
+    {
+        if (state is not DoorState s) return;
+        ApplyStateImmediate(s.isOpen, s.isLocked);
+    }
 
     public void ApplyStateImmediate(bool open, bool locked)
     {
@@ -136,7 +130,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     {
         if (isLocked && !isOpen)
         {
-            bool hasKey = key != null && interactor != null && interactor.PlayerInventory != null
+            bool hasKey = key != null && interactor?.PlayerInventory != null
                           && interactor.PlayerInventory.HasItemById(key.id);
 
             if (!hasKey)
@@ -144,11 +138,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
         }
     }
 
-
-    public void OnHoldCanceled(PlayerInteractor interactor)
-    {
-
-    }
+    public void OnHoldCanceled(PlayerInteractor interactor) { }
 
     private void SetOpen(bool value)
     {
@@ -166,28 +156,16 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
         animator.SetTrigger(tryLockedHash);
     }
 
-    // Sound stuff
-    public void PlayOpenSound()
-    {
-        if (audioSource && openSound)
-            audioSource.PlayOneShot(openSound);
-    }
+    // Sound
+    public void PlayOpenSound() { if (audioSource && openSound) audioSource.PlayOneShot(openSound); }
+    public void PlayCloseSound() { if (audioSource && closeSound) audioSource.PlayOneShot(closeSound); }
+    public void PlayLockedSound() { if (audioSource && lockedSound) audioSource.PlayOneShot(lockedSound); }
+    public void PlayUnlockSound() { if (audioSource && unlockSound) audioSource.PlayOneShot(unlockSound); }
+}
 
-    public void PlayCloseSound()
-    {
-        if (audioSource && closeSound)
-            audioSource.PlayOneShot(closeSound);
-    }
-
-    public void PlayLockedSound()
-    {
-        if (audioSource && lockedSound)
-            audioSource.PlayOneShot(lockedSound);
-    }
-
-    public void PlayUnlockSound()
-    {
-        if (audioSource && unlockSound)
-            audioSource.PlayOneShot(unlockSound);
-    }
+[System.Serializable]
+public struct DoorState
+{
+    public bool isOpen;
+    public bool isLocked;
 }

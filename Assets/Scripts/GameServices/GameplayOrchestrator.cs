@@ -225,8 +225,7 @@ public class GameplayOrchestrator : MonoBehaviour
         // 3) always invoke action
         OnPlayerSpawned?.Invoke(player);
 
-        // 4) drop flag after spawn
-        _isSaveLoad = false;
+        
 
 
         // Find cimenachineBinder and bind camera to headposition
@@ -249,6 +248,9 @@ public class GameplayOrchestrator : MonoBehaviour
 
         GameLog.Log(TAG, "OnGameplayReady() invoke");
         OnGameplayReady?.Invoke();
+
+        // 4) drop flag after spawn
+        _isSaveLoad = false;
 
         // Hide additionaly loading and resume ticking
         loading?.Hide();
@@ -279,6 +281,14 @@ public class GameplayOrchestrator : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public void LoadLocationFromSave(string sceneName)
+    {
+        if (State == GameState.Loading) return;
+
+        _nextSpawnId = null;
+        StartCoroutine(LoadLocationRoutine(sceneName));
     }
 
     public void ReloadLastSave()

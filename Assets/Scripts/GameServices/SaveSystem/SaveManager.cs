@@ -297,10 +297,9 @@ public class SaveManager : MonoBehaviour
             inventoryData = inventoryManager.Capture(),
             effectsData = statusEffectManager.CaptureAll(),
             worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
-            containersData = WorldContainerManager.CaptureAll(),
-            doorsData = DoorSaveSystem.CaptureAll(),
+            worldState = SaveRegistry.CaptureAll(),
             dateWeatherSave = dateWeatherManager.Capture(),
-            obstacleListSave = ObstacleSaveSystem.CaptureAll(),
+            obstacleListSave = InteractibleSaveSystem.CaptureAll(),
             notesData = noteManager.Capture()
         };
 
@@ -373,8 +372,15 @@ public class SaveManager : MonoBehaviour
         }
 
         // I`m not sure that this is really bad, but maybe this script should not trigger location loading
-        orch.MarkNextLoadAsSave();
-        orch.LoadLocation(data.sceneName, null);
+        if (data.hasPlayerTransform)
+        {
+            orch.MarkNextLoadAsSave();
+            orch.LoadLocationFromSave(data.sceneName);
+        }
+        else
+        {
+            orch.LoadLocation(data.sceneName, data.spawnId);
+        }
 
         GameLog.Log(TAG, $"LoadSlot requested LoadLocation '{data.sceneName}' (save-load)");
         return true;
@@ -442,8 +448,6 @@ public class SaveManager : MonoBehaviour
         if (noteManager != null)
             noteManager.Restore(_pendingLoad.notesData);
 
-
-
         // --- Flags like hasPlayerStats should be removed i think
         if (_pendingLoad.hasPlayerStats)
         {
@@ -454,10 +458,9 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        WorldContainerManager.RestoreAll(_pendingLoad.containersData);
-        DoorSaveSystem.RestoreAll(_pendingLoad.doorsData);
-        ObstacleSaveSystem.RestoreAll(_pendingLoad.obstacleListSave);
+        InteractibleSaveSystem.RestoreAll(_pendingLoad.obstacleListSave);
 
+        SaveRegistry.RestoreAll(_pendingLoad.worldState);
         _pendingLoad = null;
         GameLog.Log(TAG, "ApplyPendingLoad END (pending cleared)");
     }
