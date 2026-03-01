@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ItemData;
 
 // This script is responsible for managing quests
-public class QuestManager : MonoBehaviour
+public class QuestManager : MonoBehaviour, ISaveable
 {
     string TAG = "QuestManager"; 
     public static QuestManager Instance { get; private set; }
@@ -17,6 +18,8 @@ public class QuestManager : MonoBehaviour
 
     public event System.Action<QuestData> ActiveQuestChanged;
     public event System.Action<QuestData> QuestProgressChanged;
+
+    public string SaveId => "QUEST_MANAGER";
 
     private void Awake()
     {
@@ -56,8 +59,7 @@ public class QuestManager : MonoBehaviour
         GameEvents.Interacted -= OnInteracted;
     }
 
-    // public api
-
+    // ===================== PUBLIC API =====================
     public void StartQuest(string questId)
     {
         if (!defs.TryGetValue(questId, out var def))
@@ -66,9 +68,15 @@ public class QuestManager : MonoBehaviour
             return;
         }
 
-        SetActiveQuest(def);
-        EnsureState(def);
-        GameLog.Log(TAG, $"Active quest: {active.title}");
+        if (!IsQuestCompleted(questId))
+        {
+            SetActiveQuest(def);
+            EnsureState(def);
+            GameLog.Log(TAG, $"Active quest: {active.title}");
+        }
+        else 
+            GameLog.Log(TAG, $"Attempted to add quest thats already completed!: {active.title}"); 
+       
     }
 
     // Checking if quest completed
@@ -82,7 +90,7 @@ public class QuestManager : MonoBehaviour
         return state.stepProgress[stepIndex]; // Returning requested step progress
     }
 
-    // === Handling events ===
+    // ===================== EVENTS =====================
 
     private void OnSlept() => TryProgress(StepType.Sleep, targetId: null, amount: 1);
     private void OnConsumed(string itemId, ItemTag tag, int amount)
@@ -241,4 +249,85 @@ public class QuestManager : MonoBehaviour
             defs[quest.questId] = quest;
         }
     }
+
+    // ===================== SAVE / LOAD =====================
+
+    public object CaptureState()
+    {
+        var snap = new QuestManagerState
+        {
+            activeQuestId = active != null ? active.questId : null,
+            states = states.Values
+                .Where(s => s != null && !string.IsNullOrEmpty(s.questId))
+                .Select(s => new QuestStateSave
+                {
+                    questId = s.questId,
+                    completed = s.completed,
+                    stepProgress = (s.stepProgress != null) ? new List<int>(s.stepProgress) : new List<int>()
+                })
+                .ToList()
+        };
+
+        return snap;
+    }
+
+    public void RestoreState(object state)
+    {
+        if (state is not QuestManagerState s) return;
+
+        // defs должны быть готовы (Awake уже сделал BuildDatabase)
+        states.Clear();
+
+        if (s.states != null)
+        {
+            foreach (var qs in s.states)
+            {
+                if (qs == null || string.IsNullOrEmpty(qs.questId)) continue;
+
+                // если квеста больше нет в defs — можно пропустить (или оставить, но смысла мало)
+                if (!defs.ContainsKey(qs.questId))
+                    continue;
+
+                states[qs.questId] = new QuestState
+                {
+                    questId = qs.questId,
+                    completed = qs.completed,
+                    stepProgress = qs.stepProgress != null ? new List<int>(qs.stepProgress) : new List<int>()
+                };
+
+                // синхронизация длины прогресса под актуальные steps
+                var def = defs[qs.questId];
+                while (states[qs.questId].stepProgress.Count < def.steps.Count)
+                    states[qs.questId].stepProgress.Add(0);
+                if (states[qs.questId].stepProgress.Count > def.steps.Count)
+                    states[qs.questId].stepProgress.RemoveRange(def.steps.Count, states[qs.questId].stepProgress.Count - def.steps.Count);
+            }
+        }
+
+        // восстановить активный квест
+        QuestData newActive = null;
+        if (!string.IsNullOrEmpty(s.activeQuestId))
+            defs.TryGetValue(s.activeQuestId, out newActive);
+
+        SetActiveQuest(newActive);
+
+        // на всякий случай обеспечить состояние активного
+        if (active != null)
+            EnsureState(active);
+    }
+}
+
+[Serializable]
+public class QuestManagerState
+{
+    public string activeQuestId;
+    public List<QuestStateSave> states = new();
+}
+
+[Serializable]
+public class QuestStateSave
+{
+    public string questId;
+    public bool completed;
+    public List<int> stepProgress = new();
 }

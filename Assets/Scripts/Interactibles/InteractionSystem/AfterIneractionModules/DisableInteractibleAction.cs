@@ -1,11 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "InteractActions/Disable Interactable")]
-public class DisableInteractableAction : InteractAction
+[CreateAssetMenu(menuName = "InteractActions/Disable Executor")]
+public class DisableExecutorAction : InteractAction
 {
     public override void Execute(InteractContext ctx)
     {
-        if (ctx?.interactable == null) return;
-        ctx.interactable.ApplyStateImmediate(false);
+        if (ctx?.executor == null) return;
+        ctx.executor.ApplyStateImmediate(false);
     }
 }

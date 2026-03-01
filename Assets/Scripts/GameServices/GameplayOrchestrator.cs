@@ -276,6 +276,8 @@ public class GameplayOrchestrator : MonoBehaviour
         if (PlayerTickSystem.Instance != null)
             PlayerTickSystem.Instance.SetEnabled(false);
 
+        SoundManager.Instance.PlayUI(UISoundId.DeathSound);
+
         // UI
         uiState?.EnterDied();
 

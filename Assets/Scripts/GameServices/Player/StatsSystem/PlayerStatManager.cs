@@ -168,16 +168,6 @@ public class PlayerStatManager : MonoBehaviour
 
         if (!Mathf.Approximately(old, currentHealth))
             OnHealthChanged?.Invoke(currentHealth);
-
-        // death detect
-        if (!IsDead && currentHealth <= 0f)
-        {
-            IsDead = true;
-            OnDied?.Invoke();
-
-            if (GameplayOrchestrator.Instance != null)
-                GameplayOrchestrator.Instance.EnterDied();
-        }
     }
 
     public void ChangeHunger(float amount)
@@ -366,6 +356,16 @@ public class PlayerStatManager : MonoBehaviour
 
         // Applying snapshot to stats
         TickNaturalStats(dt, s, isSprinting);
+
+        // death detect
+        if (!IsDead && currentHealth <= 0f)
+        {
+            IsDead = true;
+            OnDied?.Invoke();
+
+            if (GameplayOrchestrator.Instance != null)
+                GameplayOrchestrator.Instance.EnterDied();
+        }
 
         CurrentSnapshot = s;
 

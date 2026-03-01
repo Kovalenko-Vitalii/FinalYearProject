@@ -58,18 +58,6 @@ public class SaveGameData
 
     public SaveWorldItemsData worldItemData;
 
-    public SaveWorldContainersData containersData;
-
-    public SaveDoorsData doorsData;
-
-    public DateWeatherSave dateWeatherSave;
-
-    public InteractibleListSave obstacleListSave;
-
-    public NotesSaveData notesData;
-
-
-
     public SaveWorldState worldState;
 
 }
@@ -117,7 +105,6 @@ public struct CameraStateSave
 }
 
 // Saving player stats
-
 [Serializable]
 public struct PlayerStatsSave
 {
@@ -133,7 +120,7 @@ public class SaveWorldItemsData
 }
 
 // This could be inherited from InventoryItemSave
-[System.Serializable]
+[Serializable]
 public struct WorldItemSave
 {
     public string itemId; 
@@ -143,79 +130,11 @@ public struct WorldItemSave
     public float durability;
 }
 
-// Saving contanier`s content
-
-[Serializable]
-public class SaveWorldContainersData
-{
-    public List<ContainerSave> containers = new();
-}
-
-[Serializable]
-public class ContainerSave
-{
-    public string containerId;
-    public List<InventoryItemSave> items = new();
-}
-
 // Saving player`s effects
-
 [Serializable]
 public class SaveEffectsData
 {
     public List<EffectSave> effectList = new();
-}
-
-// Saving doors
-[Serializable]
-public class SaveDoorsData
-{
-    public List<DoorSave> doors = new();
-}
-
-[Serializable]
-public struct DoorSave
-{
-    public string id;
-    public bool isOpen;
-    public bool isLocked;
-}
-
-// Saving time and weather
-[Serializable]
-public struct DateWeatherSave
-{
-    public int day;
-    public float minutes;
-}
-
-// Saving interactibles
-[Serializable]
-public class InteractibleListSave
-{
-    public List<InteractibleSave> interactibles = new();
-}
-
-[Serializable]
-public struct InteractibleSave
-{
-    public string id;
-    public bool isActive;
-}
-
-// Saving notes on map
-[Serializable]
-public class NotesSaveData
-{
-    public List<NoteSave> worldNotes = new();
-    public List<string> collectedNoteIds = new();
-}
-
-[Serializable]
-public struct NoteSave
-{
-    public string id;
-    public bool pickedUp;
 }
 
 // --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation

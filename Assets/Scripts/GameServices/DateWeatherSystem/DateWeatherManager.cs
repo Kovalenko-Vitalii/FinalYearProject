@@ -1,15 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class DateWeatherManager : MonoBehaviour, IPlayerTick
+public class DateWeatherManager : MonoBehaviour, IPlayerTick, ISaveable
 {
     public static DateWeatherManager Instance { get; private set; }
 
+    [SerializeField] private string id = "DateWeatherManager";
+
     [Header("Calendar")]
     [SerializeField] private int currentDay = 1;
-    public bool IsPaused { get; private set; }
-
+    
     [Header("Day Length (real time)")]
     [SerializeField] private float realMinutesPerDay = 20f;
+    public bool IsPaused { get; private set; }
 
     [Header("Start Time")]
     [SerializeField, Range(0f, 24f)] private float startTimeHours = 9f;
@@ -43,9 +46,15 @@ public class DateWeatherManager : MonoBehaviour, IPlayerTick
 
     public float GameMinutesPerSecond => MinutesPerDay / (realMinutesPerDay * MinutesPerHour);
 
+    public string SaveId => id;
+
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
 
         // initialize start time
@@ -144,7 +153,6 @@ public class DateWeatherManager : MonoBehaviour, IPlayerTick
 
 
     // handy api methods
-
     public void SetTimeHours(float hours)
     {
         currentMinutes = Mathf.Repeat(hours * MinutesPerHour, MinutesPerDay);
@@ -172,19 +180,30 @@ public class DateWeatherManager : MonoBehaviour, IPlayerTick
     }
 
     // For save
-
-    public DateWeatherSave Capture()
+    [Serializable]
+    public struct DateWeatherSave
     {
-        var saveData = new DateWeatherSave { };
-        saveData.day = currentDay;
-        saveData.minutes = currentMinutes;
-        Debug.Log(saveData.minutes + " " + saveData.day);
-        return saveData;
+        public int day;
+        public float minutes;
     }
 
-    public void Restore(DateWeatherSave save)
+    public object CaptureState()
     {
-        currentMinutes = save.minutes;
+        var data = new DateWeatherSave
+        {
+            day = currentDay,
+            minutes = currentMinutes
+        };
+        return data;
+    }
+
+    public void RestoreState(object state)
+    {
+        if (state is not DateWeatherSave save) return;
+
         currentDay = save.day;
+        currentMinutes = save.minutes;
+
+        ApplySun();
     }
 }

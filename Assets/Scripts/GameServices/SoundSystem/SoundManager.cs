@@ -28,6 +28,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioClip rejectSound;
     [SerializeField] AudioClip notePickupSound;
     [SerializeField] AudioClip noteClick;
+    [SerializeField] AudioClip deathSound;
 
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class SoundManager : MonoBehaviour
         UISoundId.RejectSound => rejectSound,
         UISoundId.NotePickupSound => notePickupSound,
         UISoundId.NoteClick => noteClick,
+        UISoundId.DeathSound => deathSound,
         _ => null
     };
 }
@@ -98,6 +100,7 @@ public enum UISoundId
     PickupSound,
     RejectSound,
     NotePickupSound,
-    NoteClick
+    NoteClick,
+    DeathSound
 }
 

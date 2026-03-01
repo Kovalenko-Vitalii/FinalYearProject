@@ -11,7 +11,6 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance { get; private set; }
     public string CurrentSlotId { get; private set; }
 
-
     // Path and name for save
     private const string SavesFolderName = "saves";
     private const string IndexFileName = "index.json";
@@ -170,7 +169,6 @@ public class SaveManager : MonoBehaviour
             spawnId = spawnId,
             hasPlayerStats = false,
             hasPlayerTransform = false,
-            dateWeatherSave = new DateWeatherSave { day = 1, minutes = 800f }, 
         };
 
         File.WriteAllText(GetSlotPath(id), JsonUtility.ToJson(data, true));
@@ -267,11 +265,6 @@ public class SaveManager : MonoBehaviour
         var worldObjectSpawner = WorldObjectSpawner.Instance;
         if (worldObjectSpawner == null) { GameLog.Error(TAG, "SaveToSlot failed: WorldObjectSpawner.Instance is NULL"); return false; }
 
-        var dateWeatherManager = DateWeatherManager.Instance;
-        if (dateWeatherManager == null) { GameLog.Error(TAG, "SaveToSlot failed: DateWeatherManager.Instance is NULL"); return false; }
-
-        var noteManager = NoteManager.Instance;
-        if (noteManager == null) { GameLog.Error(TAG, "SaveToSlot failed: NoteManager.Instance is NULL"); return false; }
 
         GameLog.Log(TAG, $"SaveToSlot BEGIN slot='{slotId}' scene='{currentScene}'");
 
@@ -298,8 +291,6 @@ public class SaveManager : MonoBehaviour
             effectsData = statusEffectManager.CaptureAll(),
             worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
             worldState = SaveRegistry.CaptureAll(),
-            dateWeatherSave = dateWeatherManager.Capture(),
-            obstacleListSave = InteractibleSaveSystem.CaptureAll()
         };
 
         // Setting up camera rotation if camera has this parameter on scene (I know it is poorly made :-)
@@ -439,23 +430,18 @@ public class SaveManager : MonoBehaviour
         if (worldObjectSpawner != null)
             worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
 
-        var dateWeatherManager = DateWeatherManager.Instance;
-        if (dateWeatherManager != null)
-            dateWeatherManager.Restore(_pendingLoad.dateWeatherSave);
-
         // --- Flags like hasPlayerStats should be removed i think
         if (_pendingLoad.hasPlayerStats)
         {
             var stats = PlayerStatManager.Instance;
             if (stats != null)
-            {
+            { 
                 stats.Restore(_pendingLoad.playerStats);
             }
         }
 
-        InteractibleSaveSystem.RestoreAll(_pendingLoad.obstacleListSave);
-
         SaveRegistry.RestoreAll(_pendingLoad.worldState);
+
         _pendingLoad = null;
         GameLog.Log(TAG, "ApplyPendingLoad END (pending cleared)");
     }
