@@ -299,8 +299,7 @@ public class SaveManager : MonoBehaviour
             worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
             worldState = SaveRegistry.CaptureAll(),
             dateWeatherSave = dateWeatherManager.Capture(),
-            obstacleListSave = InteractibleSaveSystem.CaptureAll(),
-            notesData = noteManager.Capture()
+            obstacleListSave = InteractibleSaveSystem.CaptureAll()
         };
 
         // Setting up camera rotation if camera has this parameter on scene (I know it is poorly made :-)
@@ -443,10 +442,6 @@ public class SaveManager : MonoBehaviour
         var dateWeatherManager = DateWeatherManager.Instance;
         if (dateWeatherManager != null)
             dateWeatherManager.Restore(_pendingLoad.dateWeatherSave);
-
-        var noteManager = NoteManager.Instance;
-        if (noteManager != null)
-            noteManager.Restore(_pendingLoad.notesData);
 
         // --- Flags like hasPlayerStats should be removed i think
         if (_pendingLoad.hasPlayerStats)

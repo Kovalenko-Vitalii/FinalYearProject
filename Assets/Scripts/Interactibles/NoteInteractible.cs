@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public class NoteInteractible : MonoBehaviour, IInteractable
+public class NoteInteractible : MonoBehaviour, IInteractable, ISaveable
 {
-    public string id;
-    [SerializeField] NoteData noteData;
-    public bool pickedUp = false;
+    [Header("Save")]
+    [SerializeField] private string id;
 
-    public string Id => id;
+    [Header("Data")]
+    [SerializeField] private NoteData noteData;
+    [SerializeField] private bool pickedUp = false;
+
     public bool PickedUp => pickedUp;
+    public string SaveId => id;
 
     public void ApplyStateImmediate(bool picked)
     {
@@ -15,40 +18,40 @@ public class NoteInteractible : MonoBehaviour, IInteractable
         gameObject.SetActive(!pickedUp);
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (string.IsNullOrEmpty(id))
-        {
-            GenerateId();
-            return;
-        }
+    // --------- ISaveable ---------
 
-        var all = FindObjectsByType<NoteInteractible>(FindObjectsSortMode.None);
-        foreach (var c in all)
-        {
-            if (c == this) continue;
-            if (c.id == id)
-            {
-                GenerateId();
-                break;
-            }
-        }
+    public object CaptureState()
+    {
+        return new NoteWorldState { pickedUp = pickedUp };
     }
 
-    private void GenerateId()
+    public void RestoreState(object state)
     {
-        id = System.Guid.NewGuid().ToString("N");
-        UnityEditor.EditorUtility.SetDirty(this);
+        if (state is not NoteWorldState s) return;
+        ApplyStateImmediate(s.pickedUp);
     }
-#endif
+    private void Reset()
+    {
+    #if UNITY_EDITOR
+        SaveIdUtil.EnsureId(ref id, this);
+    #else
+        if (string.IsNullOrWhiteSpace(id))
+            id = Guid.NewGuid().ToString("N");
+    #endif
+    }
+
+    #if UNITY_EDITOR
+    private void OnValidate() => SaveIdUtil.EnsureId(ref id, this);
+    #endif
+
 
     public bool Interact(PlayerInteractor interactor)
     {
+        if (pickedUp) return false;
+
         NoteManager.Instance.CollectNote(noteData);
 
-        pickedUp = true;
-        gameObject.SetActive(false);
+        ApplyStateImmediate(true);
 
         SoundManager.Instance.PlayUI(UISoundId.NotePickupSound, noteData.onPickupSound);
         return true;
@@ -56,7 +59,13 @@ public class NoteInteractible : MonoBehaviour, IInteractable
 
     public bool TryGetPrompt(PlayerInteractor interactor, out string prompt)
     {
-        prompt = "Note: " + noteData.NoteName;
+        prompt = "Note: " + (noteData != null ? noteData.NoteName : "???");
         return true;
     }
+}
+
+[System.Serializable]
+public struct NoteWorldState
+{
+    public bool pickedUp;
 }

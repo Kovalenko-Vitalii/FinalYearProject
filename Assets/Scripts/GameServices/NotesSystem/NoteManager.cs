@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class NoteManager : MonoBehaviour
+public class NoteManager : MonoBehaviour, ISaveable
 {
     public static NoteManager Instance { get; private set; }
 
-    [SerializeField] List<NoteData> notes = new();
+    [SerializeField] private List<NoteData> notes = new();
 
     private NoteData[] _allNotesCache;
+    public string SaveId => "NOTE_MANAGER";
 
     private void Awake()
     {
@@ -27,42 +29,32 @@ public class NoteManager : MonoBehaviour
 
     public IReadOnlyList<NoteData> GetNotes() => notes;
 
-    // Save load 
+    // -------- ISaveable --------
 
-    public NotesSaveData Capture()
+    public object CaptureState()
     {
-        var data = new NotesSaveData();
-
-        var world = Object.FindObjectsByType<NoteInteractible>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        );
-
-        data.worldNotes = world
-            .Where(n => !string.IsNullOrEmpty(n.Id))
-            .Select(n => new NoteSave { id = n.Id, pickedUp = n.PickedUp })
-            .ToList();
-
-        data.collectedNoteIds = notes
+        var ids = notes
             .Where(n => n != null && !string.IsNullOrEmpty(n.id))
             .Select(n => n.id)
             .Distinct()
             .ToList();
 
-        return data;
+        return new NotesCollectedState { collectedNoteIds = ids };
     }
 
-    public void Restore(NotesSaveData data)
+    public void RestoreState(object state)
     {
-        if (data == null) return;
+        if (state is not NotesCollectedState s) return;
 
         notes.Clear();
 
-        var all = _allNotesCache != null && _allNotesCache.Length > 0
+        var all = (_allNotesCache != null && _allNotesCache.Length > 0)
             ? _allNotesCache
             : Resources.LoadAll<NoteData>("Notes");
 
-        foreach (var id in data.collectedNoteIds)
+        if (s.collectedNoteIds == null) return;
+
+        foreach (var id in s.collectedNoteIds)
         {
             if (string.IsNullOrEmpty(id)) continue;
 
@@ -79,21 +71,11 @@ public class NoteManager : MonoBehaviour
             if (found != null)
                 notes.Add(found);
         }
-
-        var world = Object.FindObjectsByType<NoteInteractible>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        );
-
-        var map = world
-            .Where(n => !string.IsNullOrEmpty(n.Id))
-            .ToDictionary(n => n.Id, n => n);
-
-        foreach (var s in data.worldNotes)
-        {
-            if (string.IsNullOrEmpty(s.id)) continue;
-            if (map.TryGetValue(s.id, out var note))
-                note.ApplyStateImmediate(s.pickedUp);
-        }
     }
+}
+
+[System.Serializable]
+public struct NotesCollectedState
+{
+    public List<string> collectedNoteIds;
 }
