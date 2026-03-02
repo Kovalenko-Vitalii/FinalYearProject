@@ -225,9 +225,6 @@ public class GameplayOrchestrator : MonoBehaviour
         // 3) always invoke action
         OnPlayerSpawned?.Invoke(player);
 
-        
-
-
         // Find cimenachineBinder and bind camera to headposition
         var binder = FindFirstObjectByType<CinemachineBinder>();
         if (binder == null)

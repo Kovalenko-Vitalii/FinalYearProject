@@ -211,6 +211,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2984879014728417209, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+      propertyPath: startSpawnId
+      value: level01
+      objectReference: {fileID: 0}
     - target: {fileID: 3236452027954344462, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1475,6 +1479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: debec08d65f346f4fa58c510af798ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
+  id: DateWeatherManager
   currentDay: 1
   realMinutesPerDay: 20
   startTimeHours: 9

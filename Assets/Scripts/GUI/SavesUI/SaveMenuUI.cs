@@ -14,7 +14,7 @@ public class SaveMenuUI : MonoBehaviour
 
     [Header("Blank save start location")]
     [SerializeField] private string startSceneName = "Level01";
-    [SerializeField] private string startSpawnId = "Start";
+    [SerializeField] private string startSpawnId = "level01";
 
     private void OnEnable()
     {

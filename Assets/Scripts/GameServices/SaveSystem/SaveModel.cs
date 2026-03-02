@@ -39,17 +39,17 @@ public class SaveGameData
     // Foreign key
     public string slotId;
     public string sceneName;
+
+    public bool isSnapshot;
     public string spawnId;
+
 
     // --- I think that flags should be removed
     // Other data parts
-    public bool hasPlayerTransform;
     public PlayerTransformSave playerTransform;
 
-    public bool hasPlayerStats;
     public PlayerStatsSave playerStats;
 
-    public bool hasCameraState;
     public CameraStateSave cameraState;
 
     public SaveInventoryData inventoryData;
@@ -90,7 +90,7 @@ public struct GearPairSave
 
 // Saving player position
 [Serializable]
-public struct PlayerTransformSave
+public class PlayerTransformSave
 {
     public Vector3 position;
     public Quaternion rotation;
@@ -98,7 +98,7 @@ public struct PlayerTransformSave
 
 // Saving camera rotation
 [Serializable]
-public struct CameraStateSave
+public class CameraStateSave
 {
     public float pan;
     public float tilt;
@@ -106,7 +106,7 @@ public struct CameraStateSave
 
 // Saving player stats
 [Serializable]
-public struct PlayerStatsSave
+public class PlayerStatsSave
 {
     public float health, hunger, hydration, energy, temperature, stamina;
 }
@@ -169,7 +169,7 @@ public class PainSave
     public float buildup;
 }
 
-[System.Serializable]
+[Serializable]
 public class WorldStateEntry
 {
     public string id;   // SaveId

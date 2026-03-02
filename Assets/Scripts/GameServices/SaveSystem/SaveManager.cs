@@ -167,8 +167,24 @@ public class SaveManager : MonoBehaviour
             slotId = id,
             sceneName = sceneName,
             spawnId = spawnId,
-            hasPlayerStats = false,
-            hasPlayerTransform = false,
+            isSnapshot = false,
+
+            playerTransform = null,
+            playerStats = new PlayerStatsSave
+            {
+                health = 100f,
+                hunger = 100f,
+                hydration = 100f,
+                energy = 100f,
+                stamina = 100f,
+                temperature = 36.6f
+            },
+            cameraState = null,
+
+            inventoryData = new SaveInventoryData(),
+            effectsData = new SaveEffectsData(),
+            worldItemData = new SaveWorldItemsData(),
+            worldState = new SaveWorldState(),
         };
 
         File.WriteAllText(GetSlotPath(id), JsonUtility.ToJson(data, true));
@@ -275,17 +291,15 @@ public class SaveManager : MonoBehaviour
             version = 1,
             slotId = slotId,
             sceneName = currentScene,
-            spawnId = null,
+            spawnId = "level01",
+            isSnapshot = true,
 
-            hasPlayerTransform = true,
             playerTransform = new PlayerTransformSave
             {
                 position = player.transform.position,
                 rotation = player.transform.rotation
             },
 
-
-            hasPlayerStats = true,
             playerStats = stats.Capture(),
             inventoryData = inventoryManager.Capture(),
             effectsData = statusEffectManager.CaptureAll(),
@@ -300,7 +314,6 @@ public class SaveManager : MonoBehaviour
             var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
             if (panTilt != null)
             {
-                data.hasCameraState = true;
                 data.cameraState = new CameraStateSave
                 {
                     pan = panTilt.PanAxis.Value,
@@ -343,7 +356,7 @@ public class SaveManager : MonoBehaviour
         // Putting data into buffer and index
         _pendingLoad = data;
         CurrentSlotId = slotId;
-        GameLog.Log(TAG, $"LoadSlot set pending slot='{slotId}' scene='{data.sceneName}' hasT={data.hasPlayerTransform}");
+        GameLog.Log(TAG, $"LoadSlot set pending slot='{slotId}' scene='{data.sceneName}'");
 
         // Loading list of saves and updating time of slot has been changed
         LoadIndex();
@@ -362,7 +375,7 @@ public class SaveManager : MonoBehaviour
         }
 
         // I`m not sure that this is really bad, but maybe this script should not trigger location loading
-        if (data.hasPlayerTransform)
+        if (data.isSnapshot)
         {
             orch.MarkNextLoadAsSave();
             orch.LoadLocationFromSave(data.sceneName);
@@ -372,7 +385,7 @@ public class SaveManager : MonoBehaviour
             orch.LoadLocation(data.sceneName, data.spawnId);
         }
 
-        GameLog.Log(TAG, $"LoadSlot requested LoadLocation '{data.sceneName}' (save-load)");
+        GameLog.Log(TAG, $"LoadSlot set pending slot='{slotId}' scene='{data.sceneName}' hasT={(data.playerTransform != null)}");
         return true;
     }
 
@@ -386,7 +399,7 @@ public class SaveManager : MonoBehaviour
 
         // Setting up cinemachine rotation
         // --- I think teleporting player should be here
-        if (_pendingLoad.hasCameraState)
+        if (_pendingLoad.cameraState != null)
         {
             var vcam = GameObject.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
             if (vcam != null)
@@ -401,12 +414,17 @@ public class SaveManager : MonoBehaviour
         }
 
         // Restoring all necessary data
-        var playerSpawner = PlayerSpawner.Instance;
-        if (playerSpawner != null && _pendingLoad.hasPlayerTransform)
-            playerSpawner.SpawnOrMoveTo(
-                _pendingLoad.playerTransform.position,
-                _pendingLoad.playerTransform.rotation
-            );
+        if (_pendingLoad.isSnapshot)
+        {
+            var playerSpawner = PlayerSpawner.Instance;
+            if (playerSpawner != null)
+            {
+                playerSpawner.SpawnOrMoveTo(
+                    _pendingLoad.playerTransform.position,
+                    _pendingLoad.playerTransform.rotation
+                );
+            }
+        }
 
         var active = SceneManager.GetActiveScene();
         CinemachineBinder binder = null;
@@ -431,7 +449,7 @@ public class SaveManager : MonoBehaviour
             worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
 
         // --- Flags like hasPlayerStats should be removed i think
-        if (_pendingLoad.hasPlayerStats)
+        if (_pendingLoad.playerStats != null)
         {
             var stats = PlayerStatManager.Instance;
             if (stats != null)
