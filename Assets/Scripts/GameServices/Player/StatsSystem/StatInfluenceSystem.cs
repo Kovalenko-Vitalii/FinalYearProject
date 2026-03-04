@@ -12,12 +12,12 @@ public static class StatInfluenceSystem
 
         // Hunger
         s.StaminaRegenModifier *= EvalMinMult01(hunger01, cfg.hungerToStaminaRegen);
-        s.HealthDegenerationPerSecond += (1f - hunger01) * cfg.hungerToHealthDpsAtZero;
+        s.HealthDegenerationPerSecond += EvalDpsFromStart01(hunger01, cfg.hungerToStaminaRegen, cfg.hungerToHealthDpsAtZero);
 
         // Hydration
         s.StaminaRegenModifier *= EvalMinMult01(hyd01, cfg.hydrationToStaminaRegen);
         s.StaminaDrainMultiplier *= EvalMaxMult01(hyd01, cfg.hydrationToStaminaDrain);
-        s.HealthDegenerationPerSecond += (1f - hyd01) * cfg.hydrationToHealthDpsAtZero;
+        s.HealthDegenerationPerSecond += EvalDpsFromStart01(hyd01, cfg.hydrationToStaminaRegen, cfg.hydrationToHealthDpsAtZero);
 
         // Temperature
         float delta = Mathf.Abs(stats.Temperature - cfg.normalTemp);
@@ -69,5 +69,18 @@ public static class StatInfluenceSystem
     {
         if (max <= 0.0001f) return 0f;
         return Mathf.Clamp01(v / max);
+    }
+
+    private static float EvalDpsFromStart01(float value01, MinMultRule r, float dpsAtZero)
+    {
+        value01 = Mathf.Clamp01(value01);
+        if (value01 >= r.start01) return 0f;
+
+        float t = 1f - (value01 / Mathf.Max(r.start01, 0.0001f));
+        t = Mathf.Clamp01(t);
+
+        t = Mathf.Pow(t, Mathf.Max(0.1f, r.power));
+
+        return dpsAtZero * t;
     }
 }

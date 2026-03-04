@@ -223,16 +223,41 @@ public static class SaveRegistry
     {
         if (state == null) return;
 
-        var saveables = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        ).OfType<ISaveable>()
-         .Where(s => !string.IsNullOrWhiteSpace(s.SaveId))
-         .ToDictionary(s => s.SaveId, s => s);
+        var saveablesList = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            )
+            .OfType<ISaveable>()
+            .Where(s => !string.IsNullOrWhiteSpace(s.SaveId))
+            .ToList();
 
-        foreach (var e in state.entries)
+        var dupSaveables = saveablesList
+            .GroupBy(s => s.SaveId)
+            .Where(g => g.Count() > 1)
+            .ToList();
+
+        foreach (var g in dupSaveables)
         {
-            if (string.IsNullOrWhiteSpace(e.id)) continue;
+            var names = string.Join(", ", g.Select(x => (x as MonoBehaviour)?.name ?? x.ToString()));
+            Debug.LogError($"Duplicate SaveId in scene: {g.Key}. Objects: {names}");
+        }
+
+        var saveables = saveablesList
+            .GroupBy(s => s.SaveId)
+            .ToDictionary(g => g.Key, g => g.First());
+
+        var entries = state.entries
+            .Where(e => !string.IsNullOrWhiteSpace(e.id))
+            .GroupBy(e => e.id)
+            .Select(g =>
+            {
+                if (g.Count() > 1)
+                    Debug.LogWarning($"Duplicate saved entry id in file: {g.Key}. Using last occurrence.");
+                return g.Last();
+        });
+
+        foreach (var e in entries)
+        {
             if (!saveables.TryGetValue(e.id, out var target)) continue;
 
             var t = Type.GetType(e.type);
