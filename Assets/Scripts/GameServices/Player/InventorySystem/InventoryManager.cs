@@ -190,3 +190,28 @@ public class InventoryManager : MonoBehaviour, ISaveable
         ClearSelection();
     }
 }
+
+// Saving player inventory and gear
+[Serializable]
+public class SaveInventoryData
+{
+    public List<InventoryItemSave> inventoryItems = new();
+    public List<GearPairSave> gearSlots = new();
+}
+
+[Serializable]
+public struct InventoryItemSave
+{
+    public string itemId;
+    public int amount;
+    public float durability;
+}
+
+// --- this could be inherited from InventoryItemSave
+[Serializable]
+public struct GearPairSave
+{
+    public GearData.GearSlot slot;
+    public string gearId;
+    public float durability;
+}

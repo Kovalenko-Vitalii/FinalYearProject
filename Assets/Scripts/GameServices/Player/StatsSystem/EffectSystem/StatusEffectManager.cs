@@ -15,9 +15,11 @@ public enum BodyPart
 
 // This class responsible for managing player`s buffs/effects
 // It holds list of various effects and ticks them
-public class StatusEffectManager : MonoBehaviour
+public class StatusEffectManager : MonoBehaviour, ISaveable
 {  
     public static StatusEffectManager Instance { get; private set; }
+
+    public string SaveId => "STATUS_EFFECT_MANAGER";
 
     // List of effects
     private readonly List<StatusEffect> effects = new();
@@ -168,7 +170,7 @@ public class StatusEffectManager : MonoBehaviour
     }
 
     // Capturing all effects for save
-    public SaveEffectsData CaptureAll()
+    public object CaptureState()
     {
         var data = new SaveEffectsData();
 
@@ -179,17 +181,20 @@ public class StatusEffectManager : MonoBehaviour
     }
 
     // Restoring all effects for save
-    public void RestoreAll(SaveEffectsData data)
+    public void RestoreState(object state)
     {
-        if (data?.effectList == null) return;
+        var data = state as SaveEffectsData;
 
         ClearAllInternal();
+
+        if (data?.effectList == null) return;
 
         foreach (var s in data.effectList)
         {
             var effect = RestoreEffect(s);
-            AddEffect(effect);
+            if (effect == null) continue;
 
+            AddEffect(effect);
         }
     }
 
@@ -250,3 +255,41 @@ public class StatusEffectManager : MonoBehaviour
     }
 }
 
+// Saving player`s effects
+[Serializable]
+public class SaveEffectsData
+{
+    public List<EffectSave> effectList = new();
+}
+
+// --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation
+[Serializable]
+public class EffectSave
+{
+    public StatusEffectId id;
+    public float duration;
+
+    public bool hasTarget;
+    public BodyPart target;
+
+    public string payloadJson;
+}
+
+[Serializable]
+public class BleedingSave
+{
+    public float dps;
+}
+
+[Serializable]
+public class FractureSave
+{
+    public float speedMultiplier;
+}
+
+[Serializable]
+public class PainSave
+{
+    public float intensity;
+    public float buildup;
+}

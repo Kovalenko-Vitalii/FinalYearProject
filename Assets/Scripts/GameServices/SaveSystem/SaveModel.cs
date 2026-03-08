@@ -47,22 +47,9 @@ public class SaveGameData
     // --- I think that flags should be removed
     // Other data parts
     public PlayerTransformSave playerTransform;
-
     public CameraStateSave cameraState;
 
-    public SaveEffectsData effectsData;
-
     public SaveWorldState worldState;
-
-}
-
-// --- this could be inherited from InventoryItemSave
-[Serializable]
-public struct GearPairSave
-{
-    public GearData.GearSlot slot;
-    public string gearId;
-    public float durability;
 }
 
 // Saving player position
@@ -81,45 +68,6 @@ public class CameraStateSave
     public float tilt;
 }
 
-// Saving player`s effects
-[Serializable]
-public class SaveEffectsData
-{
-    public List<EffectSave> effectList = new();
-}
-
-// --- This system helps me to serialize different effects that has custom parameters, the best I could invent in this situation
-[Serializable]
-public class EffectSave
-{
-    public StatusEffectId id;
-    public float duration;
-
-    public bool hasTarget;
-    public BodyPart target;
-
-    public string payloadJson;
-}
-
-[Serializable]
-public class BleedingSave
-{
-    public float dps;
-}
-
-[Serializable]
-public class FractureSave
-{
-    public float speedMultiplier;
-}
-
-[Serializable]
-public class PainSave
-{
-    public float intensity;
-    public float buildup;
-}
-
 [Serializable]
 public class WorldStateEntry
 {
@@ -128,7 +76,7 @@ public class WorldStateEntry
     public string json; // JsonUtility.ToJson(state)
 }
 
-[System.Serializable]
+[Serializable]
 public class SaveWorldState
 {
     public List<WorldStateEntry> entries = new();

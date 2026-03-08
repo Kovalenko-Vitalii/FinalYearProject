@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -17,10 +16,10 @@ public class SaveManager : MonoBehaviour
     private const string IndexFileName = "index.json";
 
     // List to file with saves
-    private SaveIndex _index;
+    private SaveIndex index;
 
     // Buffer with actual game data save
-    private SaveGameData _pendingLoad;
+    private SaveGameData pendingLoad;
 
     private string SavesFolderPath => Path.Combine(Application.persistentDataPath, SavesFolderName);
     private string IndexPath => Path.Combine(SavesFolderPath, IndexFileName);
@@ -80,26 +79,26 @@ public class SaveManager : MonoBehaviour
     // Loading list of slots
     private void LoadIndex()
     {
-        if (_index != null) return;
+        if (index != null) return;
 
         if (!File.Exists(IndexPath))
         {
-            _index = new SaveIndex();
+            index = new SaveIndex();
             SaveIndexToDisk();
             GameLog.Log(TAG, "Index not found -> created new index.json");
             return;
         }
 
         var json = File.ReadAllText(IndexPath);
-        _index = JsonUtility.FromJson<SaveIndex>(json) ?? new SaveIndex();
+        index = JsonUtility.FromJson<SaveIndex>(json) ?? new SaveIndex();
 
-        GameLog.Log(TAG, $"Index loaded. slots={_index.slots.Count}");
+        GameLog.Log(TAG, $"Index loaded. slots={index.slots.Count}");
     }
 
     // Saving list of slots
     private void SaveIndexToDisk()
     {
-        var json = JsonUtility.ToJson(_index, true);
+        var json = JsonUtility.ToJson(index, true);
         File.WriteAllText(IndexPath, json);
     }
 
@@ -107,7 +106,7 @@ public class SaveManager : MonoBehaviour
     public SaveSlotMeta[] ListSlots()
     {
         LoadIndex();
-        return _index.slots
+        return index.slots
             .OrderByDescending(s => s.updatedUtcTicks)
             .ToArray();
     }
@@ -134,7 +133,7 @@ public class SaveManager : MonoBehaviour
             dataVersion = 1
         };
 
-        _index.slots.Add(meta);
+        index.slots.Add(meta);
         SaveIndexToDisk();
 
         GameLog.Log(TAG, $"Created slot id='{id}' name='{meta.displayName}' scene='{sceneName}' spawn='{spawnId}'");
@@ -159,7 +158,7 @@ public class SaveManager : MonoBehaviour
             dataVersion = 1
         };
 
-        _index.slots.Add(meta);
+        index.slots.Add(meta);
         SaveIndexToDisk();
 
         var data = new SaveGameData
@@ -173,7 +172,6 @@ public class SaveManager : MonoBehaviour
             playerTransform = null,
             cameraState = null,
 
-            effectsData = new SaveEffectsData(),
             worldState = new SaveWorldState(),
         };
 
@@ -188,7 +186,7 @@ public class SaveManager : MonoBehaviour
         LoadIndex();
 
         // Finding slot by id
-        var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
+        var meta = index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta == null)
         {
             GameLog.Warning(TAG, $"DeleteSlot: not found slotId='{slotId}'"); 
@@ -196,7 +194,7 @@ public class SaveManager : MonoBehaviour
         }
 
         // Removing slot from list (index)
-        _index.slots.Remove(meta);
+        index.slots.Remove(meta);
         SaveIndexToDisk();
 
         // Removing slot file from folder
@@ -212,7 +210,7 @@ public class SaveManager : MonoBehaviour
     {
         LoadIndex();
 
-        var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
+        var meta = index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta == null)
         {
             GameLog.Warning(TAG, $"RenameSlot: not found slotId='{slotId}'");
@@ -242,7 +240,7 @@ public class SaveManager : MonoBehaviour
             currentScene = SceneManager.GetActiveScene().name;
 
         // Finding slot
-        var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
+        var meta = index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta == null)
         {
             GameLog.Error(TAG, $"SaveToSlot failed: meta not found slotId='{slotId}'");
@@ -258,9 +256,6 @@ public class SaveManager : MonoBehaviour
 
         var player = spawner.Player;
         if (player == null) { GameLog.Error(TAG, "SaveToSlot failed: spawner.Player is NULL"); return false; }    
-
-        var statusEffectManager = StatusEffectManager.Instance;
-        if (statusEffectManager == null) { GameLog.Error(TAG, "SaveToSlot failed: StatusEffectManager.Instance is NULL"); return false; }
 
         GameLog.Log(TAG, $"SaveToSlot BEGIN slot='{slotId}' scene='{currentScene}'");
 
@@ -280,7 +275,6 @@ public class SaveManager : MonoBehaviour
                 rotation = player.transform.rotation
             },
 
-            effectsData = statusEffectManager.CaptureAll(),
             worldState = SaveRegistry.CaptureAll(),
         };
 
@@ -331,13 +325,13 @@ public class SaveManager : MonoBehaviour
         }
 
         // Putting data into buffer and index
-        _pendingLoad = data;
+        pendingLoad = data;
         CurrentSlotId = slotId;
         GameLog.Log(TAG, $"LoadSlot set pending slot='{slotId}' scene='{data.sceneName}'");
 
         // Loading list of saves and updating time of slot has been changed
         LoadIndex();
-        var meta = _index.slots.FirstOrDefault(s => s.id == slotId);
+        var meta = index.slots.FirstOrDefault(s => s.id == slotId);
         if (meta != null)
         {
             meta.updatedUtcTicks = DateTime.UtcNow.Ticks;
@@ -370,13 +364,13 @@ public class SaveManager : MonoBehaviour
     private void OnGameplayReady()
     {
         // Checking if there is stored data in buffer
-        if (_pendingLoad == null) return;
+        if (pendingLoad == null) return;
 
-        GameLog.Log(TAG, $"ApplyPendingLoad BEGIN scene='{_pendingLoad.sceneName}'");
+        GameLog.Log(TAG, $"ApplyPendingLoad BEGIN scene='{pendingLoad.sceneName}'");
 
         // Setting up cinemachine rotation
         // --- I think teleporting player should be here
-        if (_pendingLoad.cameraState != null)
+        if (pendingLoad.cameraState != null)
         {
             var vcam = GameObject.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
             if (vcam != null)
@@ -384,21 +378,21 @@ public class SaveManager : MonoBehaviour
                 var panTilt = vcam.GetComponent<Unity.Cinemachine.CinemachinePanTilt>();
                 if (panTilt != null)
                 {
-                    panTilt.PanAxis.Value = _pendingLoad.cameraState.pan;
-                    panTilt.TiltAxis.Value = _pendingLoad.cameraState.tilt;
+                    panTilt.PanAxis.Value = pendingLoad.cameraState.pan;
+                    panTilt.TiltAxis.Value = pendingLoad.cameraState.tilt;
                 }
             }
         }
 
         // Restoring all necessary data
-        if (_pendingLoad.isSnapshot)
+        if (pendingLoad.isSnapshot)
         {
             var playerSpawner = PlayerSpawner.Instance;
             if (playerSpawner != null)
             {
                 playerSpawner.SpawnOrMoveTo(
-                    _pendingLoad.playerTransform.position,
-                    _pendingLoad.playerTransform.rotation
+                    pendingLoad.playerTransform.position,
+                    pendingLoad.playerTransform.rotation
                 );
             }
         }
@@ -412,14 +406,9 @@ public class SaveManager : MonoBehaviour
         }
         binder?.BindForActivePlayer();
 
-        var statusEffectManager = StatusEffectManager.Instance;
-        if (statusEffectManager != null)
-            statusEffectManager.RestoreAll(_pendingLoad.effectsData);
+        SaveRegistry.RestoreAll(pendingLoad.worldState);
 
-
-        SaveRegistry.RestoreAll(_pendingLoad.worldState);
-
-        _pendingLoad = null;
+        pendingLoad = null;
         GameLog.Log(TAG, "ApplyPendingLoad END (pending cleared)");
     }
 
@@ -427,7 +416,7 @@ public class SaveManager : MonoBehaviour
     {
         LoadIndex();
 
-        var last = _index.slots
+        var last = index.slots
             .OrderByDescending(s => s.updatedUtcTicks)
             .FirstOrDefault();
 
@@ -439,20 +428,4 @@ public class SaveManager : MonoBehaviour
 
         LoadSlot(last.id);
     }
-}
-
-// Saving player inventory and gear
-[Serializable]
-public class SaveInventoryData
-{
-    public List<InventoryItemSave> inventoryItems = new();
-    public List<GearPairSave> gearSlots = new();
-}
-
-[Serializable]
-public struct InventoryItemSave
-{
-    public string itemId;
-    public int amount;
-    public float durability;
 }
