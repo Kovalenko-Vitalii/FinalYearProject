@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81433a6bff22f246ad5aa925fa116f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  id: f09cbf828ce14a87aa1973e49b3cc4a9
+  id: 
   key: {fileID: 0}
   displayName: Door
   openHoldDuration: 1

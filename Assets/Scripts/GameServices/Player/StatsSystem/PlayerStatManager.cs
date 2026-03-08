@@ -2,9 +2,11 @@
 using System;
 using static GameplayOrchestrator;
 
-public class PlayerStatManager : MonoBehaviour
+public class PlayerStatManager : MonoBehaviour, ISaveable
 {
     public static PlayerStatManager Instance { get; private set; }
+
+    public string SaveId => "PLAYER_STATS";
 
     // List of stats, include current, maximum
     [Header("Health settings")]
@@ -375,7 +377,7 @@ public class PlayerStatManager : MonoBehaviour
 
 
     // For storing and restoring stats
-    public PlayerStatsSave Capture()
+    public object CaptureState()
     {
         return new PlayerStatsSave
         {
@@ -388,8 +390,11 @@ public class PlayerStatManager : MonoBehaviour
         };
     }
 
-    public void Restore(PlayerStatsSave s)
+    public void RestoreState(object state)
     {
+        var s = state as PlayerStatsSave;
+        if (s == null) return;
+
         ChangeHealth(s.health - Health);
         ChangeHunger(s.hunger - Hunger);
         ChangeHydration(s.hydration - Hydration);
@@ -420,4 +425,11 @@ public class PlayerStatManager : MonoBehaviour
 
         RecalculateWeight();
     }
+}
+
+// Saving player stats
+[Serializable]
+public class PlayerStatsSave
+{
+    public float health, hunger, hydration, energy, temperature, stamina;
 }

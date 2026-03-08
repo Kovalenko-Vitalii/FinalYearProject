@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -170,20 +171,9 @@ public class SaveManager : MonoBehaviour
             isSnapshot = false,
 
             playerTransform = null,
-            playerStats = new PlayerStatsSave
-            {
-                health = 100f,
-                hunger = 100f,
-                hydration = 100f,
-                energy = 100f,
-                stamina = 100f,
-                temperature = 36.6f
-            },
             cameraState = null,
 
-            inventoryData = new SaveInventoryData(),
             effectsData = new SaveEffectsData(),
-            worldItemData = new SaveWorldItemsData(),
             worldState = new SaveWorldState(),
         };
 
@@ -267,20 +257,10 @@ public class SaveManager : MonoBehaviour
         if (spawner == null) { GameLog.Error(TAG, "SaveToSlot failed: PlayerSpawner.Instance is NULL"); return false; }
 
         var player = spawner.Player;
-        if (player == null) { GameLog.Error(TAG, "SaveToSlot failed: spawner.Player is NULL"); return false; }
-
-        var stats = PlayerStatManager.Instance;
-        if (stats == null) { GameLog.Error(TAG, "SaveToSlot failed: PlayerStatManager.Instance is NULL"); return false; }
-
-        var inventoryManager = InventoryManager.Instance;
-        if (inventoryManager == null) { GameLog.Error(TAG, "SaveToSlot failed: InventoryManager.Instance is NULL"); return false; }
+        if (player == null) { GameLog.Error(TAG, "SaveToSlot failed: spawner.Player is NULL"); return false; }    
 
         var statusEffectManager = StatusEffectManager.Instance;
         if (statusEffectManager == null) { GameLog.Error(TAG, "SaveToSlot failed: StatusEffectManager.Instance is NULL"); return false; }
-
-        var worldObjectSpawner = WorldObjectSpawner.Instance;
-        if (worldObjectSpawner == null) { GameLog.Error(TAG, "SaveToSlot failed: WorldObjectSpawner.Instance is NULL"); return false; }
-
 
         GameLog.Log(TAG, $"SaveToSlot BEGIN slot='{slotId}' scene='{currentScene}'");
 
@@ -300,10 +280,7 @@ public class SaveManager : MonoBehaviour
                 rotation = player.transform.rotation
             },
 
-            playerStats = stats.Capture(),
-            inventoryData = inventoryManager.Capture(),
             effectsData = statusEffectManager.CaptureAll(),
-            worldItemData = worldObjectSpawner.CaptureAllWorldItems(),
             worldState = SaveRegistry.CaptureAll(),
         };
 
@@ -435,28 +412,10 @@ public class SaveManager : MonoBehaviour
         }
         binder?.BindForActivePlayer();
 
-
-        var inventoryManager = InventoryManager.Instance;
-        if (inventoryManager != null && _pendingLoad.inventoryData.inventoryItems.Count > 0)
-            inventoryManager.Restore(_pendingLoad.inventoryData);
-
         var statusEffectManager = StatusEffectManager.Instance;
         if (statusEffectManager != null)
             statusEffectManager.RestoreAll(_pendingLoad.effectsData);
 
-        var worldObjectSpawner = WorldObjectSpawner.Instance;
-        if (worldObjectSpawner != null)
-            worldObjectSpawner.RestoreAllWorldItems(_pendingLoad.worldItemData);
-
-        // --- Flags like hasPlayerStats should be removed i think
-        if (_pendingLoad.playerStats != null)
-        {
-            var stats = PlayerStatManager.Instance;
-            if (stats != null)
-            { 
-                stats.Restore(_pendingLoad.playerStats);
-            }
-        }
 
         SaveRegistry.RestoreAll(_pendingLoad.worldState);
 
@@ -480,4 +439,20 @@ public class SaveManager : MonoBehaviour
 
         LoadSlot(last.id);
     }
+}
+
+// Saving player inventory and gear
+[Serializable]
+public class SaveInventoryData
+{
+    public List<InventoryItemSave> inventoryItems = new();
+    public List<GearPairSave> gearSlots = new();
+}
+
+[Serializable]
+public struct InventoryItemSave
+{
+    public string itemId;
+    public int amount;
+    public float durability;
 }

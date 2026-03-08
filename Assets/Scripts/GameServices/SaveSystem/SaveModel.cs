@@ -48,34 +48,12 @@ public class SaveGameData
     // Other data parts
     public PlayerTransformSave playerTransform;
 
-    public PlayerStatsSave playerStats;
-
     public CameraStateSave cameraState;
-
-    public SaveInventoryData inventoryData;
 
     public SaveEffectsData effectsData;
 
-    public SaveWorldItemsData worldItemData;
-
     public SaveWorldState worldState;
 
-}
-
-// Saving player inventory and gear
-[Serializable]
-public class SaveInventoryData
-{
-    public List<InventoryItemSave> inventoryItems = new();
-    public List<GearPairSave> gearSlots = new();
-}
-
-[Serializable]
-public struct InventoryItemSave
-{
-    public string itemId;
-    public int amount;
-    public float durability;
 }
 
 // --- this could be inherited from InventoryItemSave
@@ -86,7 +64,6 @@ public struct GearPairSave
     public string gearId;
     public float durability;
 }
-
 
 // Saving player position
 [Serializable]
@@ -102,32 +79,6 @@ public class CameraStateSave
 {
     public float pan;
     public float tilt;
-}
-
-// Saving player stats
-[Serializable]
-public class PlayerStatsSave
-{
-    public float health, hunger, hydration, energy, temperature, stamina;
-}
-
-// Saving items on location
-
-[Serializable]
-public class SaveWorldItemsData
-{
-    public List<WorldItemSave> items = new();
-}
-
-// This could be inherited from InventoryItemSave
-[Serializable]
-public struct WorldItemSave
-{
-    public string itemId; 
-    public Vector3 position;
-    public Quaternion rotation;
-    public int amount;
-    public float durability;
 }
 
 // Saving player`s effects
@@ -180,7 +131,7 @@ public class WorldStateEntry
 [System.Serializable]
 public class SaveWorldState
 {
-    public System.Collections.Generic.List<WorldStateEntry> entries = new();
+    public List<WorldStateEntry> entries = new();
 }
 
 public interface ISaveable
@@ -197,9 +148,11 @@ public static class SaveRegistry
         var result = new SaveWorldState();
 
         var saveables = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        ).OfType<ISaveable>();
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            ).OfType<ISaveable>();
+
+        var map = new Dictionary<string, WorldStateEntry>();
 
         foreach (var s in saveables)
         {
@@ -208,14 +161,20 @@ public static class SaveRegistry
             var state = s.CaptureState();
             if (state == null) continue;
 
-            result.entries.Add(new WorldStateEntry
+            var entry = new WorldStateEntry
             {
                 id = s.SaveId,
                 type = state.GetType().AssemblyQualifiedName,
                 json = JsonUtility.ToJson(state)
-            });
+            };
+
+            if (map.ContainsKey(entry.id))
+                Debug.LogWarning($"Duplicate SaveId during capture: {entry.id} (overwriting previous entry)");
+
+            map[entry.id] = entry;
         }
 
+        result.entries = map.Values.ToList();
         return result;
     }
 

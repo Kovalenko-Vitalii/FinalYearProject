@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class WorldObjectSpawner : MonoBehaviour
+public class WorldObjectSpawner : MonoBehaviour, ISaveable
 {
     public static WorldObjectSpawner Instance { get; private set; }
+
+    public string SaveId => "WORLD_OBJECT_SPAWNER";
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -45,12 +49,13 @@ public class WorldObjectSpawner : MonoBehaviour
     // ===== SAVE =====
 
     // Capturing data about all items on location
-    public SaveWorldItemsData CaptureAllWorldItems()
+    public object CaptureState()
     {
         var data = new SaveWorldItemsData();
 
         // Getting all items on scene, filtering and capturing to data object
-        var all = Object.FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
+        var all = FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
+
         foreach (var wi in all)
         {
             if (wi == null || wi.data == null) continue;
@@ -62,35 +67,60 @@ public class WorldObjectSpawner : MonoBehaviour
         return data;
     }
 
-    // Cleaning map from items before load
-    public void ClearAllWorldItems()
+    // Loading items on map
+    public void RestoreState(object state)
     {
-        var all = Object.FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
+        var saved = state as SaveWorldItemsData;
+
+        // Cleaning map first
+        var all = FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
         foreach (var wi in all)
+        {
             if (wi != null)
                 Destroy(wi.gameObject);
-    }
+        }
 
-    // Loading items on map
-    public void RestoreAllWorldItems(SaveWorldItemsData saved)
-    {
         // If there is no save info we dont touch anything
         if (saved == null || saved.items == null || saved.items.Count == 0)
             return;
-
-        // Cleaning
-        ClearAllWorldItems();
 
         // Adding items on map
         foreach (var s in saved.items)
         {
             // Getting scriptable object by id from resolver (json can not serialize scriptableObjects)
             var itemData = ItemResolver.Resolve(s.itemId);
-            if (itemData == null) continue;
-  
-            SpawnItem(itemData, s.amount, s.durability, s.position, s.rotation, Vector3.zero);
+            if (itemData == null)
+            {
+                Debug.LogWarning($"WorldObjectSpawner: failed to resolve itemId '{s.itemId}'");
+                continue;
+            }
+
+            SpawnItem(
+                itemData,
+                s.amount,
+                s.durability,
+                s.position,
+                s.rotation,
+                Vector3.zero
+            );
         }
     }
+}
 
+// Saving items on location
+[Serializable]
+public class SaveWorldItemsData
+{
+    public List<WorldItemSave> items = new();
+}
 
+// This could be inherited from InventoryItemSave
+[Serializable]
+public struct WorldItemSave
+{
+    public string itemId;
+    public Vector3 position;
+    public Quaternion rotation;
+    public int amount;
+    public float durability;
 }

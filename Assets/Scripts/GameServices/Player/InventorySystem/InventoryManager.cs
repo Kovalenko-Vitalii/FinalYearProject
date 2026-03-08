@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour, ISaveable
 {
     public static InventoryManager Instance { get; private set; }
 
@@ -26,6 +26,8 @@ public class InventoryManager : MonoBehaviour
     public event Action OnPlayerInventoryChanged;
 
     public event Action<InventoryItem, Inventory> OnSelectionChanged;
+
+    public string SaveId => "PLAYER_INVENTORY";
 
     private void Awake()
     {
@@ -93,7 +95,7 @@ public class InventoryManager : MonoBehaviour
         OnSelectionChanged?.Invoke(null, null);
     }
 
-    public SaveInventoryData Capture()
+    public object CaptureState()
     {
         var data = new SaveInventoryData();
 
@@ -128,12 +130,23 @@ public class InventoryManager : MonoBehaviour
         return data;
     }
 
-
-    public void Restore(SaveInventoryData data)
+    public void RestoreState(object state)
     {
-        if (data == null) return;
+        var data = state as SaveInventoryData;
 
         playerInventory.items.Clear();
+
+        playerEquipment.Unequip(GearData.GearSlot.Head);
+        playerEquipment.Unequip(GearData.GearSlot.Chest);
+        playerEquipment.Unequip(GearData.GearSlot.Legs);
+        playerEquipment.Unequip(GearData.GearSlot.Boots);
+
+        if (data == null)
+        {
+            OnPlayerInventoryChanged?.Invoke();
+            ClearSelection();
+            return;
+        }
 
         if (data.inventoryItems != null)
         {
@@ -150,11 +163,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        playerEquipment.Unequip(GearData.GearSlot.Head);
-        playerEquipment.Unequip(GearData.GearSlot.Chest);
-        playerEquipment.Unequip(GearData.GearSlot.Legs);
-        playerEquipment.Unequip(GearData.GearSlot.Boots);
-
         if (data.gearSlots != null)
         {
             foreach (var p in data.gearSlots)
@@ -167,13 +175,18 @@ public class InventoryManager : MonoBehaviour
                     Debug.LogWarning($"[Inventory] Unknown gearId '{p.gearId}'");
                     continue;
                 }
+
                 if (item is not GearData gear)
                 {
                     Debug.LogWarning($"[Inventory] itemId '{p.gearId}' is not GearData (got {item.GetType().Name})");
                     continue;
                 }
+
                 playerEquipment.Equip(gear);
             }
         }
+
+        OnPlayerInventoryChanged?.Invoke();
+        ClearSelection();
     }
 }
