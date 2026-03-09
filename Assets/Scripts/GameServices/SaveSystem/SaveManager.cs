@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
-    private const string TAG = "SaveManager";
-
     public static SaveManager Instance { get; private set; }
+
+    private const string TAG = "SaveManager";
     public string CurrentSlotId { get; private set; }
 
     // Path and name for save
@@ -292,7 +292,6 @@ public class SaveManager : MonoBehaviour
                 };
             }
         }
-
 
         var json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSlotPath(slotId), json);

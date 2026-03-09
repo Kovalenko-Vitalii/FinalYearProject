@@ -58,6 +58,8 @@ public class GameplayOrchestrator : MonoBehaviour
     {
         GameLog.Log(TAG, $"EnterMenu() from state={State} -> MainMenu. Will load '{menuScene}'");
 
+        PlayerStatManager.Instance.ResetToDefaults();
+
         loading?.Hide(); // Hiding loading ui
 
         // Calling action OnEnterMenu and setting game state
