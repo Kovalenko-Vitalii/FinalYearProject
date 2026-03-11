@@ -13,7 +13,7 @@ public class RabbitDebugHit : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 100f))
             {
-                RabbitBrain rabbit = hit.collider.GetComponentInParent<RabbitBrain>();
+                AgentBrain rabbit = hit.collider.GetComponentInParent<AgentBrain>();
 
                 if (rabbit != null)
                 {

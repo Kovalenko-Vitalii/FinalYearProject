@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3304003a5fccb1847a25c6ce8353c657, type: 3}
+  m_Name: MeatData
+  m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
+  id: 99
+  itemName: Raw Meat
+  icon: {fileID: 21300000, guid: bc4bd07e26c06dd48bf2d7a7c222c651, type: 3}
+  maxStack: 3
+  weight: 0.5
+  description: Raw meat. I would coock it first
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
+  hasDurability: 1
+  maxDurability: 5
+  useDuration: 1
+  tags: 0
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: 75390d67569527e43a2e803501360450, type: 2}
+  pickupPrefab: {fileID: 7733363461582037960, guid: 9890564f1d205864ba06ea020838833d, type: 3}
+  hpRestore: 0
+  hungerRestore: 20
+  hydrationRestore: 7
+  temperatureRestore: 0
+  onConsumeSound: {fileID: 0}
+  statusOps: []

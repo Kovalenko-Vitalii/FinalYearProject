@@ -2157,6 +2157,7 @@ MonoBehaviour:
   uiState: {fileID: 10111943}
   menuScene: MainMenu
   firstLevel: Level01
+  testLevel: TestLevel
   defaultSpawnId: level01
   _nextSpawnId: level01
   minLoadingScreenTime: 2
