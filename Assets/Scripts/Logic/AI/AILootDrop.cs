@@ -8,7 +8,7 @@ public class AILootDrop : MonoBehaviour
 
     private bool alreadyDropped;
 
-    public void Drop(AgentConfig config)
+    public void Drop(AIConfig config)
     {
         if (alreadyDropped)
             return;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class AgentBrain : MonoBehaviour, IDamageable, IPlayerTick
 {
-    [field: SerializeField] public AgentConfig Config { get; protected set; }
+    [field: SerializeField] public AIConfig Config { get; protected set; }
     [field: SerializeField] public AIContext Context { get; protected set; }
 
     // Values for animator
@@ -51,6 +51,7 @@ public abstract class AgentBrain : MonoBehaviour, IDamageable, IPlayerTick
 
     protected virtual void OnDied()
     {
+        AIManager.Instance?.NotifyAIDied(this);
         Context.LootDrop?.Drop(Config);
     }
 
