@@ -12,11 +12,24 @@ public class InventoryManager : MonoBehaviour, ISaveable
     public InventoryItem SelectedItem { get; private set; }
     public Inventory SourceInventory { get; private set; }
 
+
     [Header("Settings")]
     [SerializeField] private int playerSlotLimit = 10;
 
+    // ====================================================
+
     [Header("Player Gear")]
     public Equipment playerEquipment { get; private set; }
+
+    [Header("Player Held Slots")]
+    public HeldEquipment playerHeldEquipment { get; private set; }
+
+    public HeldSlot? ActiveHeldSlot { get; private set; }
+
+    public event Action OnHeldEquipmentChanged;
+    public event Action<HeldSlot?> OnActiveHeldSlotChanged;
+    
+    // =====================================================
 
     [Header("Test items")]
     [SerializeField] private ItemData[] initialItems;
@@ -26,6 +39,9 @@ public class InventoryManager : MonoBehaviour, ISaveable
     public event Action OnPlayerInventoryChanged;
 
     public event Action<InventoryItem, Inventory> OnSelectionChanged;
+
+    public string EquippedHeldItemId { get; private set; }
+    public event Action<string> OnEquippedHeldItemChanged;
 
     public string SaveId => "PLAYER_INVENTORY";
 
@@ -42,6 +58,9 @@ public class InventoryManager : MonoBehaviour, ISaveable
         playerEquipment = new Equipment();
 
         playerInventory.OnChanged += () => OnPlayerInventoryChanged?.Invoke();
+
+        playerHeldEquipment = new HeldEquipment();
+        playerHeldEquipment.OnChanged += () => OnHeldEquipmentChanged?.Invoke();
     }
 
     private void Start()
@@ -95,6 +114,73 @@ public class InventoryManager : MonoBehaviour, ISaveable
         OnSelectionChanged?.Invoke(null, null);
     }
 
+    public bool TryToggleEquipHeldItem(InventoryItem inventoryItem)
+    {
+        if (inventoryItem == null || inventoryItem.data is not HoldableItemData holdable)
+            return false;
+
+        if (playerHeldEquipment.TryFindSlot(holdable, out HeldSlot existingSlot))
+        {
+            playerHeldEquipment.Unequip(existingSlot);
+
+            if (ActiveHeldSlot == existingSlot)
+                SetActiveHeldSlot(null);
+
+            OnPlayerInventoryChanged?.Invoke();
+            return true;
+        }
+
+        HeldSlot targetSlot;
+        var empty = playerHeldEquipment.GetFirstEmptySlot();
+        if (empty.HasValue)
+        {
+            targetSlot = empty.Value;
+        }
+        else
+        {
+            targetSlot = ActiveHeldSlot ?? HeldSlot.Slot1;
+        }
+
+        playerHeldEquipment.Equip(holdable, targetSlot);
+        OnPlayerInventoryChanged?.Invoke();
+        return true;
+    }
+
+    // === Holdable ===
+    public void ToggleActiveHeldSlot(HeldSlot slot)
+    {
+        var item = playerHeldEquipment.GetEquipped(slot);
+
+        if (item == null)
+            return;
+
+        if (ActiveHeldSlot == slot)
+        {
+            SetActiveHeldSlot(null);
+            return;
+        }
+
+        SetActiveHeldSlot(slot);
+    }
+
+    public void SetActiveHeldSlot(HeldSlot? slot)
+    {
+        if (ActiveHeldSlot == slot)
+            return;
+
+        ActiveHeldSlot = slot;
+        OnActiveHeldSlotChanged?.Invoke(slot);
+    }
+
+    public HoldableItemData GetActiveHeldItemData()
+    {
+        if (!ActiveHeldSlot.HasValue)
+            return null;
+
+        return playerHeldEquipment.GetEquipped(ActiveHeldSlot.Value);
+    }
+
+    // === Save / Load ===
     public object CaptureState()
     {
         var data = new SaveInventoryData();
@@ -127,6 +213,13 @@ public class InventoryManager : MonoBehaviour, ISaveable
             });
         }
 
+        var held1 = playerHeldEquipment.GetEquipped(HeldSlot.Slot1);
+        var held2 = playerHeldEquipment.GetEquipped(HeldSlot.Slot2);
+
+        data.heldSlot1ItemId = held1 != null ? held1.id : null;
+        data.heldSlot2ItemId = held2 != null ? held2.id : null;
+        data.activeHeldSlot = ActiveHeldSlot.HasValue ? (int)ActiveHeldSlot.Value : -1;
+
         return data;
     }
 
@@ -135,6 +228,8 @@ public class InventoryManager : MonoBehaviour, ISaveable
         var data = state as SaveInventoryData;
 
         playerInventory.items.Clear();
+        playerHeldEquipment.Clear();
+        SetActiveHeldSlot(null);
 
         playerEquipment.Unequip(GearData.GearSlot.Head);
         playerEquipment.Unequip(GearData.GearSlot.Chest);
@@ -186,6 +281,26 @@ public class InventoryManager : MonoBehaviour, ISaveable
             }
         }
 
+        
+        if (!string.IsNullOrWhiteSpace(data.heldSlot1ItemId))
+        {
+            var item = ItemResolver.Resolve(data.heldSlot1ItemId);
+            if (item is HoldableItemData holdable1)
+                playerHeldEquipment.Equip(holdable1, HeldSlot.Slot1);
+        }
+
+        if (!string.IsNullOrWhiteSpace(data.heldSlot2ItemId))
+        {
+            var item = ItemResolver.Resolve(data.heldSlot2ItemId);
+            if (item is HoldableItemData holdable2)
+                playerHeldEquipment.Equip(holdable2, HeldSlot.Slot2);
+        }
+
+        if (data.activeHeldSlot >= 0)
+        {
+            SetActiveHeldSlot((HeldSlot)data.activeHeldSlot);
+        }
+
         OnPlayerInventoryChanged?.Invoke();
         ClearSelection();
     }
@@ -197,6 +312,10 @@ public class SaveInventoryData
 {
     public List<InventoryItemSave> inventoryItems = new();
     public List<GearPairSave> gearSlots = new();
+
+    public string heldSlot1ItemId;
+    public string heldSlot2ItemId;
+    public int activeHeldSlot = -1;
 }
 
 [Serializable]
