@@ -9821,8 +9821,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1389.888, y: 55.782288}
-  m_SizeDelta: {x: 161.084, y: 62.527}
+  m_AnchoredPosition: {x: 1840.9391, y: 27.919739}
+  m_SizeDelta: {x: 96.5055, y: 33.9431}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &428489594040627825
 CanvasRenderer:
@@ -9852,7 +9852,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Game name. \nprototype 0.03\n"
+  m_text: 'NOMO
+
+    prototype 0.03
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9879,10 +9883,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.05
+  m_fontSize: 13
   m_fontSizeBase: 13
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -25257,8 +25261,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -327.99762, y: 26.26941}
-  m_SizeDelta: {x: 541.2197, y: 116.2941}
+  m_AnchoredPosition: {x: -314.21603, y: 23.363998}
+  m_SizeDelta: {x: 541.2197, y: 100.4142}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1514667216997211599
 CanvasRenderer:
@@ -25288,7 +25292,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: GAME NAME
+  m_text: NOMO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
   m_sharedMaterial: {fileID: 600681447055792865, guid: 05e3efea949a68146a282b47985f34b7, type: 2}

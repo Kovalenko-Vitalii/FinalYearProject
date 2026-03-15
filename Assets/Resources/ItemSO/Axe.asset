@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8e6697c67f0184c999a078cc05092d, type: 3}
+  m_Name: Axe
+  m_EditorClassIdentifier: Assembly-CSharp::HoldableItemData
+  id: 67
+  itemName: Axe
+  icon: {fileID: 21300000, guid: 2090e8c6eafe62346980524dd2b78922, type: 3}
+  maxStack: 1
+  weight: 1
+  description: Stay groomed and refreshed with the Dutch Axe "Dark Temptation" deodorant
+    spray!
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
+  hasDurability: 1
+  maxDurability: 100
+  useDuration: 0
+  tags: 32
+  modules:
+  - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  pickupPrefab: {fileID: 5460278839851603056, guid: 3e112686ac3d585418d83579b1ba9fa2, type: 3}
+  heldItemKind: 0
+  firstPersonPrefab: {fileID: 7327146195831343469, guid: 3b45cc9303e81d0499c93d27560a25d7, type: 3}
+  supportsPrimary: 1
+  supportsSecondary: 0
+  supportsReload: 0
+  supportsAim: 0

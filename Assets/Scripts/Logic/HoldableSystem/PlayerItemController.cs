@@ -91,7 +91,7 @@ public class PlayerItemController : MonoBehaviour
         PlayerHeldItem heldItem = instance.GetComponent<PlayerHeldItem>();
         if (heldItem == null)
         {
-            GameLog.Log(TAG, $"[PlayerItemController] Prefab {holdableData.firstPersonPrefab.name} has no PlayerHeldItem.");
+            GameLog.Log(TAG, $"Prefab {holdableData.firstPersonPrefab.name} has no PlayerHeldItem.");
             Destroy(instance);
             return;
         }

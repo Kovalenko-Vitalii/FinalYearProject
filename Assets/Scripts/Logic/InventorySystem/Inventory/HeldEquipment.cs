@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 
+// This class stores holdable items
 [Serializable]
 public class HeldEquipment
 {
-    private readonly Dictionary<HeldSlot, HoldableItemData> _slots = new()
+    private readonly Dictionary<HeldSlot, HoldableItemData> slots = new()
     {
         { HeldSlot.Slot1, null },
         { HeldSlot.Slot2, null }
@@ -12,35 +13,39 @@ public class HeldEquipment
 
     public event Action OnChanged;
 
-    public IReadOnlyDictionary<HeldSlot, HoldableItemData> Slots => _slots;
+    public IReadOnlyDictionary<HeldSlot, HoldableItemData> Slots => slots;
 
+    // Getting equipped slot
     public HoldableItemData GetEquipped(HeldSlot slot)
     {
-        _slots.TryGetValue(slot, out var item);
+        slots.TryGetValue(slot, out var item);
         return item;
     }
 
+    // Equipping holdable to slot and passing out old item
     public HoldableItemData Equip(HoldableItemData item, HeldSlot slot)
     {
         HoldableItemData old = GetEquipped(slot);
-        _slots[slot] = item;
+        slots[slot] = item;
         OnChanged?.Invoke();
         return old;
     }
 
+    // Unequipping
     public HoldableItemData Unequip(HeldSlot slot)
     {
         HoldableItemData old = GetEquipped(slot);
-        _slots[slot] = null;
+        slots[slot] = null;
         OnChanged?.Invoke();
         return old;
     }
 
+    // Checking for item in slots
     public bool Contains(HoldableItemData item)
     {
         if (item == null) return false;
 
-        foreach (var kv in _slots)
+        foreach (var kv in slots)
         {
             if (ReferenceEquals(kv.Value, item))
                 return true;
@@ -49,9 +54,10 @@ public class HeldEquipment
         return false;
     }
 
+    // Finding slot for item
     public bool TryFindSlot(HoldableItemData item, out HeldSlot slot)
     {
-        foreach (var kv in _slots)
+        foreach (var kv in slots)
         {
             if (ReferenceEquals(kv.Value, item))
             {
@@ -66,7 +72,7 @@ public class HeldEquipment
 
     public HeldSlot? GetFirstEmptySlot()
     {
-        foreach (var kv in _slots)
+        foreach (var kv in slots)
         {
             if (kv.Value == null)
                 return kv.Key;
@@ -77,8 +83,8 @@ public class HeldEquipment
 
     public void Clear()
     {
-        _slots[HeldSlot.Slot1] = null;
-        _slots[HeldSlot.Slot2] = null;
+        slots[HeldSlot.Slot1] = null;
+        slots[HeldSlot.Slot2] = null;
         OnChanged?.Invoke();
     }
 }
