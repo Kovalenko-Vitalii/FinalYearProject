@@ -2,14 +2,20 @@ using UnityEngine;
 
 public class PlayerItemController : MonoBehaviour
 {
-    string TAG = "PlayerControllerManager";
+    private const string TAG = "PlayerItemController";
+
     [Header("Links")]
     [SerializeField] private PlayerMovement playerMovement;
-    Transform heldItemAnchor;
+    [SerializeField] private Transform aimOrigin;
+
+    private Transform heldItemAnchor;
 
     public HeldSlot? CurrentSlot { get; private set; }
     public HoldableItemData EquippedData { get; private set; }
     public PlayerHeldItem CurrentHeldItem { get; private set; }
+
+    public Transform AimOrigin => aimOrigin;
+    public GameObject OwnerObject => gameObject;
 
     private bool _wasSprintingLastFrame;
 
@@ -33,18 +39,29 @@ public class PlayerItemController : MonoBehaviour
 
     private void Start()
     {
+        ResolveViewReferences();
+
         var im = InventoryManager.Instance;
         if (im != null)
             SyncFromManager(im.ActiveHeldSlot);
-
-        if (heldItemAnchor == null && HandsRig.Instance != null)
-            heldItemAnchor = HandsRig.Instance.HeldItemAnchor;
     }
 
     private void Update()
     {
         HandleInput();
         HandleSprintState();
+    }
+
+    private void ResolveViewReferences()
+    {
+        if (HandsRig.Instance != null)
+        {
+            if (heldItemAnchor == null)
+                heldItemAnchor = HandsRig.Instance.HeldItemAnchor;
+
+            if (aimOrigin == null && HandsRig.Instance.MainCamera != null)
+                aimOrigin = HandsRig.Instance.MainCamera.transform;
+        }
     }
 
     private void HandleActiveHeldSlotChanged(HeldSlot? slot)
@@ -71,12 +88,23 @@ public class PlayerItemController : MonoBehaviour
             return;
         }
 
+        if (CurrentSlot == slot && EquippedData == data && CurrentHeldItem != null)
+            return;
+
         EquipRuntime(slot.Value, data);
     }
 
     private void EquipRuntime(HeldSlot slot, HoldableItemData holdableData)
     {
+        ResolveViewReferences();
+
         UnequipRuntime();
+
+        if (heldItemAnchor == null)
+        {
+            GameLog.Log(TAG, "Held item anchor is missing.");
+            return;
+        }
 
         if (holdableData.firstPersonPrefab == null)
         {
@@ -165,5 +193,19 @@ public class PlayerItemController : MonoBehaviour
             CurrentHeldItem.OnSprintStopped();
 
         _wasSprintingLastFrame = isSprinting;
+    }
+
+    public bool TryGetAimRay(out Ray ray)
+    {
+        ResolveViewReferences();
+
+        if (aimOrigin == null)
+        {
+            ray = default;
+            return false;
+        }
+
+        ray = new Ray(aimOrigin.position, aimOrigin.forward);
+        return true;
     }
 }

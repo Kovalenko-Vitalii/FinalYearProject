@@ -732,6 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52840294513392849977458340670b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandsRig
+  <MainCamera>k__BackingField: {fileID: 6425647969021044385}
   <HeldItemAnchor>k__BackingField: {fileID: 298256979}
 --- !u!114 &416666487
 MonoBehaviour:
@@ -2447,7 +2448,8 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_Cameras: []
+  m_Cameras:
+  - {fileID: 416666488}
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2

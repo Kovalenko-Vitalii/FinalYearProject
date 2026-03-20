@@ -204,6 +204,35 @@ public class InventoryManager : MonoBehaviour, ISaveable
         return playerHeldEquipment.GetEquipped(ActiveHeldSlot.Value);
     }
 
+    public int GetPlayerItemCount(ItemData data)
+    {
+        if (playerInventory == null || data == null)
+            return 0;
+
+        return GetItemCount(playerInventory, data);
+    }
+
+    public bool HasPlayerItems(ItemData data, int amount = 1)
+    {
+        if (data == null || amount <= 0)
+            return false;
+
+        return GetPlayerItemCount(data) >= amount;
+    }
+
+    public bool TryConsumePlayerItems(ItemData data, int amount = 1)
+    {
+        if (playerInventory == null || data == null || amount <= 0)
+            return false;
+
+        if (GetPlayerItemCount(data) < amount)
+            return false;
+
+        playerInventory.RemoveItem(data, amount);
+        return true;
+    }
+
+    // Save/Load
     public object CaptureState()
     {
         var data = new SaveInventoryData();

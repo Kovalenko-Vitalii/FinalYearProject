@@ -40,13 +40,13 @@ public abstract class AgentBrain : MonoBehaviour, IDamageable, IPlayerTick
         stateMachine.Tick(dt);
     }
 
-    public virtual void TakeDamage(int damage, Vector3 hitPoint, GameObject source)
+    public virtual void TakeDamage(DamageData damage)
     {
         if (Context.Health.IsDead)
             return;
 
-        Context.ThreatMemory.RememberThreat(source, hitPoint);
-        Context.Health.ApplyDamage(damage);
+        Context.ThreatMemory.RememberThreat(damage.source, damage.hitPoint);
+        Context.Health.ApplyDamage(damage.amount);
     }
 
     protected virtual void OnDied()

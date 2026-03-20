@@ -3,6 +3,7 @@ using UnityEngine;
 public class HandsRig : MonoBehaviour
 {
     public static HandsRig Instance { get; private set; }
+    [field: SerializeField] public Camera MainCamera { get; private set; }
     [field: SerializeField] public Transform HeldItemAnchor { get; private set; }
 
     private void Awake()

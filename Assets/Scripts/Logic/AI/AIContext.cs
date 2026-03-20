@@ -25,9 +25,3 @@ public class AIContext : MonoBehaviour
         Mover = GetComponent<AIMover>();
     }
 }
-
-// This interface is applied to AI creatures that can take damage
-public interface IDamageable
-{
-    void TakeDamage(int damage, Vector3 hitPoint, GameObject source);
-}

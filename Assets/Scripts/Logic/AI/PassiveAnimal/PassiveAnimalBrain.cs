@@ -44,9 +44,9 @@ public class PassiveAnimalBrain : AgentBrain
             stateMachine.SetState(fleeState);
     }
 
-    public override void TakeDamage(int damage, Vector3 hitPoint, GameObject source)
+    public override void TakeDamage(DamageData damage)
     {
-        base.TakeDamage(damage, hitPoint, source);
+        base.TakeDamage(damage);
 
         if (!Context.Health.IsDead)
             GoToFlee();
