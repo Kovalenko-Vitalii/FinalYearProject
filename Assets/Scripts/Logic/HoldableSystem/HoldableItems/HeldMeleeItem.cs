@@ -154,7 +154,7 @@ public class HeldMeleeItem : PlayerHeldItem
             if (Owner != null && hit.collider.transform.IsChildOf(Owner.transform))
                 continue;
 
-            ImpactEffectUtil.SpawnImpact(hit, hit.collider, ImpactKind.Melee, impactDatabase);
+            ImpactEffectUtil.SpawnImpact(hit, ImpactKind.Melee, impactDatabase);
 
             IDamageable damageable = DamageUtil.FindDamageable(hit.collider);
 
@@ -170,9 +170,6 @@ public class HeldMeleeItem : PlayerHeldItem
                     source = Owner != null ? Owner.OwnerObject : gameObject,
                     damageType = meleeData.damageType
                 });
-
-                if (audioSource != null && meleeData.hitSound != null)
-                    audioSource.PlayOneShot(meleeData.hitSound);
 
                 return;
             }

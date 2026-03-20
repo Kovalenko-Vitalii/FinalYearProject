@@ -537,6 +537,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b0fe74dd65dbae4591f63f3c159f4e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  worldOneShotPrefab: {fileID: 5544304186281471637, guid: 2d2d0096efa2dc541bf4e950007177f9, type: 3}
+  volumeWorld: 1
   uiSource: {fileID: 854153749}
   footstepSource: {fileID: 2138294831}
   subtitleSource: {fileID: 1585495644}

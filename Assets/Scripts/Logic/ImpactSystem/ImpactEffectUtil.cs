@@ -4,39 +4,53 @@ public static class ImpactEffectUtil
 {
     public static void SpawnImpact(
         RaycastHit hit,
-        Collider hitCollider,
         ImpactKind impactKind,
         ImpactEffectDatabase database)
     {
-        Debug.Log("0000000");
         if (database == null)
             return;
-        Debug.Log("1111111");
-        SurfaceType surfaceType = ResolveSurfaceType(hitCollider);
+
+        SurfaceType surfaceType = ResolveSurfaceType(hit.collider);
         ImpactEffectEntry entry = database.GetEntry(surfaceType, impactKind);
 
-        if (entry == null || entry.effectPrefab == null)
+        if (entry == null)
             return;
 
-        Debug.Log("222222");
+        SpawnEffect(hit, entry);
+        PlayImpactSound(hit, entry);
+    }
+
+    private static void SpawnEffect(RaycastHit hit, ImpactEffectEntry entry)
+    {
+        if (entry.effectPrefab == null)
+            return;
+
         Vector3 spawnPos = hit.point + hit.normal * 0.01f;
         Quaternion rotation = Quaternion.LookRotation(hit.normal);
 
         GameObject fx = Object.Instantiate(entry.effectPrefab, spawnPos, rotation);
-
-        float lifetime = entry.lifetime > 0f ? entry.lifetime : 2f;
-        Object.Destroy(fx, lifetime);
+        Object.Destroy(fx, entry.lifetime > 0f ? entry.lifetime : 2f);
     }
 
-    public static SurfaceType ResolveSurfaceType(Collider col)
+    private static void PlayImpactSound(RaycastHit hit, ImpactEffectEntry entry)
+    {
+        if (entry.soundClips == null || entry.soundClips.Length == 0)
+            return;
+
+        AudioClip clip = entry.soundClips[Random.Range(0, entry.soundClips.Length)];
+        if (clip == null)
+            return;
+
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayWorldOneShot(clip, hit.point, entry.soundVolume);
+    }
+
+    private static SurfaceType ResolveSurfaceType(Collider col)
     {
         if (col == null)
             return SurfaceType.Default;
 
         SurfaceTypeHolder holder = col.GetComponentInParent<SurfaceTypeHolder>();
-        if (holder != null)
-            return holder.type;
-
-        return SurfaceType.Default;
+        return holder != null ? holder.type : SurfaceType.Default;
     }
 }

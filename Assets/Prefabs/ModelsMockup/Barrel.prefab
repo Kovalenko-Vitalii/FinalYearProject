@@ -1400,6 +1400,7 @@ GameObject:
   - component: {fileID: 8971368865986844861}
   - component: {fileID: 7981587067766058386}
   - component: {fileID: 2834498149292719531}
+  - component: {fileID: 1493463775654906807}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -2563,3 +2564,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1493463775654906807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5051394590359301381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5

@@ -5,7 +5,11 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
-    [Header("Audio Sources")]
+    [Header("World Audio")]
+    [SerializeField] private AudioSource worldOneShotPrefab;
+    [SerializeField, Range(0f, 1f)] private float volumeWorld = 1f;
+
+    [Header("2D Audio Sources")]
     [SerializeField] AudioSource uiSource;
     [SerializeField] AudioSource footstepSource;
     [SerializeField] AudioSource subtitleSource;
@@ -62,12 +66,28 @@ public class SoundManager : MonoBehaviour
         footstepSource.PlayOneShot(clip, volumeFootstep * volumeMul);
     }
 
-    public void PlaySubtitle(AudioClip clip)
+    public void PlaySubtitleSound(AudioClip clip)
     {
         if (!subtitleSource || !clip) return;
         subtitleSource.PlayOneShot(clip, volumeSubtitle);
-
     }
+
+    public void PlayWorldOneShot(AudioClip clip, Vector3 position, float volumeMul = 1f, float pitch = 1f)
+    {
+        if (clip == null)
+            return;
+
+        if (worldOneShotPrefab == null)
+            return;
+
+        AudioSource source = Instantiate(worldOneShotPrefab, position, Quaternion.identity);
+        source.pitch = pitch;
+        source.PlayOneShot(clip, volumeWorld * volumeMul);
+
+        float lifetime = clip.length / Mathf.Max(0.01f, Mathf.Abs(pitch));
+        Destroy(source.gameObject, lifetime + 0.1f);
+    }
+
     private AudioClip GetDefault(UISoundId id) => id switch
     {
         UISoundId.UIClick => uiClick,

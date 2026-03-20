@@ -14,5 +14,4 @@ public class HoldableMeleeData : HoldableItemData
 
     [Header("Sounds")]
     public AudioClip swingSound;
-    public AudioClip hitSound;
 }

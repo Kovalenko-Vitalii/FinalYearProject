@@ -40,6 +40,7 @@ public class ImpactEffectEntry
     public ImpactKind impactKind = ImpactKind.Default;
 
     public GameObject effectPrefab;
-    public AudioClip sound;
+    public AudioClip[] soundClips;
+    [Range(0f, 1f)] public float soundVolume = 1f;
     public float lifetime = 2f;
 }

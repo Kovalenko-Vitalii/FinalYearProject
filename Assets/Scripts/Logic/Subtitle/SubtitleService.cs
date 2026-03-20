@@ -59,7 +59,7 @@ public class SubtitleService : MonoBehaviour
 
             if (clip)
             {
-                SoundManager.Instance.PlaySubtitle(clip);
+                SoundManager.Instance.PlaySubtitleSound(clip);
                 duration = Mathf.Max(0.05f, clip.length);
             }
 

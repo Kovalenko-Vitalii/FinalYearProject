@@ -138,7 +138,7 @@ public class HeldFirearmItem : PlayerHeldItem
             if (Owner != null && hit.collider.transform.IsChildOf(Owner.transform))
                 return;
 
-            ImpactEffectUtil.SpawnImpact(hit, hit.collider, ImpactKind.Bullet, impactDatabase);
+            ImpactEffectUtil.SpawnImpact(hit, ImpactKind.Bullet, impactDatabase);
 
             IDamageable damageable = DamageUtil.FindDamageable(hit.collider);
             if (damageable != null)
