@@ -3,28 +3,38 @@ using UnityEngine;
 
 public class HeldMeleeItem : PlayerHeldItem
 {
+    string TAG = "MELEE";
     [Header("Melee Animation")]
     [SerializeField] private Animator animator;
-    [SerializeField] private string swingTriggerName = "Swing";
+    [Header("VFX")]
+    [SerializeField] private ImpactEffectDatabase impactDatabase;
 
-    [Header("Debug")]
-    [SerializeField] private bool debugHitLogs = true;
+    private bool isBusy;
+    private bool isSprinting;
+    private bool isHoldingAttack;
+    private bool hitAppliedThisSwing;
 
-    private bool _isBusy;
-    private bool _isSprinting;
-    private bool _isHoldingAttack;
-    private bool _hitAppliedThisSwing;
+    private int swingTriggerHash;
 
-    private static readonly int IsSprintingHash = Animator.StringToHash("IsSprinting");
-    private int _swingTriggerHash;
+    private HoldableMeleeData meleeData;
 
-    private HoldableMeleeData meleeData => Data as HoldableMeleeData;
+    public override void Initialize(PlayerItemController owner, HoldableItemData data)
+    {
+        base.Initialize(owner, data);
+
+        meleeData = data as HoldableMeleeData;
+        if (meleeData == null)
+        {
+            GameLog.Error(TAG, $"[{nameof(HeldMeleeItem)}] Expected {nameof(HoldableMeleeData)}, got {data?.GetType().Name}");
+            return;
+        }
+
+        swingTriggerHash = Animator.StringToHash(meleeData.swingTriggerName);
+    }
 
     protected override void Awake()
     {
         base.Awake();
-
-        _swingTriggerHash = Animator.StringToHash(swingTriggerName);
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
@@ -34,95 +44,88 @@ public class HeldMeleeItem : PlayerHeldItem
     {
         base.OnEquip();
 
-        _isBusy = false;
-        _isSprinting = false;
-        _isHoldingAttack = false;
-        _hitAppliedThisSwing = false;
-
-        if (animator != null)
-            animator.SetBool(IsSprintingHash, false);
+        isBusy = false;
+        isSprinting = false;
+        isHoldingAttack = false;
+        hitAppliedThisSwing = false;
     }
 
     public override void OnUnequip()
     {
-        _isBusy = false;
-        _isHoldingAttack = false;
-        _hitAppliedThisSwing = false;
+        isBusy = false;
+        isHoldingAttack = false;
+        hitAppliedThisSwing = false;
     }
 
     public override void OnPrimaryPressed()
     {
-        if (_isSprinting)
+        if (isSprinting || PauseManager.Instance.IsPaused)
             return;
 
-        _isHoldingAttack = true;
+        isHoldingAttack = true;
         TryStartSwing();
     }
 
     public override void OnPrimaryReleased()
     {
-        _isHoldingAttack = false;
+        isHoldingAttack = false;
     }
 
     public override void OnSprintStarted()
     {
-        _isSprinting = true;
-        _isHoldingAttack = false;
+        isSprinting = true;
+        isHoldingAttack = false;
         SetSprintPose();
-
-        if (animator != null)
-            animator.SetBool(IsSprintingHash, true);
     }
 
     public override void OnSprintStopped()
     {
-        _isSprinting = false;
+        isSprinting = false;
         SetIdlePose();
-
-        if (animator != null)
-            animator.SetBool(IsSprintingHash, false);
     }
 
     private void TryStartSwing()
     {
-        if (_isBusy || _isSprinting)
+        if (meleeData == null)
             return;
 
-        _isBusy = true;
-        _hitAppliedThisSwing = false;
+        if (isBusy || isSprinting)
+            return;
+
+        isBusy = true;
+        hitAppliedThisSwing = false;
 
         if (animator != null)
-            animator.SetTrigger(_swingTriggerHash);
+            animator.SetTrigger(swingTriggerHash);
+
+        if (audioSource != null && meleeData.swingSound != null)
+            audioSource.PlayOneShot(meleeData.swingSound);
     }
 
     public void OnSwingHitFrame()
     {
-        if (_hitAppliedThisSwing)
+        if (hitAppliedThisSwing)
             return;
 
-        _hitAppliedThisSwing = true;
+        hitAppliedThisSwing = true;
         PerformHit();
     }
 
     public void OnSwingAnimationFinished()
     {
-        _isBusy = false;
+        isBusy = false;
 
-        if (_isHoldingAttack && !_isSprinting)
+        if (isHoldingAttack && !isSprinting)
             TryStartSwing();
     }
 
     private void PerformHit()
     {
-        Camera cam = HandsRig.Instance != null ? HandsRig.Instance.MainCamera : null;
-        if (cam == null)
+        if (Owner == null || !Owner.TryGetAimRay(out Ray ray))
         {
-            if (debugHitLogs) Debug.LogWarning("[HeldMeleeItem] MainCamera is null");
+            GameLog.Warning(TAG, "Aim ray is unavailable");
             return;
         }
-
-        Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f);
-        Ray ray = cam.ScreenPointToRay(screenCenter);
 
         Debug.DrawRay(ray.origin, ray.direction * meleeData.hitDistance, Color.red, 1.5f);
 
@@ -135,7 +138,7 @@ public class HeldMeleeItem : PlayerHeldItem
 
         if (hits == null || hits.Length == 0)
         {
-            if (debugHitLogs) Debug.Log("[HeldMeleeItem] No hits");
+            GameLog.Log(TAG, "No hits");
             return;
         }
 
@@ -143,24 +146,21 @@ public class HeldMeleeItem : PlayerHeldItem
 
         foreach (var hit in hits)
         {
-            if (debugHitLogs)
-            {
-                Debug.Log(
-                    $"[HeldMeleeItem] Hit: {hit.collider.name}, " +
-                    $"trigger={hit.collider.isTrigger}, " +
+             GameLog.Log(TAG, $"Hit: {hit.collider.name}, " +
+                     $"trigger={hit.collider.isTrigger}, " +
                     $"distance={hit.distance:F2}"
                 );
-            }
-
+            
             if (Owner != null && hit.collider.transform.IsChildOf(Owner.transform))
                 continue;
 
-            IDamageable damageable = FindDamageable(hit.collider);
+            ImpactEffectUtil.SpawnImpact(hit, hit.collider, ImpactKind.Melee, impactDatabase);
+
+            IDamageable damageable = DamageUtil.FindDamageable(hit.collider);
 
             if (damageable != null)
             {
-                if (debugHitLogs)
-                    Debug.Log($"[HeldMeleeItem] Applying damage to {((MonoBehaviour)damageable).name}");
+                GameLog.Log(TAG, $"Applying damage to {((MonoBehaviour)damageable).name}");
 
                 damageable.TakeDamage(new DamageData
                 {
@@ -171,28 +171,17 @@ public class HeldMeleeItem : PlayerHeldItem
                     damageType = meleeData.damageType
                 });
 
+                if (audioSource != null && meleeData.hitSound != null)
+                    audioSource.PlayOneShot(meleeData.hitSound);
+
                 return;
             }
 
             if (!hit.collider.isTrigger)
             {
-                if (debugHitLogs)
-                    Debug.Log($"[HeldMeleeItem] Blocked by solid collider: {hit.collider.name}");
+                GameLog.Log(TAG, $"Blocked by solid collider: {hit.collider.name}");
                 return;
             }
         }
-    }
-
-    private IDamageable FindDamageable(Collider col)
-    {
-        MonoBehaviour[] behaviours = col.GetComponentsInParent<MonoBehaviour>(true);
-
-        foreach (var behaviour in behaviours)
-        {
-            if (behaviour is IDamageable damageable)
-                return damageable;
-        }
-
-        return null;
     }
 }

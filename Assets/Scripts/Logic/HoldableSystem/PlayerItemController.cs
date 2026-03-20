@@ -35,6 +35,8 @@ public class PlayerItemController : MonoBehaviour
     {
         if (InventoryManager.Instance != null)
             InventoryManager.Instance.OnActiveHeldSlotChanged -= HandleActiveHeldSlotChanged;
+
+        UnequipRuntime();
     }
 
     private void Start()

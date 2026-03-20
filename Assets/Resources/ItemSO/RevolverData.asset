@@ -25,13 +25,11 @@ MonoBehaviour:
   maxDurability: 100
   useDuration: 0
   tags: 0
-  modules: []
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}
   pickupPrefab: {fileID: 8449905402055494328, guid: b7df02f85152c2e42a1df7d9608ac8c0, type: 3}
   firstPersonPrefab: {fileID: 7466473699233248179, guid: c5561adeebefcf747a6c521bb53feedc, type: 3}
-  supportsPrimary: 1
-  supportsSecondary: 0
-  supportsReload: 0
-  supportsAim: 0
   damageAmount: 20
   fireCooldown: 1
   fireDistance: 30
@@ -41,9 +39,10 @@ MonoBehaviour:
   damageType: 3
   ammoPerShot: 1
   magCapacity: 6
-  ammoItem: {fileID: 0}
+  ammoItem: {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
   fireKickBack: 0.08
   fireKickUp: 8
   shotSound: {fileID: 8300000, guid: 197a1f0fb588fee4ba74e9b5c9bfb40b, type: 3}
-  aimSoun: {fileID: 0}
+  dryShotSound: {fileID: 8300000, guid: 2a230a2b0b85b694c9cda88b3eaa58d7, type: 3}
+  aimSound: {fileID: 0}
   reloadSound: {fileID: 0}

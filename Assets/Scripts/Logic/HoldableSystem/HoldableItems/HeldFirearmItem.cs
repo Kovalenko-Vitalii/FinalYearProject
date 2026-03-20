@@ -2,94 +2,109 @@
 
 public class HeldFirearmItem : PlayerHeldItem
 {
-    [Header("Aim")]
-    [SerializeField] private Transform aimPose; 
+    string TAG = "FIREARM";
 
-    [SerializeField] private bool infiniteAmmo = false;
+    [SerializeField] private Transform aimPose;
 
-    [Header("Debug")]
-    [SerializeField] private bool debugLogs = true;
+    [Header("VFX")]
+    [SerializeField] private Transform muzzlePoint;
+    [SerializeField] private ParticleSystem muzzleFlashFx;
+    [SerializeField] private ParticleSystem muzzleSmokeFx;
+    [SerializeField] private ImpactEffectDatabase impactDatabase;
 
-    [SerializeField] AudioSource audioSource;
+    private bool isAiming;
+    private bool isSprinting;
+    private float nextFireTime;
 
-    private bool _isAiming;
-    private bool _isSprinting;
-    private float _nextFireTime;
+    private HoldableFirearmData firearmData;
 
-    private HoldableFirearmData firearmData => Data as HoldableFirearmData;
+    public override void Initialize(PlayerItemController owner, HoldableItemData data)
+    {
+        base.Initialize(owner, data);
+
+        firearmData = data as HoldableFirearmData;
+        if (firearmData == null)
+        {
+            GameLog.Error(TAG, $"[{nameof(HeldFirearmItem)}] Expected {nameof(HoldableFirearmData)}, got {data?.GetType().Name}");
+            return;
+        }
+    }
 
     public override void OnEquip()
     {
         base.OnEquip();
-        _isAiming = false;
-        _isSprinting = false;
-        _nextFireTime = 0f;
+        isAiming = false;
+        isSprinting = false;
+        nextFireTime = 0f;
     }
 
-    public override void OnPrimaryPressed()
-    {
-        TryFire();
+    public override void OnPrimaryPressed() {
+        if (isSprinting || PauseManager.Instance.IsPaused)
+            return;
+
+        TryFire(); 
     }
 
     public override void OnSecondaryPressed()
     {
-        if (_isSprinting)
+        if (isSprinting)
             return;
 
-        _isAiming = true;
+        isAiming = true;
         SetAimPose();
     }
 
     public override void OnSecondaryReleased()
     {
-        _isAiming = false;
+        isAiming = false;
         SetIdlePose();
     }
 
     public override void OnSprintStarted()
     {
-        _isSprinting = true;
-        _isAiming = false;
+        isSprinting = true;
+        isAiming = false;
         SetSprintPose();
     }
 
     public override void OnSprintStopped()
     {
-        _isSprinting = false;
+        isSprinting = false;
         SetIdlePose();
     }
 
-    public override void OnReloadPressed()
-    {
-    }
+    public override void OnReloadPressed() { }
 
+    
     protected virtual void TryFire()
     {
-        if (_isSprinting)
+        if (firearmData == null)
             return;
 
-        if (Time.time < _nextFireTime)
+        if (isSprinting)
+            return;
+
+        if (Time.time < nextFireTime)
             return;
 
         if (!HasAmmo())
         {
             DryFire();
-            _nextFireTime = Time.time + firearmData.fireCooldown;
+            nextFireTime = Time.time + firearmData.fireCooldown;
             return;
         }
 
         ConsumeAmmo();
-        _nextFireTime = Time.time + firearmData.fireCooldown;
+        nextFireTime = Time.time + firearmData.fireCooldown;
 
+        PlaySound(firearmData.shotSound);
+        PlayMuzzleEffects();
         ApplyRecoil();
         PerformShot();
     }
 
     protected virtual bool HasAmmo()
     {
-        if (infiniteAmmo)
-            return true;
-
         var im = InventoryManager.Instance;
         if (im == null || firearmData.ammoItem == null)
             return false;
@@ -99,9 +114,6 @@ public class HeldFirearmItem : PlayerHeldItem
 
     protected virtual void ConsumeAmmo()
     {
-        if (infiniteAmmo)
-            return;
-
         var im = InventoryManager.Instance;
         if (im == null || firearmData.ammoItem == null)
             return;
@@ -109,18 +121,13 @@ public class HeldFirearmItem : PlayerHeldItem
         im.TryConsumePlayerItems(firearmData.ammoItem, firearmData.ammoPerShot);
     }
 
-    protected virtual void DryFire()
-    {
-        if (debugLogs)
-            Debug.Log("[HeldFirearmItem] Dry fire");
-    }
-
+    protected virtual void DryFire() => PlaySound(firearmData.dryShotSound);
+    
     protected virtual void PerformShot()
     {
         if (Owner == null || !Owner.TryGetAimRay(out Ray ray))
         {
-            if (debugLogs)
-                Debug.LogWarning("[HeldFirearmItem] No aim ray");
+            GameLog.Warning(TAG, "Aim ray is unavailable");
             return;
         }
 
@@ -131,7 +138,9 @@ public class HeldFirearmItem : PlayerHeldItem
             if (Owner != null && hit.collider.transform.IsChildOf(Owner.transform))
                 return;
 
-            IDamageable damageable = FindDamageable(hit.collider);
+            ImpactEffectUtil.SpawnImpact(hit, hit.collider, ImpactKind.Bullet, impactDatabase);
+
+            IDamageable damageable = DamageUtil.FindDamageable(hit.collider);
             if (damageable != null)
             {
                 damageable.TakeDamage(new DamageData
@@ -143,15 +152,7 @@ public class HeldFirearmItem : PlayerHeldItem
                     damageType = firearmData.damageType
                 });
             }
-
-            audioSource.PlayOneShot(firearmData.shotSound);
-            if (debugLogs)
-                Debug.Log($"[HeldFirearmItem] Hit {hit.collider.name}");
-        }
-        else
-        {
-            if (debugLogs)
-                Debug.Log("[HeldFirearmItem] Miss");
+            GameLog.Log(TAG, $" Hit {hit.collider.name}");
         }
     }
 
@@ -161,22 +162,24 @@ public class HeldFirearmItem : PlayerHeldItem
         viewRoot.localRotation *= Quaternion.Euler(0f, 0f, firearmData.fireKickUp);
     }
 
-    protected IDamageable FindDamageable(Collider col)
-    {
-        MonoBehaviour[] behaviours = col.GetComponentsInParent<MonoBehaviour>(true);
-
-        foreach (var behaviour in behaviours)
-        {
-            if (behaviour is IDamageable damageable)
-                return damageable;
-        }
-
-        return null;
-    }
-
     private void SetAimPose()
     {
         if (aimPose != null)
             targetPose = aimPose;
+    }
+
+    protected virtual void PlayMuzzleEffects()
+    {
+        if (muzzleFlashFx != null)
+            muzzleFlashFx.Play();
+
+        if (muzzleSmokeFx != null)
+            muzzleSmokeFx.Play();
+    }
+
+    protected virtual void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+            audioSource.PlayOneShot(clip);
     }
 }

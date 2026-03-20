@@ -10,4 +10,9 @@ public class HoldableMeleeData : HoldableItemData
     public LayerMask hitMask = ~0;
     public int damageAmount = 0;
     public DamageType damageType = DamageType.Generic;
+    public string swingTriggerName = "Swing";
+
+    [Header("Sounds")]
+    public AudioClip swingSound;
+    public AudioClip hitSound;
 }

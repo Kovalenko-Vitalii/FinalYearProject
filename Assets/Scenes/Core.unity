@@ -548,9 +548,9 @@ MonoBehaviour:
   menuOpen: {fileID: 0}
   menuClose: {fileID: 0}
   dropItem: {fileID: 8300000, guid: 741f151b297bdbb41a932102ee529811, type: 3}
-  equipItem: {fileID: 8300000, guid: 42ea3e2ce6c76ee458e823faa088f800, type: 3}
-  unequipItem: {fileID: 8300000, guid: 481f8b03b3e71a1439cda129bd7a51f0, type: 3}
-  consumeItem: {fileID: 8300000, guid: 5d602661373e9fb4b8f4d24caa51ed27, type: 3}
+  equipItem: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
+  unequipItem: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
+  consumeItem: {fileID: 8300000, guid: 40681c7d513709045a8259ea7044863e, type: 3}
   pickupItem: {fileID: 8300000, guid: 21c9a54bbf891dc4c8004b23b3082c50, type: 3}
   rejectSound: {fileID: 8300000, guid: 481f8b03b3e71a1439cda129bd7a51f0, type: 3}
   notePickupSound: {fileID: 8300000, guid: 06657f1213ea0014487434501425c298, type: 3}
@@ -2508,8 +2508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4231eb89ef0595d44b7ade5d594b2ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RabbitDebugHit
-  cam: {fileID: 6425647969021044385}
-  damage: 1
 --- !u!4 &8135241711166380691
 Transform:
   m_ObjectHideFlags: 0

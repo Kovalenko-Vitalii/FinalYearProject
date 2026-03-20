@@ -102,7 +102,7 @@ public class FootstepPlayer : MonoBehaviour, IPlayerTick
             return SurfaceType.Default;
             
         // Priority for model
-        SurfaceSound surfaceOnModel = hit.collider.GetComponent<SurfaceSound>();
+        SurfaceTypeHolder surfaceOnModel = hit.collider.GetComponent<SurfaceTypeHolder>();
         if (surfaceOnModel)
             return surfaceOnModel.type;
             

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c32e206d79a344bbdd3d999553c74f, type: 3}
+  m_Name: VFX
+  m_EditorClassIdentifier: Assembly-CSharp::ImpactEffectDatabase
+  entries:
+  - surfaceType: 10
+    impactKind: 2
+    effectPrefab: {fileID: 7097076223889954276, guid: d7cf8ec7045904a46bc6e0f08ae4ac96, type: 3}
+    sound: {fileID: 8300000, guid: 22f1561e623055c4ea7f4cc10cae2ac1, type: 3}
+    lifetime: 1
+  - surfaceType: 10
+    impactKind: 1
+    effectPrefab: {fileID: 7097076223889954276, guid: d7cf8ec7045904a46bc6e0f08ae4ac96, type: 3}
+    sound: {fileID: 8300000, guid: 22f1561e623055c4ea7f4cc10cae2ac1, type: 3}
+    lifetime: 1
+  - surfaceType: 6
+    impactKind: 2
+    effectPrefab: {fileID: 7097076223889954276, guid: 6501d8e57828fa74082b60b79e1ad67f, type: 3}
+    sound: {fileID: 0}
+    lifetime: 1
+  - surfaceType: 6
+    impactKind: 1
+    effectPrefab: {fileID: 7097076223889954276, guid: 6501d8e57828fa74082b60b79e1ad67f, type: 3}
+    sound: {fileID: 0}
+    lifetime: 1

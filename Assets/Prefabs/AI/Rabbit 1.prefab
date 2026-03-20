@@ -739,6 +739,7 @@ GameObject:
   - component: {fileID: 2531594578950733217}
   - component: {fileID: 513976894305101230}
   - component: {fileID: 4287005705948412854}
+  - component: {fileID: 7894364467398217310}
   - component: {fileID: 7285117831498908910}
   m_Layer: 0
   m_Name: Rabbit 1
@@ -953,6 +954,19 @@ MonoBehaviour:
   dropOffset: {x: 0, y: 0.25, z: 0}
   randomRadius: 0.3
   impulseStrength: 1.5
+--- !u!114 &7894364467398217310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588090451174212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 10
 --- !u!82 &7285117831498908910
 AudioSource:
   m_ObjectHideFlags: 0

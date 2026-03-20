@@ -15,7 +15,7 @@ MonoBehaviour:
   questId: 004
   title: Get into the shack
   description: There should be some fuel left in the old shack, find axe to open
-    it and get fuel.
+    it and get fuel. Try to brake the blocked enterance..
   steps:
   - type: 2
     description: Pickup axe somewhere in house

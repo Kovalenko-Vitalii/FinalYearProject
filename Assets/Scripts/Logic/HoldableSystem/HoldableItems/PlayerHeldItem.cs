@@ -16,6 +16,8 @@ public abstract class PlayerHeldItem : MonoBehaviour
     [SerializeField] protected Transform idlePose;
     [SerializeField] protected Transform sprintPose;
 
+    [SerializeField] protected AudioSource audioSource;
+
     protected Transform targetPose;
 
     protected virtual void Awake()

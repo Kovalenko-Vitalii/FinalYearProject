@@ -30,13 +30,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   pickupPrefab: {fileID: 5460278839851603056, guid: 3e112686ac3d585418d83579b1ba9fa2, type: 3}
   firstPersonPrefab: {fileID: 7327146195831343469, guid: 3b45cc9303e81d0499c93d27560a25d7, type: 3}
-  supportsPrimary: 1
-  supportsSecondary: 0
-  supportsReload: 0
-  supportsAim: 0
   hitDistance: 2
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295
   damageAmount: 5
   damageType: 1
+  swingTriggerName: Swing
+  swingSound: {fileID: 8300000, guid: 6d1f0c113a613d44b8dff57911357ad9, type: 3}
+  hitSound: {fileID: 8300000, guid: 22f1561e623055c4ea7f4cc10cae2ac1, type: 3}

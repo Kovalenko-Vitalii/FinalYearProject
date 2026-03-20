@@ -23,6 +23,7 @@ public class HoldableFirearmData : HoldableItemData
 
     [Header("Sounds")]
     public AudioClip shotSound;
-    public AudioClip aimSoun;
+    public AudioClip dryShotSound;
+    public AudioClip aimSound;
     public AudioClip reloadSound;
 }
