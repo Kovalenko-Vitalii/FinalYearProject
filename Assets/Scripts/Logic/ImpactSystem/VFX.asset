@@ -41,7 +41,7 @@ MonoBehaviour:
     lifetime: 1
   - surfaceType: 5
     impactKind: 2
-    effectPrefab: {fileID: 7097076223889954276, guid: 6501d8e57828fa74082b60b79e1ad67f, type: 3}
+    effectPrefab: {fileID: 7097076223889954276, guid: 1a3d51fc14106f642a69fe4767a6d1cd, type: 3}
     soundClips:
     - {fileID: 8300000, guid: 7e1d5199e69ffe845a774450d100d782, type: 3}
     - {fileID: 8300000, guid: e26e39caf0f93c949995fb43530e2fb7, type: 3}
@@ -50,7 +50,7 @@ MonoBehaviour:
     lifetime: 1
   - surfaceType: 5
     impactKind: 1
-    effectPrefab: {fileID: 7097076223889954276, guid: 6501d8e57828fa74082b60b79e1ad67f, type: 3}
+    effectPrefab: {fileID: 7097076223889954276, guid: 1a3d51fc14106f642a69fe4767a6d1cd, type: 3}
     soundClips:
     - {fileID: 8300000, guid: 7e1d5199e69ffe845a774450d100d782, type: 3}
     - {fileID: 8300000, guid: e26e39caf0f93c949995fb43530e2fb7, type: 3}

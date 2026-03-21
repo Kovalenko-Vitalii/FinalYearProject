@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,9 +12,9 @@ public class Inventory
     public event Action OnChanged;
 
     public Inventory(IInventoryPolicy policy) { this.policy = policy; }
-
     public void SetPolicy(IInventoryPolicy policy) { this.policy = policy; }
 
+    // === Adding ===
     public void AddItem(ItemData data, int amount, float currentDurability)
     {
         if (policy == null) { Debug.LogError("No policy set!"); return; }
@@ -25,7 +25,6 @@ public class Inventory
         CompactStacks(data);
         OnChanged?.Invoke();
     }
-
     public bool CanAdd(ItemData data, int amount)
     {
         if (policy == null || data == null || amount <= 0)
@@ -33,7 +32,49 @@ public class Inventory
 
         return policy.CanAddItem(this, data, amount);
     }
+    public int AddItemAndGetAccepted(ItemData data, int amount, float currentDurability)
+    {
+        if (policy == null || data == null || amount <= 0) return 0;
 
+        int before = items.Where(i => i.data == data).Sum(i => i.amount);
+        int countBefore = items.Count;
+
+        if (!policy.CanAddItem(this, data, amount))
+            return 0;
+
+        policy.AddItem(this, data, amount, currentDurability);
+
+        CompactStacks(data);
+        OnChanged?.Invoke();
+
+        int after = items.Where(i => i.data == data).Sum(i => i.amount);
+        return Mathf.Clamp(after - before, 0, amount);
+    }
+    public bool TryAddItemInstance(InventoryItem item)
+    {
+        if (item == null || item.data == null || item.amount <= 0)
+            return false;
+
+        if (policy == null)
+            return false;
+
+        item.EnsureRuntimeState();
+
+        if (item.data.maxStack <= 1 || item.firearmState != null || item.data is HoldableItemData)
+        {
+            if (!policy.CanAddItem(this, item.data, item.amount))
+                return false;
+
+            items.Add(item);
+            OnChanged?.Invoke();
+            return true;
+        }
+
+        int accepted = AddItemAndGetAccepted(item.data, item.amount, item.currentDurability);
+        return accepted == item.amount;
+    }
+
+    // === Removing ===
     public void RemoveItem(ItemData data, int amount)
     {
         if (data == null || amount <= 0) return;
@@ -54,8 +95,17 @@ public class Inventory
         CompactStacks(data);
         OnChanged?.Invoke();
     }
+    public bool RemoveItemInstance(InventoryItem item)
+    {
+        if (item == null)
+            return false;
 
+        bool removed = items.Remove(item);
+        if (removed)
+            OnChanged?.Invoke();
 
+        return removed;
+    }
     public void RemoveFromStack(InventoryItem stack, int amount)
     {
         int idx = items.IndexOf(stack);
@@ -72,6 +122,54 @@ public class Inventory
         OnChanged?.Invoke();
     }
 
+    // === Queries ===
+    public bool HasItemById(string id)
+    {
+        foreach (var item in items)
+        {
+            if (item.data.id == id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public InventoryItem GetInventoryItemById(string id)
+    {
+        foreach (var item in items)
+        {
+            if (item.data.id == id)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+    public InventoryItem GetItemByInstanceId(string instanceId)
+    {
+        if (string.IsNullOrWhiteSpace(instanceId))
+            return null;
+
+        foreach (var item in items)
+        {
+            if (item != null && item.instanceId == instanceId)
+                return item;
+        }
+
+        return null;
+    }
+    public int GetTotalAmountById(string id)
+    {
+        int total = 0;
+        foreach (var item in items)
+        {
+            if (item?.data != null && item.data.id == id)
+                total += item.amount;
+        }
+        return total;
+    }
+
+    // === Helpers ===
     private void CompactStacks(ItemData data)
     {
         if (data == null) return;
@@ -99,61 +197,6 @@ public class Inventory
             }
         }
     }
-
-    public int AddItemAndGetAccepted(ItemData data, int amount, float currentDurability)
-    {
-        if (policy == null || data == null || amount <= 0) return 0;
-
-        int before = items.Where(i => i.data == data).Sum(i => i.amount);
-        int countBefore = items.Count;
-
-        if (!policy.CanAddItem(this, data, amount))
-            return 0;
-
-        policy.AddItem(this, data, amount, currentDurability);
-
-        CompactStacks(data);
-        OnChanged?.Invoke();
-
-        int after = items.Where(i => i.data == data).Sum(i => i.amount);
-        return Mathf.Clamp(after - before, 0, amount);
-    }
-
-    public bool HasItemById(string id)
-    {
-        foreach (var item in items)
-        {
-            if (item.data.id == id)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public InventoryItem GetInventoryItemById(string id)
-    {
-        foreach (var item in items)
-        {
-            if (item.data.id == id)
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public int GetTotalAmountById(string id)
-    {
-        int total = 0;
-        foreach (var item in items)
-        {
-            if (item?.data != null && item.data.id == id)
-                total += item.amount;
-        }
-        return total;
-    }
-
 }
 
 
@@ -171,7 +214,6 @@ public class PlayerInventoryPolicy : IInventoryPolicy
     {
         this.maxSlots = maxSlots;
     }
-
     public bool CanAddItem(Inventory inventory, ItemData data, int amount)
     {
         var existing = inventory.items.Find(i => i.data == data);
@@ -185,7 +227,6 @@ public class PlayerInventoryPolicy : IInventoryPolicy
             return inventory.items.Count + 1 <= maxSlots;
         }
     }
-
     public void AddItem(Inventory inventory, ItemData data, int amount, float currentDurability)
     {
         var existing = inventory.items.Find(i => i.data == data);
@@ -224,7 +265,6 @@ public class StorageInventoryPolicy : IInventoryPolicy
         this.maxSlots = maxSlots;
         this.allowTags = allowTags != null ? new HashSet<string>(allowTags) : null;
     }
-
     public bool CanAddItem(Inventory inventory, ItemData data, int amount)
     {
         if (allowTags != null && data is ITagsProvider tp)
@@ -246,7 +286,6 @@ public class StorageInventoryPolicy : IInventoryPolicy
             return inventory.items.Count + 1 <= maxSlots;
         }
     }
-
     public void AddItem(Inventory inventory, ItemData data, int amount, float currentDurability)
     {
         var existing = inventory.items.Find(i => i.data == data);
@@ -259,7 +298,6 @@ public class StorageInventoryPolicy : IInventoryPolicy
             inventory.items.Add(new InventoryItem(data, amount, currentDurability));
         }
     }
-
 }
 
 public interface ITagsProvider

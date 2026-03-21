@@ -14,16 +14,17 @@ public class WorldObjectSpawner : MonoBehaviour, ISaveable
     }
 
     // Method used for spawning items on scene
-    public WorldItem SpawnItem(ItemData data, int amount, float currentDurability, Vector3 pos, Quaternion rotation, Vector3 impulse)
+    public WorldItem SpawnItem(InventoryItem item, Vector3 pos, Quaternion rotation, Vector3 impulse)
     {
         // Checking if we have itemData at all
-        if (data == null || amount <= 0) return null;
+        if (item == null || item.data == null || item.amount <= 0)
+            return null;
 
         // Getting spawn prefab for item
-        GameObject prefab = data.pickupPrefab;
+        GameObject prefab = item.data.pickupPrefab;
         if (!prefab)
         {
-            Debug.LogError($"Item '{data.name}' has no pickupPrefab assigned!");
+            Debug.LogError($"Item '{item.data.name}' has no pickupPrefab assigned!");
             return null;
         }
 
@@ -34,14 +35,15 @@ public class WorldObjectSpawner : MonoBehaviour, ISaveable
         if (!wi)
         {
             Debug.LogError($"pickupPrefab '{prefab.name}' has no WorldItem component!");
+            Destroy(go);
             return null;
         }
 
-        wi.Init(data, amount, currentDurability);
+        wi.Init(item);
 
-        // Applying impulse
         var rb = go.GetComponent<Rigidbody>();
-        if (rb) rb.AddForce(impulse, ForceMode.Impulse);
+        if (rb)
+            rb.AddForce(impulse, ForceMode.Impulse);
 
         return wi;
     }
@@ -58,8 +60,11 @@ public class WorldObjectSpawner : MonoBehaviour, ISaveable
 
         foreach (var wi in all)
         {
-            if (wi == null || wi.data == null) continue;
-            if (wi.amount <= 0) continue;
+            if (wi == null || wi.Item == null || wi.Data == null)
+                continue;
+
+            if (wi.Amount <= 0)
+                continue;
 
             data.items.Add(wi.Capture());
         }
@@ -87,22 +92,14 @@ public class WorldObjectSpawner : MonoBehaviour, ISaveable
         // Adding items on map
         foreach (var s in saved.items)
         {
-            // Getting scriptable object by id from resolver (json can not serialize scriptableObjects)
-            var itemData = ItemResolver.Resolve(s.itemId);
-            if (itemData == null)
+            InventoryItem item = s.item.ToRuntime();
+            if (item == null)
             {
-                Debug.LogWarning($"WorldObjectSpawner: failed to resolve itemId '{s.itemId}'");
+                Debug.LogWarning("WorldObjectSpawner: failed to restore world item");
                 continue;
             }
 
-            SpawnItem(
-                itemData,
-                s.amount,
-                s.durability,
-                s.position,
-                s.rotation,
-                Vector3.zero
-            );
+            SpawnItem(item, s.position, s.rotation, Vector3.zero);
         }
     }
 }
@@ -118,9 +115,7 @@ public class SaveWorldItemsData
 [Serializable]
 public struct WorldItemSave
 {
-    public string itemId;
+    public InventoryItemSave item;
     public Vector3 position;
     public Quaternion rotation;
-    public int amount;
-    public float durability;
 }

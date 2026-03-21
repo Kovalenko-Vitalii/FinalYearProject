@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
 public class HeldFirearmItem : PlayerHeldItem
 {
@@ -7,44 +9,68 @@ public class HeldFirearmItem : PlayerHeldItem
     [SerializeField] private Transform aimPose;
 
     [Header("VFX")]
-    [SerializeField] private Transform muzzlePoint;
     [SerializeField] private ParticleSystem muzzleFlashFx;
     [SerializeField] private ParticleSystem muzzleSmokeFx;
     [SerializeField] private ImpactEffectDatabase impactDatabase;
 
+    public event Action<float> OnReloadProgressChanged;
+    public event Action<bool> OnReloadStateChanged;
+
     private bool isAiming;
     private bool isSprinting;
-    private float nextFireTime;
+    private bool reloadHeld;
+    private float nextFireTime; 
+
+    private Coroutine reloadRoutine;
 
     private HoldableFirearmData firearmData;
+    private FirearmRuntimeState runtimeState;
 
-    public override void Initialize(PlayerItemController owner, HoldableItemData data)
+    // === Initialization ===
+    public override void Initialize(PlayerItemController owner, InventoryItem itemInstance)
     {
-        base.Initialize(owner, data);
+        base.Initialize(owner, itemInstance);
 
-        firearmData = data as HoldableFirearmData;
+        firearmData = Data as HoldableFirearmData;
         if (firearmData == null)
         {
-            GameLog.Error(TAG, $"[{nameof(HeldFirearmItem)}] Expected {nameof(HoldableFirearmData)}, got {data?.GetType().Name}");
+            GameLog.Error(TAG, $"[{nameof(HeldFirearmItem)}] Expected {nameof(HoldableFirearmData)}, got {Data?.GetType().Name}");
             return;
         }
-    }
 
+        ItemInstance?.EnsureRuntimeState();
+        runtimeState = ItemInstance?.firearmState;
+    }
     public override void OnEquip()
     {
         base.OnEquip();
+
         isAiming = false;
         isSprinting = false;
+        reloadHeld = false;
         nextFireTime = 0f;
+
+        if (ItemInstance != null)
+        {
+            ItemInstance.EnsureRuntimeState();
+            runtimeState = ItemInstance.firearmState;
+        }
+
+        NotifyReloadStopped();
+    }
+    public override void OnUnequip()
+    {
+        CancelReload();
     }
 
+    // === Input callbacks ===
     public override void OnPrimaryPressed() {
         if (isSprinting || PauseManager.Instance.IsPaused)
             return;
 
+        CancelReload();
         TryFire(); 
     }
-
     public override void OnSecondaryPressed()
     {
         if (isSprinting)
@@ -53,29 +79,43 @@ public class HeldFirearmItem : PlayerHeldItem
         isAiming = true;
         SetAimPose();
     }
-
     public override void OnSecondaryReleased()
     {
         isAiming = false;
         SetIdlePose();
     }
-
     public override void OnSprintStarted()
     {
         isSprinting = true;
         isAiming = false;
+        CancelReload();
         SetSprintPose();
     }
-
     public override void OnSprintStopped()
     {
         isSprinting = false;
         SetIdlePose();
     }
+    public override void OnReloadPressed()
+    {
+        if (PauseManager.Instance.IsPaused || firearmData == null || runtimeState == null)
+            return;
 
-    public override void OnReloadPressed() { }
+        reloadHeld = true;
 
-    
+        if (reloadRoutine == null && CanStartReload())
+            reloadRoutine = StartCoroutine(ReloadRoutine());
+    }
+    public override void OnReloadReleased()
+    {
+        reloadHeld = false;
+
+        if (firearmData != null && firearmData.reloadMode == ReloadMode.PerRound)
+            CancelReload();
+    }
+
+
+    // === Firing Logic ===
     protected virtual void TryFire()
     {
         if (firearmData == null)
@@ -95,6 +135,9 @@ public class HeldFirearmItem : PlayerHeldItem
         }
 
         ConsumeAmmo();
+
+        InventoryManager.Instance?.NotifyRuntimeItemStateChanged();
+
         nextFireTime = Time.time + firearmData.fireCooldown;
 
         PlaySound(firearmData.shotSound);
@@ -102,27 +145,18 @@ public class HeldFirearmItem : PlayerHeldItem
         ApplyRecoil();
         PerformShot();
     }
-
     protected virtual bool HasAmmo()
     {
-        var im = InventoryManager.Instance;
-        if (im == null || firearmData.ammoItem == null)
-            return false;
-
-        return im.HasPlayerItems(firearmData.ammoItem, firearmData.ammoPerShot);
+        return runtimeState != null && runtimeState.currentAmmoInMag >= firearmData.ammoPerShot;
     }
-
     protected virtual void ConsumeAmmo()
     {
-        var im = InventoryManager.Instance;
-        if (im == null || firearmData.ammoItem == null)
+        if (runtimeState == null)
             return;
 
-        im.TryConsumePlayerItems(firearmData.ammoItem, firearmData.ammoPerShot);
+        runtimeState.currentAmmoInMag = Mathf.Max(0, runtimeState.currentAmmoInMag - firearmData.ammoPerShot);
     }
-
     protected virtual void DryFire() => PlaySound(firearmData.dryShotSound);
-    
     protected virtual void PerformShot()
     {
         if (Owner == null || !Owner.TryGetAimRay(out Ray ray))
@@ -155,19 +189,16 @@ public class HeldFirearmItem : PlayerHeldItem
             GameLog.Log(TAG, $" Hit {hit.collider.name}");
         }
     }
-
     protected virtual void ApplyRecoil()
     {
         viewRoot.localPosition -= new Vector3(0f, firearmData.fireKickBack, 0f);
         viewRoot.localRotation *= Quaternion.Euler(0f, 0f, firearmData.fireKickUp);
     }
-
     private void SetAimPose()
     {
         if (aimPose != null)
             targetPose = aimPose;
     }
-
     protected virtual void PlayMuzzleEffects()
     {
         if (muzzleFlashFx != null)
@@ -176,10 +207,161 @@ public class HeldFirearmItem : PlayerHeldItem
         if (muzzleSmokeFx != null)
             muzzleSmokeFx.Play();
     }
-
     protected virtual void PlaySound(AudioClip clip)
     {
         if (audioSource != null && clip != null)
             audioSource.PlayOneShot(clip);
+    }
+    
+    // === Reload Logic ===
+    private bool CanStartReload()
+    {
+        if (firearmData == null || runtimeState == null)
+            return false;
+
+        if (isSprinting)
+            return false;
+
+        if (runtimeState.currentAmmoInMag >= firearmData.magCapacity)
+            return false;
+
+        var im = InventoryManager.Instance;
+        if (im == null || firearmData.ammoItem == null)
+            return false;
+
+        return im.HasPlayerItems(firearmData.ammoItem, 1);
+    }
+    private IEnumerator ReloadRoutine()
+    {
+        runtimeState.isReloading = true;
+        OnReloadStateChanged?.Invoke(true);
+
+        while (CanContinueReloadLoop())
+        {
+            float duration = Mathf.Max(0.01f, firearmData.reloadDuration);
+            float t = 0f;
+
+            
+
+            while (t < duration)
+            {
+                if (!CanContinueCurrentReloadStep())
+                {
+                    NotifyReloadStopped();
+                    reloadRoutine = null;
+                    yield break;
+                }
+
+                t += Time.deltaTime;
+                float progress = Mathf.Clamp01(t / duration);
+
+                runtimeState.reloadProgress01 = progress;
+                OnReloadProgressChanged?.Invoke(progress);
+
+                yield return null;
+            }
+
+            bool inserted = InsertAmmo();
+            if (!inserted)
+            {
+                NotifyReloadStopped();
+                reloadRoutine = null;
+                yield break;
+            }
+
+            PlaySound(firearmData.reloadSound);
+
+            runtimeState.reloadProgress01 = 0f;
+            OnReloadProgressChanged?.Invoke(0f);
+
+            if (firearmData.reloadMode == ReloadMode.Magazine)
+                break;
+        }
+
+        NotifyReloadStopped();
+        reloadRoutine = null;
+    }
+    private bool CanContinueReloadLoop()
+    {
+        if (!CanStartReload())
+            return false;
+
+        if (firearmData.reloadMode == ReloadMode.PerRound && !reloadHeld)
+            return false;
+
+        return true;
+    }
+    private bool CanContinueCurrentReloadStep()
+    {
+        if (PauseManager.Instance.IsPaused)
+            return false;
+
+        if (isSprinting)
+            return false;
+
+        if (!CanStartReload())
+            return false;
+
+        if (firearmData.reloadMode == ReloadMode.PerRound && !reloadHeld)
+            return false;
+
+        return true;
+    }
+    private bool InsertAmmo()
+    {
+        var im = InventoryManager.Instance;
+        if (im == null || firearmData.ammoItem == null)
+            return false;
+
+        int missing = firearmData.magCapacity - runtimeState.currentAmmoInMag;
+        if (missing <= 0)
+            return false;
+
+        if (firearmData.reloadMode == ReloadMode.Magazine)
+        {
+            int available = im.GetPlayerItemCount(firearmData.ammoItem);
+            int toLoad = Mathf.Min(missing, available);
+
+            if (toLoad <= 0)
+                return false;
+
+            if (!im.TryConsumePlayerItems(firearmData.ammoItem, toLoad))
+                return false;
+
+            runtimeState.currentAmmoInMag += toLoad;
+            im.NotifyRuntimeItemStateChanged();
+            return true;
+        }
+
+        // PerRound
+        if (!im.TryConsumePlayerItems(firearmData.ammoItem, 1))
+            return false;
+
+        runtimeState.currentAmmoInMag += 1;
+        im.NotifyRuntimeItemStateChanged();
+        return true;
+    }
+    private void CancelReload()
+    {
+        reloadHeld = false;
+
+        if (reloadRoutine != null)
+        {
+            StopCoroutine(reloadRoutine);
+            reloadRoutine = null;
+        }
+
+        NotifyReloadStopped();
+    }
+    private void NotifyReloadStopped()
+    {
+        if (runtimeState != null)
+        {
+            runtimeState.isReloading = false;
+            runtimeState.reloadProgress01 = 0f;
+        }
+
+        OnReloadProgressChanged?.Invoke(0f);
+        OnReloadStateChanged?.Invoke(false);
     }
 }

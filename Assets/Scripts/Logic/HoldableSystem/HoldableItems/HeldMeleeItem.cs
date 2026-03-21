@@ -4,8 +4,10 @@ using UnityEngine;
 public class HeldMeleeItem : PlayerHeldItem
 {
     string TAG = "MELEE";
+
     [Header("Melee Animation")]
     [SerializeField] private Animator animator;
+
     [Header("VFX")]
     [SerializeField] private ImpactEffectDatabase impactDatabase;
 
@@ -18,20 +20,20 @@ public class HeldMeleeItem : PlayerHeldItem
 
     private HoldableMeleeData meleeData;
 
-    public override void Initialize(PlayerItemController owner, HoldableItemData data)
+    // === Initialization ===
+    public override void Initialize(PlayerItemController owner, InventoryItem itemInstance)
     {
-        base.Initialize(owner, data);
+        base.Initialize(owner, itemInstance);
 
-        meleeData = data as HoldableMeleeData;
+        meleeData = Data as HoldableMeleeData;
         if (meleeData == null)
         {
-            GameLog.Error(TAG, $"[{nameof(HeldMeleeItem)}] Expected {nameof(HoldableMeleeData)}, got {data?.GetType().Name}");
+            GameLog.Error(TAG, $"[{nameof(HeldMeleeItem)}] Expected {nameof(HoldableMeleeData)}, got {Data?.GetType().Name}");
             return;
         }
 
         swingTriggerHash = Animator.StringToHash(meleeData.swingTriggerName);
     }
-
     protected override void Awake()
     {
         base.Awake();
@@ -39,7 +41,6 @@ public class HeldMeleeItem : PlayerHeldItem
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
     }
-
     public override void OnEquip()
     {
         base.OnEquip();
@@ -49,7 +50,6 @@ public class HeldMeleeItem : PlayerHeldItem
         isHoldingAttack = false;
         hitAppliedThisSwing = false;
     }
-
     public override void OnUnequip()
     {
         isBusy = false;
@@ -57,6 +57,7 @@ public class HeldMeleeItem : PlayerHeldItem
         hitAppliedThisSwing = false;
     }
 
+    // === Handling Input ===
     public override void OnPrimaryPressed()
     {
         if (isSprinting || PauseManager.Instance.IsPaused)
@@ -65,25 +66,23 @@ public class HeldMeleeItem : PlayerHeldItem
         isHoldingAttack = true;
         TryStartSwing();
     }
-
     public override void OnPrimaryReleased()
     {
         isHoldingAttack = false;
     }
-
     public override void OnSprintStarted()
     {
         isSprinting = true;
         isHoldingAttack = false;
         SetSprintPose();
     }
-
     public override void OnSprintStopped()
     {
         isSprinting = false;
         SetIdlePose();
     }
 
+    // === Swing Logic ===
     private void TryStartSwing()
     {
         if (meleeData == null)
@@ -101,7 +100,6 @@ public class HeldMeleeItem : PlayerHeldItem
         if (audioSource != null && meleeData.swingSound != null)
             audioSource.PlayOneShot(meleeData.swingSound);
     }
-
     public void OnSwingHitFrame()
     {
         if (hitAppliedThisSwing)
@@ -110,7 +108,6 @@ public class HeldMeleeItem : PlayerHeldItem
         hitAppliedThisSwing = true;
         PerformHit();
     }
-
     public void OnSwingAnimationFinished()
     {
         isBusy = false;
@@ -118,7 +115,6 @@ public class HeldMeleeItem : PlayerHeldItem
         if (isHoldingAttack && !isSprinting)
             TryStartSwing();
     }
-
     private void PerformHit()
     {
         if (Owner == null || !Owner.TryGetAimRay(out Ray ray))

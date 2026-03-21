@@ -5,45 +5,44 @@ using System.Collections.Generic;
 [Serializable]
 public class HeldEquipment
 {
-    private readonly Dictionary<HeldSlot, HoldableItemData> slots = new()
+    // Update now we store inventory items, not just static data
+    private readonly Dictionary<HeldSlot, InventoryItem> slots = new()
     {
         { HeldSlot.Slot1, null },
         { HeldSlot.Slot2, null }
     };
 
     public event Action OnChanged;
+    public IReadOnlyDictionary<HeldSlot, InventoryItem> Slots => slots;
 
-    public IReadOnlyDictionary<HeldSlot, HoldableItemData> Slots => slots;
-
-    // Getting equipped slot
-    public HoldableItemData GetEquipped(HeldSlot slot)
+    // === Getters ===
+    public InventoryItem GetEquippedItem(HeldSlot slot) // Getting inventory item from slot
     {
         slots.TryGetValue(slot, out var item);
         return item;
     }
 
-    // Equipping holdable to slot and passing out old item
-    public HoldableItemData Equip(HoldableItemData item, HeldSlot slot)
+    // === Setters ===
+    public InventoryItem Equip(InventoryItem item, HeldSlot slot) // Equipping inventoryItem to slot and passing out old item
     {
-        HoldableItemData old = GetEquipped(slot);
+        InventoryItem old = GetEquippedItem(slot);
         slots[slot] = item;
         OnChanged?.Invoke();
         return old;
     }
-
-    // Unequipping
-    public HoldableItemData Unequip(HeldSlot slot)
+    public InventoryItem Unequip(HeldSlot slot) // Unequipping item
     {
-        HoldableItemData old = GetEquipped(slot);
+        InventoryItem old = GetEquippedItem(slot);
         slots[slot] = null;
         OnChanged?.Invoke();
         return old;
     }
 
-    // Checking for item in slots
-    public bool Contains(HoldableItemData item)
+    // === Queries ===
+    public bool Contains(InventoryItem item) // Checking for item in slots
     {
-        if (item == null) return false;
+        if (item == null)
+            return false;
 
         foreach (var kv in slots)
         {
@@ -53,9 +52,7 @@ public class HeldEquipment
 
         return false;
     }
-
-    // Finding slot for item
-    public bool TryFindSlot(HoldableItemData item, out HeldSlot slot)
+    public bool TryFindSlot(InventoryItem item, out HeldSlot slot) // Finding slot for item
     {
         foreach (var kv in slots)
         {
@@ -69,7 +66,6 @@ public class HeldEquipment
         slot = default;
         return false;
     }
-
     public HeldSlot? GetFirstEmptySlot()
     {
         foreach (var kv in slots)
@@ -81,6 +77,7 @@ public class HeldEquipment
         return null;
     }
 
+    // === Helpers ===
     public void Clear()
     {
         slots[HeldSlot.Slot1] = null;

@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class PlayerHeldItem : MonoBehaviour
 {
     public HoldableItemData Data { get; private set; }
+    public InventoryItem ItemInstance { get; private set; }
     protected PlayerItemController Owner { get; private set; }
 
     [Header("View Model Root")]
@@ -26,15 +27,17 @@ public abstract class PlayerHeldItem : MonoBehaviour
             viewRoot = transform;
     }
 
+    // (!!! need to move to playertick !!!)
     protected virtual void Update()
     {
         UpdatePose();
     }
 
-    public virtual void Initialize(PlayerItemController owner, HoldableItemData data)
+    public virtual void Initialize(PlayerItemController owner, InventoryItem itemInstance)
     {
         Owner = owner;
-        Data = data;
+        ItemInstance = itemInstance;
+        Data = itemInstance?.data as HoldableItemData;
     }
 
     public virtual void OnEquip()
@@ -51,6 +54,7 @@ public abstract class PlayerHeldItem : MonoBehaviour
     public virtual void OnSecondaryReleased() { }
 
     public virtual void OnReloadPressed() { }
+    public virtual void OnReloadReleased() { }
 
     public virtual void OnSprintStarted()
     {

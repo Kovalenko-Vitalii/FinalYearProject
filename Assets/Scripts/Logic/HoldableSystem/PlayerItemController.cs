@@ -17,20 +17,19 @@ public class PlayerItemController : MonoBehaviour
     public Transform AimOrigin => aimOrigin;
     public GameObject OwnerObject => gameObject;
 
-    private bool _wasSprintingLastFrame;
+    private bool wasSprintingLastFrame;
 
+    // === Unity Lifecycle ===
     private void Awake()
     {
         if (playerMovement == null)
             playerMovement = GetComponent<PlayerMovement>();
     }
-
     private void OnEnable()
     {
         if (InventoryManager.Instance != null)
             InventoryManager.Instance.OnActiveHeldSlotChanged += HandleActiveHeldSlotChanged;
     }
-
     private void OnDisable()
     {
         if (InventoryManager.Instance != null)
@@ -38,7 +37,6 @@ public class PlayerItemController : MonoBehaviour
 
         UnequipRuntime();
     }
-
     private void Start()
     {
         ResolveViewReferences();
@@ -47,30 +45,17 @@ public class PlayerItemController : MonoBehaviour
         if (im != null)
             SyncFromManager(im.ActiveHeldSlot);
     }
-
     private void Update()
     {
         HandleInput();
         HandleSprintState();
     }
 
-    private void ResolveViewReferences()
-    {
-        if (HandsRig.Instance != null)
-        {
-            if (heldItemAnchor == null)
-                heldItemAnchor = HandsRig.Instance.HeldItemAnchor;
-
-            if (aimOrigin == null && HandsRig.Instance.MainCamera != null)
-                aimOrigin = HandsRig.Instance.MainCamera.transform;
-        }
-    }
-
+    // === Sync from Manager ===
     private void HandleActiveHeldSlotChanged(HeldSlot? slot)
     {
         SyncFromManager(slot);
     }
-
     private void SyncFromManager(HeldSlot? slot)
     {
         var im = InventoryManager.Instance;
@@ -83,24 +68,27 @@ public class PlayerItemController : MonoBehaviour
             return;
         }
 
-        var data = im.playerHeldEquipment.GetEquipped(slot.Value);
-        if (data == null)
+        var item = im.playerHeldEquipment.GetEquippedItem(slot.Value);
+        if (item == null || item.data is not HoldableItemData holdableData)
         {
             UnequipRuntime();
             return;
         }
 
-        if (CurrentSlot == slot && EquippedData == data && CurrentHeldItem != null)
+        if (CurrentSlot == slot && CurrentHeldItem != null && CurrentHeldItem.ItemInstance == item)
             return;
 
-        EquipRuntime(slot.Value, data);
+        EquipRuntime(slot.Value, item);
     }
 
-    private void EquipRuntime(HeldSlot slot, HoldableItemData holdableData)
+    // === Runtime equip/unequip ===
+    private void EquipRuntime(HeldSlot slot, InventoryItem item)
     {
         ResolveViewReferences();
-
         UnequipRuntime();
+
+        if (item == null || item.data is not HoldableItemData holdableData)
+            return;
 
         if (heldItemAnchor == null)
         {
@@ -130,10 +118,9 @@ public class PlayerItemController : MonoBehaviour
         EquippedData = holdableData;
         CurrentHeldItem = heldItem;
 
-        CurrentHeldItem.Initialize(this, holdableData);
+        CurrentHeldItem.Initialize(this, item);
         CurrentHeldItem.OnEquip();
     }
-
     private void UnequipRuntime()
     {
         if (CurrentHeldItem != null)
@@ -147,6 +134,7 @@ public class PlayerItemController : MonoBehaviour
         CurrentHeldItem = null;
     }
 
+    // === Handling Input ===
     private void HandleInput()
     {
         var im = InventoryManager.Instance;
@@ -176,27 +164,41 @@ public class PlayerItemController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
             CurrentHeldItem.OnReloadPressed();
-    }
 
+        if (Input.GetKeyUp(KeyCode.R))
+            CurrentHeldItem.OnReloadReleased();
+    }
     private void HandleSprintState()
     {
         bool isSprinting = playerMovement != null && playerMovement.IsSprinting;
 
         if (CurrentHeldItem == null)
         {
-            _wasSprintingLastFrame = isSprinting;
+            wasSprintingLastFrame = isSprinting;
             return;
         }
 
-        if (isSprinting && !_wasSprintingLastFrame)
+        if (isSprinting && !wasSprintingLastFrame)
             CurrentHeldItem.OnSprintStarted();
 
-        if (!isSprinting && _wasSprintingLastFrame)
+        if (!isSprinting && wasSprintingLastFrame)
             CurrentHeldItem.OnSprintStopped();
 
-        _wasSprintingLastFrame = isSprinting;
+        wasSprintingLastFrame = isSprinting;
     }
 
+    // === Helpers ===
+    private void ResolveViewReferences()
+    {
+        if (HandsRig.Instance != null)
+        {
+            if (heldItemAnchor == null)
+                heldItemAnchor = HandsRig.Instance.HeldItemAnchor;
+
+            if (aimOrigin == null && HandsRig.Instance.MainCamera != null)
+                aimOrigin = HandsRig.Instance.MainCamera.transform;
+        }
+    }
     public bool TryGetAimRay(out Ray ray)
     {
         ResolveViewReferences();

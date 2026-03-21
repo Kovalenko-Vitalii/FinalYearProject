@@ -3,65 +3,86 @@
 [RequireComponent(typeof(Collider))]
 public class WorldItem : MonoBehaviour, IInteractable
 {
-    [Header("Data")]
-    public ItemData data;
-    public int amount = 1;
+    [Header("Runtime Item")]
+    [SerializeField] private InventoryItem item;
 
-    public float currentDurability;
+    public InventoryItem Item => item;
+    public ItemData Data => item?.data;
+    public int Amount => item != null ? item.amount : 0;
 
-    public void Init(ItemData d, int amt, float currentDurability)
+    public void Init(InventoryItem inventoryItem)
     {
-        data = d;
-        amount = Mathf.Max(amt, 0);
+        item = inventoryItem;
 
-        if (currentDurability < 0f)
-            this.currentDurability = (d != null && d.hasDurability) ? d.maxDurability : 0f;
-        else
-            this.currentDurability = currentDurability;
+        if (item != null)
+            item.EnsureRuntimeState();
     }
-
 
     public void AddAmount(int delta)
     {
-        amount += delta;
-        if (amount <= 0)
-        {
-            Destroy(gameObject);
+        if (item == null)
             return;
-        }
+
+        item.amount += delta;
+
+        if (item.amount <= 0)
+            Destroy(gameObject);
     }
 
     public int TryPickupTo(Inventory target, int desiredAmount)
     {
-        if (target == null || data == null || amount <= 0 || desiredAmount <= 0) { SoundManager.Instance?.PlayUI(UISoundId.RejectSound); return 0; }
+        if (target == null || item == null || item.data == null || item.amount <= 0 || desiredAmount <= 0)
+        {
+            SoundManager.Instance?.PlayUI(UISoundId.RejectSound);
+            return 0;
+        }
 
-        int toTake = Mathf.Min(desiredAmount, amount);
-        int accepted = target.AddItemAndGetAccepted(data, toTake, currentDurability);
-        if (accepted > 0) AddAmount(-accepted);
-        // Sound integration
-        SoundManager.Instance?.PlayUI(UISoundId.PickupSound, data.onPickupSound);
-        GameEvents.RaiseItemPicked(data.id, accepted);
-        return accepted;
+        if (item.amount == 1)
+        {
+            bool accepted = target.TryAddItemInstance(item);
+            if (!accepted)
+            {
+                SoundManager.Instance?.PlayUI(UISoundId.RejectSound);
+                return 0;
+            }
+
+            SoundManager.Instance?.PlayUI(UISoundId.PickupSound, item.data.onPickupSound);
+            GameEvents.RaiseItemPicked(item.data.id, 1);
+
+            Destroy(gameObject);
+            return 1;
+        }
+
+        int toTake = Mathf.Min(desiredAmount, item.amount);
+        int acceptedAmount = target.AddItemAndGetAccepted(item.data, toTake, item.currentDurability);
+
+        if (acceptedAmount > 0)
+            AddAmount(-acceptedAmount);
+
+        SoundManager.Instance?.PlayUI(UISoundId.PickupSound, item.data.onPickupSound);
+        GameEvents.RaiseItemPicked(item.data.id, acceptedAmount);
+
+        return acceptedAmount;
     }
 
     public bool TryGetPrompt(PlayerInteractor interactor, out string prompt)
     {
-        if (amount <= 0 || data == null)
+        if (item == null || item.data == null || item.amount <= 0)
         {
             prompt = null;
             return false;
         }
 
-        prompt = $"{data.itemName}";
+        prompt = item.data.itemName;
         return true;
     }
 
     public bool Interact(PlayerInteractor interactor)
     {
-        if (amount <= 0 || data == null) return false;
+        if (item == null || item.data == null || item.amount <= 0)
+            return false;
 
-        int desired = amount;
-        int taken = TryPickupTo(interactor.PlayerInventory, desired);
+        int taken = TryPickupTo(interactor.PlayerInventory, item.amount);
         return taken > 0;
     }
 
@@ -69,11 +90,9 @@ public class WorldItem : MonoBehaviour, IInteractable
     {
         return new WorldItemSave
         {
-            itemId = data.id,
+            item = InventoryItemSave.FromRuntime(item),
             position = transform.position,
-            rotation = transform.rotation,
-            amount = amount,
-            durability = currentDurability
+            rotation = transform.rotation
         };
     }
 

@@ -47,10 +47,10 @@ public class AILootDrop : MonoBehaviour
             Random.Range(-0.5f, 0.5f)
         ).normalized * impulseStrength;
 
+        InventoryItem loot = new InventoryItem(config.dropItem, amount, 0f);
+
         WorldObjectSpawner.Instance.SpawnItem(
-            config.dropItem,
-            amount,
-            0f,
+            loot,
             spawnPos,
             Quaternion.identity,
             impulse

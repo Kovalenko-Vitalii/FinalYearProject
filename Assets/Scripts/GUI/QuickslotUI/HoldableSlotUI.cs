@@ -24,6 +24,7 @@ public class HoldableSlotUI : MonoBehaviour
         {
             InventoryManager.Instance.OnHeldEquipmentChanged += Refresh;
             InventoryManager.Instance.OnActiveHeldSlotChanged += HandleActiveSlotChanged;
+            InventoryManager.Instance.OnPlayerInventoryChanged += Refresh;
         }
 
         Refresh();
@@ -35,6 +36,7 @@ public class HoldableSlotUI : MonoBehaviour
         {
             InventoryManager.Instance.OnHeldEquipmentChanged -= Refresh;
             InventoryManager.Instance.OnActiveHeldSlotChanged -= HandleActiveSlotChanged;
+            InventoryManager.Instance.OnPlayerInventoryChanged += Refresh;
         }
     }
 
@@ -46,41 +48,82 @@ public class HoldableSlotUI : MonoBehaviour
     private void Refresh()
     {
         var inventory = InventoryManager.Instance;
-        if (inventory == null) return;
+        if (inventory == null)
+            return;
 
         var slots = inventory.playerHeldEquipment.Slots;
         var activeSlot = inventory.ActiveHeldSlot;
 
-        ItemData item1 = slots[HeldSlot.Slot1];
-        if (item1 != null)
+        RefreshSlot(
+            slots[HeldSlot.Slot1],
+            HeldSlot.Slot1,
+            activeSlot,
+            slotImage1,
+            slotHighlight1,
+            slotName1,
+            slotDetail1
+        );
+
+        RefreshSlot(
+            slots[HeldSlot.Slot2],
+            HeldSlot.Slot2,
+            activeSlot,
+            slotImage2,
+            slotHighlight2,
+            slotName2,
+            slotDetail2
+        );
+    }
+
+    private void RefreshSlot(
+        InventoryItem item,
+        HeldSlot slot,
+        HeldSlot? activeSlot,
+        Image slotImage,
+        GameObject slotHighlight,
+        TextMeshProUGUI slotName,
+        TextMeshProUGUI slotDetail)
+    {
+        if (item == null || item.data == null)
         {
-            slotImage1.sprite = item1.icon != null ? item1.icon : defaultIcon;
-            slotName1.text = item1.itemName;
-            slotDetail1.text = "";
-            slotHighlight1.SetActive(activeSlot == HeldSlot.Slot1);
-        }
-        else
-        {
-            slotImage1.sprite = defaultIcon;
-            slotName1.text = "";
-            slotDetail1.text = "";
-            slotHighlight1.SetActive(false);
+            slotImage.sprite = defaultIcon;
+            slotName.text = "";
+            slotDetail.text = "";
+            slotHighlight.SetActive(false);
+            return;
         }
 
-        ItemData item2 = slots[HeldSlot.Slot2];
-        if (item2 != null)
+        slotImage.sprite = item.data.icon != null ? item.data.icon : defaultIcon;
+        slotName.text = item.data.itemName;
+        slotDetail.text = BuildDetailText(item);
+        slotHighlight.SetActive(activeSlot == slot);
+    }
+
+    private string BuildDetailText(InventoryItem item)
+    {
+        if (item == null || item.data == null)
+            return "";
+
+        if (item.data is HoldableFirearmData firearmData)
         {
-            slotImage2.sprite = item2.icon != null ? item2.icon : defaultIcon;
-            slotName2.text = item2.itemName;
-            slotDetail2.text = "";
-            slotHighlight2.SetActive(activeSlot == HeldSlot.Slot2);
+            item.EnsureRuntimeState();
+
+            int ammoInMag = item.firearmState != null ? item.firearmState.currentAmmoInMag : 0;
+            int magCapacity = firearmData.magCapacity;
+
+            int reserveAmmo = 0;
+            var im = InventoryManager.Instance;
+            if (im != null && firearmData.ammoItem != null)
+                reserveAmmo = im.GetPlayerItemCount(firearmData.ammoItem);
+
+            return $"{ammoInMag}/{magCapacity} ({reserveAmmo})";
         }
-        else
+
+        if (item.HasDurability)
         {
-            slotImage2.sprite = defaultIcon;
-            slotName2.text = "";
-            slotDetail2.text = "";
-            slotHighlight2.SetActive(false);
+            return $"{Mathf.CeilToInt(item.currentDurability)}";
         }
+
+        return "";
     }
 }

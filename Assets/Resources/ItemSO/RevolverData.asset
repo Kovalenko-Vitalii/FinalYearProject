@@ -37,12 +37,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   damageType: 3
+  ammoItem: {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
   ammoPerShot: 1
   magCapacity: 6
-  ammoItem: {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
+  reloadMode: 1
+  reloadDuration: 1.5
   fireKickBack: 0.08
   fireKickUp: 8
   shotSound: {fileID: 8300000, guid: 197a1f0fb588fee4ba74e9b5c9bfb40b, type: 3}
   dryShotSound: {fileID: 8300000, guid: 2a230a2b0b85b694c9cda88b3eaa58d7, type: 3}
-  aimSound: {fileID: 0}
-  reloadSound: {fileID: 0}
+  aimSound: {fileID: 8300000, guid: 3e94189cdc4026241b1a725d0d197918, type: 3}
+  reloadSound: {fileID: 8300000, guid: 7be66c9963887944d9205f46af02d0cb, type: 3}

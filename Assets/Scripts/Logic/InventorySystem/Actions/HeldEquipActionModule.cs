@@ -10,7 +10,9 @@ public class HeldEquipActionModule : ActionModule
             yield break;
 
         var im = InventoryManager.Instance;
-        bool isAssigned = im.playerHeldEquipment.Contains(holdable);
+        if (im == null)
+            yield break;
+        bool isAssigned = im.playerHeldEquipment.Contains(ctx.item);
 
         yield return new ItemAction
         {
@@ -22,7 +24,7 @@ public class HeldEquipActionModule : ActionModule
             {
                 im.TryToggleEquipHeldItem(ctx.item);
 
-                var inventoryUi = Object.FindAnyObjectByType<InventoryUI>();
+                var inventoryUi = FindAnyObjectByType<InventoryUI>();
                 if (inventoryUi != null) inventoryUi.Refresh();
             }
         };

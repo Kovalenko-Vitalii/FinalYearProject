@@ -13,9 +13,12 @@ public class HoldableFirearmData : HoldableItemData
     public DamageType damageType = DamageType.Bullet;
 
     [Header("Ammo")]
+    public ItemData ammoItem;
     public int ammoPerShot = 0;
     public int magCapacity = 0;
-    public ItemData ammoItem;
+    
+    public ReloadMode reloadMode = ReloadMode.Magazine;
+    public float reloadDuration = 1.5f;
 
     [Header("Recoil")]
     public float fireKickBack = 0f;
@@ -26,4 +29,10 @@ public class HoldableFirearmData : HoldableItemData
     public AudioClip dryShotSound;
     public AudioClip aimSound;
     public AudioClip reloadSound;
+}
+
+public enum ReloadMode
+{
+    Magazine,
+    PerRound
 }

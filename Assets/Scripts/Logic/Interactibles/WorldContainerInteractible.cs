@@ -180,7 +180,7 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
     }
 }
 
-[System.Serializable]
+[Serializable]
 public struct WorldContainerFullState
 {
     public bool isSearched;

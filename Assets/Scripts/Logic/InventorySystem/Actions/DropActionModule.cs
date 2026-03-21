@@ -25,21 +25,43 @@ public class DropActionModule : ActionModule
             id = "drop",
             label = "Drop",
             slot = ActionSlot.Drop,
-            interactable = ctx.item.amount > 0 && ctx.item.data != null && ctx.item.data.pickupPrefab != null,
+            interactable = ctx.item != null && ctx.item.amount > 0 && ctx.item.data != null && ctx.item.data.pickupPrefab != null,
             execute = () =>
             {
-                ctx.source.RemoveItem(ctx.item.data, 1);
+                if (ctx.item == null || ctx.item.data == null || ctx.source == null)
+                    return;
 
                 var origin = GetDropOrigin();
                 Vector3 pos = origin ? origin.position : Vector3.zero;
                 Vector3 impulse = origin ? origin.forward * dropImpulse : Vector3.zero;
 
-                WorldObjectSpawner.Instance.SpawnItem(ctx.item.data, 1, ctx.item.currentDurability, pos, Quaternion.identity, impulse);
+                bool isInstanceItem =
+                    ctx.item.amount == 1 ||
+                    ctx.item.firearmState != null ||
+                    ctx.item.data is HoldableItemData ||
+                    ctx.item.data.maxStack <= 1;
 
-                var ui = Object.FindAnyObjectByType<InventoryUI>();
+                if (isInstanceItem)
+                {
+                    InventoryItem loot = ctx.item.Clone();
+
+                    if (!ctx.source.RemoveItemInstance(ctx.item))
+                        return;
+
+                    WorldObjectSpawner.Instance?.SpawnItem(loot, pos, Quaternion.identity, impulse);
+                }
+                else
+                {
+                    ctx.source.RemoveItem(ctx.item.data, 1);
+
+                    InventoryItem loot = new InventoryItem(ctx.item.data, 1, ctx.item.currentDurability);
+                    WorldObjectSpawner.Instance?.SpawnItem(loot, pos, Quaternion.identity, impulse);
+                }
+
+                var ui = FindAnyObjectByType<InventoryUI>();
                 if (ui != null) ui.Refresh();
 
-                var gearUI = Object.FindAnyObjectByType<GearUI>();
+                var gearUI = FindAnyObjectByType<GearUI>();
                 if (gearUI != null) gearUI.Refresh();
 
                 // Sound integration

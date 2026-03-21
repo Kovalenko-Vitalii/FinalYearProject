@@ -7,6 +7,7 @@ public class GameplayOrchestrator : MonoBehaviour
     string TAG = "GameplayOrchestrator";
     public static GameplayOrchestrator Instance { get; private set; }
     private bool _isSaveLoad;
+    public bool IsLoadingFromSave => _isSaveLoad;
 
     // Loading screen UI
     [SerializeField] private LoadingOverlay loading;
@@ -16,6 +17,7 @@ public class GameplayOrchestrator : MonoBehaviour
     public event Action<string> OnLoadingStarted;
     public event Action<GameObject> OnPlayerSpawned;
     public event Action OnGameplayReady;
+    public event Action OnFreshGameplayStarted;
 
     // Menu and GUI switcher/controller
     [SerializeField] private UIStateController uiState;
@@ -23,7 +25,6 @@ public class GameplayOrchestrator : MonoBehaviour
     // Menu scene/Initial location/Initial spawn id
     [SerializeField] private string menuScene = "MainMenu";
     [SerializeField] private string firstLevel = "Level01";
-    [SerializeField] private string testLevel = "TestLevel";
     [SerializeField] private string defaultSpawnId = "Start";
 
     // Buffer spawn id for transition between locations
@@ -248,6 +249,12 @@ public class GameplayOrchestrator : MonoBehaviour
 
         GameLog.Log(TAG, "OnGameplayReady() invoke");
         OnGameplayReady?.Invoke();
+
+        if (!_isSaveLoad)
+        {
+            GameLog.Log(TAG, "OnFreshGameplayStarted() invoke");
+            OnFreshGameplayStarted?.Invoke();
+        }
 
         // 4) drop flag after spawn
         _isSaveLoad = false;
