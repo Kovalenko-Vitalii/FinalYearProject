@@ -5,7 +5,7 @@ public class InventoryScreen : MenuScreen
     [Header("Inventory Screen")]
     [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private GearUI gearUI;
-    [SerializeField] private GearSelectionUI gearSelectionUI;
+    [SerializeField] private EquipmentSelectionUI gearSelectionUI;
     [SerializeField] private ItemInfoUI itemInfoUI;
 
     [SerializeField] private GearData.GearSlot defaultSlot = GearData.GearSlot.Head;
@@ -21,9 +21,6 @@ public class InventoryScreen : MenuScreen
 
         if (gearUI != null)
             gearUI.Refresh();
-
-        if (gearSelectionUI != null)
-            gearSelectionUI.Open(defaultSlot);
 
         if (itemInfoUI != null)
             itemInfoUI.ShowDefault();

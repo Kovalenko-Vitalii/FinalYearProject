@@ -55,9 +55,10 @@ public class GearSlotUI : MonoBehaviour
 
     private void OnItemClicked()
     {
-        var selection = Object.FindAnyObjectByType<GearSelectionUI>();
+        var selection = Object.FindAnyObjectByType<EquipmentSelectionUI>();
         if (selection != null)
-            selection.Open(ToGearSlot());
-        SoundManager.Instance.PlayUI(UISoundId.ItemClick, currentGearData.onClickSound);
+            selection.OpenGear(ToGearSlot());
+
+        SoundManager.Instance.PlayUI(UISoundId.ItemClick, currentGearData != null ? currentGearData.onClickSound : null);
     }
 }

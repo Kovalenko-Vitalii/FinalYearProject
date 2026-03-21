@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HoldableSlotUI : MonoBehaviour
+public class FPSHoldableSlotsUI : MonoBehaviour
 {
     [SerializeField] private Sprite defaultIcon;
 
@@ -36,7 +36,7 @@ public class HoldableSlotUI : MonoBehaviour
         {
             InventoryManager.Instance.OnHeldEquipmentChanged -= Refresh;
             InventoryManager.Instance.OnActiveHeldSlotChanged -= HandleActiveSlotChanged;
-            InventoryManager.Instance.OnPlayerInventoryChanged += Refresh;
+            InventoryManager.Instance.OnPlayerInventoryChanged -= Refresh;
         }
     }
 
