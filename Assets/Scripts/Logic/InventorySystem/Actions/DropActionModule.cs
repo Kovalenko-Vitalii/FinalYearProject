@@ -32,14 +32,10 @@ public class DropActionModule : ActionModule
                     return;
 
                 var origin = GetDropOrigin();
-                Vector3 pos = origin ? origin.position : Vector3.zero;
-                Vector3 impulse = origin ? origin.forward * dropImpulse : Vector3.zero;
+                Vector3 pos = origin != null ? origin.position : Vector3.zero;
+                Vector3 impulse = origin != null ? origin.forward * dropImpulse : Vector3.zero;
 
-                bool isInstanceItem =
-                    ctx.item.amount == 1 ||
-                    ctx.item.firearmState != null ||
-                    ctx.item.data is HoldableItemData ||
-                    ctx.item.data.maxStack <= 1;
+                bool isInstanceItem = ctx.item.MustRemainUniqueInstance;
 
                 if (isInstanceItem)
                 {
@@ -58,13 +54,6 @@ public class DropActionModule : ActionModule
                     WorldObjectSpawner.Instance?.SpawnItem(loot, pos, Quaternion.identity, impulse);
                 }
 
-                var ui = FindAnyObjectByType<InventoryUI>();
-                if (ui != null) ui.Refresh();
-
-                var gearUI = FindAnyObjectByType<GearUI>();
-                if (gearUI != null) gearUI.Refresh();
-
-                // Sound integration
                 SoundManager.Instance?.PlayUI(UISoundId.DropItem, ctx.item.data.onDropSound);
             }
         };

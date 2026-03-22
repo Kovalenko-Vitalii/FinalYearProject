@@ -59,10 +59,17 @@ public class Inventory
             return false;
 
         item.EnsureRuntimeState();
+        item.EnsureInstanceId();
 
-        if (item.data.maxStack <= 1 || item.firearmState != null || item.data is HoldableItemData)
+        if (item.MustRemainUniqueInstance)
         {
-            if (!policy.CanAddItem(this, item.data, item.amount))
+            if (item.amount != 1)
+            {
+                Debug.LogError($"[Inventory] Unique item '{item.data.id}' must have amount = 1.");
+                return false;
+            }
+
+            if (!policy.CanAddItem(this, item.data, 1))
                 return false;
 
             items.Add(item);
@@ -172,18 +179,22 @@ public class Inventory
     // === Helpers ===
     private void CompactStacks(ItemData data)
     {
-        if (data == null) return;
+        if (!InventoryRules.IsStackable(data))
+            return;
+
         int max = data.maxStack;
 
         for (int i = 0; i < items.Count; i++)
         {
             var a = items[i];
-            if (a.data != data || a.amount >= max) continue;
+            if (a.data != data || a.amount >= max)
+                continue;
 
             for (int j = i + 1; j < items.Count && a.amount < max; j++)
             {
                 var b = items[j];
-                if (b.data != data) continue;
+                if (b.data != data)
+                    continue;
 
                 int transfer = Mathf.Min(max - a.amount, b.amount);
                 a.amount += transfer;
@@ -208,50 +219,86 @@ public interface IInventoryPolicy
 
 public class PlayerInventoryPolicy : IInventoryPolicy
 {
-    private int maxSlots;
+    private readonly int maxSlots;
 
     public PlayerInventoryPolicy(int maxSlots)
     {
         this.maxSlots = maxSlots;
     }
+
     public bool CanAddItem(Inventory inventory, ItemData data, int amount)
     {
-        var existing = inventory.items.Find(i => i.data == data);
-        if (existing != null)
-        {
-            return existing.amount + amount <= data.maxStack
-                   || inventory.items.Count < maxSlots;
-        }
-        else
-        {
-            return inventory.items.Count + 1 <= maxSlots;
-        }
+        return GetAcceptableAmount(inventory, data, amount) >= amount;
     }
+
     public void AddItem(Inventory inventory, ItemData data, int amount, float currentDurability)
     {
-        var existing = inventory.items.Find(i => i.data == data);
-        if (existing != null)
-        {
-            int canPut = Mathf.Min(amount, data.maxStack - existing.amount);
-            existing.amount += canPut;
-            int left = amount - canPut;
+        if (data == null || amount <= 0)
+            return;
 
-            while (left > 0 && inventory.items.Count < maxSlots)
-            {
-                int put = Mathf.Min(left, data.maxStack);
-                inventory.items.Add(new InventoryItem(data, put, currentDurability));
-                left -= put;
-            }
-        }
-        else
+        if (!CanAddItem(inventory, data, amount))
+            return;
+
+        if (!InventoryRules.IsStackable(data))
         {
             while (amount > 0 && inventory.items.Count < maxSlots)
             {
-                int put = Mathf.Min(amount, data.maxStack);
-                inventory.items.Add(new InventoryItem(data, put, currentDurability));
-                amount -= put;
+                inventory.items.Add(new InventoryItem(data, 1, currentDurability));
+                amount--;
             }
+
+            return;
         }
+
+        foreach (var stack in inventory.items)
+        {
+            if (stack.data != data || stack.amount >= data.maxStack)
+                continue;
+
+            int put = Mathf.Min(amount, data.maxStack - stack.amount);
+            stack.amount += put;
+            amount -= put;
+
+            if (amount <= 0)
+                return;
+        }
+
+        while (amount > 0 && inventory.items.Count < maxSlots)
+        {
+            int put = Mathf.Min(amount, data.maxStack);
+            inventory.items.Add(new InventoryItem(data, put, currentDurability));
+            amount -= put;
+        }
+    }
+
+    private int GetAcceptableAmount(Inventory inventory, ItemData data, int requestedAmount)
+    {
+        if (inventory == null || data == null || requestedAmount <= 0)
+            return 0;
+
+        if (!InventoryRules.IsStackable(data))
+        {
+            int freeSlots = Mathf.Max(0, maxSlots - inventory.items.Count);
+            return Mathf.Min(requestedAmount, freeSlots);
+        }
+
+        int accepted = 0;
+
+        foreach (var stack in inventory.items)
+        {
+            if (stack == null || stack.data != data)
+                continue;
+
+            accepted += Mathf.Max(0, data.maxStack - stack.amount);
+
+            if (accepted >= requestedAmount)
+                return requestedAmount;
+        }
+
+        int freeSlotCount = Mathf.Max(0, maxSlots - inventory.items.Count);
+        accepted += freeSlotCount * data.maxStack;
+
+        return Mathf.Min(accepted, requestedAmount);
     }
 }
 
@@ -265,37 +312,84 @@ public class StorageInventoryPolicy : IInventoryPolicy
         this.maxSlots = maxSlots;
         this.allowTags = allowTags != null ? new HashSet<string>(allowTags) : null;
     }
+
     public bool CanAddItem(Inventory inventory, ItemData data, int amount)
     {
+        if (inventory == null || data == null || amount <= 0)
+            return false;
+
         if (allowTags != null && data is ITagsProvider tp)
         {
-            bool ok = tp.Tags.Any(t => allowTags.Contains(t));
-            if (!ok) return false;
+            bool ok = tp.Tags.Any(tag => allowTags.Contains(tag));
+            if (!ok)
+                return false;
         }
 
-        if (maxSlots < 0) return true;
+        if (maxSlots < 0)
+            return true;
 
-        var existing = inventory.items.Find(i => i.data == data);
-        if (existing != null)
+        if (!InventoryRules.IsStackable(data))
         {
-            return existing.amount + amount <= data.maxStack
-                   || inventory.items.Count < maxSlots;
+            int freeSlots = Mathf.Max(0, maxSlots - inventory.items.Count);
+            return freeSlots >= amount;
         }
-        else
+
+        int accepted = 0;
+
+        foreach (var stack in inventory.items)
         {
-            return inventory.items.Count + 1 <= maxSlots;
+            if (stack == null || stack.data != data)
+                continue;
+
+            accepted += Mathf.Max(0, data.maxStack - stack.amount);
+
+            if (accepted >= amount)
+                return true;
         }
+
+        int freeSlotCount = Mathf.Max(0, maxSlots - inventory.items.Count);
+        accepted += freeSlotCount * data.maxStack;
+
+        return accepted >= amount;
     }
+
     public void AddItem(Inventory inventory, ItemData data, int amount, float currentDurability)
     {
-        var existing = inventory.items.Find(i => i.data == data);
-        if (existing != null)
+        if (inventory == null || data == null || amount <= 0)
+            return;
+
+        if (!CanAddItem(inventory, data, amount))
+            return;
+
+        if (!InventoryRules.IsStackable(data))
         {
-            existing.amount += amount;
+            while (amount > 0 && (maxSlots < 0 || inventory.items.Count < maxSlots))
+            {
+                inventory.items.Add(new InventoryItem(data, 1, currentDurability));
+                amount--;
+            }
+
+            return;
         }
-        else
+
+        foreach (var stack in inventory.items)
         {
-            inventory.items.Add(new InventoryItem(data, amount, currentDurability));
+            if (stack.data != data || stack.amount >= data.maxStack)
+                continue;
+
+            int put = Mathf.Min(amount, data.maxStack - stack.amount);
+            stack.amount += put;
+            amount -= put;
+
+            if (amount <= 0)
+                return;
+        }
+
+        while (amount > 0 && (maxSlots < 0 || inventory.items.Count < maxSlots))
+        {
+            int put = Mathf.Min(amount, data.maxStack);
+            inventory.items.Add(new InventoryItem(data, put, currentDurability));
+            amount -= put;
         }
     }
 }
@@ -304,4 +398,23 @@ public interface ITagsProvider
 {
     IEnumerable<string> Tags { get; }
 }
- 
+
+public static class InventoryRules
+{
+    public static bool IsStackable(ItemData data)
+    {
+        if (data == null)
+            return false;
+
+        if (data.maxStack <= 1)
+            return false;
+
+        if (data.hasDurability)
+            return false;
+
+        if (data is IEquippableItemData)
+            return false;
+
+        return true;
+    }
+}

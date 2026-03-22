@@ -20,11 +20,12 @@ public class FPSHoldableSlotsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (InventoryManager.Instance != null)
+        var im = InventoryManager.Instance;
+        if (im != null)
         {
-            InventoryManager.Instance.OnHeldEquipmentChanged += Refresh;
-            InventoryManager.Instance.OnActiveHeldSlotChanged += HandleActiveSlotChanged;
-            InventoryManager.Instance.OnPlayerInventoryChanged += Refresh;
+            im.OnEquipmentChanged += Refresh;
+            im.OnActiveHeldSlotChanged += HandleActiveSlotChanged;
+            im.OnPlayerInventoryChanged += Refresh;
         }
 
         Refresh();
@@ -32,32 +33,30 @@ public class FPSHoldableSlotsUI : MonoBehaviour
 
     private void OnDisable()
     {
-        if (InventoryManager.Instance != null)
+        var im = InventoryManager.Instance;
+        if (im != null)
         {
-            InventoryManager.Instance.OnHeldEquipmentChanged -= Refresh;
-            InventoryManager.Instance.OnActiveHeldSlotChanged -= HandleActiveSlotChanged;
-            InventoryManager.Instance.OnPlayerInventoryChanged -= Refresh;
+            im.OnEquipmentChanged -= Refresh;
+            im.OnActiveHeldSlotChanged -= HandleActiveSlotChanged;
+            im.OnPlayerInventoryChanged -= Refresh;
         }
     }
 
-    private void HandleActiveSlotChanged(HeldSlot? _)
+    private void HandleActiveSlotChanged(EquipmentSlotId? _)
     {
         Refresh();
     }
 
     private void Refresh()
     {
-        var inventory = InventoryManager.Instance;
-        if (inventory == null)
+        var im = InventoryManager.Instance;
+        if (im == null)
             return;
 
-        var slots = inventory.playerHeldEquipment.Slots;
-        var activeSlot = inventory.ActiveHeldSlot;
-
         RefreshSlot(
-            slots[HeldSlot.Slot1],
-            HeldSlot.Slot1,
-            activeSlot,
+            im.GetEquippedItem(EquipmentSlotId.Held1),
+            EquipmentSlotId.Held1,
+            im.ActiveHeldSlot,
             slotImage1,
             slotHighlight1,
             slotName1,
@@ -65,9 +64,9 @@ public class FPSHoldableSlotsUI : MonoBehaviour
         );
 
         RefreshSlot(
-            slots[HeldSlot.Slot2],
-            HeldSlot.Slot2,
-            activeSlot,
+            im.GetEquippedItem(EquipmentSlotId.Held2),
+            EquipmentSlotId.Held2,
+            im.ActiveHeldSlot,
             slotImage2,
             slotHighlight2,
             slotName2,
@@ -77,8 +76,8 @@ public class FPSHoldableSlotsUI : MonoBehaviour
 
     private void RefreshSlot(
         InventoryItem item,
-        HeldSlot slot,
-        HeldSlot? activeSlot,
+        EquipmentSlotId slot,
+        EquipmentSlotId? activeSlot,
         Image slotImage,
         GameObject slotHighlight,
         TextMeshProUGUI slotName,
@@ -109,20 +108,17 @@ public class FPSHoldableSlotsUI : MonoBehaviour
             item.EnsureRuntimeState();
 
             int ammoInMag = item.firearmState != null ? item.firearmState.currentAmmoInMag : 0;
-            int magCapacity = firearmData.magCapacity;
-
             int reserveAmmo = 0;
+
             var im = InventoryManager.Instance;
             if (im != null && firearmData.ammoItem != null)
                 reserveAmmo = im.GetPlayerItemCount(firearmData.ammoItem);
 
-            return $"{ammoInMag}/{magCapacity} ({reserveAmmo})";
+            return $"{ammoInMag}/{firearmData.magCapacity} ({reserveAmmo})";
         }
 
         if (item.HasDurability)
-        {
             return $"{Mathf.CeilToInt(item.currentDurability)}";
-        }
 
         return "";
     }

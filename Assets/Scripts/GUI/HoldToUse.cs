@@ -11,33 +11,66 @@ public class HoldToUse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
     private float duration;
     private Action onComplete;
+    private AudioClip sound;
+    private UISoundId soundId;
 
+    private bool isConfigured;
     private bool isHolding;
     private float timer;
-    AudioClip sound;
-    UISoundId soundId;
+
+    private Button cachedButton;
+
+    private void Awake()
+    {
+        cachedButton = GetComponent<Button>();
+        ResetProgress();
+    }
+
+    private void OnDisable()
+    {
+        ResetProgress();
+    }
 
     public void Setup(float duration, Action onComplete, AudioClip sound, UISoundId soundId)
     {
+        ClearBinding();
+
+        if (duration <= 0f || onComplete == null)
+            return;
+
         this.duration = duration;
         this.onComplete = onComplete;
         this.sound = sound;
         this.soundId = soundId;
+        isConfigured = true;
+    }
 
-        ResetUI();
+    public void ClearBinding()
+    {
+        isConfigured = false;
+        duration = 0f;
+        onComplete = null;
+        sound = null;
+        soundId = default;
+        ResetProgress();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (duration <= 0f || onComplete == null)
+        if (!CanStartHold())
             return;
+
+        ResetProgress();
 
         SoundManager.Instance?.PlayUI(soundId, sound);
 
         isHolding = true;
-        timer = 0f;
-        if (panel) panel.SetActive(true);
-        if (radialImage) radialImage.fillAmount = 0f;
+
+        if (panel != null)
+            panel.SetActive(true);
+
+        if (radialImage != null)
+            radialImage.fillAmount = 0f;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -52,33 +85,73 @@ public class HoldToUse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
     private void Update()
     {
-        if (!isHolding) return;
+        if (!isHolding)
+            return;
 
-        timer += Time.deltaTime;
+        if (!CanContinueHold())
+        {
+            CancelHold();
+            return;
+        }
+
+        timer += Time.unscaledDeltaTime;
+
         float t = Mathf.Clamp01(timer / duration);
 
-        if (radialImage) radialImage.fillAmount = t;
+        if (radialImage != null)
+            radialImage.fillAmount = t;
 
         if (t >= 1f)
         {
-            isHolding = false;
-            if (panel) panel.SetActive(false);
-            onComplete?.Invoke();
-            ResetUI();
+            Action callback = onComplete;
+
+            ResetProgress();
+            callback?.Invoke();
         }
+    }
+
+    private bool CanStartHold()
+    {
+        if (!isConfigured)
+            return false;
+
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+            return false;
+
+        if (cachedButton != null && !cachedButton.interactable)
+            return false;
+
+        return true;
+    }
+
+    private bool CanContinueHold()
+    {
+        if (!isConfigured)
+            return false;
+
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+            return false;
+
+        if (cachedButton != null && !cachedButton.interactable)
+            return false;
+
+        return true;
     }
 
     private void CancelHold()
     {
-        if (!isHolding) return;
-        isHolding = false;
-        ResetUI();
+        ResetProgress();
     }
 
-    private void ResetUI()
+    private void ResetProgress()
     {
-        if (panel) panel.SetActive(false);
-        if (radialImage) radialImage.fillAmount = 0f;
+        isHolding = false;
         timer = 0f;
+
+        if (panel != null)
+            panel.SetActive(false);
+
+        if (radialImage != null)
+            radialImage.fillAmount = 0f;
     }
 }

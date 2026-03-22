@@ -6,13 +6,15 @@ public class HeldEquipActionModule : ActionModule
 {
     public override IEnumerable<ItemAction> GetActions(ItemActionContext ctx)
     {
-        if (ctx.item.data is not HoldableItemData)
+        if (ctx.item == null || ctx.item.data is not HoldableItemData)
             yield break;
 
         var im = InventoryManager.Instance;
-        if (im == null)
+        if (im == null || ctx.source == null)
             yield break;
-        bool isEquipped = im.playerHeldEquipment.Contains(ctx.item);
+
+        bool isEquipped = im.playerEquippedItems != null &&
+                          im.playerEquippedItems.Contains(ctx.item);
 
         yield return new ItemAction
         {
@@ -22,13 +24,7 @@ public class HeldEquipActionModule : ActionModule
             interactable = ctx.item.amount > 0,
             execute = () =>
             {
-                im.TryToggleEquipHeldItem(ctx.item);
-
-                var inventoryUi = FindAnyObjectByType<InventoryUI>();
-                if (inventoryUi != null) inventoryUi.Refresh();
-
-                var gearUI = Object.FindAnyObjectByType<GearUI>(); if (gearUI) gearUI.Refresh();
-                foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None)) invUI.Refresh();
+                im.TryToggleEquipItem(ctx.source, ctx.item);
             }
         };
     }

@@ -6,12 +6,16 @@ public class EquipActionModule : ActionModule
 {
     public override IEnumerable<ItemAction> GetActions(ItemActionContext ctx)
     {
-        if (ctx.item.data is not GearData g) yield break;
+        if (ctx.item == null || ctx.item.data is not GearData gearData)
+            yield break;
 
         var im = InventoryManager.Instance;
-        var eq = im.playerEquipment.GetEquipped(g.slot);
-        bool isEquipped = ReferenceEquals(eq, g);
-        float currentDurability = ctx.item.currentDurability;
+        if (im == null)
+            yield break;
+
+        EquipmentSlotId slot = gearData.Slot;
+        var equippedItem = im.GetEquippedItem(slot);
+        bool isEquipped = ReferenceEquals(equippedItem, ctx.item);
 
         if (!isEquipped)
         {
@@ -21,15 +25,11 @@ public class EquipActionModule : ActionModule
                 label = "Equip",
                 slot = ActionSlot.Use,
                 interactable = ctx.item.amount > 0,
-                holdStartSound = g.onEquipSound,
+                holdStartSound = gearData.onEquipSound,
                 holdStartSoundId = UISoundId.EquipItem,
                 execute = () =>
                 {
-                    var old = im.playerEquipment.Equip(g);
-                    ctx.source.RemoveItem(g, 1);
-                    if (old != null) ctx.source.AddItem(old, 1, currentDurability);
-                    var gearUI = Object.FindAnyObjectByType<GearUI>(); if (gearUI) gearUI.Refresh();
-                    foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None)) invUI.Refresh();
+                    im.TryEquipItem(ctx.source, ctx.item, slot);
                 }
             };
         }
@@ -41,14 +41,11 @@ public class EquipActionModule : ActionModule
                 label = "Unequip",
                 slot = ActionSlot.Use,
                 interactable = true,
-                holdStartSound = g.onUnequipSound,
+                holdStartSound = gearData.onUnequipSound,
                 holdStartSoundId = UISoundId.UnequipItem,
                 execute = () =>
                 {
-                    im.playerEquipment.Unequip(g.slot);
-                    ctx.source.AddItem(g, 1, currentDurability);
-                    var gearUI = Object.FindAnyObjectByType<GearUI>(); if (gearUI) gearUI.Refresh();
-                    foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None)) invUI.Refresh();
+                    im.TryUnequipItem(slot, ctx.source);
                 }
             };
         }

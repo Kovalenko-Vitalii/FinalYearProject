@@ -11,6 +11,10 @@ public class InventoryItem
 
     public FirearmRuntimeState firearmState;
 
+    public bool IsEquippable => data is IEquippableItemData;
+    public bool MustRemainUniqueInstance =>
+        firearmState != null || !InventoryRules.IsStackable(data);
+
     public InventoryItem(ItemData data, int amount, float currentDurability = -1f)
     {
         instanceId = Guid.NewGuid().ToString();

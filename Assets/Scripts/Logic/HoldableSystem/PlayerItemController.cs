@@ -10,7 +10,7 @@ public class PlayerItemController : MonoBehaviour
 
     private Transform heldItemAnchor;
 
-    public HeldSlot? CurrentSlot { get; private set; }
+    public EquipmentSlotId? CurrentSlot { get; private set; }
     public HoldableItemData EquippedData { get; private set; }
     public PlayerHeldItem CurrentHeldItem { get; private set; }
 
@@ -52,11 +52,11 @@ public class PlayerItemController : MonoBehaviour
     }
 
     // === Sync from Manager ===
-    private void HandleActiveHeldSlotChanged(HeldSlot? slot)
+    private void HandleActiveHeldSlotChanged(EquipmentSlotId? slot)
     {
         SyncFromManager(slot);
     }
-    private void SyncFromManager(HeldSlot? slot)
+    private void SyncFromManager(EquipmentSlotId? slot)
     {
         var im = InventoryManager.Instance;
         if (im == null)
@@ -68,8 +68,8 @@ public class PlayerItemController : MonoBehaviour
             return;
         }
 
-        var item = im.playerHeldEquipment.GetEquippedItem(slot.Value);
-        if (item == null || item.data is not HoldableItemData holdableData)
+        var item = im.GetEquippedItem(slot.Value);
+        if (item == null || item.data is not HoldableItemData)
         {
             UnequipRuntime();
             return;
@@ -82,7 +82,7 @@ public class PlayerItemController : MonoBehaviour
     }
 
     // === Runtime equip/unequip ===
-    private void EquipRuntime(HeldSlot slot, InventoryItem item)
+    private void EquipRuntime(EquipmentSlotId? slot, InventoryItem item)
     {
         ResolveViewReferences();
         UnequipRuntime();
@@ -141,10 +141,10 @@ public class PlayerItemController : MonoBehaviour
         if (im != null)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
-                im.ToggleActiveHeldSlot(HeldSlot.Slot1);
+                im.ToggleActiveHeldSlot(EquipmentSlotId.Held1);
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
-                im.ToggleActiveHeldSlot(HeldSlot.Slot2);
+                im.ToggleActiveHeldSlot(EquipmentSlotId.Held2);
         }
 
         if (CurrentHeldItem == null)

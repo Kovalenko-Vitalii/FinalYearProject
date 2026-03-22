@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/GearData")]
-public class GearData : ItemData, IStatProvider
+public class GearData : ItemData, IStatProvider, IEquippableItemData
 {
     public float temperatureResist = 0;
     public float damageResist = 0;
@@ -10,8 +10,10 @@ public class GearData : ItemData, IStatProvider
     public AudioClip onEquipSound;
     public AudioClip onUnequipSound;
 
-    public enum GearSlot { Head, Chest, Legs, Boots }
-    public GearSlot slot;
+    [SerializeField] private EquipmentSlotId slot = EquipmentSlotId.Head;
+    public EquipmentSlotId Slot => slot;
+
+    public IReadOnlyList<EquipmentSlotId> AllowedSlots => new[] { slot };
 
     public override IEnumerable<StatValue> GetStats()
     {

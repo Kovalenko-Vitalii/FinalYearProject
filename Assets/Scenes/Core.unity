@@ -430,7 +430,7 @@ PrefabInstance:
     - target: {fileID: 8052751812266930398, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 1862068516}
+      objectReference: {fileID: 0}
     - target: {fileID: 8052751812266930398, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: RefreshBodyPartButtons
@@ -482,17 +482,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05c0f60458781d49b8c2df7ea17ac6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIStateController
---- !u!114 &10111944 stripped
+--- !u!114 &214261023 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8358018717834431150, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2892456518209867784, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
   m_PrefabInstance: {fileID: 10111942}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1792da5fa74e51b41b80d2c4522888ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bb5c229fcbb03c40a1ffe477487f799, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SubtitleView
+  m_EditorClassIdentifier: Assembly-CSharp::FPSUIManager
 --- !u!1 &283643426
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e7c26de14246e4e91b9c5f07cd9137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubtitleService
-  view: {fileID: 10111944}
+  view: {fileID: 1877453407}
 --- !u!1 &689708116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,17 +1056,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 352845219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &733983974 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 732825452298712235, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
-  m_PrefabInstance: {fileID: 10111942}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bb5c229fcbb03c40a1ffe477487f799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FPSUIManager
 --- !u!1 &854153748
 GameObject:
   m_ObjectHideFlags: 0
@@ -1615,17 +1604,17 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   currentMinutes: 0
---- !u!114 &1862068516 stripped
+--- !u!114 &1877453407 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6534118524575449431, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5375171522918837979, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
   m_PrefabInstance: {fileID: 10111942}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f6c8d361059a944e98255d7bf437007, type: 3}
+  m_Script: {fileID: 11500000, guid: 1792da5fa74e51b41b80d2c4522888ed, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectUIRoot
+  m_EditorClassIdentifier: Assembly-CSharp::SubtitleView
 --- !u!1 &2074301283
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,7 +2120,6 @@ GameObject:
   - component: {fileID: 743630112770731329}
   - component: {fileID: 2895310075659697412}
   - component: {fileID: 7860218275231330499}
-  - component: {fileID: 7860218275231330500}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2184,13 +2172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
   playerSlotLimit: 25
-  initialItems:
-  - {fileID: 11400000, guid: 10d17342b827c564988bf2243ec4f5d1, type: 2}
-  - {fileID: 11400000, guid: 3e38685841254354eb3e09abe0a94dee, type: 2}
-  - {fileID: 11400000, guid: 3851d54ed74291c4c9718147476bf1a0, type: 2}
-  - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
-  - {fileID: 11400000, guid: 4ffe238acd9ef0d418e7f4ec593e06a1, type: 2}
-  initialAmounts: 0100000001000000010000000100000001000000
+  <playerInventory>k__BackingField:
+    items: []
 --- !u!1 &3461668549182550961
 GameObject:
   m_ObjectHideFlags: 0
@@ -2253,7 +2236,6 @@ MonoBehaviour:
   uiState: {fileID: 10111943}
   menuScene: MainMenu
   firstLevel: Level01
-  testLevel: TestLevel
   defaultSpawnId: level01
   _nextSpawnId: level01
   minLoadingScreenTime: 2
@@ -2497,19 +2479,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   interactKey: 101
   cam: {fileID: 6425647969021044385}
-  ui: {fileID: 733983974}
---- !u!114 &7860218275231330500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2397950629566427020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4231eb89ef0595d44b7ade5d594b2ae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RabbitDebugHit
+  ui: {fileID: 214261023}
 --- !u!4 &8135241711166380691
 Transform:
   m_ObjectHideFlags: 0

@@ -116,9 +116,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         if (invMgr != null)
         {
             invMgr.OnPlayerInventoryChanged += HandleInventoryChanged;
-
-            if (invMgr.playerEquipment != null)
-                invMgr.playerEquipment.OnChanged += HandleEquipmentChanged;
+            invMgr.OnEquipmentChanged += HandleEquipmentChanged;
         }
 
         OnStaminaChanged?.Invoke(currentStamina);
@@ -139,9 +137,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         if (invMgr != null)
         {
             invMgr.OnPlayerInventoryChanged -= HandleInventoryChanged;
-
-            if (invMgr.playerEquipment != null)
-                invMgr.playerEquipment.OnChanged -= HandleEquipmentChanged;
+            invMgr.OnEquipmentChanged -= HandleEquipmentChanged;
         }
     }
     // Applying consumable
@@ -269,11 +265,13 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     private void HandleInventoryChanged()
     {
         RecalculateWeight();
+        RecalculateResistances();
     }
 
-    private void HandleEquipmentChanged(GearData.GearSlot slot, GearData oldGear, GearData newGear)
+    private void HandleEquipmentChanged()
     {
         RecalculateWeight();
+        RecalculateResistances();
     }
 
     // Recalculating weight based on inventory and gear list
@@ -294,13 +292,11 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
                 }
             }
 
-            var eq = invMgr.playerEquipment;
+            var eq = invMgr.playerEquippedItems;
             if (eq != null)
             {
-                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Head), ref total);
-                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Chest), ref total);
-                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Legs), ref total);
-                AddGearWeightIfNotNull(eq.GetEquipped(GearData.GearSlot.Boots), ref total);
+                foreach (var kv in eq.Slots)
+                    AddEquippedItemWeight(kv.Value, ref total);
             }
         }
 
@@ -310,13 +306,48 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         if (!Mathf.Approximately(old, currentWeight))
             OnWeightChanged?.Invoke(CurrentWeight);
     }
-
-    // tf is ts ???
-    private void AddGearWeightIfNotNull(GearData gear, ref float total)
+    private void AddEquippedItemWeight(InventoryItem item, ref float total)
     {
-        if (gear != null)
-            total += gear.weight;
+        if (item?.data != null)
+            total += item.data.weight * item.amount;
     }
+
+    public void RecalculateResistances()
+    {
+        float newTemperatureResist = 0f;
+        float newDamageResist = 0f;
+
+        var invMgr = InventoryManager.Instance;
+        var eq = invMgr != null ? invMgr.playerEquippedItems : null;
+
+        if (eq != null)
+        {
+            foreach (var kv in eq.Slots)
+                AddGearResist(kv.Value, ref newTemperatureResist, ref newDamageResist);
+        }
+
+        if (!Mathf.Approximately(temperatureResist, newTemperatureResist))
+        {
+            temperatureResist = newTemperatureResist;
+            OnTemperatureResistChanged?.Invoke(temperatureResist);
+        }
+
+        if (!Mathf.Approximately(damageResist, newDamageResist))
+        {
+            damageResist = newDamageResist;
+            OnDamageResistChanged?.Invoke(damageResist);
+        }
+    }
+
+    private void AddGearResist(InventoryItem item, ref float totalTemperatureResist, ref float totalDamageResist)
+    {
+        if (item?.data is not GearData gear)
+            return;
+
+        totalTemperatureResist += gear.temperatureResist;
+        totalDamageResist += gear.damageResist;
+    }
+
 
     // Ticking stats (I know it should be optimised)
     public void TickNaturalStats(float dt, in StatusEffectsSnapshot s, bool isSprinting)

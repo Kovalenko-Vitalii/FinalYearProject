@@ -1,16 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EquipmentSelectionUI : MonoBehaviour
 {
-    public enum Mode
-    {
-        Gear,
-        Held
-    }
-
     [Header("UI")]
     [SerializeField] private Image centerIcon;
     [SerializeField] private Image leftPreviewIcon;
@@ -29,77 +24,43 @@ public class EquipmentSelectionUI : MonoBehaviour
     [SerializeField] private StatPanelRenderer statPanel;
 
     [Header("Preview")]
-    [SerializeField] private Color previewDimColor = new Color(1, 1, 1, 0.35f);
-    [SerializeField] private Color previewHiddenColor = new Color(1, 1, 1, 0f);
+    [SerializeField] private Color previewDimColor = new Color(1f, 1f, 1f, 0.35f);
+    [SerializeField] private Color previewHiddenColor = new Color(1f, 1f, 1f, 0f);
 
     [Header("Defaults")]
     [SerializeField] private Sprite defaultIcon;
     [SerializeField] private string defaultName = "Nothing equipped";
     [SerializeField, TextArea] private string defaultDescription = "Nothing equipped in this slot.";
 
-    private Mode mode;
-
-    private GearData.GearSlot activeGearSlot;
-    private HeldSlot activeHeldSlot;
-
+    private EquipmentSlotId activeSlot;
     private Inventory playerInv;
-    private Equipment playerEq;
-    private HeldEquipment playerHeldEq;
+    private InventoryItem equippedItem;
 
-    private GearData equippedGear;
-    private InventoryItem equippedHeld;
-
-    private System.Collections.Generic.List<GearData> gearOptions = new();
-    private System.Collections.Generic.List<InventoryItem> heldOptions = new();
+    private readonly List<InventoryItem> options = new();
 
     private int index = -1;
     private bool subscribed;
+    private bool hasOpenedSlot;
 
     private void Awake()
     {
-        if (leftBtn) leftBtn.onClick.AddListener(OnLeft);
-        if (rightBtn) rightBtn.onClick.AddListener(OnRight);
+        if (leftBtn != null)
+            leftBtn.onClick.AddListener(OnLeft);
+
+        if (rightBtn != null)
+            rightBtn.onClick.AddListener(OnRight);
     }
 
-    public void OpenGear(GearData.GearSlot slot)
+    public void OpenSlot(EquipmentSlotId slot)
     {
         var im = InventoryManager.Instance;
         if (im == null)
             return;
 
-        mode = Mode.Gear;
+        hasOpenedSlot = true;
+        activeSlot = slot;
         playerInv = im.playerInventory;
-        playerEq = im.playerEquipment;
-        playerHeldEq = im.playerHeldEquipment;
-
-        activeGearSlot = slot;
-        equippedGear = playerEq.GetEquipped(slot);
-        equippedHeld = null;
-
-        BuildOptions();
-        UpdateUI();
-
-        Subscribe();
-        RebuildAndRefresh();
-    }
-
-    public void OpenHeld(HeldSlot slot)
-    {
-        var im = InventoryManager.Instance;
-        if (im == null)
-            return;
-
-        mode = Mode.Held;
-        playerInv = im.playerInventory;
-        playerEq = im.playerEquipment;
-        playerHeldEq = im.playerHeldEquipment;
-
-        activeHeldSlot = slot;
-        equippedHeld = playerHeldEq.GetEquippedItem(slot);
-        equippedGear = null;
-
-        BuildOptions();
-        UpdateUI();
+        equippedItem = im.GetEquippedItem(slot);
 
         Subscribe();
         RebuildAndRefresh();
@@ -107,7 +68,7 @@ public class EquipmentSelectionUI : MonoBehaviour
 
     private void OnLeft()
     {
-        if (GetOptionCount() == 0)
+        if (options.Count == 0)
             return;
 
         if (index > 0)
@@ -118,333 +79,262 @@ public class EquipmentSelectionUI : MonoBehaviour
 
     private void OnRight()
     {
-        if (GetOptionCount() == 0)
+        if (options.Count == 0)
             return;
 
-        if (index < GetOptionCount() - 1)
+        if (index < options.Count - 1)
             index++;
 
         UpdateUI();
     }
 
+    private void RebuildAndRefresh()
+    {
+        BuildOptions();
+        UpdateUI();
+    }
+
+    private void BuildOptions()
+    {
+        string previouslySelectedInstanceId = GetSelectedItem()?.instanceId;
+
+        options.Clear();
+
+        if (!hasOpenedSlot || playerInv == null)
+        {
+            index = -1;
+            return;
+        }
+
+        if (equippedItem != null)
+            options.Add(equippedItem);
+
+        var fromInventory = playerInv.items
+            .Where(i => i != null)
+            .Where(CanBeEquippedToActiveSlot)
+            .Where(i => !ReferenceEquals(i, equippedItem));
+
+        options.AddRange(fromInventory);
+
+        if (options.Count == 0)
+        {
+            index = -1;
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(previouslySelectedInstanceId))
+        {
+            int foundIndex = options.FindIndex(i => i != null && i.instanceId == previouslySelectedInstanceId);
+            if (foundIndex >= 0)
+            {
+                index = foundIndex;
+                return;
+            }
+        }
+
+        if (equippedItem != null)
+        {
+            int equippedIndex = options.FindIndex(i => ReferenceEquals(i, equippedItem));
+            if (equippedIndex >= 0)
+            {
+                index = equippedIndex;
+                return;
+            }
+        }
+
+        index = Mathf.Clamp(index, 0, options.Count - 1);
+        if (index < 0)
+            index = 0;
+    }
+
+    private bool CanBeEquippedToActiveSlot(InventoryItem item)
+    {
+        return item != null &&
+               item.data is IEquippableItemData equippable &&
+               equippable.AllowedSlots != null &&
+               equippable.AllowedSlots.Contains(activeSlot);
+    }
+
     public void UpdateUI()
     {
-        bool hasList = GetOptionCount() > 0 && index >= 0;
+        bool hasSelection = options.Count > 0 && index >= 0 && index < options.Count;
 
-        if (leftBtn) leftBtn.interactable = hasList && index > 0;
-        if (rightBtn) rightBtn.interactable = hasList && index < GetOptionCount() - 1;
+        if (leftBtn != null)
+            leftBtn.interactable = hasSelection && index > 0;
 
-        if (!hasList && !HasEquipped())
+        if (rightBtn != null)
+            rightBtn.interactable = hasSelection && index < options.Count - 1;
+
+        if (!hasSelection && equippedItem == null)
         {
             ShowDefault();
             return;
         }
 
-        if (!hasList)
+        if (!hasSelection)
         {
             ShowEquippedOnly();
             return;
         }
 
-        SetImage(centerIcon, GetSelectedIcon(), Color.white);
+        InventoryItem selected = GetSelectedItem();
 
-        if (nameText) nameText.text = GetSelectedName();
-        if (descText) descText.text = GetSelectedDescription();
-        if (detailText) detailText.text = GetSelectedDetail();
+        SetImage(centerIcon, selected?.data?.icon ?? defaultIcon, Color.white);
 
-        SetImage(leftPreviewIcon, GetPreviewSprite(index - 1), index > 0 ? previewDimColor : previewHiddenColor);
-        SetImage(rightPreviewIcon, GetPreviewSprite(index + 1), index < GetOptionCount() - 1 ? previewDimColor : previewHiddenColor);
+        if (nameText != null)
+            nameText.text = selected?.data?.itemName ?? defaultName;
 
-        if (centerHighlight)
+        if (descText != null)
+            descText.text = selected?.data?.description ?? defaultDescription;
+
+        if (detailText != null)
+            detailText.text = BuildDetailText(selected);
+
+        SetImage(
+            leftPreviewIcon,
+            GetPreviewSprite(index - 1),
+            index > 0 ? previewDimColor : previewHiddenColor
+        );
+
+        SetImage(
+            rightPreviewIcon,
+            GetPreviewSprite(index + 1),
+            index < options.Count - 1 ? previewDimColor : previewHiddenColor
+        );
+
+        if (centerHighlight != null)
             centerHighlight.SetActive(IsSelectedEquipped());
 
-        RenderStatsForCurrentSelection();
-        BindButtonsForSelection();
+        RenderStats(selected);
+        BindButtons(selected);
     }
 
     private void ShowEquippedOnly()
     {
-        SetImage(centerIcon, GetEquippedIcon(), Color.white);
+        SetImage(centerIcon, equippedItem?.data?.icon ?? defaultIcon, Color.white);
 
-        if (nameText) nameText.text = GetEquippedName();
-        if (descText) descText.text = GetEquippedDescription();
-        if (detailText) detailText.text = GetEquippedDetail();
+        if (nameText != null)
+            nameText.text = equippedItem?.data?.itemName ?? defaultName;
+
+        if (descText != null)
+            descText.text = equippedItem?.data?.description ?? defaultDescription;
+
+        if (detailText != null)
+            detailText.text = BuildDetailText(equippedItem);
 
         SetImage(leftPreviewIcon, null, previewHiddenColor);
         SetImage(rightPreviewIcon, null, previewHiddenColor);
 
-        if (centerHighlight)
-            centerHighlight.SetActive(HasEquipped());
+        if (centerHighlight != null)
+            centerHighlight.SetActive(equippedItem != null);
 
-        RenderStatsForEquippedOnly();
-        BindButtonsForEquippedOnly();
+        RenderStats(equippedItem);
+        BindButtons(equippedItem);
     }
 
-    private void BindButtonsForSelection()
+    private void BindButtons(InventoryItem selected)
     {
         ClearButtons();
 
-        if (mode == Mode.Gear)
-        {
-            GearData selected = GetSelectedGear();
-            if (selected == null)
-                return;
-
-            InventoryItem invItem = InventoryUtil.MakeItem(playerInv, selected);
-
-            ActionBinder.BindFixedButtons(
-                dropButton: buttonDrop,
-                primaryButton: buttonEquip,
-                actionsButton: buttonActions,
-                invItem: invItem,
-                source: playerInv,
-                afterActionRefresh: () =>
-                {
-                    equippedGear = playerEq.GetEquipped(activeGearSlot);
-                    RebuildAndRefresh();
-                },
-                primaryFallbackLabel: "Equip"
-            );
-
+        if (selected == null || playerInv == null)
             return;
-        }
 
-        if (mode == Mode.Held)
+        if (IsSelectedEquipped())
         {
-            InventoryItem selected = GetSelectedHeld();
-            if (selected == null)
-                return;
-
-            ActionBinder.BindFixedButtons(
-                dropButton: buttonDrop,
-                primaryButton: buttonEquip,
-                actionsButton: buttonActions,
-                invItem: selected,
-                source: playerInv,
-                afterActionRefresh: () =>
-                {
-                    equippedHeld = playerHeldEq.GetEquippedItem(activeHeldSlot);
-                    RebuildAndRefresh();
-                },
-                primaryFallbackLabel: "Equip"
-            );
-
             if (buttonEquip != null)
             {
-                buttonEquip.onClick.RemoveAllListeners();
                 buttonEquip.gameObject.SetActive(true);
                 buttonEquip.interactable = true;
+                buttonEquip.onClick.RemoveAllListeners();
 
                 var label = buttonEquip.GetComponentInChildren<TextMeshProUGUI>(true);
-                if (label) label.text = "Equip";
+                if (label != null)
+                    label.text = "Unequip";
+
+                var hold = buttonEquip.GetComponent<HoldToUse>();
+                hold?.ClearBinding();
 
                 buttonEquip.onClick.AddListener(() =>
                 {
-                    InventoryManager.Instance.TryEquipHeldToSlot(playerInv, selected, activeHeldSlot);
-                    equippedHeld = playerHeldEq.GetEquippedItem(activeHeldSlot);
+                    var im = InventoryManager.Instance;
+                    if (im == null)
+                        return;
 
-                    var gearUI = Object.FindAnyObjectByType<GearUI>();
-                    if (gearUI) gearUI.Refresh();
-
-                    foreach (var invUI in Object.FindObjectsByType<InventoryUI>(FindObjectsSortMode.None))
-                        invUI.Refresh();
-
+                    im.TryUnequipItem(activeSlot, playerInv);
+                    equippedItem = im.GetEquippedItem(activeSlot);
                     RebuildAndRefresh();
                 });
             }
-        }
-    }
-
-    private void BindButtonsForEquippedOnly()
-    {
-        ClearButtons();
-
-        if (mode == Mode.Gear)
-        {
-            if (equippedGear == null || buttonEquip == null)
-                return;
-
-            buttonEquip.gameObject.SetActive(true);
-            buttonEquip.interactable = true;
-
-            var label = buttonEquip.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (label) label.text = "Unequip";
-
-            buttonEquip.onClick.AddListener(() =>
-            {
-                InventoryManager.Instance.playerEquipment.Unequip(activeGearSlot);
-                playerInv.AddItem(equippedGear, 1, equippedGear.maxDurability);
-                equippedGear = playerEq.GetEquipped(activeGearSlot);
-                RebuildAndRefresh();
-            });
 
             return;
         }
 
-        if (mode == Mode.Held)
-        {
-            if (equippedHeld == null || buttonEquip == null)
-                return;
+        ActionBinder.BindFixedButtons(
+            dropButton: buttonDrop,
+            primaryButton: buttonEquip,
+            actionsButton: buttonActions,
+            invItem: selected,
+            source: playerInv,
+            afterActionRefresh: () =>
+            {
+                var im = InventoryManager.Instance;
+                if (im != null)
+                    equippedItem = im.GetEquippedItem(activeSlot);
 
+                RebuildAndRefresh();
+            },
+            primaryFallbackLabel: "Equip"
+        );
+
+        if (buttonEquip != null)
+        {
             buttonEquip.gameObject.SetActive(true);
             buttonEquip.interactable = true;
+            buttonEquip.onClick.RemoveAllListeners();
 
             var label = buttonEquip.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (label) label.text = "Unequip";
+            if (label != null)
+                label.text = "Equip";
+
+            var hold = buttonEquip.GetComponent<HoldToUse>();
+            hold?.ClearBinding();
 
             buttonEquip.onClick.AddListener(() =>
             {
-                InventoryManager.Instance.TryUnequipHeldFromSlot(activeHeldSlot, playerInv);
-                equippedHeld = playerHeldEq.GetEquippedItem(activeHeldSlot);
+                var im = InventoryManager.Instance;
+                if (im == null)
+                    return;
+
+                im.TryEquipItem(playerInv, selected, activeSlot);
+                equippedItem = im.GetEquippedItem(activeSlot);
                 RebuildAndRefresh();
             });
-
-            return;
         }
     }
 
-    private void BuildOptions()
+    private InventoryItem GetSelectedItem()
     {
-        gearOptions.Clear();
-        heldOptions.Clear();
-
-        if (mode == Mode.Gear)
-        {
-            if (equippedGear != null && equippedGear.slot == activeGearSlot)
-                gearOptions.Add(equippedGear);
-
-            var fromInv = playerInv.items
-                .Where(i => i.data is GearData g && g.slot == activeGearSlot)
-                .Select(i => (GearData)i.data)
-                .Where(g => g != equippedGear);
-
-            gearOptions.AddRange(fromInv.Distinct());
-        }
-        else
-        {
-            var fromInv = playerInv.items
-                .Where(i => i != null && i.data is HoldableItemData);
-
-            heldOptions.AddRange(fromInv);
-        }
-
-        index = GetOptionCount() > 0 ? 0 : -1;
-    }
-
-    private int GetOptionCount()
-    {
-        return mode == Mode.Gear ? gearOptions.Count : heldOptions.Count;
-    }
-
-    private bool HasEquipped()
-    {
-        return mode == Mode.Gear ? equippedGear != null : equippedHeld != null;
-    }
-
-    private GearData GetSelectedGear()
-    {
-        if (mode != Mode.Gear || index < 0 || index >= gearOptions.Count)
+        if (index < 0 || index >= options.Count)
             return null;
 
-        return gearOptions[index];
-    }
-
-    private InventoryItem GetSelectedHeld()
-    {
-        if (mode != Mode.Held || index < 0 || index >= heldOptions.Count)
-            return null;
-
-        return heldOptions[index];
-    }
-
-    private Sprite GetSelectedIcon()
-    {
-        if (mode == Mode.Gear)
-            return GetSelectedGear()?.icon;
-
-        return GetSelectedHeld()?.data?.icon;
-    }
-
-    private string GetSelectedName()
-    {
-        if (mode == Mode.Gear)
-            return GetSelectedGear()?.itemName ?? defaultName;
-
-        return GetSelectedHeld()?.data?.itemName ?? defaultName;
-    }
-
-    private string GetSelectedDescription()
-    {
-        if (mode == Mode.Gear)
-            return GetSelectedGear()?.description ?? defaultDescription;
-
-        return GetSelectedHeld()?.data?.description ?? defaultDescription;
-    }
-
-    private string GetSelectedDetail()
-    {
-        if (mode == Mode.Gear)
-            return "";
-
-        return BuildHeldDetailText(GetSelectedHeld());
+        return options[index];
     }
 
     private bool IsSelectedEquipped()
     {
-        if (mode == Mode.Gear)
-        {
-            GearData selected = GetSelectedGear();
-            return equippedGear != null && ReferenceEquals(selected, equippedGear);
-        }
-
-        InventoryItem selectedHeld = GetSelectedHeld();
-        return equippedHeld != null && ReferenceEquals(selectedHeld, equippedHeld);
+        InventoryItem selected = GetSelectedItem();
+        return selected != null && equippedItem != null && ReferenceEquals(selected, equippedItem);
     }
 
     private Sprite GetPreviewSprite(int previewIndex)
     {
-        if (previewIndex < 0 || previewIndex >= GetOptionCount())
+        if (previewIndex < 0 || previewIndex >= options.Count)
             return null;
 
-        if (mode == Mode.Gear)
-            return gearOptions[previewIndex]?.icon;
-
-        return heldOptions[previewIndex]?.data?.icon;
+        return options[previewIndex]?.data?.icon;
     }
 
-    private Sprite GetEquippedIcon()
-    {
-        if (mode == Mode.Gear)
-            return equippedGear != null ? equippedGear.icon : defaultIcon;
-
-        return equippedHeld != null && equippedHeld.data != null ? equippedHeld.data.icon : defaultIcon;
-    }
-
-    private string GetEquippedName()
-    {
-        if (mode == Mode.Gear)
-            return equippedGear != null ? equippedGear.itemName : defaultName;
-
-        return equippedHeld != null && equippedHeld.data != null ? equippedHeld.data.itemName : defaultName;
-    }
-
-    private string GetEquippedDescription()
-    {
-        if (mode == Mode.Gear)
-            return equippedGear != null ? equippedGear.description : defaultDescription;
-
-        return equippedHeld != null && equippedHeld.data != null ? equippedHeld.data.description : defaultDescription;
-    }
-
-    private string GetEquippedDetail()
-    {
-        if (mode == Mode.Gear)
-            return "";
-
-        return BuildHeldDetailText(equippedHeld);
-    }
-
-    private string BuildHeldDetailText(InventoryItem item)
+    private string BuildDetailText(InventoryItem item)
     {
         if (item == null || item.data == null)
             return "";
@@ -469,68 +359,22 @@ public class EquipmentSelectionUI : MonoBehaviour
         return "";
     }
 
-    private void RenderStatsForCurrentSelection()
+    private void RenderStats(InventoryItem item)
     {
         if (statPanel == null)
             return;
 
-        if (mode == Mode.Gear)
-        {
-            GearData selected = GetSelectedGear();
-            if (selected == null)
-            {
-                statPanel.Clear();
-                return;
-            }
-
-            var invItem = InventoryUtil.MakeItem(playerInv, selected);
-            if (invItem != null)
-                statPanel.Render(invItem);
-            else
-                statPanel.Render(selected);
-
-            return;
-        }
-
-        InventoryItem heldSelected = GetSelectedHeld();
-        if (heldSelected != null)
-            statPanel.Render(heldSelected);
-        else
-            statPanel.Clear();
-    }
-
-    private void RenderStatsForEquippedOnly()
-    {
-        if (statPanel == null)
-            return;
-
-        if (mode == Mode.Gear)
-        {
-            if (equippedGear != null)
-            {
-                var invItem = InventoryUtil.MakeItem(playerInv, equippedGear);
-                if (invItem != null)
-                    statPanel.Render(invItem);
-                else
-                    statPanel.Render(equippedGear);
-            }
-            else
-            {
-                statPanel.Clear();
-            }
-
-            return;
-        }
-
-        if (equippedHeld != null)
-            statPanel.Render(equippedHeld);
+        if (item != null)
+            statPanel.Render(item);
         else
             statPanel.Clear();
     }
 
     private void SetImage(Image img, Sprite sprite, Color tint)
     {
-        if (!img) return;
+        if (img == null)
+            return;
+
         img.sprite = sprite;
         img.color = tint;
         img.enabled = sprite != null || tint.a > 0f;
@@ -540,6 +384,9 @@ public class EquipmentSelectionUI : MonoBehaviour
     {
         if (buttonEquip != null)
         {
+            var hold = buttonEquip.GetComponent<HoldToUse>();
+            hold?.ClearBinding();
+
             buttonEquip.onClick.RemoveAllListeners();
             buttonEquip.gameObject.SetActive(false);
         }
@@ -557,19 +404,42 @@ public class EquipmentSelectionUI : MonoBehaviour
         }
     }
 
+    private void ShowDefault()
+    {
+        SetImage(centerIcon, defaultIcon, Color.white);
+
+        if (nameText != null)
+            nameText.text = defaultName;
+
+        if (descText != null)
+            descText.text = defaultDescription;
+
+        if (detailText != null)
+            detailText.text = "";
+
+        SetImage(leftPreviewIcon, null, previewHiddenColor);
+        SetImage(rightPreviewIcon, null, previewHiddenColor);
+
+        if (centerHighlight != null)
+            centerHighlight.SetActive(false);
+
+        if (statPanel != null)
+            statPanel.Clear();
+
+        ClearButtons();
+    }
+
     private void Subscribe()
     {
         if (subscribed)
             return;
 
-        if (InventoryManager.Instance != null)
+        var im = InventoryManager.Instance;
+        if (im != null)
         {
-            InventoryManager.Instance.OnPlayerInventoryChanged += OnInventoryChanged;
-            InventoryManager.Instance.OnHeldEquipmentChanged += OnHeldChanged;
+            im.OnPlayerInventoryChanged += OnInventoryChanged;
+            im.OnEquipmentSlotChanged += OnEquipmentSlotChanged;
         }
-
-        if (playerEq != null)
-            playerEq.OnChanged += OnGearChanged;
 
         subscribed = true;
     }
@@ -579,14 +449,12 @@ public class EquipmentSelectionUI : MonoBehaviour
         if (!subscribed)
             return;
 
-        if (InventoryManager.Instance != null)
+        var im = InventoryManager.Instance;
+        if (im != null)
         {
-            InventoryManager.Instance.OnPlayerInventoryChanged -= OnInventoryChanged;
-            InventoryManager.Instance.OnHeldEquipmentChanged -= OnHeldChanged;
+            im.OnPlayerInventoryChanged -= OnInventoryChanged;
+            im.OnEquipmentSlotChanged -= OnEquipmentSlotChanged;
         }
-
-        if (playerEq != null)
-            playerEq.OnChanged -= OnGearChanged;
 
         subscribed = false;
     }
@@ -598,50 +466,22 @@ public class EquipmentSelectionUI : MonoBehaviour
 
     private void OnInventoryChanged()
     {
-        RebuildAndRefresh();
-    }
-
-    private void OnHeldChanged()
-    {
-        if (mode != Mode.Held)
+        if (!hasOpenedSlot)
             return;
 
-        equippedHeld = playerHeldEq != null ? playerHeldEq.GetEquippedItem(activeHeldSlot) : null;
+        var im = InventoryManager.Instance;
+        if (im != null)
+            equippedItem = im.GetEquippedItem(activeSlot);
+
         RebuildAndRefresh();
     }
 
-    private void OnGearChanged(GearData.GearSlot slot, GearData oldGear, GearData newGear)
+    private void OnEquipmentSlotChanged(EquipmentSlotId slot, InventoryItem oldItem, InventoryItem newItem)
     {
-        if (mode != Mode.Gear || slot != activeGearSlot)
+        if (!hasOpenedSlot || slot != activeSlot)
             return;
 
-        equippedGear = newGear;
+        equippedItem = newItem;
         RebuildAndRefresh();
-    }
-
-    private void RebuildAndRefresh()
-    {
-        BuildOptions();
-        UpdateUI();
-    }
-
-    private void ShowDefault()
-    {
-        SetImage(centerIcon, defaultIcon, Color.white);
-
-        if (nameText) nameText.text = defaultName;
-        if (descText) descText.text = defaultDescription;
-        if (detailText) detailText.text = "";
-
-        SetImage(leftPreviewIcon, null, previewHiddenColor);
-        SetImage(rightPreviewIcon, null, previewHiddenColor);
-
-        if (centerHighlight)
-            centerHighlight.SetActive(false);
-
-        if (statPanel)
-            statPanel.Clear();
-
-        ClearButtons();
     }
 }

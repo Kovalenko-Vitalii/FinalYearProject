@@ -4,79 +4,130 @@ using UnityEngine.UI;
 
 public class InventoryItemUI : MonoBehaviour
 {
-	[SerializeField] private Image icon;
-	[SerializeField] private TextMeshProUGUI itemName;
-	[SerializeField] private TextMeshProUGUI amountText;
-	[SerializeField] private TextMeshProUGUI weightText;
-	[SerializeField] private Button button;
+    [SerializeField] private Image icon;
+    [SerializeField] private TextMeshProUGUI itemName;
+    [SerializeField] private TextMeshProUGUI amountText;
+    [SerializeField] private TextMeshProUGUI weightText;
+    [SerializeField] private Button button;
 
-	[Header("Highlight")]
-	[SerializeField] private GameObject selectionHighlight;
+    [Header("Highlight")]
+    [SerializeField] private GameObject selectionHighlight;
 
-	private Inventory sourceInventory;
-	private InventoryItem currentItem;
+    private Inventory sourceInventory;
+    private InventoryItem currentItem;
+    private bool subscribed;
 
-	public InventoryItem CurrentItem => currentItem;
+    public InventoryItem CurrentItem => currentItem;
 
-	public void SetItem(InventoryItem item, Inventory source)
-	{
-		currentItem = item;
-		this.sourceInventory = source;
+    private void OnEnable()
+    {
+        Subscribe();
+        RefreshSelectionState();
+    }
 
-		if (icon != null)
-			icon.sprite = item.data.icon;
+    private void OnDisable()
+    {
+        Unsubscribe();
+    }
 
-		if (itemName != null)
-			itemName.text = item.data.itemName;
+    public void SetItem(InventoryItem item, Inventory source)
+    {
+        currentItem = item;
+        sourceInventory = source;
 
-		if (weightText != null)
-			weightText.text = (item.data.weight * item.amount).ToString() + " kg";
+        if (icon != null)
+            icon.sprite = item != null && item.data != null ? item.data.icon : null;
 
-		if (amountText != null)
-			if (item.amount > 1)
-			{
-				amountText.text = item.amount.ToString();
-			}
-			else amountText.text = "";
+        if (itemName != null)
+            itemName.text = item != null && item.data != null ? item.data.itemName : "";
 
+        if (weightText != null)
+            weightText.text = item != null && item.data != null
+                ? (item.data.weight * item.amount).ToString("0.##") + " kg"
+                : "";
 
+        if (amountText != null)
+            amountText.text = item != null && item.amount > 1 ? item.amount.ToString() : "";
 
-		if (selectionHighlight != null)
-			selectionHighlight.SetActive(false);
+        if (button != null)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(OnItemClicked);
+        }
 
-		if (button != null)
-		{
-			button.onClick.RemoveAllListeners();
-			button.onClick.AddListener(() => OnItemClicked());
-		}
-	}
+        Subscribe();
+        RefreshSelectionState();
+    }
 
-	private void OnItemClicked()
-	{
-		var manager = InventoryManager.Instance;
+    private void OnItemClicked()
+    {
+        var manager = InventoryManager.Instance;
+        if (manager == null || currentItem == null)
+            return;
 
-		manager.SelectItem(currentItem, sourceInventory);
+        manager.SelectItem(currentItem, sourceInventory);
 
-		foreach (var ui in Object.FindObjectsByType<InventoryItemUI>(FindObjectsSortMode.None))
-			ui.SetHighlight(false);
+        var infoUI = Object.FindAnyObjectByType<ItemInfoUI>();
+        if (infoUI != null)
+            infoUI.SetItem(currentItem, sourceInventory);
 
-		SetHighlight(true);
+        SoundManager.Instance?.PlayUI(
+            UISoundId.ItemClick,
+            currentItem.data != null ? currentItem.data.onClickSound : null
+        );
+    }
 
-		var uiManager = Object.FindAnyObjectByType<CanvasSwitcher>();
-		var infoUI = Object.FindAnyObjectByType<ItemInfoUI>();
-		if (uiManager != null)
-		{
-			if (infoUI != null)
-				infoUI.SetItem(currentItem, sourceInventory);
-		}
+    private void Subscribe()
+    {
+        if (subscribed)
+            return;
 
-		// Sound integration
-		SoundManager.Instance?.PlayUI(UISoundId.ItemClick, currentItem.data.onClickSound);
-	}
+        var manager = InventoryManager.Instance;
+        if (manager != null)
+        {
+            manager.OnSelectionChanged += HandleSelectionChanged;
+            subscribed = true;
+        }
+    }
 
-	public void SetHighlight(bool active)
-	{
-		if (selectionHighlight != null)
-			selectionHighlight.SetActive(active);
-	}
+    private void Unsubscribe()
+    {
+        if (!subscribed)
+            return;
+
+        var manager = InventoryManager.Instance;
+        if (manager != null)
+            manager.OnSelectionChanged -= HandleSelectionChanged;
+
+        subscribed = false;
+    }
+
+    private void HandleSelectionChanged(InventoryItem item, Inventory source)
+    {
+        bool isSelected =
+            currentItem != null &&
+            ReferenceEquals(item, currentItem) &&
+            ReferenceEquals(source, sourceInventory);
+
+        SetHighlight(isSelected);
+    }
+
+    private void RefreshSelectionState()
+    {
+        var manager = InventoryManager.Instance;
+
+        bool isSelected =
+            manager != null &&
+            currentItem != null &&
+            ReferenceEquals(manager.SelectedItem, currentItem) &&
+            ReferenceEquals(manager.SourceInventory, sourceInventory);
+
+        SetHighlight(isSelected);
+    }
+
+    public void SetHighlight(bool active)
+    {
+        if (selectionHighlight != null)
+            selectionHighlight.SetActive(active);
+    }
 }

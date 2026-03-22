@@ -21,10 +21,10 @@ public struct ItemActionContext
 {
     public Inventory source;
     public InventoryItem item;
-    public Equipment equipment;
+    public EquippedItems equippedItems;
 }
 
 public interface IItemActionProvider
 {
-    System.Collections.Generic.IEnumerable<ItemAction> GetActions(ItemActionContext ctx);
+    IEnumerable<ItemAction> GetActions(ItemActionContext ctx);
 }

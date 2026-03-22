@@ -6,30 +6,27 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour, ISaveable
 {
     public static InventoryManager Instance { get; private set; }
-    public string SaveId => "PLAYER_INVENTORY";
-    string TAG => SaveId;
+
+    public string SaveId => "PLAYER_INVENTORY_V2";
+    private string TAG => SaveId;
 
     [Header("Settings")]
     [SerializeField] private int playerSlotLimit = 10;
 
-    [Header("Test items")]
-    [SerializeField] private ItemData[] initialItems;
-    [SerializeField] private int[] initialAmounts;
-
-    public Inventory playerInventory { get; private set; }
-    public Equipment playerEquipment { get; private set; }
-    public HeldEquipment playerHeldEquipment { get; private set; }
+    [field: SerializeField] public Inventory playerInventory { get; private set; }
+    public EquippedItems playerEquippedItems { get; private set; }
 
     public InventoryItem SelectedItem { get; private set; }
     public Inventory SourceInventory { get; private set; }
-    public HeldSlot? ActiveHeldSlot { get; private set; }
+    public EquipmentSlotId? ActiveHeldSlot { get; private set; }
 
     public event Action OnPlayerInventoryChanged;
-    public event Action OnHeldEquipmentChanged;
-    public event Action<HeldSlot?> OnActiveHeldSlotChanged;
     public event Action<InventoryItem, Inventory> OnSelectionChanged;
 
-    // === Initializtion ===
+    public event Action OnEquipmentChanged;
+    public event Action<EquipmentSlotId, InventoryItem, InventoryItem> OnEquipmentSlotChanged;
+    public event Action<EquipmentSlotId?> OnActiveHeldSlotChanged;
+
     private void Awake()
     {
         if (!TryInitializeSingleton())
@@ -38,12 +35,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
         InitializeInventories();
         SubscribeToEvents();
     }
-    private void Start()
-    {
-        AddInitialItems();
-    }
 
-    // === Initialization Helpers ===
     private bool TryInitializeSingleton()
     {
         if (Instance != null && Instance != this)
@@ -55,44 +47,34 @@ public class InventoryManager : MonoBehaviour, ISaveable
         Instance = this;
         return true;
     }
+
     private void InitializeInventories()
     {
         playerInventory = new Inventory(new PlayerInventoryPolicy(playerSlotLimit));
-        playerEquipment = new Equipment();
-        playerHeldEquipment = new HeldEquipment();
+        playerEquippedItems = new EquippedItems(EquipmentSlots.All);
     }
+
     private void SubscribeToEvents()
     {
         playerInventory.OnChanged += () => OnPlayerInventoryChanged?.Invoke();
-        playerHeldEquipment.OnChanged += () => OnHeldEquipmentChanged?.Invoke();
-    }
-    private void AddInitialItems()
-    {
-        if (initialItems == null)
-            return;
 
-        for (int i = 0; i < initialItems.Length; i++)
+        playerEquippedItems.OnSlotChanged += (slot, oldItem, newItem) =>
         {
-            var itemData = initialItems[i];
-            int amount = (initialAmounts != null && i < initialAmounts.Length) ? initialAmounts[i] : 1;
-
-            if (itemData is GearData gearData)
-            {
-                playerEquipment.Equip(gearData);
-                continue;
-            }
-
-            playerInventory.AddItem(itemData, amount, itemData.maxDurability);
-        }
+            OnEquipmentChanged?.Invoke();
+            OnEquipmentSlotChanged?.Invoke(slot, oldItem, newItem);
+        };
     }
 
-    // === Selection ===
+    // =========================
+    // Selection
+    // =========================
     public void SelectItem(InventoryItem item, Inventory source)
     {
         SelectedItem = item;
         SourceInventory = source;
         OnSelectionChanged?.Invoke(item, source);
     }
+
     public void ClearSelection()
     {
         SelectedItem = null;
@@ -100,14 +82,19 @@ public class InventoryManager : MonoBehaviour, ISaveable
         OnSelectionChanged?.Invoke(null, null);
     }
 
-    // === Inventory Queries ===
+    // =========================
+    // Queries
+    // =========================
     public int GetPlayerItemCount(ItemData data)
     {
         if (playerInventory == null || data == null)
             return 0;
 
-        return GetItemCount(playerInventory, data);
+        return playerInventory.items
+            .Where(i => i.data == data)
+            .Sum(i => i.amount);
     }
+
     public bool HasPlayerItems(ItemData data, int amount = 1)
     {
         if (data == null || amount <= 0)
@@ -115,6 +102,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
 
         return GetPlayerItemCount(data) >= amount;
     }
+
     public bool TryConsumePlayerItems(ItemData data, int amount = 1)
     {
         if (playerInventory == null || data == null || amount <= 0)
@@ -126,13 +114,29 @@ public class InventoryManager : MonoBehaviour, ISaveable
         playerInventory.RemoveItem(data, amount);
         return true;
     }
+
+    public InventoryItem GetEquippedItem(EquipmentSlotId slot)
+    {
+        return playerEquippedItems.Get(slot);
+    }
+
+    public InventoryItem GetActiveHeldItem()
+    {
+        if (!ActiveHeldSlot.HasValue)
+            return null;
+
+        return playerEquippedItems.Get(ActiveHeldSlot.Value);
+    }
+
     public void NotifyRuntimeItemStateChanged()
     {
         OnPlayerInventoryChanged?.Invoke();
+        OnEquipmentChanged?.Invoke();
     }
 
-
-    // === Inventory Transfering ===
+    // =========================
+    // Inventory transfer
+    // =========================
     public void MoveItem(Inventory from, Inventory to, ItemData data, int amount, float currentDurability)
     {
         if (from == null || to == null || data == null || amount <= 0)
@@ -143,149 +147,177 @@ public class InventoryManager : MonoBehaviour, ISaveable
             return;
 
         int canMove = Mathf.Min(src.amount, amount);
+        int accepted = to.AddItemAndGetAccepted(data, canMove, currentDurability);
 
-        int beforeToCount = GetItemCount(to, data);
-        to.AddItem(data, canMove, currentDurability);
-        int afterToCount = GetItemCount(to, data);
-
-        int accepted = Mathf.Clamp(afterToCount - beforeToCount, 0, canMove);
-        if (accepted <= 0)
-            return;
-
-        from.RemoveItem(data, accepted);
+        if (accepted > 0)
+            from.RemoveItem(data, accepted);
     }
-    private int GetItemCount(Inventory inventory, ItemData data)
+    public bool TryMoveItemInstance(Inventory from, Inventory to, InventoryItem item)
     {
-        return inventory.items
-            .Where(i => i.data == data)
-            .Sum(i => i.amount);
-    }
-
-    // === Held item equip/active slot ===
-    public bool TryToggleEquipHeldItem(InventoryItem inventoryItem)
-    {
-        if (inventoryItem == null || inventoryItem.data is not HoldableItemData)
+        if (from == null || to == null || item == null)
             return false;
 
-        if (playerHeldEquipment.TryFindSlot(inventoryItem, out HeldSlot existingSlot))
-            return TryUnequipHeldFromSlot(existingSlot, playerInventory);
+        if (!from.RemoveItemInstance(item))
+            return false;
 
-        HeldSlot targetSlot = GetTargetHeldSlot();
-        return TryEquipHeldToSlot(playerInventory, inventoryItem, targetSlot);
-    }
-    private void UnequipHeldItem(HeldSlot existingSlot)
-    {
-        InventoryItem item = playerHeldEquipment.Unequip(existingSlot);
-
-        if (item != null)
-            playerInventory.TryAddItemInstance(item);
-
-        if (ActiveHeldSlot == existingSlot)
-            SetActiveHeldSlot(null);
-
-        OnPlayerInventoryChanged?.Invoke();
-    }
-    private void EquipHeldItem(InventoryItem item)
-    {
-        HeldSlot targetSlot = GetTargetHeldSlot();
-
-        if (playerInventory.RemoveItemInstance(item))
+        if (!to.TryAddItemInstance(item))
         {
-            var old = playerHeldEquipment.Equip(item, targetSlot);
-            if (old != null)
-                playerInventory.TryAddItemInstance(old);
+            from.TryAddItemInstance(item);
+            return false;
         }
 
-        OnPlayerInventoryChanged?.Invoke();
+        return true;
     }
-    private HeldSlot GetTargetHeldSlot()
-    {
-        var empty = playerHeldEquipment.GetFirstEmptySlot();
-        if (empty.HasValue)
-            return empty.Value;
 
-        return ActiveHeldSlot ?? HeldSlot.Slot1;
-    }
-    public void ToggleActiveHeldSlot(HeldSlot slot)
+    // =========================
+    // Equip / Unequip
+    // =========================
+    public bool TryToggleEquipItem(Inventory source, InventoryItem item)
     {
-        var item = playerHeldEquipment.GetEquippedItem(slot);
+        if (item == null || item.data is not IEquippableItemData)
+            return false;
+
+        if (playerEquippedItems.TryFindSlot(item, out var currentSlot))
+            return TryUnequipItem(currentSlot, source ?? playerInventory);
+
+        return TryEquipItem(source, item);
+    }
+
+    public bool TryEquipItem(Inventory source, InventoryItem item)
+    {
+        if (source == null || item == null || item.data is not IEquippableItemData equippable)
+            return false;
+
+        var preferredSlot = GetPreferredSlot(equippable);
+        if (!preferredSlot.HasValue)
+            return false;
+
+        return TryEquipItem(source, item, preferredSlot.Value);
+    }
+
+    public bool TryEquipItem(Inventory source, InventoryItem item, EquipmentSlotId slot)
+    {
+        if (source == null || item == null || item.data is not IEquippableItemData equippable)
+            return false;
+
+        if (!playerEquippedItems.HasSlot(slot))
+            return false;
+
+        if (!equippable.AllowedSlots.Contains(slot))
+            return false;
+
+        if (!source.RemoveItemInstance(item))
+            return false;
+
+        InventoryItem displaced = playerEquippedItems.Equip(slot, item);
+
+        if (displaced != null)
+        {
+            if (!source.TryAddItemInstance(displaced))
+            {
+                playerEquippedItems.Equip(slot, displaced);
+                source.TryAddItemInstance(item);
+                return false;
+            }
+        }
+
+        if (EquipmentSlots.IsHeld(slot))
+            SetActiveHeldSlot(slot);
+
+        return true;
+    }
+
+    public bool TryUnequipItem(EquipmentSlotId slot, Inventory target)
+    {
+        if (target == null || !playerEquippedItems.HasSlot(slot))
+            return false;
+
+        InventoryItem item = playerEquippedItems.Unequip(slot);
         if (item == null)
+            return false;
+
+        if (!target.TryAddItemInstance(item))
+        {
+            playerEquippedItems.Equip(slot, item);
+            return false;
+        }
+
+        if (ActiveHeldSlot == slot)
+            SetActiveHeldSlot(null);
+
+        return true;
+    }
+
+    // =========================
+    // Held logic
+    // =========================
+    public void ToggleActiveHeldSlot(EquipmentSlotId slot)
+    {
+        if (!EquipmentSlots.IsHeld(slot))
+            return;
+
+        if (playerEquippedItems.Get(slot) == null)
             return;
 
         if (ActiveHeldSlot == slot)
-        {
             SetActiveHeldSlot(null);
-            return;
+        else
+            SetActiveHeldSlot(slot);
+    }
+
+    public void SetActiveHeldSlot(EquipmentSlotId? slot)
+    {
+        if (slot.HasValue)
+        {
+            if (!EquipmentSlots.IsHeld(slot.Value))
+                return;
+
+            if (playerEquippedItems.Get(slot.Value) == null)
+                slot = null;
         }
 
-        SetActiveHeldSlot(slot);
-    }
-    public void SetActiveHeldSlot(HeldSlot? slot)
-    {
         if (ActiveHeldSlot == slot)
             return;
 
         ActiveHeldSlot = slot;
         OnActiveHeldSlotChanged?.Invoke(slot);
     }
-    public InventoryItem GetActiveHeldItem()
+
+    private EquipmentSlotId? GetPreferredSlot(IEquippableItemData equippable)
     {
-        if (!ActiveHeldSlot.HasValue)
+        if (equippable == null || equippable.AllowedSlots == null || equippable.AllowedSlots.Count == 0)
             return null;
 
-        return playerHeldEquipment.GetEquippedItem(ActiveHeldSlot.Value);
-    }
-    public bool TryEquipHeldToSlot(Inventory source, InventoryItem item, HeldSlot slot)
-    {
-        if (source == null || item == null || item.data is not HoldableItemData)
-            return false;
-
-        if (!source.RemoveItemInstance(item))
-            return false;
-
-        InventoryItem old = playerHeldEquipment.Equip(item, slot);
-
-        if (old != null)
-            playerInventory.TryAddItemInstance(old);
-
-        SetActiveHeldSlot(slot);
-        OnPlayerInventoryChanged?.Invoke();
-        return true;
-    }
-    public bool TryUnequipHeldFromSlot(HeldSlot slot, Inventory target)
-    {
-        if (target == null)
-            return false;
-
-        InventoryItem item = playerHeldEquipment.Unequip(slot);
-        if (item == null)
-            return false;
-
-        bool added = target.TryAddItemInstance(item);
-        if (!added)
+        foreach (var slot in equippable.AllowedSlots)
         {
-            playerHeldEquipment.Equip(item, slot);
-            return false;
+            if (!EquipmentSlots.IsHeld(slot) && playerEquippedItems.Get(slot) == null)
+                return slot;
         }
 
-        if (ActiveHeldSlot == slot)
-            SetActiveHeldSlot(null);
+        var emptyHeld = playerEquippedItems.GetFirstEmpty(EquipmentSlots.Held);
+        if (emptyHeld.HasValue && equippable.AllowedSlots.Contains(emptyHeld.Value))
+            return emptyHeld.Value;
 
-        OnPlayerInventoryChanged?.Invoke();
-        return true;
+        if (ActiveHeldSlot.HasValue && equippable.AllowedSlots.Contains(ActiveHeldSlot.Value))
+            return ActiveHeldSlot.Value;
+
+        return equippable.AllowedSlots[0];
     }
 
-    // === Save/Load ===
+    // =========================
+    // Save / Load
+    // =========================
     public object CaptureState()
     {
         var data = new SaveInventoryData();
 
         CaptureInventoryState(data);
-        CaptureGearState(data);
-        CaptureHeldState(data);
+        CaptureEquippedState(data);
+        CaptureActiveHeldState(data);
 
         return data;
     }
+
     public void RestoreState(object state)
     {
         var data = state as SaveInventoryData;
@@ -299,74 +331,62 @@ public class InventoryManager : MonoBehaviour, ISaveable
         }
 
         RestoreInventoryState(data);
-        RestoreGearState(data);
-        RestoreHeldState(data);
-        RestoreActiveHeldSlot(data);
+        RestoreEquippedState(data);
+        RestoreActiveHeldState(data);
 
         FinishRestoreState();
     }
 
-    // === Save Helpers ===
     private void CaptureInventoryState(SaveInventoryData data)
     {
-        foreach (var it in playerInventory.items)
+        foreach (var item in playerInventory.items)
         {
-            if (it == null || it.data == null || it.amount <= 0)
+            if (item == null || item.data == null || item.amount <= 0)
                 continue;
 
-            data.inventoryItems.Add(InventoryItemSave.FromRuntime(it));
+            data.inventoryItems.Add(InventoryItemSave.FromRuntime(item));
         }
     }
-    private void CaptureGearState(SaveInventoryData data)
+
+    private void CaptureEquippedState(SaveInventoryData data)
     {
-        foreach (var kv in playerEquipment.slots)
+        foreach (var kv in playerEquippedItems.Slots)
         {
-            var gear = kv.Value;
-            if (gear == null)
+            if (kv.Value == null)
                 continue;
 
-            data.gearSlots.Add(new GearPairSave
+            data.equippedSlots.Add(new EquippedSlotSave
             {
                 slot = kv.Key,
-                gearId = gear.id,
-                durability = 0f
+                item = InventoryItemSave.FromRuntime(kv.Value)
             });
         }
     }
-    private void CaptureHeldState(SaveInventoryData data)
+
+    private void CaptureActiveHeldState(SaveInventoryData data)
     {
-        var held1 = playerHeldEquipment.GetEquippedItem(HeldSlot.Slot1);
-        var held2 = playerHeldEquipment.GetEquippedItem(HeldSlot.Slot2);
-
-        data.heldSlot1Item = held1 != null ? InventoryItemSave.FromRuntime(held1) : default;
-        data.heldSlot2Item = held2 != null ? InventoryItemSave.FromRuntime(held2) : default;
-
         data.activeHeldSlot = ActiveHeldSlot.HasValue ? (int)ActiveHeldSlot.Value : -1;
     }
 
-    // === Restore Helpers ===
     private void ClearAllState()
     {
         playerInventory.items.Clear();
-        playerHeldEquipment.Clear();
+        playerEquippedItems.Clear();
         SetActiveHeldSlot(null);
-
-        playerEquipment.Unequip(GearData.GearSlot.Head);
-        playerEquipment.Unequip(GearData.GearSlot.Chest);
-        playerEquipment.Unequip(GearData.GearSlot.Legs);
-        playerEquipment.Unequip(GearData.GearSlot.Boots);
+        ClearSelection();
     }
+
     private void RestoreInventoryState(SaveInventoryData data)
     {
         if (data.inventoryItems == null)
             return;
 
-        foreach (var s in data.inventoryItems)
+        foreach (var savedItem in data.inventoryItems)
         {
-            var item = s.ToRuntime();
+            var item = savedItem.ToRuntime();
             if (item == null)
             {
-                GameLog.Warning(TAG, $"Unknown itemId '{s.itemId}'");
+                GameLog.Warning(TAG, $"Unknown itemId '{savedItem.itemId}'");
                 continue;
             }
 
@@ -374,57 +394,49 @@ public class InventoryManager : MonoBehaviour, ISaveable
             playerInventory.TryAddItemInstance(item);
         }
     }
-    private void RestoreGearState(SaveInventoryData data)
+
+    private void RestoreEquippedState(SaveInventoryData data)
     {
-        if (data.gearSlots == null)
+        if (data.equippedSlots == null)
             return;
 
-        foreach (var p in data.gearSlots)
+        foreach (var savedSlot in data.equippedSlots)
         {
-            if (string.IsNullOrWhiteSpace(p.gearId))
+            if (!playerEquippedItems.HasSlot(savedSlot.slot))
                 continue;
 
-            var item = ItemResolver.Resolve(p.gearId);
+            if (string.IsNullOrWhiteSpace(savedSlot.item.itemId))
+                continue;
+
+            var item = savedSlot.item.ToRuntime();
             if (item == null)
-            {
-                GameLog.Warning(TAG, $"Unknown gearId '{p.gearId}'");
                 continue;
-            }
 
-            if (item is not GearData gear)
-            {
-                GameLog.Warning(TAG, $"itemId '{p.gearId}' is not GearData (got {item.GetType().Name})");
-                continue;
-            }
-
-            playerEquipment.Equip(gear);
+            item.EnsureInstanceId();
+            playerEquippedItems.Equip(savedSlot.slot, item);
         }
     }
-    private void RestoreHeldState(SaveInventoryData data)
+
+    private void RestoreActiveHeldState(SaveInventoryData data)
     {
-        RestoreHeldSlot(data.heldSlot1Item, HeldSlot.Slot1);
-        RestoreHeldSlot(data.heldSlot2Item, HeldSlot.Slot2);
-    }
-    private void RestoreHeldSlot(InventoryItemSave savedItem, HeldSlot slot)
-    {
-        if (string.IsNullOrWhiteSpace(savedItem.itemId))
+        if (data.activeHeldSlot < 0)
             return;
 
-        var item = savedItem.ToRuntime();
-        if (item == null)
+        var slot = (EquipmentSlotId)data.activeHeldSlot;
+
+        if (!EquipmentSlots.IsHeld(slot))
             return;
 
-        item.EnsureInstanceId();
-        playerHeldEquipment.Equip(item, slot);
+        if (playerEquippedItems.Get(slot) == null)
+            return;
+
+        SetActiveHeldSlot(slot);
     }
-    private void RestoreActiveHeldSlot(SaveInventoryData data)
-    {
-        if (data.activeHeldSlot >= 0)
-            SetActiveHeldSlot((HeldSlot)data.activeHeldSlot);
-    }
+
     private void FinishRestoreState()
     {
         OnPlayerInventoryChanged?.Invoke();
+        OnEquipmentChanged?.Invoke();
         ClearSelection();
     }
 }
@@ -434,11 +446,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
 public class SaveInventoryData
 {
     public List<InventoryItemSave> inventoryItems = new();
-    public List<GearPairSave> gearSlots = new();
-
-    public InventoryItemSave heldSlot1Item;
-    public InventoryItemSave heldSlot2Item;
-
+    public List<EquippedSlotSave> equippedSlots = new();
     public int activeHeldSlot = -1;
 }
 
@@ -493,11 +501,9 @@ public struct InventoryItemSave
     }
 }
 
-// --- this could be inherited from InventoryItemSave
 [Serializable]
-public struct GearPairSave
+public struct EquippedSlotSave
 {
-    public GearData.GearSlot slot;
-    public string gearId;
-    public float durability;
+    public EquipmentSlotId slot;
+    public InventoryItemSave item;
 }
