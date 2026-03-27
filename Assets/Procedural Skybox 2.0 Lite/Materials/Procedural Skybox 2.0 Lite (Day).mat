@@ -66,7 +66,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AtmosphereThickness: 0.5
+    - _AtmosphereThickness: 4.32
     - _BumpScale: 1
     - _CloudAnisotropy: 0.541
     - _CloudBaseHeight: 0.25
@@ -94,7 +94,7 @@ Material:
     - _OcclusionStrength: 1
     - _Overcast: 0
     - _Parallax: 0.02
-    - _SkyExposure: 1
+    - _SkyExposure: 0.8
     - _SkySaturation: 1.15
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -107,8 +107,8 @@ Material:
     - _SunFlareLength: 0.5
     - _SunFlareRayCount: 8
     - _SunFlareRotation: 0
-    - _SunHaze: 0.1
-    - _SunSize: 0.05
+    - _SunHaze: 0.132
+    - _SunSize: 0.03
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

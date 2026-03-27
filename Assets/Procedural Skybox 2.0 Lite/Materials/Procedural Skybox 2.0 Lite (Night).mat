@@ -80,6 +80,7 @@ Material:
     - _CloudScale: 1.5
     - _CloudSeed: 83
     - _CloudSoftness: 0.5
+    - _CloudSpeed: 0.05
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -92,6 +93,7 @@ Material:
     - _GroundPower: 1
     - _HorizonCurvature: 0.1
     - _HorizonHeight: 0
+    - _HorizonSharpness: 0.5
     - _Metallic: 0
     - _Mode: 0
     - _MoonSize: 0.15
@@ -99,6 +101,7 @@ Material:
     - _Overcast: 0
     - _Parallax: 0.02
     - _SkyExposure: 1
+    - _SkySaturation: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -116,9 +119,11 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _CloudTint: {r: 0.2830189, g: 0.27572215, b: 0.25765398, a: 1}
+    - _CloudWindDirection: {r: 1, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GroundColor: {r: 0.011764707, g: 0.050980397, b: 0.14117648, a: 1}
     - _HorizonColor: {r: 0.012682444, g: 0.04976902, b: 0.14150941, a: 1}
     - _ZenithColor: {r: 0.041295845, g: 0.11700601, b: 0.3018868, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
