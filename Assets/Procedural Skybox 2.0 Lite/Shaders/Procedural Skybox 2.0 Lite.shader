@@ -2,6 +2,7 @@
 {
     Properties
     {
+        _NightAmount ("Night Amount", Range(0,1)) = 0
         _SunSize ("Sun Size", Range(0,1)) = 0.05
         _SunHaze ("Sun Haze", Range(0,0.5)) = 0.1
         _AtmosphereThickness ("Atmosphere Thickness", Range(0.1,5)) = 0.5
@@ -46,6 +47,7 @@
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
 
+            float _NightAmount;
             float  _SunSize;
             float  _SunHaze;
             float  _AtmosphereThickness;
@@ -359,16 +361,18 @@
                 fixed4 cloud = ProcessClouds(i.dir, sky);
                 fixed3 result = lerp(sky, cloud.rgb, cloud.a);
 
-                result += ProcessSun(i.dir) * (1.0 - cloud.a);
+                float visible = 1.0 - cloud.a;
+                float nightAmount = saturate(_NightAmount);
+                float dayAmount = 1.0 - nightAmount;
+
+                result += ProcessSun(i.dir) * visible * dayAmount;
+
                 if (_EnableMoon >= 0.5)
                 {
-                    result += ProcessMoon(i.dir) * (1.0 - cloud.a);
+                    result += ProcessMoon(i.dir) * visible * nightAmount;
                 }
-                else
-                {
-                    result += ProcessSun(i.dir) * (1.0 - cloud.a);
-                }
-                result += ProcessStars(i.dir) * (1.0 - cloud.a);
+
+                result += ProcessStars(i.dir) * visible * nightAmount;
                 result *= _SkyExposure;
 
                 return fixed4(saturate(result), 1);
