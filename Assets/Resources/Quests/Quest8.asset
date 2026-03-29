@@ -21,5 +21,5 @@ MonoBehaviour:
     targetId: startedBoat
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: 8b6da8739810d3f4c9e13de6b5198691, type: 2}
   onCompleteLines: []
