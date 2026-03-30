@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class NoteInteractible : MonoBehaviour, IInteractable, ISaveable
@@ -64,7 +65,7 @@ public class NoteInteractible : MonoBehaviour, IInteractable, ISaveable
     }
 }
 
-[System.Serializable]
+[Serializable]
 public struct NoteWorldState
 {
     public bool pickedUp;

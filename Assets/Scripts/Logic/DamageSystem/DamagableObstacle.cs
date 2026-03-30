@@ -1,12 +1,46 @@
+using System;
 using UnityEngine;
 
 // This script represents a damageble obstacle that can receive selected type of damage.
-public class DamageableObstacle : MonoBehaviour, IDamageable
+public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
 {
+    [Header("Save")]
+    [SerializeField] private string id;
+
+    [SerializeField] private bool active;
+
     [SerializeField] int hp = 30;
     [SerializeField] bool acceptsAxe = true;
     [SerializeField] bool acceptsPickaxe = false;
     [SerializeField] bool acceptsBullet = false;
+
+    public string SaveId => id;
+
+    private void Reset()
+    {
+    #if UNITY_EDITOR
+        SaveIdUtil.EnsureId(ref id, this);
+    #else
+        if (string.IsNullOrWhiteSpace(id))
+            id = Guid.NewGuid().ToString("N");
+    #endif
+    }
+
+    #if UNITY_EDITOR
+    private void OnValidate() => SaveIdUtil.EnsureId(ref id, this);
+#endif
+
+    public object CaptureState()
+    {
+        return new DamagableObstacleWorldState { active = active, hp = hp };
+    }
+
+    public void RestoreState(object state)
+    {
+        if (state is not DamagableObstacleWorldState s) return;
+        hp = s.hp;
+        if (!active) Break();
+    }
 
     public void TakeDamage(DamageData damage)
     {
@@ -35,6 +69,13 @@ public class DamageableObstacle : MonoBehaviour, IDamageable
 
     private void Break()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
+}
+
+[Serializable]
+public struct DamagableObstacleWorldState
+{
+    public bool active;
+    public int hp;
 }

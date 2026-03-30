@@ -27,4 +27,4 @@ MonoBehaviour:
   tags: 16
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
-  pickupPrefab: {fileID: 6391819915781962078, guid: 34e7c4a2f72c33e429db18e7690bf1eb, type: 3}
+  pickupPrefab: {fileID: 5783929685553178233, guid: e2b98d9f3c55bcf4abb0f06584fe9057, type: 3}

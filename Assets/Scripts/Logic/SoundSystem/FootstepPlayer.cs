@@ -89,8 +89,10 @@ public class FootstepPlayer : MonoBehaviour, IPlayerTick
         foreach (var clip in surfaceClips)
             if (clip.type == surface)
                 selectedClips = clip.clips;
-
-        return selectedClips[UnityEngine.Random.Range(0, selectedClips.Length)];
+        if (selectedClips.Length > 0)
+            return selectedClips[UnityEngine.Random.Range(0, selectedClips.Length)];
+        else
+            return null;
     }
 
     // This method gets surface type depending on what is under player

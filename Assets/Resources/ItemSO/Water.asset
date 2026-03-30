@@ -18,6 +18,9 @@ MonoBehaviour:
   maxStack: 1
   weight: 1
   description: How it didn`t freeze here !?!
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 10
   useDuration: 4
@@ -25,9 +28,10 @@ MonoBehaviour:
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: 67c0d938799617f4d8cd35f328b54f6a, type: 2}
-  pickupPrefab: {fileID: 5676821114242119214, guid: 5a0148a2726237f4b8b6b2f905da6982, type: 3}
+  pickupPrefab: {fileID: 4263390244771787578, guid: ae9c07e46e9c5c8489cf6ed472d3178c, type: 3}
   hpRestore: 0
   hungerRestore: 0
   hydrationRestore: 5
   temperatureRestore: -0.1
+  onConsumeSound: {fileID: 0}
   statusOps: []
