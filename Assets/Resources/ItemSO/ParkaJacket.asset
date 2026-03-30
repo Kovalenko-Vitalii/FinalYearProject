@@ -18,12 +18,12 @@ MonoBehaviour:
   maxStack: 1
   weight: 1.4
   description: Warm and cool.
-  onClickSound: {fileID: 0}
-  onPickupSound: {fileID: 0}
+  onClickSound: {fileID: 8300000, guid: 42ea3e2ce6c76ee458e823faa088f800, type: 3}
+  onPickupSound: {fileID: 8300000, guid: a5760998cf5066d4495bcfe99356c8e3, type: 3}
   onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
-  useDuration: 5
+  useDuration: 2
   tags: 8
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -31,6 +31,6 @@ MonoBehaviour:
   pickupPrefab: {fileID: 2301237298300920353, guid: aaa1e695536febf4e985af8c6b7d612b, type: 3}
   temperatureResist: 10
   damageResist: 7
-  onEquipSound: {fileID: 0}
-  onUnequipSound: {fileID: 0}
+  onEquipSound: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
+  onUnequipSound: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
   slot: 1

@@ -18,9 +18,12 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.5
   description: One time use splint, can fix broken arm or leg.
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}
+  onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 3
-  useDuration: 10
+  useDuration: 4
   tags: 4
   modules:
   - {fileID: 11400000, guid: b3f7fe1031153804d8be1d7aaf811704, type: 2}
@@ -30,6 +33,7 @@ MonoBehaviour:
   hungerRestore: 0
   hydrationRestore: 0
   temperatureRestore: 0
+  onConsumeSound: {fileID: 8300000, guid: 03a43420b958d374fbcfe4b12b585ebc, type: 3}
   statusOps:
   - opType: 2
     effectId: 4

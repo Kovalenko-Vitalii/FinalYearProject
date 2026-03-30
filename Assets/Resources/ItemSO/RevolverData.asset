@@ -19,11 +19,11 @@ MonoBehaviour:
   weight: 1.2
   description: Old rusty Nagan revolver, hope it doesn`t explode in my hands..
   onClickSound: {fileID: 0}
-  onPickupSound: {fileID: 0}
+  onPickupSound: {fileID: 8300000, guid: 40681c7d513709045a8259ea7044863e, type: 3}
   onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
-  useDuration: 0
+  useDuration: 2
   tags: 0
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

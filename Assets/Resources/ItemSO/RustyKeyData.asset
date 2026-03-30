@@ -18,6 +18,12 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.01
   description: Some old key covered in rust, must unlock someones shelter
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 8300000, guid: 86ce01f81cfacae49b3ab6da883bb978, type: 3}
+  onDropSound: {fileID: 0}
+  hasDurability: 0
+  maxDurability: 0
+  useDuration: 0
   tags: 64
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

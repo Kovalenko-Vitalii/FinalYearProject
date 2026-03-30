@@ -18,8 +18,8 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.15
   description: Warm and cozy
-  onClickSound: {fileID: 0}
-  onPickupSound: {fileID: 0}
+  onClickSound: {fileID: 8300000, guid: 42ea3e2ce6c76ee458e823faa088f800, type: 3}
+  onPickupSound: {fileID: 8300000, guid: a5760998cf5066d4495bcfe99356c8e3, type: 3}
   onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
@@ -31,6 +31,6 @@ MonoBehaviour:
   pickupPrefab: {fileID: 2301237298300920353, guid: 6dcecf1c703b0084cb0aa291dcf1d314, type: 3}
   temperatureResist: 7
   damageResist: 1
-  onEquipSound: {fileID: 0}
-  onUnequipSound: {fileID: 0}
+  onEquipSound: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
+  onUnequipSound: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
   slot: 0
