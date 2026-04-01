@@ -41,7 +41,6 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-
     public void PlayUI(UISoundId id, AudioClip overrideClip = null)
     {
         if (uiSource == null) return;

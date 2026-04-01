@@ -23,7 +23,7 @@ MonoBehaviour:
   onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
-  useDuration: 2
+  useDuration: 0
   tags: 0
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

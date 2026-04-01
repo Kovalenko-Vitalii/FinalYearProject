@@ -9,8 +9,10 @@ public class HeldFirearmItem : PlayerHeldItem
     [SerializeField] private Transform aimPose;
 
     [Header("VFX")]
-    [SerializeField] private ParticleSystem muzzleFlashFx;
-    [SerializeField] private ParticleSystem muzzleSmokeFx;
+    [SerializeField] private ParticleSystem muzzleFlashPrefab;
+    [SerializeField] private ParticleSystem muzzleSmokePrefab;
+    [SerializeField] private Transform muzzlePoint;
+
     [SerializeField] private ImpactEffectDatabase impactDatabase;
 
     public event Action<float> OnReloadProgressChanged;
@@ -201,16 +203,19 @@ public class HeldFirearmItem : PlayerHeldItem
     }
     protected virtual void PlayMuzzleEffects()
     {
-        if (muzzleFlashFx != null)
-            muzzleFlashFx.Play();
+        if (ParticleManager.Instance == null || muzzlePoint == null)
+            return;
 
-        if (muzzleSmokeFx != null)
-            muzzleSmokeFx.Play();
+        if (muzzleFlashPrefab != null)
+            ParticleManager.Instance.PlayOneShot(muzzleFlashPrefab, muzzlePoint.position, muzzlePoint.rotation);
+
+        if (muzzleSmokePrefab != null)
+            ParticleManager.Instance.PlayOneShot(muzzleSmokePrefab, muzzlePoint.position, muzzlePoint.rotation);
     }
     protected virtual void PlaySound(AudioClip clip)
     {
-        if (audioSource != null && clip != null)
-            audioSource.PlayOneShot(clip);
+        if (clip != null)
+            SoundManager.Instance.PlayWorldOneShot(clip, transform.position);
     }
     
     // === Reload Logic ===

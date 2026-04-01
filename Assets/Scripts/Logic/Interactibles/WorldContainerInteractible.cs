@@ -17,7 +17,6 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
     [SerializeField] private string isOpenBoolName = "isOpen";
 
     [Header("Sound")]
-    [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip openSound;
     [SerializeField] private AudioClip closeSound;
 
@@ -169,14 +168,14 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
     // Sound stuff
     public void PlayOpenSound()
     {
-        if (audioSource && openSound)
-            audioSource.PlayOneShot(openSound);
+        if (openSound)
+            SoundManager.Instance.PlayWorldOneShot(openSound, transform.position);
     }
 
     public void PlayCloseSound()
     {
-        if (audioSource && closeSound)
-            audioSource.PlayOneShot(closeSound);
+        if (closeSound)
+            SoundManager.Instance.PlayWorldOneShot(closeSound, transform.position);
     }
 }
 

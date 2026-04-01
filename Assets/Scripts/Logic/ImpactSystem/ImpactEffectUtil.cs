@@ -16,11 +16,11 @@ public static class ImpactEffectUtil
         if (entry == null)
             return;
 
-        SpawnEffect(hit, entry);
+        PlayImpactParticle(hit, entry);
         PlayImpactSound(hit, entry);
     }
 
-    private static void SpawnEffect(RaycastHit hit, ImpactEffectEntry entry)
+    private static void PlayImpactParticle(RaycastHit hit, ImpactEffectEntry entry)
     {
         if (entry.effectPrefab == null)
             return;
@@ -28,8 +28,8 @@ public static class ImpactEffectUtil
         Vector3 spawnPos = hit.point + hit.normal * 0.01f;
         Quaternion rotation = Quaternion.LookRotation(hit.normal);
 
-        GameObject fx = Object.Instantiate(entry.effectPrefab, spawnPos, rotation);
-        Object.Destroy(fx, entry.lifetime > 0f ? entry.lifetime : 2f);
+        if (ParticleManager.Instance != null)
+            ParticleManager.Instance.PlayOneShot(entry.effectPrefab, spawnPos, rotation);
     }
 
     private static void PlayImpactSound(RaycastHit hit, ImpactEffectEntry entry)

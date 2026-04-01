@@ -39,7 +39,7 @@ public class ImpactEffectEntry
     public SurfaceType surfaceType = SurfaceType.Default;
     public ImpactKind impactKind = ImpactKind.Default;
 
-    public GameObject effectPrefab;
+    public ParticleSystem effectPrefab;
     public AudioClip[] soundClips;
     [Range(0f, 1f)] public float soundVolume = 1f;
     public float lifetime = 2f;

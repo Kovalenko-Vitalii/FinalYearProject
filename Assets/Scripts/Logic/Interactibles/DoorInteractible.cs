@@ -24,7 +24,6 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     [SerializeField] private string tryLockedTriggerName = "tryLocked";
 
     [Header("Sound")]
-    [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip openSound;
     [SerializeField] AudioClip closeSound;
     [SerializeField] AudioClip lockedSound;
@@ -157,13 +156,13 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     }
 
     // Sound
-    public void PlayOpenSound() { if (audioSource && openSound) audioSource.PlayOneShot(openSound); }
-    public void PlayCloseSound() { if (audioSource && closeSound) audioSource.PlayOneShot(closeSound); }
-    public void PlayLockedSound() { if (audioSource && lockedSound) audioSource.PlayOneShot(lockedSound); }
-    public void PlayUnlockSound() { if (audioSource && unlockSound) audioSource.PlayOneShot(unlockSound); }
+    public void PlayOpenSound() { if (openSound) SoundManager.Instance.PlayWorldOneShot(openSound, transform.position); }
+    public void PlayCloseSound() { if (closeSound) SoundManager.Instance.PlayWorldOneShot(closeSound, transform.position); }
+    public void PlayLockedSound() { if (lockedSound) SoundManager.Instance.PlayWorldOneShot(lockedSound, transform.position); }
+    public void PlayUnlockSound() { if (unlockSound) SoundManager.Instance.PlayWorldOneShot(unlockSound, transform.position); }
 }
 
-[System.Serializable]
+[Serializable]
 public struct DoorState
 {
     public bool isOpen;

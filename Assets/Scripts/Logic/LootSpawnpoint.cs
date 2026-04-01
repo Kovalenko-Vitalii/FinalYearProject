@@ -18,7 +18,7 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
         SaveIdUtil.EnsureId(ref id, this);
 #else
             if (string.IsNullOrWhiteSpace(id))
-                id = Guid.NewGuid().ToString("N");
+                id = System.Guid.NewGuid().ToString("N");
 #endif
     }
 
