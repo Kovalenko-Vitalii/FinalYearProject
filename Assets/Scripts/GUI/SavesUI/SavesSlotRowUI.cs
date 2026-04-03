@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class SaveSlotRowUI : MonoBehaviour
 {
     [SerializeField] private Button button;
+    [SerializeField] private Button deleteButton;
     [SerializeField] private TextMeshProUGUI titleText;
 
     private string _slotId;
@@ -26,11 +27,23 @@ public class SaveSlotRowUI : MonoBehaviour
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(OnClick);
         }
+
+        if (deleteButton != null)
+        {
+            deleteButton.onClick.RemoveAllListeners();
+            deleteButton.onClick.AddListener(Delete);
+        }
     }
 
     private void OnClick()
     {
         if (_menu != null && !string.IsNullOrEmpty(_slotId))
             _menu.LoadSlot(_slotId);
+    }
+
+    private void Delete()
+    {
+        if (_menu != null && !string.IsNullOrEmpty(_slotId))
+            _menu.DeleteSlot(_slotId);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class SaveMenuUI : MonoBehaviour
 {
+    string TAG = "Save Menu UI";
     [Header("Scroll View")]
     [SerializeField] private Transform contentRoot;
     [SerializeField] private SaveSlotRowUI slotPrefab;
@@ -58,7 +59,7 @@ public class SaveMenuUI : MonoBehaviour
         var sm = SaveManager.Instance;
         if (sm == null)
         {
-            Debug.LogError("[SaveMenuUI] SaveManager.Instance is NULL. Is SaveManager in Core scene and active?");
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL. Is SaveManager in Core scene and active?");
             return;
         }
 
@@ -67,7 +68,7 @@ public class SaveMenuUI : MonoBehaviour
 
         foreach (var meta in slots)
         {
-            Debug.Log($"[SaveMenuUI] Creating row for slot id={meta.id}, name={meta.displayName}");
+            GameLog.Log(TAG, $"Creating row for slot id={meta.id}, name={meta.displayName}");
             var row = Instantiate(slotPrefab, contentRoot);
             row.Bind(meta, this);
         }
@@ -77,12 +78,30 @@ public class SaveMenuUI : MonoBehaviour
     {
         var sm = SaveManager.Instance;
         if (sm == null)
+        {
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL on CreateBlankSave");
             return;
-
+        }
+            
         bool ok = sm.LoadSlot(slotId);
 
         if (!ok)
-            Debug.LogError($"[SaveMenuUI] Failed to load slot '{slotId}'");
+            GameLog.Error(TAG, $"Failed to load slot '{slotId}'");
+    }
+
+    public void DeleteSlot(string slotId)
+    {
+        var sm = SaveManager.Instance;
+        if (sm == null)
+        {
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL on CreateBlankSave");
+            return;
+        }
+
+        bool ok = sm.DeleteSlot(slotId);
+        RefreshList();
+        if (!ok)
+            GameLog.Error(TAG, $"Failed to delete slot '{slotId}'");
     }
 
     private void CreateBlankSave()
@@ -90,7 +109,7 @@ public class SaveMenuUI : MonoBehaviour
         var sm = SaveManager.Instance;
         if (sm == null)
         {
-            Debug.LogError("[SaveMenuUI] SaveManager.Instance is NULL on CreateBlankSave");
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL on CreateBlankSave");
             return;
         }
 
