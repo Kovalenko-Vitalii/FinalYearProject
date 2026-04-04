@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
 {
     [Header("Radial Bars")]
-    [SerializeField] private Image temperatureBar;
     [SerializeField] private Image hungerBar;
     [SerializeField] private Image hydrationBar;
     [SerializeField] private Image energyBar;
+
+    [SerializeField] private TMP_Text temperatureText;
 
     [Header("HP")]
     [SerializeField] private Slider hpBar;
@@ -17,6 +19,7 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private Color warningColor = Color.yellow;
     [SerializeField] private Color criticalColor = Color.red;
+
 
     private PlayerStatManager stats;
 
@@ -152,9 +155,33 @@ public class StatsUI : MonoBehaviour
 
     private void HandleTemperatureChanged(float value)
     {
-        if (!temperatureBar || stats == null) return;
-        float t = Mathf.InverseLerp(stats.TemperatureMin, stats.TemperatureMax, value);
-        temperatureBar.fillAmount = t;
-        temperatureBar.color = GetStatColor(t);
+        if (stats == null) return;
+
+        if (temperatureText != null)
+        {
+            temperatureText.text = $"{value:0.0}°C";
+            temperatureText.color = GetTemperatureColor(value);
+        }
+    }
+
+    private Color GetTemperatureColor(float bodyTemp)
+    {
+        var cfg = StatInfluenceProvider.Instance != null
+            ? StatInfluenceProvider.Instance.config
+            : null;
+
+        if (cfg == null)
+            return normalColor;
+
+        if (bodyTemp < cfg.noSprintBelow || bodyTemp > cfg.noSprintAbove)
+            return criticalColor;
+
+        float comfortMin = cfg.normalTemp - cfg.tempPenaltyStartDelta;
+        float comfortMax = cfg.normalTemp + cfg.tempPenaltyStartDelta;
+
+        if (bodyTemp < comfortMin || bodyTemp > comfortMax)
+            return warningColor;
+
+        return normalColor;
     }
 }

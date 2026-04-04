@@ -9,8 +9,8 @@ public class HeldFirearmItem : PlayerHeldItem
     [SerializeField] private Transform aimPose;
 
     [Header("VFX")]
-    [SerializeField] private ParticleSystem muzzleFlashPrefab;
-    [SerializeField] private ParticleSystem muzzleSmokePrefab;
+    [SerializeField] private GameObject muzzleFlashPrefab;
+    [SerializeField] private GameObject muzzleSmokePrefab;
     [SerializeField] private Transform muzzlePoint;
 
     [SerializeField] private ImpactEffectDatabase impactDatabase;

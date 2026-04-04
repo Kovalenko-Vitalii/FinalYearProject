@@ -593,7 +593,6 @@ MonoBehaviour:
   quickOpenDuration: 0.1
   animator: {fileID: 4445554933499494129}
   isOpenBoolName: isOpen
-  audioSource: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
 --- !u!82 &5326416148435010834
@@ -723,6 +722,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5777292629892474522}
+  - {fileID: 5583621725703353592}
+  - {fileID: 6475191137475744220}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &6051015683532017555
@@ -838,3 +839,135 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 1344337027531075907, guid: 4efcf81f50b069f428c6f65c7db2c844, type: 3}
+--- !u!1001 &1126773760294191735
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 139977935503444455}
+    m_Modifications:
+    - target: {fileID: 686844780053338846, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883614713159846063, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_Name
+      value: MedicalSpawnpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3902207
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.38023764
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.010666452
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.0000029504295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+--- !u!4 &5583621725703353592 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+  m_PrefabInstance: {fileID: 1126773760294191735}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1946285852906579795
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 139977935503444455}
+    m_Modifications:
+    - target: {fileID: 686844780053338846, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883614713159846063, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_Name
+      value: MedicalSpawnpoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.33765388
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.9753977
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.038390245
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.0000029504295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+--- !u!4 &6475191137475744220 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+  m_PrefabInstance: {fileID: 1946285852906579795}
+  m_PrefabAsset: {fileID: 0}

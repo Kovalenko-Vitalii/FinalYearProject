@@ -22,7 +22,7 @@ MonoBehaviour:
     lifetime: 1
   - surfaceType: 10
     impactKind: 1
-    effectPrefab: {fileID: 7097076223889954276, guid: d7cf8ec7045904a46bc6e0f08ae4ac96, type: 3}
+    effectPrefab: {fileID: 7314077583044901837, guid: d7cf8ec7045904a46bc6e0f08ae4ac96, type: 3}
     soundClips:
     - {fileID: 8300000, guid: 22f1561e623055c4ea7f4cc10cae2ac1, type: 3}
     soundVolume: 1

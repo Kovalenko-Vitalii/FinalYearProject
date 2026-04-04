@@ -27,6 +27,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     [SerializeField] private float maxTemperature = 42f;
     [SerializeField] private float normalTemperature = 36.6f;
 
+
     [Header("Energy settings")]
     [SerializeField] private float currentEnergy = 100f;
     [SerializeField] private float energyCap = 100f;
@@ -45,7 +46,15 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     [Header("Resistances")]
     [SerializeField] private float temperatureResist = 0;
     [SerializeField] private float damageResist = 0;
-    
+
+    [Header("Temperature Simulation")]
+    [SerializeField] private PlayerTemperatureSensor temperatureSensor;
+    [SerializeField] private float comfortableAmbientTemperature = 22f;
+    [SerializeField] private float bodyTempPerAmbientDegree = 0.08f;
+    [SerializeField] private float baseTemperatureChangePerSecond = 0.35f;
+    [SerializeField] private float sprintBodyHeatBonus = 0.25f;
+    [SerializeField] private float resistForFullProtection = 100f;
+
     // Regen parameters
     [Header("Natural Change Rates (per second)")]
     [SerializeField] private float healthRegenPerSecond = 0f; 
@@ -129,6 +138,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         OnDamageResistChanged?.Invoke(damageResist);
 
         RecalculateWeight();
+        RecalculateResistances();
     }
 
     private void OnDestroy()
@@ -378,6 +388,8 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
     public void Tick(float dt, bool isSprinting)
     {
+        TickTemperature(dt, isSprinting);
+
         var s = StatusEffectsSnapshot.Default;
 
         // Influence of stats like low water - loosing hp etc.
@@ -406,6 +418,51 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         dbgSnapshot = s;
     }
 
+    public void BindTemperatureSensor(PlayerTemperatureSensor sensor)
+    {
+        temperatureSensor = sensor;
+    }
+
+    public void UnbindTemperatureSensor(PlayerTemperatureSensor sensor)
+    {
+        if (temperatureSensor == sensor)
+            temperatureSensor = null;
+    }
+
+    private void TickTemperature(float dt, bool isSprinting)
+    {
+        TemperatureContext ctx = temperatureSensor != null
+            ? temperatureSensor.GetContext()
+            : new TemperatureContext
+            {
+                AmbientTemperature = 20f
+            };
+
+        float protect01 = Mathf.Clamp01(
+            temperatureResist / Mathf.Max(1f, resistForFullProtection));
+
+        float effectiveAmbient = Mathf.Lerp(
+            ctx.AmbientTemperature,
+            comfortableAmbientTemperature,
+            protect01);
+
+        float ambientDelta = effectiveAmbient - comfortableAmbientTemperature;
+        float targetBodyTemperature = normalTemperature + ambientDelta * bodyTempPerAmbientDegree;
+
+        if (isSprinting)
+            targetBodyTemperature += sprintBodyHeatBonus;
+
+        float old = temperature;
+        temperature = Mathf.MoveTowards(
+            temperature,
+            targetBodyTemperature,
+            baseTemperatureChangePerSecond * dt);
+
+        temperature = Mathf.Clamp(temperature, minTemperature, maxTemperature);
+
+        if (!Mathf.Approximately(old, temperature))
+            OnTemperatureChanged?.Invoke(temperature);
+    }
 
     // For storing and restoring stats
     public object CaptureState()

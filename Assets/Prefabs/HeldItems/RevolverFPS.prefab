@@ -401,7 +401,7 @@ MonoBehaviour:
   sprintPose: {fileID: 1429043751692347155}
   audioSource: {fileID: 5746809944343581992}
   aimPose: {fileID: 6951787459769325483}
-  muzzleFlashPrefab: {fileID: 8351752517881626849, guid: 00f15ce0b7118664fa129cb12a33b87f, type: 3}
-  muzzleSmokePrefab: {fileID: 8961104127605204128, guid: e49b8e5294f07974fa12d344bd11af4f, type: 3}
+  muzzleFlashPrefab: {fileID: 2792198216958627968, guid: 00f15ce0b7118664fa129cb12a33b87f, type: 3}
+  muzzleSmokePrefab: {fileID: 9101820449196302302, guid: e49b8e5294f07974fa12d344bd11af4f, type: 3}
   muzzlePoint: {fileID: 8374497463472257966}
   impactDatabase: {fileID: 11400000, guid: 9ea76d63726c7ba47bb31a899a7eaff8, type: 2}

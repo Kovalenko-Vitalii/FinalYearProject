@@ -141,7 +141,7 @@ public class InteractExecutor : MonoBehaviour, ISaveable
     {
         var invManager = InventoryManager.Instance;
         var statManager = PlayerStatManager.Instance;
-        var dateWeatherManager = DateWeatherManager.Instance;
+        var dateWeatherManager = TimeEnviromentManager.Instance;
 
         if (dateWeatherManager != null)
             dateWeatherManager.AddTime(-timeHourCost, -timeMinuteCost);

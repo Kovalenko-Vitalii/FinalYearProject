@@ -47,7 +47,6 @@ MonoBehaviour:
   id: 
   activated: 0
   lootPool:
-  - {fileID: 11400000, guid: 15eac31047e7a8e47b807eae435ef993, type: 2}
   - {fileID: 11400000, guid: e836465063413a141a10532f1d12fee2, type: 2}
   - {fileID: 11400000, guid: 3101b663ae926154dbaf5e2840d0c5ac, type: 2}
   - {fileID: 11400000, guid: 5bce243d3a1b5b04287e103643742934, type: 2}

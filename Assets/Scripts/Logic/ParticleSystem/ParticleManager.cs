@@ -17,7 +17,7 @@ public class ParticleManager : MonoBehaviour
     }
 
     public ParticleSystem PlayOneShot(
-        ParticleSystem prefab,
+        GameObject prefab,
         Vector3 position,
         Quaternion rotation,
         Transform parent = null)
@@ -25,9 +25,18 @@ public class ParticleManager : MonoBehaviour
         if (prefab == null)
             return null;
 
-        ParticleSystem ps = Instantiate(prefab, position, rotation, parent);
-        ps.Play(true);
+        GameObject instance = Instantiate(prefab, position, rotation, parent);
+        ParticleSystem ps = instance.GetComponent<ParticleSystem>();
 
+        if (ps == null)
+        {
+            Debug.LogError($"Prefab '{prefab.name}' has no ParticleSystem component.");
+            UnityEngine.Object.Destroy(instance);
+            return null;
+        }
+
+        ps.Play();
+        UnityEngine.Object.Destroy(instance, ps.main.duration + ps.main.startLifetime.constantMax);
         return ps;
     }
 }
