@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4618761528393937414}
   - component: {fileID: 4527528167106120739}
   - component: {fileID: 5181038318612909342}
+  - component: {fileID: 904085704366902080}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -111,3 +112,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.03587184, y: 0.0027251332, z: 0.029602975}
   m_Center: {x: 0, y: -0.000000001338776, z: 0.011139025}
+--- !u!114 &904085704366902080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2414553258440842069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3

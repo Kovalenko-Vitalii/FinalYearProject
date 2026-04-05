@@ -2554,7 +2554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
-  type: 0
+  type: 6
 --- !u!1 &6973852895140741861
 GameObject:
   m_ObjectHideFlags: 0
@@ -3292,4 +3292,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
-  type: 6
+  type: 5

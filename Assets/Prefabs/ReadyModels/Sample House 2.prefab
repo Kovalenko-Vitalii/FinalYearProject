@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3560691033969002103}
   - component: {fileID: 6898972829358293795}
   - component: {fileID: 693444979382723698}
+  - component: {fileID: 5071919809919190595}
   m_Layer: 0
   m_Name: Cube (11)
   m_TagString: Untagged
@@ -355,6 +356,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5071919809919190595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534703191591707888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &591617927243252296
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +383,7 @@ GameObject:
   - component: {fileID: 184633503228334284}
   - component: {fileID: 1124656734272475790}
   - component: {fileID: 2982708232863373637}
+  - component: {fileID: 425058602950157312}
   m_Layer: 0
   m_Name: Cube (7)
   m_TagString: Untagged
@@ -710,6 +725,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &425058602950157312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591617927243252296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &1400112381945580126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1107,7 @@ GameObject:
   - component: {fileID: 6539734711973972632}
   - component: {fileID: 6983839827384993867}
   - component: {fileID: 8928354339645547481}
+  - component: {fileID: 8584698109560257458}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1741,6 +1770,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &8584698109560257458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566304986497668519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5
 --- !u!1 &1696365058191414749
 GameObject:
   m_ObjectHideFlags: 0
@@ -2910,6 +2952,7 @@ GameObject:
   - component: {fileID: 2069716698073227937}
   - component: {fileID: 8751762710037991025}
   - component: {fileID: 3917187785934869897}
+  - component: {fileID: 2109869870459988120}
   m_Layer: 0
   m_Name: Cube (23)
   m_TagString: Untagged
@@ -3251,6 +3294,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &2109869870459988120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091071519591051488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &2124669510464695710
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,6 +3321,7 @@ GameObject:
   - component: {fileID: 8674257287834136401}
   - component: {fileID: 7117870426410320988}
   - component: {fileID: 2475352821621982139}
+  - component: {fileID: 7373172774289367710}
   m_Layer: 0
   m_Name: Cube (38)
   m_TagString: Untagged
@@ -3726,6 +3783,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7373172774289367710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124669510464695710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3
 --- !u!1 &2269262611838782221
 GameObject:
   m_ObjectHideFlags: 0
@@ -4111,6 +4181,7 @@ GameObject:
   - component: {fileID: 2962692859304529157}
   - component: {fileID: 7323068519808673803}
   - component: {fileID: 4078379923638101021}
+  - component: {fileID: 3301490885102775205}
   m_Layer: 0
   m_Name: Prism
   m_TagString: Untagged
@@ -4416,6 +4487,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &3301490885102775205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403191469364423733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5
 --- !u!1 &2424965999809011663
 GameObject:
   m_ObjectHideFlags: 0
@@ -4785,6 +4869,7 @@ GameObject:
   - component: {fileID: 6265142300518338705}
   - component: {fileID: 61235300874828595}
   - component: {fileID: 4674953652454828742}
+  - component: {fileID: 5312404994272127112}
   m_Layer: 0
   m_Name: Cube (17)
   m_TagString: Untagged
@@ -5126,6 +5211,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5312404994272127112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746697314960224526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &2757593523538182397
 GameObject:
   m_ObjectHideFlags: 0
@@ -5495,6 +5593,7 @@ GameObject:
   - component: {fileID: 3846219974496538774}
   - component: {fileID: 1653993463659017295}
   - component: {fileID: 1099690013914560291}
+  - component: {fileID: 5905063155504052553}
   m_Layer: 0
   m_Name: Cube (20)
   m_TagString: Untagged
@@ -5836,6 +5935,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5905063155504052553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3142401817106755165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &3258196121190395505
 GameObject:
   m_ObjectHideFlags: 0
@@ -5850,6 +5962,7 @@ GameObject:
   - component: {fileID: 8055529660687778219}
   - component: {fileID: 2812867862038976860}
   - component: {fileID: 7848790003488137859}
+  - component: {fileID: 8309869010999774615}
   m_Layer: 0
   m_Name: Cube (13)
   m_TagString: Untagged
@@ -6191,6 +6304,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &8309869010999774615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3258196121190395505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &3438556372653129066
 GameObject:
   m_ObjectHideFlags: 0
@@ -6205,6 +6331,7 @@ GameObject:
   - component: {fileID: 2557396336557995240}
   - component: {fileID: 4810043981224176335}
   - component: {fileID: 7565883089659840662}
+  - component: {fileID: 1985196220583909183}
   m_Layer: 0
   m_Name: Cube (4)
   m_TagString: Untagged
@@ -6546,6 +6673,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1985196220583909183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3438556372653129066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &3451400915681835875
 GameObject:
   m_ObjectHideFlags: 0
@@ -7270,6 +7410,7 @@ GameObject:
   - component: {fileID: 6795414250698744278}
   - component: {fileID: 6647682659874656914}
   - component: {fileID: 3382598981026511808}
+  - component: {fileID: 481768130756991606}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -7611,6 +7752,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &481768130756991606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4193884913892102978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &4472481565568215426
 GameObject:
   m_ObjectHideFlags: 0
@@ -8335,6 +8489,7 @@ GameObject:
   - component: {fileID: 1999209877709812495}
   - component: {fileID: 5353491889440114945}
   - component: {fileID: 370634672679881189}
+  - component: {fileID: 1400366880057868215}
   m_Layer: 0
   m_Name: Cube (18)
   m_TagString: Untagged
@@ -8676,6 +8831,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1400366880057868215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4575790719299215242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &4606794224674548459
 GameObject:
   m_ObjectHideFlags: 0
@@ -9045,6 +9213,7 @@ GameObject:
   - component: {fileID: 3110307618026139140}
   - component: {fileID: 1292896165884030669}
   - component: {fileID: 101438426834545681}
+  - component: {fileID: 9018235560459860086}
   m_Layer: 0
   m_Name: Cube (12)
   m_TagString: Untagged
@@ -9386,6 +9555,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &9018235560459860086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778937608870157870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &4894417809732636869
 GameObject:
   m_ObjectHideFlags: 0
@@ -11175,6 +11357,7 @@ GameObject:
   - component: {fileID: 6926249736394942102}
   - component: {fileID: 2096429959695416757}
   - component: {fileID: 8355056069772268996}
+  - component: {fileID: 7107781387294816982}
   m_Layer: 0
   m_Name: Prism (1)
   m_TagString: Untagged
@@ -11479,6 +11662,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7107781387294816982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5542758017751672426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5
 --- !u!1 &5699075820795310230
 GameObject:
   m_ObjectHideFlags: 0
@@ -12203,6 +12399,7 @@ GameObject:
   - component: {fileID: 8527315758003515617}
   - component: {fileID: 1806847828579718000}
   - component: {fileID: 2869815343826319674}
+  - component: {fileID: 3108578266649759758}
   m_Layer: 0
   m_Name: Cube (19)
   m_TagString: Untagged
@@ -12544,6 +12741,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &3108578266649759758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6081165639608705727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &6396614017893484877
 GameObject:
   m_ObjectHideFlags: 0
@@ -12558,6 +12768,7 @@ GameObject:
   - component: {fileID: 3948303886023449390}
   - component: {fileID: 756963461831691780}
   - component: {fileID: 7296472101257117850}
+  - component: {fileID: 2747527312150550482}
   m_Layer: 0
   m_Name: Cube (39)
   m_TagString: Untagged
@@ -12899,6 +13110,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &2747527312150550482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6396614017893484877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3
 --- !u!1 &6439538205252320864
 GameObject:
   m_ObjectHideFlags: 0
@@ -12913,6 +13137,7 @@ GameObject:
   - component: {fileID: 9100599718929181256}
   - component: {fileID: 7465469878129259547}
   - component: {fileID: 5131633840959701518}
+  - component: {fileID: 5338179427796285266}
   m_Layer: 0
   m_Name: Cube (22)
   m_TagString: Untagged
@@ -13254,6 +13479,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5338179427796285266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6439538205252320864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &6774256325927387915
 GameObject:
   m_ObjectHideFlags: 0
@@ -13268,6 +13506,7 @@ GameObject:
   - component: {fileID: 4634561041065580681}
   - component: {fileID: 5157872133924540162}
   - component: {fileID: 1822784867872917214}
+  - component: {fileID: 1533838337124933323}
   m_Layer: 0
   m_Name: Cube (5)
   m_TagString: Untagged
@@ -13609,6 +13848,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1533838337124933323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6774256325927387915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &6985914083919906775
 GameObject:
   m_ObjectHideFlags: 0
@@ -14423,6 +14675,7 @@ GameObject:
   - component: {fileID: 4544672186597902312}
   - component: {fileID: 1882508157852407218}
   - component: {fileID: 2552071344960794527}
+  - component: {fileID: 5820523372541217687}
   m_Layer: 0
   m_Name: Cube (9)
   m_TagString: Untagged
@@ -14764,6 +15017,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5820523372541217687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7139985732535842431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7174474342612535287
 GameObject:
   m_ObjectHideFlags: 0
@@ -15459,6 +15725,7 @@ GameObject:
   - component: {fileID: 6236737138038141677}
   - component: {fileID: 4309033769679938999}
   - component: {fileID: 2514441599246934372}
+  - component: {fileID: 7514872396644450520}
   m_Layer: 0
   m_Name: Cube (16)
   m_TagString: Untagged
@@ -15800,6 +16067,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7514872396644450520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7205381442821092893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7271833057459178059
 GameObject:
   m_ObjectHideFlags: 0
@@ -16169,6 +16449,7 @@ GameObject:
   - component: {fileID: 3079839664876661020}
   - component: {fileID: 8296145045845631819}
   - component: {fileID: 1876059676746656066}
+  - component: {fileID: 1013811425963576666}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -16511,6 +16792,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1013811425963576666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7366668639819625977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3
 --- !u!1 &7483223797019379793
 GameObject:
   m_ObjectHideFlags: 0
@@ -16525,6 +16819,7 @@ GameObject:
   - component: {fileID: 2985646067484371919}
   - component: {fileID: 639780942415362289}
   - component: {fileID: 5633496792731141541}
+  - component: {fileID: 7546975223330955160}
   m_Layer: 0
   m_Name: Cube (50)
   m_TagString: Untagged
@@ -16866,6 +17161,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7546975223330955160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7483223797019379793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5
 --- !u!1 &7544625158331156655
 GameObject:
   m_ObjectHideFlags: 0
@@ -17688,6 +17996,7 @@ GameObject:
   - component: {fileID: 2033884936566052889}
   - component: {fileID: 2694512128167664441}
   - component: {fileID: 8141740363747345135}
+  - component: {fileID: 7249837098589277203}
   m_Layer: 0
   m_Name: Cube (21)
   m_TagString: Untagged
@@ -18029,6 +18338,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7249837098589277203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8501163729703236962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &8590993196329353836
 GameObject:
   m_ObjectHideFlags: 0
@@ -18043,6 +18365,7 @@ GameObject:
   - component: {fileID: 7144488177994026271}
   - component: {fileID: 891717852871791981}
   - component: {fileID: 8442785555065655348}
+  - component: {fileID: 795098931245659650}
   m_Layer: 0
   m_Name: Cube (6)
   m_TagString: Untagged
@@ -18384,6 +18707,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &795098931245659650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8590993196329353836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &9220233499809758989
 GameObject:
   m_ObjectHideFlags: 0
@@ -18398,6 +18734,7 @@ GameObject:
   - component: {fileID: 2123064363751253690}
   - component: {fileID: 3401635084063011596}
   - component: {fileID: 3590612552073285985}
+  - component: {fileID: 1052419553763342005}
   m_Layer: 0
   m_Name: Cube (10)
   m_TagString: Untagged
@@ -18739,6 +19076,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1052419553763342005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9220233499809758989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1001 &60665648486894025
 PrefabInstance:
   m_ObjectHideFlags: 0

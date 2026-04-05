@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7307984086910426894}
   - component: {fileID: 1403658932010410843}
   - component: {fileID: 2376107578460697342}
+  - component: {fileID: 6072473256013826980}
   m_Layer: 0
   m_Name: Cube (19)
   m_TagString: Untagged
@@ -355,6 +356,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &6072473256013826980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101394744999020893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &1763075132852981152
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +383,7 @@ GameObject:
   - component: {fileID: 4149270704511716670}
   - component: {fileID: 3700926193295871974}
   - component: {fileID: 2526232277360783741}
+  - component: {fileID: 5159957788505274297}
   m_Layer: 0
   m_Name: Cube (18)
   m_TagString: Untagged
@@ -710,6 +725,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5159957788505274297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763075132852981152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &2534153212376406811
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,6 +1121,7 @@ GameObject:
   - component: {fileID: 2202048754784836631}
   - component: {fileID: 6100373943703970361}
   - component: {fileID: 3500164674446609691}
+  - component: {fileID: 4664468882599594081}
   m_Layer: 0
   m_Name: Cube (17)
   m_TagString: Untagged
@@ -1434,6 +1463,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &4664468882599594081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2854819024478877525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &3803478695082606011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,6 +1522,7 @@ GameObject:
   - component: {fileID: 4855046446195378267}
   - component: {fileID: 527094107979779027}
   - component: {fileID: 3047074114641664385}
+  - component: {fileID: 8537971344709137042}
   m_Layer: 0
   m_Name: DoorMovable
   m_TagString: Untagged
@@ -1822,6 +1865,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &8537971344709137042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4745308606298030956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &5294914046626792082
 GameObject:
   m_ObjectHideFlags: 0
@@ -2574,6 +2630,7 @@ GameObject:
   - component: {fileID: 3473344172519780084}
   - component: {fileID: 4144794236206175351}
   - component: {fileID: 8852574765361998137}
+  - component: {fileID: 6749553243838995823}
   m_Layer: 0
   m_Name: Cube (16)
   m_TagString: Untagged
@@ -2915,6 +2972,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &6749553243838995823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6437302933253967706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &6645155535487091975
 GameObject:
   m_ObjectHideFlags: 0
@@ -2927,6 +2997,7 @@ GameObject:
   - component: {fileID: 2979551606216020919}
   - component: {fileID: 8744766800499593811}
   - component: {fileID: 2423128011144609662}
+  - component: {fileID: 2682529571705425321}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -3026,6 +3097,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2682529571705425321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6645155535487091975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7320548035511045976
 GameObject:
   m_ObjectHideFlags: 0
@@ -3035,6 +3119,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5817117577350551034}
+  - component: {fileID: 5206355863634286849}
   m_Layer: 0
   m_Name: UndergroundEnteracne
   m_TagString: Untagged
@@ -3065,6 +3150,19 @@ Transform:
   - {fileID: 2935377828705861158}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5206355863634286849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7320548035511045976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7320635828550285211
 GameObject:
   m_ObjectHideFlags: 0
@@ -3516,7 +3614,6 @@ MonoBehaviour:
   animator: {fileID: 1557888838950809264}
   isOpenBoolName: isOpen
   tryLockedTriggerName: tryLocked
-  audioSource: {fileID: 1381834569105014531}
   openSound: {fileID: 8300000, guid: 741a141641da46c41868045d82d27236, type: 3}
   closeSound: {fileID: 8300000, guid: 16eebe95c1b716742944060137179bf5, type: 3}
   lockedSound: {fileID: 8300000, guid: a2231f26f495d6c4d8c97e709b88e1bf, type: 3}
@@ -4002,6 +4099,7 @@ GameObject:
   - component: {fileID: 5845188210683442002}
   - component: {fileID: 1543011099007236164}
   - component: {fileID: 4800719242617556674}
+  - component: {fileID: 240669469749097168}
   m_Layer: 0
   m_Name: Underground entrance
   m_TagString: Untagged
@@ -4356,6 +4454,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
   type: 6
+--- !u!114 &240669469749097168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8726994166651833294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 0
 --- !u!1 &8805175759844459448
 GameObject:
   m_ObjectHideFlags: 0

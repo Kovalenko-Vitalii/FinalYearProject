@@ -18,7 +18,7 @@ MonoBehaviour:
     happening
   steps:
   - type: 3
-    description: Locate house
+    description: Look houses
     targetId: 864568
     amount: 1
     requiredTag: 0

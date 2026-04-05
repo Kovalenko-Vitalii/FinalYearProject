@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5555019331968513144}
   - component: {fileID: 3346169439188243994}
   - component: {fileID: 4274260515103965356}
+  - component: {fileID: 750004603468482517}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -89,6 +90,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &750004603468482517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542533887836131734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &3111287512325530731
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,6 +114,7 @@ GameObject:
   - component: {fileID: 1284464217126962436}
   - component: {fileID: 3133144714608813436}
   - component: {fileID: 2005696654781491616}
+  - component: {fileID: 4908533141606390565}
   m_Layer: 0
   m_Name: Cylinder.004
   m_TagString: Untagged
@@ -178,6 +193,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4908533141606390565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111287512325530731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &3541328215641912967
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,6 +217,7 @@ GameObject:
   - component: {fileID: 7227888623720052525}
   - component: {fileID: 2255371183991176708}
   - component: {fileID: 7124505480463176277}
+  - component: {fileID: 4432092448514116286}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -267,6 +296,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4432092448514116286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3541328215641912967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &4711777360645590205
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,6 +320,7 @@ GameObject:
   - component: {fileID: 4240961149513846982}
   - component: {fileID: 8861733238384541547}
   - component: {fileID: 2685370951275559337}
+  - component: {fileID: 5417590767546370950}
   m_Layer: 0
   m_Name: Cylinder.002
   m_TagString: Untagged
@@ -356,6 +399,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5417590767546370950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711777360645590205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7024794721651125832
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3845086237740072168}
   - component: {fileID: 3090890662088919060}
+  - component: {fileID: 1118125884916111415}
   m_Layer: 0
   m_Name: lep stolb
   m_TagString: Untagged
@@ -413,3 +470,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.4525447, y: 5.1768904, z: 1}
   m_Center: {x: -1.2263062, y: 2.595964, z: -0.00002686134}
+--- !u!114 &1118125884916111415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7024794721651125832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6

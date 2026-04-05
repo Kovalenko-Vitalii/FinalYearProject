@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 893496763305412604}
   - component: {fileID: 6971565958798350881}
   - component: {fileID: 5227976278644840051}
+  - component: {fileID: -759014310879916081}
   m_Layer: 0
   m_Name: Wall connector
   m_TagString: Untagged
@@ -111,3 +112,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.006684858, y: 0.007373541, z: 0.006684858}
   m_Center: {x: -6.492898e-10, y: -3.9844847e-10, z: 0.003342427}
+--- !u!114 &-759014310879916081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5951321015849534815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3

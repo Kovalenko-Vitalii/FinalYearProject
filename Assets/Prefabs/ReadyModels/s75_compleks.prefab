@@ -190,6 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 597067513095317567}
   - component: {fileID: 1658998701436025021}
+  - component: {fileID: 2555318431244335078}
   m_Layer: 0
   m_Name: s75_compleks
   m_TagString: Untagged
@@ -256,6 +257,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 11.503082, y: 4.688404, z: 3.0729675}
   m_Center: {x: 5.251541, y: 1.844202, z: -0.02961731}
+--- !u!114 &2555318431244335078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661963979797724804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5
 --- !u!1 &1011005891555850371
 GameObject:
   m_ObjectHideFlags: 0

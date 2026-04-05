@@ -1079,6 +1079,7 @@ GameObject:
   - component: {fileID: 6225001551228953525}
   - component: {fileID: 4666533338038133250}
   - component: {fileID: 8196679322937355692}
+  - component: {fileID: 2727489928712019520}
   m_Layer: 0
   m_Name: Fence
   m_TagString: Untagged
@@ -1423,3 +1424,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &2727489928712019520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8926684330043637984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6

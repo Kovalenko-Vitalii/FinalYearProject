@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 1147585866971650578}
   - component: {fileID: 2490746998285937980}
   - component: {fileID: 2427742889322224866}
+  - component: {fileID: 1632003031326201210}
   m_Layer: 0
   m_Name: Window (1)
   m_TagString: Untagged
@@ -710,6 +711,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1632003031326201210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080849969672550773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3
 --- !u!1 &4415424328350532151
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,6 +738,7 @@ GameObject:
   - component: {fileID: 7477027849436997611}
   - component: {fileID: 4659262485890944409}
   - component: {fileID: 8993900279078789423}
+  - component: {fileID: 7583303159052462821}
   m_Layer: 0
   m_Name: Window (4)
   m_TagString: Untagged
@@ -1065,6 +1080,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7583303159052462821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4415424328350532151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &5822550692100489504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1107,7 @@ GameObject:
   - component: {fileID: 5424798375748648321}
   - component: {fileID: 218745643087080170}
   - component: {fileID: 7045185729163432988}
+  - component: {fileID: 7340816935992197143}
   m_Layer: 0
   m_Name: Window
   m_TagString: Untagged
@@ -1426,6 +1455,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7340816935992197143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5822550692100489504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7175392677382608556
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,6 +1482,7 @@ GameObject:
   - component: {fileID: 787436122205143900}
   - component: {fileID: 7994660003678098828}
   - component: {fileID: 1862478212732543570}
+  - component: {fileID: 5895073180508480845}
   m_Layer: 0
   m_Name: Window (2)
   m_TagString: Untagged
@@ -1781,6 +1824,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5895073180508480845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7175392677382608556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &7712208049833229991
 GameObject:
   m_ObjectHideFlags: 0
@@ -1795,6 +1851,7 @@ GameObject:
   - component: {fileID: 4648536894895000187}
   - component: {fileID: 360869072875002556}
   - component: {fileID: 6376654694924828425}
+  - component: {fileID: 1206690538724638878}
   m_Layer: 0
   m_Name: Window (5)
   m_TagString: Untagged
@@ -2136,6 +2193,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1206690538724638878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7712208049833229991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6
 --- !u!1 &8712391535352835347
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,6 +2220,7 @@ GameObject:
   - component: {fileID: 8932248485329273715}
   - component: {fileID: 8782468045770281115}
   - component: {fileID: 3271897405221585176}
+  - component: {fileID: 7584442174341181823}
   m_Layer: 0
   m_Name: Window (3)
   m_TagString: Untagged
@@ -2491,3 +2562,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7584442174341181823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8712391535352835347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 6

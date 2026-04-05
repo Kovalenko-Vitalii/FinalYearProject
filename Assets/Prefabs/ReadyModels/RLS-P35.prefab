@@ -1888,6 +1888,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6641094872792783491}
   - component: {fileID: 8539501725739286075}
+  - component: {fileID: 5425706475720420352}
   m_Layer: 0
   m_Name: RLS-P35
   m_TagString: Untagged
@@ -1959,6 +1960,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.052124, y: 3.9796867, z: 6.285095}
   m_Center: {x: 0.0138549805, y: 2.2461166, z: 0.19515991}
+--- !u!114 &5425706475720420352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6880559018391735380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 5
 --- !u!1 &6982176074436682893
 GameObject:
   m_ObjectHideFlags: 0

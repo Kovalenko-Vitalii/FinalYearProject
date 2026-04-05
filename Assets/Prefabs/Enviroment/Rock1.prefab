@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1455011666274537545}
   - component: {fileID: 7683560629956597570}
   - component: {fileID: 1980036816435793472}
+  - component: {fileID: 3319528990838812510}
   m_Layer: 0
   m_Name: Rock1
   m_TagString: Untagged
@@ -1514,3 +1515,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &3319528990838812510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2239691082829337903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 3
