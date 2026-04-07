@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static ItemData;
 
 public class InventoryManager : MonoBehaviour, ISaveable
 {
@@ -26,6 +27,8 @@ public class InventoryManager : MonoBehaviour, ISaveable
     public event Action OnEquipmentChanged;
     public event Action<EquipmentSlotId, InventoryItem, InventoryItem> OnEquipmentSlotChanged;
     public event Action<EquipmentSlotId?> OnActiveHeldSlotChanged;
+
+    public event Action OwnedItemsChanged;
 
     private void Awake()
     {
@@ -56,12 +59,17 @@ public class InventoryManager : MonoBehaviour, ISaveable
 
     private void SubscribeToEvents()
     {
-        playerInventory.OnChanged += () => OnPlayerInventoryChanged?.Invoke();
+        playerInventory.OnChanged += () =>
+        {
+            OnPlayerInventoryChanged?.Invoke();
+            OwnedItemsChanged?.Invoke();
+        };
 
         playerEquippedItems.OnSlotChanged += (slot, oldItem, newItem) =>
         {
             OnEquipmentChanged?.Invoke();
             OnEquipmentSlotChanged?.Invoke(slot, oldItem, newItem);
+            OwnedItemsChanged?.Invoke();
         };
     }
 
@@ -302,6 +310,63 @@ public class InventoryManager : MonoBehaviour, ISaveable
             return ActiveHeldSlot.Value;
 
         return equippable.AllowedSlots[0];
+    }
+
+    // =========================
+    // For Quests
+    // =========================
+
+    public int GetOwnedAmountByItemId(string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(itemId))
+            return 0;
+
+        int total = 0;
+
+        foreach (var item in EnumerateOwnedItems())
+        {
+            if (item.data.id == itemId)
+                total += item.amount;
+        }
+
+        return total;
+    }
+
+    public int GetOwnedAmountByTag(ItemTag tag)
+    {
+        if (tag == ItemTag.None)
+            return 0;
+
+        int total = 0;
+
+        foreach (var item in EnumerateOwnedItems())
+        {
+            if ((item.data.Tags & tag) != 0)
+                total += item.amount;
+        }
+
+        return total;
+    }
+
+    private IEnumerable<InventoryItem> EnumerateOwnedItems()
+    {
+        if (playerInventory != null)
+        {
+            foreach (var item in playerInventory.items)
+            {
+                if (item?.data != null && item.amount > 0)
+                    yield return item;
+            }
+        }
+
+        if (playerEquippedItems != null)
+        {
+            foreach (var item in playerEquippedItems.Slots.Values)
+            {
+                if (item?.data != null && item.amount > 0)
+                    yield return item;
+            }
+        }
     }
 
     // =========================

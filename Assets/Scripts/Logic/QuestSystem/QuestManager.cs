@@ -16,8 +16,8 @@ public class QuestManager : MonoBehaviour, ISaveable
     private QuestData active; // Active quest
     public QuestData ActiveQuest => active;
 
-    public event System.Action<QuestData> ActiveQuestChanged;
-    public event System.Action<QuestData> QuestProgressChanged;
+    public event Action<QuestData> ActiveQuestChanged;
+    public event Action<QuestData> QuestProgressChanged;
 
     public string SaveId => "QUEST_MANAGER";
 
@@ -68,15 +68,21 @@ public class QuestManager : MonoBehaviour, ISaveable
             return;
         }
 
-        if (!IsQuestCompleted(questId))
+        if (IsQuestCompleted(questId))
         {
-            SetActiveQuest(def);
-            EnsureState(def);
-            GameLog.Log(TAG, $"Active quest: {active.title}");
+            GameLog.Log(TAG, $"Attempted to add quest that's already completed: {def.title}");
+            return;
         }
-        else 
-            GameLog.Log(TAG, $"Attempted to add quest thats already completed!: {active.title}"); 
-       
+
+        SetActiveQuest(def);
+
+        var state = EnsureState(def);
+
+        SyncPickupStepsFromInventory(def, state);
+
+        GameLog.Log(TAG, $"Active quest: {active.title}");
+
+        TryFinishActiveQuest();
     }
 
     // Checking if quest completed
@@ -149,25 +155,7 @@ public class QuestManager : MonoBehaviour, ISaveable
         if (!changed) return; // If not changed we return
         QuestProgressChanged?.Invoke(active);
 
-        // Checking if all steps are complete
-        if (IsAllStepsComplete(active, state))
-        {
-            state.completed = true; // Setting state as complete
-            GameLog.Log(TAG, $"Quest completed: {active.title}");
-
-            PlayQuestCompleteLines(active); // Playing lines
-
-            if (active.nextQuest != null) // Activating new quest if specified
-            {
-                SetActiveQuest(active.nextQuest);
-                EnsureState(active);
-                GameLog.Log(TAG, $"Next quest: {active.title}");
-            }
-            else
-            {
-                active = null;
-            }
-        }
+        TryFinishActiveQuest();
     }
 
     // This should be moved to other separated module I think
@@ -250,6 +238,73 @@ public class QuestManager : MonoBehaviour, ISaveable
         }
     }
 
+    private void SyncPickupStepsFromInventory(QuestData quest, QuestState state)
+    {
+        if (quest == null || state == null)
+            return;
+
+        if (InventoryManager.Instance == null)
+            return;
+
+        bool changed = false;
+
+        for (int i = 0; i < quest.steps.Count; i++)
+        {
+            var step = quest.steps[i];
+
+            if (step.type != StepType.PickupItem)
+                continue;
+
+            int ownedAmount = 0;
+
+            if (!string.IsNullOrWhiteSpace(step.targetId))
+            {
+                ownedAmount = InventoryManager.Instance.GetOwnedAmountByItemId(step.targetId);
+            }
+            else if (step.requiredTag != ItemTag.None)
+            {
+                ownedAmount = InventoryManager.Instance.GetOwnedAmountByTag(step.requiredTag);
+            }
+
+            int next = Mathf.Min(ownedAmount, step.amount);
+
+            if (next > state.stepProgress[i])
+            {
+                state.stepProgress[i] = next;
+                changed = true;
+            }
+        }
+
+        if (changed)
+            QuestProgressChanged?.Invoke(quest);
+    }
+    private void TryFinishActiveQuest()
+    {
+        while (active != null)
+        {
+            var state = EnsureState(active);
+
+            if (!IsAllStepsComplete(active, state))
+                return;
+
+            state.completed = true;
+            GameLog.Log(TAG, $"Quest completed: {active.title}");
+
+            PlayQuestCompleteLines(active);
+
+            if (active.nextQuest != null)
+            {
+                SetActiveQuest(active.nextQuest);
+                var nextState = EnsureState(active);
+                SyncPickupStepsFromInventory(active, nextState);
+                GameLog.Log(TAG, $"Next quest: {active.title}");
+            }
+            else
+            {
+                SetActiveQuest(null);
+            }
+        }
+    }
     // ===================== SAVE / LOAD =====================
 
     public object CaptureState()
@@ -275,7 +330,6 @@ public class QuestManager : MonoBehaviour, ISaveable
     {
         if (state is not QuestManagerState s) return;
 
-        // defs должны быть готовы (Awake уже сделал BuildDatabase)
         states.Clear();
 
         if (s.states != null)
@@ -284,7 +338,6 @@ public class QuestManager : MonoBehaviour, ISaveable
             {
                 if (qs == null || string.IsNullOrEmpty(qs.questId)) continue;
 
-                // если квеста больше нет в defs — можно пропустить (или оставить, но смысла мало)
                 if (!defs.ContainsKey(qs.questId))
                     continue;
 
@@ -295,7 +348,6 @@ public class QuestManager : MonoBehaviour, ISaveable
                     stepProgress = qs.stepProgress != null ? new List<int>(qs.stepProgress) : new List<int>()
                 };
 
-                // синхронизация длины прогресса под актуальные steps
                 var def = defs[qs.questId];
                 while (states[qs.questId].stepProgress.Count < def.steps.Count)
                     states[qs.questId].stepProgress.Add(0);
@@ -304,16 +356,18 @@ public class QuestManager : MonoBehaviour, ISaveable
             }
         }
 
-        // восстановить активный квест
         QuestData newActive = null;
         if (!string.IsNullOrEmpty(s.activeQuestId))
             defs.TryGetValue(s.activeQuestId, out newActive);
 
         SetActiveQuest(newActive);
 
-        // на всякий случай обеспечить состояние активного
         if (active != null)
-            EnsureState(active);
+        {
+            var activeState = EnsureState(active);
+            SyncPickupStepsFromInventory(active, activeState);
+            TryFinishActiveQuest();
+        }
     }
 }
 
