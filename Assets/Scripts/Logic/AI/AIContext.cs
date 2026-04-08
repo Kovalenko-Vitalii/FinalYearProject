@@ -12,6 +12,9 @@ public class AIContext : MonoBehaviour
     [field: SerializeField] public AILootDrop LootDrop { get; private set; }
     [field: SerializeField] public AINavPointProvider NavPointProvider { get; private set; }
     [field: SerializeField] public AIAudio Audio { get; private set; }
+    [field: SerializeField] public AIMonsterMemory MonsterMemory { get; private set; }
+    [field: SerializeField] public AIVisionSensor Vision { get; private set; }
+    [field: SerializeField] public AIHearingReceiver Hearing { get; private set; }
 
     private void Reset()
     {
@@ -23,5 +26,8 @@ public class AIContext : MonoBehaviour
         NavPointProvider = GetComponent<AINavPointProvider>();
         Audio = GetComponent<AIAudio>();
         Mover = GetComponent<AIMover>();
+        MonsterMemory = GetComponent<AIMonsterMemory>();
+        Vision = GetComponent<AIVisionSensor>();
+        Hearing = GetComponent<AIHearingReceiver>();
     }
 }

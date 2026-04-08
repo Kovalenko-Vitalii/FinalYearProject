@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class AgentBrain : MonoBehaviour, IDamageable, IPlayerTick
 {
-    [field: SerializeField] public AIConfig Config { get; protected set; }
+    [field: SerializeField] public PassiveCreatureConfig Config { get; protected set; }
     [field: SerializeField] public AIContext Context { get; protected set; }
 
     // Values for animator

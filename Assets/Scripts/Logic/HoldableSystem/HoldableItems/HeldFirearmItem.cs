@@ -216,6 +216,8 @@ public class HeldFirearmItem : PlayerHeldItem
     {
         if (clip != null)
             SoundManager.Instance.PlayWorldOneShot(clip, transform.position);
+
+        AIHearingReceiver.BroadcastNoise(transform.position);
     }
     
     // === Reload Logic ===

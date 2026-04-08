@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/AI Configs/PassiveAnimalConfig")]
-public class AIConfig : ScriptableObject
+[CreateAssetMenu(menuName = "AI/AI Configs/PassiveCreatureConfig")]
+public class PassiveCreatureConfig : ScriptableObject
 {
     public string creatureId;
 

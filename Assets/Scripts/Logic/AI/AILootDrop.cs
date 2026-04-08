@@ -8,7 +8,7 @@ public class AILootDrop : MonoBehaviour
 
     private bool alreadyDropped;
 
-    public void Drop(AIConfig config)
+    public void Drop(PassiveCreatureConfig config)
     {
         if (alreadyDropped)
             return;
