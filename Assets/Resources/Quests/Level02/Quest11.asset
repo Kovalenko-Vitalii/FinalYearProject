@@ -13,25 +13,14 @@ MonoBehaviour:
   m_Name: Quest11
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 011
-  title: Get Instruments
-  description: "Oh my god, that is a real murderer! \nI need to leave that place
-    as soon as possible,\nI`ll find all instruments to dig that tunnel"
+  title: Find Leonid
+  description: There was a note in the house, maybe that will help
   steps:
   - type: 3
-    description: Locate shack
-    targetId: 465854
+    description: Find Leoind
+    targetId: 7587456
     amount: 1
     requiredTag: 0
-  - type: 2
-    description: Find Pickaxe
-    targetId: 7845
-    amount: 1
-    requiredTag: 0
-  - type: 2
-    description: Find Axe
-    targetId: 67
-    amount: 1
-    requiredTag: 0
-  nextQuest: {fileID: 11400000, guid: 007664a400892bb47b27b2d10f3bc681, type: 2}
+  nextQuest: {fileID: 11400000, guid: edee0bbca91f74d489a40dd9c826e2d7, type: 2}
   onCompleteLines:
   - {fileID: 0}

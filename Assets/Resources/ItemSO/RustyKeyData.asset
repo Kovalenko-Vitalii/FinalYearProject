@@ -17,7 +17,10 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: d3a8a161e6bd674478c3454161aadf03, type: 3}
   maxStack: 1
   weight: 0.01
-  description: Some old key covered in rust, must unlock someones shelter
+  description: 'Some old key covered in rust, must unlock shack with supplies and
+    instruments
+
+'
   onClickSound: {fileID: 0}
   onPickupSound: {fileID: 8300000, guid: 86ce01f81cfacae49b3ab6da883bb978, type: 3}
   onDropSound: {fileID: 0}

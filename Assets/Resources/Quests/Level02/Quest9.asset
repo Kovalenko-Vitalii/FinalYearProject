@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Quest9
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 009
-  title: Where I am
-  description: Investigate the island, try to find some information about what is
-    happening
+  title: Where am I
+  description: 'I need to find some information about where am I
+
+'
   steps:
   - type: 3
-    description: Look houses
-    targetId: 864568
+    description: Investigate area
+    targetId: 34566846
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 3b3240c681d11704799e2652c724ee32, type: 2}
-  onCompleteLines:
-  - {fileID: 0}
+  onCompleteLines: []

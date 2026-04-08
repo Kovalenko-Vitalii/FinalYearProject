@@ -13,14 +13,25 @@ MonoBehaviour:
   m_Name: Quest12
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 012
-  title: Dig the tunnel
-  description: Now I need to go back to that basement and finish Leonid`s work
+  title: Get Instruments
+  description: "Oh my god, that is a real murderer! \nI need to leave that place
+    as soon as possible,\nI`ll find all instruments to dig that tunnel"
   steps:
   - type: 3
-    description: Escape the area
-    targetId: 4762458546
+    description: Locate shack
+    targetId: 465854
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 0}
+  - type: 2
+    description: Find Pickaxe
+    targetId: 7845
+    amount: 1
+    requiredTag: 0
+  - type: 2
+    description: Find Axe
+    targetId: 67
+    amount: 1
+    requiredTag: 0
+  nextQuest: {fileID: 11400000, guid: 007664a400892bb47b27b2d10f3bc681, type: 2}
   onCompleteLines:
   - {fileID: 0}

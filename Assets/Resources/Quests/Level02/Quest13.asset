@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Quest13
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 013
-  title: Follow the road
+  title: Dig the tunnel
   description: Now I need to go back to that basement and finish Leonid`s work
   steps:
   - type: 3
