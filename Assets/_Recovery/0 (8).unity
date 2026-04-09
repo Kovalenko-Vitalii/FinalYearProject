@@ -274,7 +274,7 @@ PrefabInstance:
     - target: {fileID: 8052751812266930398, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 1862068516}
+      objectReference: {fileID: 0}
     - target: {fileID: 8052751812266930398, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: RefreshBodyPartButtons
@@ -310,17 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05c0f60458781d49b8c2df7ea17ac6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIStateController
---- !u!114 &10111944 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8358018717834431150, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
-  m_PrefabInstance: {fileID: 10111942}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1792da5fa74e51b41b80d2c4522888ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SubtitleView
 --- !u!1 &219747584
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2b668fb412894468ec642332f354dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsTicker
+  move: {fileID: 0}
 --- !u!1 &319002775
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,8 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e7c26de14246e4e91b9c5f07cd9137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubtitleService
-  view: {fileID: 10111944}
-  audioSource: {fileID: 1585495644}
+  view: {fileID: 0}
 --- !u!1 &689708116
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,17 +576,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 352845219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &733983974 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 732825452298712235, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
-  m_PrefabInstance: {fileID: 10111942}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bb5c229fcbb03c40a1ffe477487f799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FPSUIManager
 --- !u!1 &1025221073
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,17 +828,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1862068516 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6534118524575449431, guid: e3a14904a3e03ab4d81648035ea12c48, type: 3}
-  m_PrefabInstance: {fileID: 10111942}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f6c8d361059a944e98255d7bf437007, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectUIRoot
 --- !u!1 &2074301283
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,15 +1131,18 @@ MonoBehaviour:
   maxCarryWeight: 35
   temperatureResist: 0
   damageResist: 0
+  temperatureSensor: {fileID: 0}
+  comfortableAmbientTemperature: 22
+  bodyTempPerAmbientDegree: 0.08
+  baseTemperatureChangePerSecond: 0.35
+  sprintBodyHeatBonus: 0.25
+  resistForFullProtection: 100
   healthRegenPerSecond: 0
-  healthDegenerationPerSecond: 0
   hungerDrainPerSecond: 0.2
   hydrationDrainPerSecond: 0.3
   energyDrainPerSecond: 1
   staminaRegenPerSecond: 18
-  staminaRegenDelayAfterUse: 0.75
   minStaminaToStartSprint: 10
-  temperatureChangeTowardsNormalPerSecond: 0.1
   dbgSnapshot:
     HealthDegenerationPerSecond: 0
     HasPain: 0
@@ -1181,14 +1151,13 @@ MonoBehaviour:
     MoveSpeedMultiplier: 0
     StaminaDrainMultiplier: 0
     StaminaRegenModifier: 0
-    StaminaCapMultiplier: 0
     CanSprint: 0
     HealthRegenModifier: 0
     HungerRateModifier: 0
     HydrationRateModifier: 0
     TemperatureRateModifier: 0
     EnergyRateModifier: 0
-    BleedDpsBonus: 0
+    InteractionSpeedMultiplier: 0
 --- !u!1 &2097564500714957225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,16 +1278,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050f49d73c3d47543877a3564e13eb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
-  playerInventory:
-    items: []
   playerSlotLimit: 25
-  initialItems:
-  - {fileID: 11400000, guid: 10d17342b827c564988bf2243ec4f5d1, type: 2}
-  - {fileID: 11400000, guid: 3e38685841254354eb3e09abe0a94dee, type: 2}
-  - {fileID: 11400000, guid: 3851d54ed74291c4c9718147476bf1a0, type: 2}
-  - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
-  - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
-  initialAmounts: 0100000001000000010000000100000001000000
+  <playerInventory>k__BackingField:
+    items: []
 --- !u!1 &3461668549182550961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,7 +1585,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   interactKey: 101
   cam: {fileID: 6425647969021044385}
-  ui: {fileID: 733983974}
+  ui: {fileID: 0}
 --- !u!4 &8135241711166380691
 Transform:
   m_ObjectHideFlags: 0

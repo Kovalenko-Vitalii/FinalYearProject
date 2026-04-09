@@ -1024,6 +1024,7 @@ MonoBehaviour:
   corpseLifetime: 10
   aiSpawnConfigs:
   - {fileID: 11400000, guid: f5a05215d25cf744f8658995c9a9b552, type: 2}
+  - {fileID: 11400000, guid: 52628440e87a1e749996033985d197b8, type: 2}
 --- !u!1 &684434084
 GameObject:
   m_ObjectHideFlags: 0

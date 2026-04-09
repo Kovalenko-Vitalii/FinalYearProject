@@ -142,7 +142,7 @@ public class HeldFirearmItem : PlayerHeldItem
 
         nextFireTime = Time.time + firearmData.fireCooldown;
 
-        PlaySound(firearmData.shotSound);
+        PlaySound(firearmData.shotSound, AINoiseRanges.Gunshot);
         PlayMuzzleEffects();
         ApplyRecoil();
         PerformShot();
@@ -158,7 +158,7 @@ public class HeldFirearmItem : PlayerHeldItem
 
         runtimeState.currentAmmoInMag = Mathf.Max(0, runtimeState.currentAmmoInMag - firearmData.ammoPerShot);
     }
-    protected virtual void DryFire() => PlaySound(firearmData.dryShotSound);
+    protected virtual void DryFire() => PlaySound(firearmData.dryShotSound, AINoiseRanges.MinorSound);
     protected virtual void PerformShot()
     {
         if (Owner == null || !Owner.TryGetAimRay(out Ray ray))
@@ -174,8 +174,6 @@ public class HeldFirearmItem : PlayerHeldItem
             if (Owner != null && hit.collider.transform.IsChildOf(Owner.transform))
                 return;
 
-            ImpactEffectUtil.SpawnImpact(hit, ImpactKind.Bullet, impactDatabase);
-
             IDamageable damageable = DamageUtil.FindDamageable(hit.collider);
             if (damageable != null)
             {
@@ -189,6 +187,8 @@ public class HeldFirearmItem : PlayerHeldItem
                 });
             }
             GameLog.Log(TAG, $" Hit {hit.collider.name}");
+
+            ImpactEffectUtil.SpawnImpact(hit, ImpactKind.Bullet, impactDatabase);
         }
     }
     protected virtual void ApplyRecoil()
@@ -212,12 +212,13 @@ public class HeldFirearmItem : PlayerHeldItem
         if (muzzleSmokePrefab != null)
             ParticleManager.Instance.PlayOneShot(muzzleSmokePrefab, muzzlePoint.position, muzzlePoint.rotation);
     }
-    protected virtual void PlaySound(AudioClip clip)
+    protected virtual void PlaySound(AudioClip clip, float radius)
     {
         if (clip != null)
+        {
             SoundManager.Instance.PlayWorldOneShot(clip, transform.position);
-
-        AIHearingReceiver.BroadcastNoise(transform.position);
+            AIHearingReceiver.BroadcastNoise(transform.position, radius);
+        }
     }
     
     // === Reload Logic ===
@@ -276,7 +277,7 @@ public class HeldFirearmItem : PlayerHeldItem
                 yield break;
             }
 
-            PlaySound(firearmData.reloadSound);
+            PlaySound(firearmData.reloadSound, AINoiseRanges.MinorSound);
 
             runtimeState.reloadProgress01 = 0f;
             OnReloadProgressChanged?.Invoke(0f);

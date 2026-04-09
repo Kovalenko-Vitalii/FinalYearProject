@@ -2,9 +2,33 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class AINoiseRanges
+{
+    public const float SneakStep = 2.5f;
+    public const float WalkStep = 5f;
+
+    public const float MinorSound = 3f;
+
+    public const float DoorSound = 8f;
+
+    public const float Gunshot = 80f;
+}
+
+public readonly struct AINoiseEvent
+{
+    public readonly Vector3 Position;
+    public readonly float Radius;
+
+    public AINoiseEvent(Vector3 position, float radius)
+    {
+        Position = position;
+        Radius = radius;
+    }
+}
+
 public class AIHearingReceiver : MonoBehaviour
 {
-    public event Action<Vector3> NoiseHeard;
+    public event Action<AINoiseEvent> NoiseHeard;
 
     private static readonly List<AIHearingReceiver> ActiveReceivers = new();
 
@@ -19,16 +43,18 @@ public class AIHearingReceiver : MonoBehaviour
         ActiveReceivers.Remove(this);
     }
 
-    public void Hear(Vector3 noisePosition)
+    public void Hear(AINoiseEvent noise)
     {
-        NoiseHeard?.Invoke(noisePosition);
+        NoiseHeard?.Invoke(noise);
     }
 
-    public static void BroadcastNoise(Vector3 noisePosition)
+    public static void BroadcastNoise(Vector3 noisePosition, float radius)
     {
+        AINoiseEvent noise = new AINoiseEvent(noisePosition, radius);
+
         for (int i = ActiveReceivers.Count - 1; i >= 0; i--)
         {
-            var receiver = ActiveReceivers[i];
+            AIHearingReceiver receiver = ActiveReceivers[i];
 
             if (receiver == null)
             {
@@ -36,7 +62,7 @@ public class AIHearingReceiver : MonoBehaviour
                 continue;
             }
 
-            receiver.Hear(noisePosition);
+            receiver.Hear(noise);
         }
     }
 }

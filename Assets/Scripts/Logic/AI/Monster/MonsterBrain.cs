@@ -13,7 +13,10 @@ public class MonsterBrain : AgentBrain
     private MonsterInvestigateState investigateState;
     private MonsterSearchState searchState;
     private MonsterChaseState chaseState;
+    private MonsterAttackState attackState;
     private MonsterDeadState deadState;
+
+    public bool attackAnimationPlaying { get; private set; }
 
     protected override void Awake()
     {
@@ -44,6 +47,7 @@ public class MonsterBrain : AgentBrain
         investigateState = new MonsterInvestigateState(this);
         searchState = new MonsterSearchState(this);
         chaseState = new MonsterChaseState(this);
+        attackState = new MonsterAttackState(this);
         deadState = new MonsterDeadState(this);
     }
 
@@ -93,7 +97,7 @@ public class MonsterBrain : AgentBrain
         if (damage.source != null)
             Context.MonsterMemory.RememberSeenTarget(damage.source.transform);
         else
-            Context.MonsterMemory.RememberNoise(damage.hitPoint);
+            Context.MonsterMemory.RememberNoise(damage.hitPoint, MonsterConfig.hearingRadius);
 
         Context.Health.ApplyDamage(damage.amount);
 
@@ -137,23 +141,30 @@ public class MonsterBrain : AgentBrain
         {
             Context.MonsterMemory.RememberSeenTarget(target);
 
-            if (stateMachine.CurrentState != chaseState)
+            if (stateMachine.CurrentState != chaseState &&
+            stateMachine.CurrentState != attackState)
+            {
                 stateMachine.SetState(chaseState);
+            }
         }
     }
 
-    private void OnNoiseHeard(Vector3 noisePosition)
+    private void OnNoiseHeard(AINoiseEvent noise)
     {
         if (Context.Health.IsDead)
             return;
 
-        Vector3 delta = noisePosition - transform.position;
-        delta.y = 0f;
-
-        if (delta.sqrMagnitude > MonsterConfig.hearingRadius * MonsterConfig.hearingRadius)
+        float effectiveRadius = Mathf.Min(MonsterConfig.hearingRadius, noise.Radius);
+        if (effectiveRadius <= 0f)
             return;
 
-        Context.MonsterMemory.RememberNoise(noisePosition);
+        Vector3 delta = noise.Position - transform.position;
+        delta.y = 0f;
+
+        if (delta.sqrMagnitude > effectiveRadius * effectiveRadius)
+            return;
+
+        Context.MonsterMemory.RememberNoise(noise.Position, noise.Radius);
 
         if (stateMachine.CurrentState != chaseState)
             stateMachine.SetState(investigateState);
@@ -188,6 +199,11 @@ public class MonsterBrain : AgentBrain
         if (!Context.Health.IsDead)
             stateMachine.SetState(chaseState);
     }
+    public void GoToAttack()
+    {
+        if (!Context.Health.IsDead)
+            stateMachine.SetState(attackState);
+    }
 
     public void PlayDeathAnimation()
     {
@@ -196,6 +212,53 @@ public class MonsterBrain : AgentBrain
 
         Context.Animator.SetFloat(Animator.StringToHash("Speed"), 0f);
         Context.Animator.SetTrigger(Animator.StringToHash("Die"));
+    }
+
+    public void PlayAttackAnimation()
+    {
+        if (Context.Animator == null)
+            return;
+
+        if (attackAnimationPlaying)
+            return;
+
+        attackAnimationPlaying = true;
+        Context.Animator.SetTrigger(Animator.StringToHash("Attack"));
+    }
+
+    public void OnAttackAnimationFinished()
+    {
+        attackAnimationPlaying = false;
+    }
+
+    private float GetDistanceToTargetSurface(Transform target)
+    {
+        if (target == null)
+            return float.PositiveInfinity;
+
+        Vector3 from = transform.position;
+        Vector3 to = target.position;
+
+        Collider targetCollider = target.GetComponentInChildren<Collider>();
+        if (targetCollider != null)
+            to = targetCollider.ClosestPoint(from);
+
+        from.y = 0f;
+        to.y = 0f;
+
+        return Vector3.Distance(from, to);
+    }
+
+    private Vector3 GetDesiredAttackPosition(Transform target, float desiredDistance)
+    {
+        Vector3 targetPos = target.position;
+        Vector3 away = transform.position - targetPos;
+        away.y = 0f;
+
+        if (away.sqrMagnitude < 0.001f)
+            away = -target.forward;
+
+        return targetPos + away.normalized * desiredDistance;
     }
 
     private sealed class MonsterIdleState : IAIState
@@ -333,11 +396,27 @@ public class MonsterBrain : AgentBrain
         public void Enter()
         {
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.chaseSpeed);
+            brain.Context.Mover.SetStoppingDistance(0.1f);
             repathTimer = 0f;
         }
 
         public void Tick(float dt)
         {
+            Transform target = brain.Context.MonsterMemory.CurrentTarget;
+            if (target == null)
+            {
+                brain.GoToSearch();
+                return;
+            }
+
+            float distance = brain.GetDistanceToTargetSurface(target);
+
+            if (distance <= brain.MonsterConfig.attackRange)
+            {
+                brain.GoToAttack();
+                return;
+            }
+
             if (!brain.Context.MonsterMemory.HasSeenRecently(brain.MonsterConfig.lostSightGraceTime))
             {
                 brain.GoToSearch();
@@ -350,12 +429,66 @@ public class MonsterBrain : AgentBrain
             {
                 repathTimer = brain.MonsterConfig.chaseRepathInterval;
 
-                Vector3 targetPoint = brain.Context.MonsterMemory.CurrentTarget != null
-                    ? brain.Context.MonsterMemory.CurrentTarget.position
-                    : brain.Context.MonsterMemory.LastKnownTargetPosition;
+                Vector3 desiredPos = brain.GetDesiredAttackPosition(
+                    target,
+                    brain.MonsterConfig.attackRange * 0.9f);
 
-                brain.Context.Mover.MoveTo(targetPoint);
+                brain.Context.Mover.MoveTo(desiredPos);
             }
+        }
+
+        public void Exit() { }
+    }
+
+    private sealed class MonsterAttackState : IAIState
+    {
+        private readonly MonsterBrain brain;
+        private float cooldown;
+
+        public MonsterAttackState(MonsterBrain brain) => this.brain = brain;
+
+        public void Enter()
+        {
+            brain.Context.Mover.Stop();
+            cooldown = 0f;
+        }
+
+        public void Tick(float dt)
+        {
+            Transform target = brain.Context.MonsterMemory.CurrentTarget;
+            if (target == null)
+            {
+                brain.GoToSearch();
+                return;
+            }
+
+            float distance = brain.GetDistanceToTargetSurface(target);
+
+            if (distance > brain.MonsterConfig.attackLoseRange)
+            {
+                brain.GoToChase();
+                return;
+            }
+
+            if (distance > brain.MonsterConfig.attackLoseRange * brain.MonsterConfig.attackLoseRange)
+            {
+                brain.GoToChase();
+                return;
+            }
+
+            brain.Context.Mover.Stop();
+            brain.Context.Mover.FaceTowards(target.position);
+
+            cooldown -= dt;
+
+            if (cooldown > 0f)
+                return;
+
+            if (brain.attackAnimationPlaying)
+                return;
+
+            cooldown = brain.MonsterConfig.attackCooldown;
+            brain.PlayAttackAnimation();
         }
 
         public void Exit() { }

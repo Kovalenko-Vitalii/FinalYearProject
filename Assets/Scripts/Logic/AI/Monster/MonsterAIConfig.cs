@@ -21,4 +21,10 @@ public class MonsterAIConfig : PassiveCreatureConfig
     public float searchDuration = 4f;
     public float searchRadius = 5f;
     public float searchRepathInterval = 0.8f;
+
+    [Header("Attack")]
+    public float attackRange = 1.8f;
+    public float attackCooldown = 1.0f;
+    public int attackDamage = 1;
+    public float attackLoseRange = 2.4f;
 }

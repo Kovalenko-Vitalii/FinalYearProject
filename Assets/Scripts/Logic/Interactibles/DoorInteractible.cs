@@ -156,10 +156,30 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     }
 
     // Sound
-    public void PlayOpenSound() { if (openSound) SoundManager.Instance.PlayWorldOneShot(openSound, transform.position); }
-    public void PlayCloseSound() { if (closeSound) SoundManager.Instance.PlayWorldOneShot(closeSound, transform.position); }
-    public void PlayLockedSound() { if (lockedSound) SoundManager.Instance.PlayWorldOneShot(lockedSound, transform.position); }
-    public void PlayUnlockSound() { if (unlockSound) SoundManager.Instance.PlayWorldOneShot(unlockSound, transform.position); }
+    public void PlayOpenSound() {
+        if (openSound) {
+            SoundManager.Instance.PlayWorldOneShot(openSound, transform.position);
+            AIHearingReceiver.BroadcastNoise(transform.position, AINoiseRanges.DoorSound);
+        }
+    }
+    public void PlayCloseSound() {
+        if (closeSound) {
+            SoundManager.Instance.PlayWorldOneShot(closeSound, transform.position);
+            AIHearingReceiver.BroadcastNoise(transform.position, AINoiseRanges.DoorSound);
+        }
+    }
+    public void PlayLockedSound() { 
+        if (lockedSound) { 
+            SoundManager.Instance.PlayWorldOneShot(lockedSound, transform.position); 
+            AIHearingReceiver.BroadcastNoise(transform.position, AINoiseRanges.DoorSound); 
+        }
+    }
+    public void PlayUnlockSound() {
+        if (unlockSound) {
+            SoundManager.Instance.PlayWorldOneShot(unlockSound, transform.position); 
+            AIHearingReceiver.BroadcastNoise(transform.position, AINoiseRanges.DoorSound); 
+        } 
+    }
 }
 
 [Serializable]

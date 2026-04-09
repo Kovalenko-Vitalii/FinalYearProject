@@ -1854,6 +1854,8 @@ GameObject:
   - component: {fileID: 8714859243280714195}
   - component: {fileID: 889990282838795595}
   - component: {fileID: 1555779093958387687}
+  - component: {fileID: 7337944474112301788}
+  - component: {fileID: 3404970859373894451}
   - component: {fileID: 1715693815204670560}
   m_Layer: 0
   m_Name: MonsterMixamoRig
@@ -1920,10 +1922,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 0.98
+  m_Height: 7.3014736
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 3.150734, z: 0}
 --- !u!195 &9017983601458895521
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2093,6 +2095,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dbd4b2cece522b43babc486ebc33286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIHearingReceiver
+--- !u!114 &7337944474112301788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9024693472424470051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a912a5bb124892b40b779ddd7b7fe20b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterDebugGizmos
+  drawAlways: 1
+  drawHearing: 1
+  drawVision: 1
+  drawMemory: 1
+--- !u!114 &3404970859373894451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9024693472424470051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1988f58f821a14da433b2dcbdd5993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceTypeHolder
+  type: 10
 --- !u!82 &1715693815204670560
 AudioSource:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class AIMonsterMemory : MonoBehaviour
 
     public float LastSeenTime { get; private set; } = float.NegativeInfinity;
     public float LastHeardTime { get; private set; } = float.NegativeInfinity;
+    public float LastHeardRadius { get; private set; }
 
     public bool HasSeenTarget => LastSeenTime > float.NegativeInfinity;
     public bool HasHeardNoise => LastHeardTime > float.NegativeInfinity;
@@ -23,10 +24,11 @@ public class AIMonsterMemory : MonoBehaviour
         LastSeenTime = Time.time;
     }
 
-    public void RememberNoise(Vector3 position)
+    public void RememberNoise(Vector3 position, float radius)
     {
         LastHeardPosition = position;
         LastHeardTime = Time.time;
+        LastHeardRadius = radius;
     }
 
     public bool HasSeenRecently(float seconds)
@@ -41,5 +43,6 @@ public class AIMonsterMemory : MonoBehaviour
         LastHeardPosition = Vector3.zero;
         LastSeenTime = float.NegativeInfinity;
         LastHeardTime = float.NegativeInfinity;
+        LastHeardRadius = 0f;
     }
 }
