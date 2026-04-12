@@ -16,7 +16,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     [SerializeField] private float lockedTryDuration = 0.15f;
 
     [Header("Lock")]
-    public bool isLocked { get; private set; }
+    public bool isLocked;
 
     [Header("Animation")]
     [SerializeField] private Animator animator;

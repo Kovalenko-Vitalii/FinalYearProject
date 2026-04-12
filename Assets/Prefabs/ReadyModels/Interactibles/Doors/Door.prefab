@@ -75,9 +75,9 @@ MonoBehaviour:
   id: 
   key: {fileID: 0}
   displayName: Door
-  openHoldDuration: 1
-  closeHoldDuration: 1
-  lockedTryDuration: 1
+  openHoldDuration: 0.5
+  closeHoldDuration: 0.5
+  lockedTryDuration: 0.5
   animator: {fileID: 3393988598353276674}
   isOpenBoolName: isOpen
   tryLockedTriggerName: tryLocked

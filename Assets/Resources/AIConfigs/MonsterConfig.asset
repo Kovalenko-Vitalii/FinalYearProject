@@ -22,7 +22,7 @@ MonoBehaviour:
   fleeDuration: 3
   fleeDistance: 10
   fleeRepathInterval: 0.25
-  dropItem: {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
+  dropItem: {fileID: 11400000, guid: 15eac31047e7a8e47b807eae435ef993, type: 2}
   dropMinAmount: 1
   dropMaxAmount: 1
   dropChance: 1
@@ -41,5 +41,5 @@ MonoBehaviour:
   searchRepathInterval: 0.8
   attackRange: 2.2
   attackCooldown: 2
-  attackDamage: 1
+  attackDamage: 20
   attackLoseRange: 2.4

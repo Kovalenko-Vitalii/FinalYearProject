@@ -12,6 +12,9 @@ public class GameplayOrchestrator : MonoBehaviour
     // Loading screen UI
     [SerializeField] private LoadingOverlay loading;
 
+    // Cinemachine Binder
+    [SerializeField] private CinemachineBinder cinemachineBinder;
+
     // Actions for indicating stages of the game
     public event Action OnEnterMenu;
     public event Action<string> OnLoadingStarted;
@@ -131,9 +134,16 @@ public class GameplayOrchestrator : MonoBehaviour
         State = GameState.Loading; // Set game state to loading
 
         // Enable loading screen, set progress bar at 0 and deactivate PressAnyKey label
-        loading?.Show();
-        loading?.SetProgress(0f);
-        loading?.ShowPressAnyKey(false);
+        if (loading != null)
+        {
+            yield return StartCoroutine(loading.ShowAndWait());
+            loading.SetProgress(0f);
+            loading.ShowPressAnyKey(false);
+        }
+        else
+        {
+            yield return null;
+        }
 
         // Turn off ticking and trigger action
         PlayerTickSystem.Instance.SetEnabled(false);
@@ -145,61 +155,57 @@ public class GameplayOrchestrator : MonoBehaviour
         if (SceneLoader.Instance == null)
         {
             GameLog.Error(TAG, "SceneLoader.Instance is NULL inside LoadLocationRoutine");
+            loading?.Hide();
+            PlayerTickSystem.Instance?.SetEnabled(true);
+            State = GameState.MainMenu;
             yield break;
         }
 
-        var op = SceneLoader.Instance.LoadContentAsync(sceneName, allowSceneActivation: false);
-        GameLog.Log(TAG, $"Scene async load started (allowActivation=false)");
+        SceneLoader.Instance.LoadContentAsync(sceneName, allowSceneActivation: true);
+
+        
 
         float visual = 0f;
 
-        while (op != null && op.progress < 0.9f)
+        while (SceneLoader.Instance.IsBusy)
         {
-            float p = Mathf.Clamp01(op.progress / 0.9f);
-            visual = Mathf.MoveTowards(visual, p, Time.unscaledDeltaTime * 2f);
+            float target = Mathf.Clamp01(SceneLoader.Instance.Progress) * 0.90f;
+            visual = Mathf.MoveTowards(visual, target, Time.unscaledDeltaTime * 2f);
             loading?.SetProgress(visual);
             yield return null;
         }
 
         while (Time.unscaledTime - startTime < minLoadingScreenTime)
         {
-            float speed = 1f / Mathf.Max(0.01f, minLoadingScreenTime);
-            visual = Mathf.MoveTowards(visual, 1f, Time.unscaledDeltaTime * speed);
+            visual = Mathf.MoveTowards(
+                visual,
+                0.90f,
+                Time.unscaledDeltaTime / Mathf.Max(0.01f, minLoadingScreenTime)
+            );
+
             loading?.SetProgress(visual);
             yield return null;
         }
 
-        loading?.SetProgress(1f);
-
-        loading?.ShowPressAnyKey(true);
-        GameLog.Log(TAG, "Scene loaded to 0.9 -> waiting PressAnyKey");
-
-        while (!Input.anyKeyDown)
-            yield return null;
-
-        loading?.ShowPressAnyKey(false);
-        GameLog.Log(TAG, "PressAnyKey received -> activating loaded scene");
-        // =-=-=-=-=-=-=-=-=-=-=-=
-
-        // ??? Wait till the scene loader prepare scene ???
-        SceneLoader.Instance.ActivateLoadedScene();
-        while (SceneLoader.Instance.IsLoading)
-            yield return null;
+        loading?.SetProgress(0.90f);
 
         yield return null;
 
         GameLog.Log(TAG, $"Scene swap finished. CurrentContentScene='{SceneLoader.Instance.CurrentContentScene}' activeScene='{UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}'");
 
-        // 1) player should exist always
         if (PlayerSpawner.Instance == null)
         {
             GameLog.Error(TAG, "PlayerSpawner.Instance is NULL (cannot EnsureSpawned)");
+            loading?.Hide();
+            PlayerTickSystem.Instance?.SetEnabled(true);
+            State = GameState.MainMenu;
             yield break;
         }
-        var player = PlayerSpawner.Instance.EnsureSpawned();
-        GameLog.Log(TAG, $"EnsureSpawned done");
 
-        // 2) if it is not saveLoad than we use spawnpoint registry
+        var player = PlayerSpawner.Instance.EnsureSpawned();
+        loading?.SetProgress(0.94f);
+        GameLog.Log(TAG, "EnsureSpawned done");
+
         if (!_isSaveLoad)
         {
             if (SpawnPointRegistry.Instance == null)
@@ -208,12 +214,13 @@ public class GameplayOrchestrator : MonoBehaviour
             }
             else
             {
-                var spawn = SpawnPointRegistry.Instance.Get(_nextSpawnId) ?? SpawnPointRegistry.Instance.Get(defaultSpawnId);
+                var spawn = SpawnPointRegistry.Instance.Get(_nextSpawnId)
+                         ?? SpawnPointRegistry.Instance.Get(defaultSpawnId);
 
                 if (spawn != null)
                 {
                     PlayerSpawner.Instance.SpawnOrMoveTo(spawn);
-                    GameLog.Log(TAG, $"SpawnOrMoveTo spawnId='{spawn}' (next='{_nextSpawnId}', default='{defaultSpawnId}')");
+                    GameLog.Log(TAG, $"SpawnOrMoveTo spawn='{spawn.name}' (next='{_nextSpawnId}', default='{defaultSpawnId}')");
                 }
                 else
                 {
@@ -226,20 +233,9 @@ public class GameplayOrchestrator : MonoBehaviour
             GameLog.Log(TAG, "isSaveLoad=true -> spawnpoint move skipped (SaveManager will teleport player on OnGameplayReady)");
         }
 
-        // 3) always invoke action
         OnPlayerSpawned?.Invoke(player);
+        loading?.SetProgress(0.96f);
 
-        // Find cimenachineBinder and bind camera to headposition
-        var binder = FindFirstObjectByType<CinemachineBinder>();
-        if (binder == null)
-            GameLog.Warning(TAG, "CinemachineBinder NOT found");
-        else
-        {
-            binder.BindForActivePlayer();
-            GameLog.Log(TAG, "CinemachineBinder binded");
-        }
-
-        // Show GUI, set game state and trigger action
         if (uiState == null)
             GameLog.Warning(TAG, "uiState is NULL (cannot EnterGameplay)");
         else
@@ -249,6 +245,15 @@ public class GameplayOrchestrator : MonoBehaviour
 
         GameLog.Log(TAG, "OnGameplayReady() invoke");
         OnGameplayReady?.Invoke();
+        loading?.SetProgress(0.98f);
+
+        if (cinemachineBinder == null)
+            GameLog.Warning(TAG, "CinemachineBinder NOT found in active scene");
+        else
+        {
+            cinemachineBinder.BindForActivePlayer();
+            GameLog.Log(TAG, "CinemachineBinder binded");
+        }
 
         if (!_isSaveLoad)
         {
@@ -256,13 +261,27 @@ public class GameplayOrchestrator : MonoBehaviour
             OnFreshGameplayStarted?.Invoke();
         }
 
-        // 4) drop flag after spawn
         _isSaveLoad = false;
 
-        // Hide additionaly loading and resume ticking
+        loading?.SetProgress(1f);
+
+        loading?.ShowPressAnyKey(true);
+
+        while (!Input.anyKeyDown)
+            yield return null;
+
+        loading?.ShowPressAnyKey(false);
+
+        PlayerTickSystem.Instance?.SetEnabled(true);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        yield return null;
+
         loading?.Hide();
-        PlayerTickSystem.Instance.SetEnabled(true);
-        GameLog.Log(TAG, "LoadLocationRoutine END -> Gameplay (ticking enabled, loading hidden)");
+
+        GameLog.Log(TAG, "LoadLocationRoutine END -> Gameplay (ready before key press)");
     }
 
     public void MarkNextLoadAsSave()
@@ -296,6 +315,7 @@ public class GameplayOrchestrator : MonoBehaviour
     {
         if (State == GameState.Loading) return;
 
+        _isSaveLoad = true;
         _nextSpawnId = null;
         StartCoroutine(LoadLocationRoutine(sceneName));
     }

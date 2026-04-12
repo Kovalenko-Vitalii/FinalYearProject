@@ -2207,6 +2207,8 @@ MonoBehaviour:
   maxCarryWeight: 35
   temperatureResist: 0
   damageResist: 0
+  damageResistForMaxReduction: 100
+  maxDamageReduction: 0.8
   temperatureSensor: {fileID: 0}
   comfortableAmbientTemperature: 18
   bodyTempPerAmbientDegree: 0.03
@@ -2396,6 +2398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameplayOrchestrator
   loading: {fileID: 1034200913}
+  cinemachineBinder: {fileID: 2111569090}
   uiState: {fileID: 10111943}
   menuScene: MainMenu
   firstLevel: Level01

@@ -226,6 +226,29 @@ public class MonsterBrain : AgentBrain
         Context.Animator.SetTrigger(Animator.StringToHash("Attack"));
     }
 
+    public void OnAttackHit()
+    {
+        Transform target = Context.MonsterMemory.CurrentTarget;
+        if (target == null)
+            return;
+
+        Vector3 delta = target.position - transform.position;
+        delta.y = 0f;
+
+        if (delta.sqrMagnitude > MonsterConfig.attackRange * MonsterConfig.attackRange)
+            return;
+
+        PlayerDamageReceiver receiver = target.GetComponentInParent<PlayerDamageReceiver>();
+        if (receiver == null)
+            return;
+
+        receiver.ReceiveHit(new PlayerHitData(
+            MonsterConfig.attackDamage,
+            gameObject,
+            target.position
+        ));
+    }
+
     public void OnAttackAnimationFinished()
     {
         attackAnimationPlaying = false;

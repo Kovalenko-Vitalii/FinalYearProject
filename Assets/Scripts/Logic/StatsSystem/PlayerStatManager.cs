@@ -36,8 +36,6 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     [SerializeField] private float currentStamina = 100f;
     [SerializeField] private float staminaCap = 100f;
 
-
-
     [Header("Weight settings")]
     [SerializeField] private float baseWeight = 0f;
     [SerializeField] private float currentWeight = 0f;
@@ -46,6 +44,8 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     [Header("Resistances")]
     [SerializeField] private float temperatureResist = 0;
     [SerializeField] private float damageResist = 0;
+    [SerializeField] private float damageResistForMaxReduction = 100f;
+    [SerializeField, Range(0f, 0.95f)] private float maxDamageReduction = 0.8f;
 
     [Header("Temperature Simulation")]
     [SerializeField] private PlayerTemperatureSensor temperatureSensor;
@@ -102,6 +102,8 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     public float EnergyMax => energyCap;
     public float TemperatureMin => minTemperature;
     public float TemperatureMax => maxTemperature;
+
+    public float DamageResist => damageResist;
 
     public float Stamina => currentStamina;
     public float StaminaMax => staminaCap;
@@ -403,14 +405,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         TickNaturalStats(dt, s, isSprinting);
 
         // death detect
-        if (!IsDead && currentHealth <= 0f)
-        {
-            IsDead = true;
-            OnDied?.Invoke();
-
-            if (GameplayOrchestrator.Instance != null)
-                GameplayOrchestrator.Instance.EnterDied();
-        }
+        EvaluateDeath();
 
         CurrentSnapshot = s;
 
@@ -462,6 +457,41 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
         if (!Mathf.Approximately(old, temperature))
             OnTemperatureChanged?.Invoke(temperature);
+    }
+
+    // Dealing with damage
+    public void ApplyIncomingDamage(float rawDamage)
+    {
+        if (IsDead || rawDamage <= 0f)
+            return;
+
+        float finalDamage = CalculateFinalDamage(rawDamage);
+        ChangeHealth(-finalDamage);
+        EvaluateDeath();
+    }
+
+    public float CalculateFinalDamage(float rawDamage)
+    {
+        if (rawDamage <= 0f)
+            return 0f;
+
+        float resist01 = Mathf.Clamp01(
+            damageResist / Mathf.Max(1f, damageResistForMaxReduction));
+
+        float reduction = resist01 * maxDamageReduction;
+        return rawDamage * (1f - reduction);
+    }
+
+    private void EvaluateDeath()
+    {
+        if (IsDead || currentHealth > 0f)
+            return;
+
+        IsDead = true;
+        OnDied?.Invoke();
+
+        if (GameplayOrchestrator.Instance != null)
+            GameplayOrchestrator.Instance.EnterDied();
     }
 
     // For storing and restoring stats

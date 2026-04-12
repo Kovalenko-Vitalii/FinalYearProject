@@ -396,15 +396,6 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        var active = SceneManager.GetActiveScene();
-        CinemachineBinder binder = null;
-        foreach (var root in active.GetRootGameObjects())
-        {
-            binder = root.GetComponentInChildren<CinemachineBinder>(true);
-            if (binder) break;
-        }
-        binder?.BindForActivePlayer();
-
         SaveRegistry.RestoreAll(pendingLoad.worldState);
 
         pendingLoad = null;

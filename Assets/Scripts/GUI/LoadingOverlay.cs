@@ -84,4 +84,33 @@ public class LoadingOverlay : MonoBehaviour
             group.interactable = false;
         }
     }
+
+    public IEnumerator ShowAndWait()
+    {
+        transform.SetAsLastSibling();
+
+        if (progressSlider) progressSlider.value = 0f;
+        ShowPressAnyKey(false);
+
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+
+        if (_fade != null)
+            StopCoroutine(_fade);
+
+        group.blocksRaycasts = true;
+        group.interactable = true;
+
+        float start = group.alpha;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / Mathf.Max(0.001f, fadeTime);
+            group.alpha = Mathf.Lerp(start, 1f, t);
+            yield return null;
+        }
+
+        group.alpha = 1f;
+    }
 }

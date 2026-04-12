@@ -11,6 +11,9 @@ public class SceneLoader : MonoBehaviour
  
     AsyncOperation _activeLoadOp; // Async operation for paralel loading
 
+    private bool _isBusy;
+    public bool IsBusy => _isBusy;
+
     public string CurrentContentScene => _currentContentScene;
 
     public float Progress { get; private set; } = 0f; // Float that indicated loading progress, used mainly for UI
@@ -47,15 +50,16 @@ public class SceneLoader : MonoBehaviour
             }
         }
 
-        if (IsLoading)
+        if (_isBusy)
         {
-            GameLog.Warning(TAG, $"LoadContent ignored: already loading");
+            GameLog.Warning(TAG, $"LoadContent ignored: already busy");
             return null;
         }
         GameLog.Log(TAG, $"LoadContent('{sceneName}') initiated ");
 
         Progress = 0f; // Resetting load progress
-      
+        _isBusy = true;
+
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive); // Adding loading process to async and activate it        
         _activeLoadOp.allowSceneActivation = true;
 
@@ -76,15 +80,16 @@ public class SceneLoader : MonoBehaviour
             }
         }
 
-        if (IsLoading)
+        if (_isBusy)
         {
-            GameLog.Warning(TAG, $"LoadContentAsync ignored: already loading");
+            GameLog.Warning(TAG, $"LoadContentAsync ignored: already busy");
             return _activeLoadOp;
         }
 
         GameLog.Log(TAG, $"AsyncLoadContent('{sceneName}') initiated ");
 
         Progress = 0f;
+        _isBusy = true;
 
         _activeLoadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         _activeLoadOp.allowSceneActivation = allowSceneActivation;
@@ -94,6 +99,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // Trigger scene activation
+    // DEPRECIATED
     public void ActivateLoadedScene()
     {
         if (_activeLoadOp != null)
@@ -119,15 +125,6 @@ public class SceneLoader : MonoBehaviour
 
         GameLog.Log(TAG, $"FinishSwapRoutine BEGIN target='{sceneName}' prev='{_currentContentScene}'");
 
-        // Waiting for loading and updating progress
-        /*
-        while (_activeLoadOp != null && !_activeLoadOp.isDone)
-        {
-            float raw = _activeLoadOp.progress;
-            Progress = Mathf.Clamp01(raw < 0.9f ? raw / 0.9f : 1f);
-            yield return null;
-        }
-        */
         var loadedScene = SceneManager.GetSceneByName(sceneName); // Making this scene active
 
         if (loadedScene.IsValid())
@@ -150,6 +147,7 @@ public class SceneLoader : MonoBehaviour
 
         Progress = 1f;
         _activeLoadOp = null;
+        _isBusy = false;
 
         GameLog.Log(TAG, $"FinishSwapRoutine END currentContent='{_currentContentScene}' activeScene='{SceneManager.GetActiveScene().name}'");
     }
