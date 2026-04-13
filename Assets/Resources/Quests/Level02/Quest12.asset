@@ -27,11 +27,6 @@ MonoBehaviour:
     targetId: 7845
     amount: 1
     requiredTag: 0
-  - type: 2
-    description: Find Axe
-    targetId: 67
-    amount: 1
-    requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 007664a400892bb47b27b2d10f3bc681, type: 2}
   onCompleteLines:
   - {fileID: 0}

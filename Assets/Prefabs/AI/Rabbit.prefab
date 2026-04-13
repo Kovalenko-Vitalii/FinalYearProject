@@ -867,6 +867,9 @@ MonoBehaviour:
   <LootDrop>k__BackingField: {fileID: 4287005705948412854}
   <NavPointProvider>k__BackingField: {fileID: 2531594578950733217}
   <Audio>k__BackingField: {fileID: 513976894305101230}
+  <MonsterMemory>k__BackingField: {fileID: 0}
+  <Vision>k__BackingField: {fileID: 0}
+  <Hearing>k__BackingField: {fileID: 0}
 --- !u!114 &5936481100987040590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -929,16 +932,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RabbitAudio
   audioSource: {fileID: 7285117831498908910}
-  health: {fileID: 1808642609666595852}
-  hurtClip: {fileID: 8300000, guid: 0c045684c0614204a9286a27df1029ad, type: 3}
-  deathClip: {fileID: 8300000, guid: 75aca90df8db2194d96fb4201d9cda45, type: 3}
-  footstepClips:
-  - {fileID: 8300000, guid: 7c858508a42654b41a15ed3b7c93358f, type: 3}
-  - {fileID: 8300000, guid: eb876c9b915861d4f9d9423b96629290, type: 3}
-  - {fileID: 8300000, guid: b3a86be38ee15bf4d96fcdd491397945, type: 3}
-  idleClips:
-  - {fileID: 8300000, guid: 2b17bb8b33ca0a7409a743840b9fb07d, type: 3}
-  pitchRange: {x: 0.95, y: 1.05}
+  sounds:
+  - type: 0
+    clips:
+    - {fileID: 8300000, guid: 0c045684c0614204a9286a27df1029ad, type: 3}
+    pitchRange: {x: 0, y: 0}
+    volumeRange: {x: 0, y: 0}
+    cooldown: 0
+  - type: 1
+    clips:
+    - {fileID: 8300000, guid: 75aca90df8db2194d96fb4201d9cda45, type: 3}
+    pitchRange: {x: 0, y: 0}
+    volumeRange: {x: 0, y: 0}
+    cooldown: 0
+  - type: 2
+    clips:
+    - {fileID: 8300000, guid: ec4bd5988d7de0c41ab2d9959705dd8b, type: 3}
+    - {fileID: 8300000, guid: a45bdfd5056ed1d4d8f667cc2498ca12, type: 3}
+    - {fileID: 8300000, guid: eea9624d96ae191439615ca598fe01fa, type: 3}
+    pitchRange: {x: 0, y: 0}
+    volumeRange: {x: 0, y: 0}
+    cooldown: 0
 --- !u!114 &4287005705948412854
 MonoBehaviour:
   m_ObjectHideFlags: 0

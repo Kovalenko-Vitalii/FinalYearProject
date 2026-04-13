@@ -21,6 +21,6 @@ MonoBehaviour:
     targetId: 0453764358
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: 8b1b75113d58eec449cde3a467d4a308, type: 2}
   onCompleteLines:
   - {fileID: 0}

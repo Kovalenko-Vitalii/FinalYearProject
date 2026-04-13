@@ -18,6 +18,7 @@ public class MonsterBrain : AgentBrain
 
     public bool attackAnimationPlaying { get; private set; }
 
+
     protected override void Awake()
     {
         base.Awake();
@@ -241,7 +242,6 @@ public class MonsterBrain : AgentBrain
         PlayerDamageReceiver receiver = target.GetComponentInParent<PlayerDamageReceiver>();
         if (receiver == null)
             return;
-
         receiver.ReceiveHit(new PlayerHitData(
             MonsterConfig.attackDamage,
             gameObject,
@@ -284,6 +284,9 @@ public class MonsterBrain : AgentBrain
         return targetPos + away.normalized * desiredDistance;
     }
 
+    public void PlayFootstepSound() => Context.Audio?.Play(AISoundType.Footstep);
+    public void PlayIdleSoundSound() => Context.Audio?.Play(AISoundType.ChaseStart);
+
     private sealed class MonsterIdleState : IAIState
     {
         private readonly MonsterBrain brain;
@@ -300,8 +303,8 @@ public class MonsterBrain : AgentBrain
                 brain.MonsterConfig.minIdleTime,
                 brain.MonsterConfig.maxIdleTime);
 
-            if (Random.value < 0.25f)
-                brain.Context.Audio?.PlayIdle();
+            //if (Random.value < 0.25f)
+            brain.Context.Audio?.Play(AISoundType.Idle);
         }
 
         public void Tick(float dt)
@@ -311,6 +314,7 @@ public class MonsterBrain : AgentBrain
             if (timer <= 0f)
                 brain.GoToWander();
         }
+
 
         public void Exit() { }
     }
@@ -324,7 +328,7 @@ public class MonsterBrain : AgentBrain
         public void Enter()
         {
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.walkSpeed);
-
+       
             Vector3 point = brain.Context.NavPointProvider.GetRandomPoint(
                 brain.transform.position,
                 brain.MonsterConfig.wanderRadius);
@@ -350,6 +354,9 @@ public class MonsterBrain : AgentBrain
         public void Enter()
         {
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.walkSpeed);
+
+            brain.Context.Audio?.Play(AISoundType.Investigate);
+
             brain.Context.Mover.MoveTo(brain.Context.MonsterMemory.LastHeardPosition);
         }
 
@@ -374,6 +381,8 @@ public class MonsterBrain : AgentBrain
         public void Enter()
         {
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.walkSpeed);
+
+            brain.Context.Audio?.Play(AISoundType.Alert);
 
             center = brain.Context.MonsterMemory.HasSeenTarget
                 ? brain.Context.MonsterMemory.LastKnownTargetPosition
@@ -421,6 +430,7 @@ public class MonsterBrain : AgentBrain
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.chaseSpeed);
             brain.Context.Mover.SetStoppingDistance(0.1f);
             repathTimer = 0f;
+            brain.Context.Audio?.Play(AISoundType.ChaseStart);
         }
 
         public void Tick(float dt)
@@ -474,6 +484,7 @@ public class MonsterBrain : AgentBrain
         {
             brain.Context.Mover.Stop();
             cooldown = 0f;
+            brain.Context.Audio?.Play(AISoundType.Attack);
         }
 
         public void Tick(float dt)
@@ -528,6 +539,7 @@ public class MonsterBrain : AgentBrain
             brain.Context.Mover.Stop();
             brain.Context.Mover.Disable();
             brain.PlayDeathAnimation();
+            brain.Context.Audio?.Play(AISoundType.Death);
         }
 
         public void Tick(float dt) { }

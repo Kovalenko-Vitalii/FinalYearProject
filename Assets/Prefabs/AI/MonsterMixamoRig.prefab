@@ -2037,12 +2037,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIAudio
   audioSource: {fileID: 1715693815204670560}
-  health: {fileID: 360653008965049004}
-  hurtClip: {fileID: 0}
-  deathClip: {fileID: 0}
-  footstepClips: []
-  idleClips: []
-  pitchRange: {x: 0.95, y: 1.05}
+  sounds:
+  - type: 2
+    clips:
+    - {fileID: 8300000, guid: 3e069d60195c9de4a9f7765557397f30, type: 3}
+    - {fileID: 8300000, guid: 7f3ebf527276b484e8edae7846d33119, type: 3}
+    - {fileID: 8300000, guid: 0c1712eebdb3af2438eb4cd93140acc0, type: 3}
+    - {fileID: 8300000, guid: 05c42e498b8744744ad3fbf2055f3624, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 0.2
+  - type: 1
+    clips:
+    - {fileID: 8300000, guid: 42db932501f380744a7f170b289ca270, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 1
+  - type: 3
+    clips:
+    - {fileID: 8300000, guid: a1c257b41a8f99d47a5debfbac7b4d85, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 1
+  - type: 0
+    clips:
+    - {fileID: 8300000, guid: 69b4974f6bc702945b930272c266f759, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 1
+  - type: 5
+    clips:
+    - {fileID: 8300000, guid: 04b980dc000f04940b31b7448b49839d, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 1
+  - type: 6
+    clips:
+    - {fileID: 8300000, guid: 5d602661373e9fb4b8f4d24caa51ed27, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 1
 --- !u!114 &8912635326126164387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2146,7 +2180,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 248.9751
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -2181,7 +2215,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

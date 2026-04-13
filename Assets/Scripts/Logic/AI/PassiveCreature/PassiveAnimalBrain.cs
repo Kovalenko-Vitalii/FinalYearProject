@@ -48,6 +48,8 @@ public class PassiveAnimalBrain : AgentBrain
     {
         base.TakeDamage(damage);
 
+        Context.Audio?.Play(AISoundType.Hurt);
+
         if (!Context.Health.IsDead)
             GoToFlee();
     }
@@ -63,9 +65,13 @@ public class PassiveAnimalBrain : AgentBrain
         if (Context.Animator == null)
             return;
 
+        Context.Audio?.Play(AISoundType.Death);
+
         Context.Animator.SetFloat(Animator.StringToHash("Speed"), 0f);
         Context.Animator.SetTrigger(Animator.StringToHash("Die"));
     }
+
+    public void PlayFootstepSound() => Context.Audio?.Play(AISoundType.Footstep);
 }
 
 // This class represents passive animal wander state
@@ -107,8 +113,8 @@ public class PassiveIdleState : IAIState
         brain.Context.Mover.SetSpeed(brain.Config.walkSpeed); // next movement will be with walk speed
         timer = Random.Range(brain.Config.minIdleTime, brain.Config.maxIdleTime); // setting random time to wander state from range
 
-        if (Random.value < 0.35f)
-            brain.Context.Audio?.PlayIdle();
+        //if (Random.value < 0.35f)
+        brain.Context.Audio?.Play(AISoundType.Idle);
     }
 
     // Ticking time and switching state if needed
