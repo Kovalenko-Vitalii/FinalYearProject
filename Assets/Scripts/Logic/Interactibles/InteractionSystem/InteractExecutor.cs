@@ -15,7 +15,7 @@ public class InteractExecutor : MonoBehaviour, ISaveable
     [Header("Requirements")]
     [SerializeField] private RequiredItem[] requiredItems;
 
-    [SerializeField] private InteractExecutor dependentOn;
+    [SerializeField] private InteractExecutor[] dependentOn;
 
     [Header("Costs")]
     [Range(0f, 100f)] [SerializeField] private float hungerCost;
@@ -65,7 +65,17 @@ public class InteractExecutor : MonoBehaviour, ISaveable
         if (!isActive) return false;
         if (policy.HasFlag(ExecutePolicy.IgnoreLock)) return true;
         if (dependentOn == null) return true;
-        return dependentOn.IsActive == false;
+        return AllDependentResolved() == true;
+    }
+    public bool AllDependentResolved()
+    {
+        if (dependentOn.Length == 0)
+            return true;
+
+        foreach (var item in dependentOn)
+            if (item.isActive == true)
+                return false;
+        return true;
     }
 
     public bool CanExecute(ExecutePolicy policy)

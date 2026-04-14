@@ -2052,31 +2052,31 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 42db932501f380744a7f170b289ca270, type: 3}
     pitchRange: {x: 1, y: 1}
     volumeRange: {x: 1, y: 1}
-    cooldown: 1
+    cooldown: 0.2
   - type: 3
     clips:
     - {fileID: 8300000, guid: a1c257b41a8f99d47a5debfbac7b4d85, type: 3}
     pitchRange: {x: 1, y: 1}
     volumeRange: {x: 1, y: 1}
-    cooldown: 1
+    cooldown: 0.2
   - type: 0
     clips:
     - {fileID: 8300000, guid: 69b4974f6bc702945b930272c266f759, type: 3}
     pitchRange: {x: 1, y: 1}
     volumeRange: {x: 1, y: 1}
-    cooldown: 1
+    cooldown: 0.2
   - type: 5
     clips:
     - {fileID: 8300000, guid: 04b980dc000f04940b31b7448b49839d, type: 3}
     pitchRange: {x: 1, y: 1}
     volumeRange: {x: 1, y: 1}
-    cooldown: 1
+    cooldown: 0.2
   - type: 6
     clips:
     - {fileID: 8300000, guid: 5d602661373e9fb4b8f4d24caa51ed27, type: 3}
     pitchRange: {x: 1, y: 1}
     volumeRange: {x: 1, y: 1}
-    cooldown: 1
+    cooldown: 0.2
 --- !u!114 &8912635326126164387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2180,7 +2180,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 248.9751
+  MaxDistance: 488.16193
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

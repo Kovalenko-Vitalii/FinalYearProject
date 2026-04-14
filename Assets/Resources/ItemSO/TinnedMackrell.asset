@@ -29,9 +29,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: 75390d67569527e43a2e803501360450, type: 2}
   pickupPrefab: {fileID: 701189204572172589, guid: d3bfa16f7a97d59498e4fd553dabe71f, type: 3}
-  hpRestore: 2
-  hungerRestore: 30
-  hydrationRestore: -5
+  hpRestore: 1
+  hungerRestore: 15
+  hydrationRestore: -2
   temperatureRestore: 0
   onConsumeSound: {fileID: 8300000, guid: 6db3500cf58333b44aa0c9e95cd16e41, type: 3}
   statusOps: []

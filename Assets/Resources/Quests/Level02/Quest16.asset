@@ -18,7 +18,7 @@ MonoBehaviour:
     for more information
   steps:
   - type: 3
-    description: Get on the other side
+    description: Go to the town
     targetId: town
     amount: 1
     requiredTag: 0

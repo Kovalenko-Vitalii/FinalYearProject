@@ -68,3 +68,14 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c5c0831326d887e44ad265cc70f73cc7, type: 3}
     soundVolume: 1
     lifetime: 1
+  - surfaceType: 7
+    impactKind: 1
+    effectPrefab: {fileID: 7097076223889954276, guid: b596389ea5bd7be4b81447f794d6343e, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: dc7d357b69aa37443a58bf3defdd4d8e, type: 3}
+    - {fileID: 8300000, guid: 5979b3870a0c205449bab72f803ff029, type: 3}
+    - {fileID: 8300000, guid: 2581295f2effdfc4ab3a3a005edfdab2, type: 3}
+    - {fileID: 8300000, guid: 9ac69636739d4674b9390c2505b2efc4, type: 3}
+    - {fileID: 8300000, guid: c5c0831326d887e44ad265cc70f73cc7, type: 3}
+    soundVolume: 1
+    lifetime: 1

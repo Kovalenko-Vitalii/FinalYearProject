@@ -24,7 +24,7 @@ MonoBehaviour:
   hasDurability: 1
   maxDurability: 100
   useDuration: 0
-  tags: 0
+  tags: 32
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}

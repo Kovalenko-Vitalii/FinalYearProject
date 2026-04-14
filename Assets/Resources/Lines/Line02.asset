@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 002
   text: I gues I am hungry and need to rest, there should be some food in the house
     I guess
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: 2f6c7bc23e4797946ab433d8c1bee7ff, type: 3}
   duration: 5

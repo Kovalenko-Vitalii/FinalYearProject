@@ -22,5 +22,5 @@ MonoBehaviour:
     targetId: hangar
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: bc5d86611f39a784780f77ff980bce2d, type: 2}
   onCompleteLines: []

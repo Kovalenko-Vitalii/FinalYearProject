@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 014
   text: Woah, this looks like a small town, I definetly need to look there for more
     information
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: 56b27289d48ae5c4d9425e3ba829137e, type: 3}
   duration: 6

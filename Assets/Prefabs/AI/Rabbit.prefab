@@ -936,23 +936,29 @@ MonoBehaviour:
   - type: 0
     clips:
     - {fileID: 8300000, guid: 0c045684c0614204a9286a27df1029ad, type: 3}
-    pitchRange: {x: 0, y: 0}
-    volumeRange: {x: 0, y: 0}
-    cooldown: 0
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 0.1
   - type: 1
     clips:
     - {fileID: 8300000, guid: 75aca90df8db2194d96fb4201d9cda45, type: 3}
     pitchRange: {x: 0, y: 0}
     volumeRange: {x: 0, y: 0}
-    cooldown: 0
+    cooldown: 0.1
   - type: 2
     clips:
     - {fileID: 8300000, guid: ec4bd5988d7de0c41ab2d9959705dd8b, type: 3}
     - {fileID: 8300000, guid: a45bdfd5056ed1d4d8f667cc2498ca12, type: 3}
     - {fileID: 8300000, guid: eea9624d96ae191439615ca598fe01fa, type: 3}
-    pitchRange: {x: 0, y: 0}
-    volumeRange: {x: 0, y: 0}
-    cooldown: 0
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 0.1
+  - type: 3
+    clips:
+    - {fileID: 8300000, guid: 2b17bb8b33ca0a7409a743840b9fb07d, type: 3}
+    pitchRange: {x: 1, y: 1}
+    volumeRange: {x: 1, y: 1}
+    cooldown: 0.1
 --- !u!114 &4287005705948412854
 MonoBehaviour:
   m_ObjectHideFlags: 0

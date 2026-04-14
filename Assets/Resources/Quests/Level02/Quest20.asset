@@ -21,5 +21,5 @@ MonoBehaviour:
     targetId: office
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: 3a093d11a5351b048b964c5875a5f5a4, type: 2}
   onCompleteLines: []

@@ -18,12 +18,12 @@ MonoBehaviour:
   background: {fileID: 0}
   textContent: 'Whoever''s reading this, know that this boat is your only chance
     to escape this hell! The soldiers damaged it, but not critically. You need a
-    navigation module, a converter, and a wrench for installation. Just install them
-    where the sparks are, and you''re good to go! I''m done for, I''ve caught a bug,
-    but you can still get out!
+    navigation module and converter. Just install them where the sparks are, and
+    you''re good to go! I''m done for, I''ve caught a bug, but you can still get
+    out!
 
-    The navigation module can definitely be salvaged
-    from the military missile they installed on the mountain. The converter belonged
-    to Mikhalych, who lives in apartment #3.'
+    The navigation module can definitely be salvaged from the military
+    radar on the mountain. The converter belonged to Mikhalych, who lives in apartment
+    #3.'
   onClickSound: {fileID: 0}
   onPickupSound: {fileID: 0}

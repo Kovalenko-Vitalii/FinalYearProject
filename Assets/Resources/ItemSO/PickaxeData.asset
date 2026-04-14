@@ -27,7 +27,7 @@ MonoBehaviour:
   tags: 32
   modules:
   - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}
-  - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   pickupPrefab: {fileID: 7010701446823456235, guid: 348169f23003bf74eaa6b03e1268dd7e, type: 3}
   firstPersonPrefab: {fileID: 776981045700149990, guid: 0cffc18a206eea84db21291d949b4cdb, type: 3}
   hitDistance: 2

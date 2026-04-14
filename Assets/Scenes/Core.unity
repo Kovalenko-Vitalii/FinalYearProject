@@ -2216,9 +2216,9 @@ MonoBehaviour:
   sprintBodyHeatBonus: 0.2
   resistForFullProtection: 60
   healthRegenPerSecond: 0
-  hungerDrainPerSecond: 0.2
-  hydrationDrainPerSecond: 0.3
-  energyDrainPerSecond: 0.1
+  hungerDrainPerSecond: 0.1
+  hydrationDrainPerSecond: 0.13
+  energyDrainPerSecond: 0.05
   staminaRegenPerSecond: 18
   minStaminaToStartSprint: 10
   dbgSnapshot:

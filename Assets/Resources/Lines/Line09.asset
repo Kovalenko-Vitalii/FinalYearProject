@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 576457
   text: Smells awful, like someone was burned down here...
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: bbc7670b1665a4d44830e6521918f6c5, type: 3}
   duration: 1.2

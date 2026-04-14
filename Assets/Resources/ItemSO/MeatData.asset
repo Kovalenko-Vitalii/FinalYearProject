@@ -29,7 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: 75390d67569527e43a2e803501360450, type: 2}
   pickupPrefab: {fileID: 7733363461582037960, guid: 9890564f1d205864ba06ea020838833d, type: 3}
-  hpRestore: 0
+  hpRestore: 3
   hungerRestore: 20
   hydrationRestore: 7
   temperatureRestore: 0

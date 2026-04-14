@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 245674
   text: For sure I can not go there
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: 4b47e38f779afc542a654db0e8808f79, type: 3}
   duration: 3

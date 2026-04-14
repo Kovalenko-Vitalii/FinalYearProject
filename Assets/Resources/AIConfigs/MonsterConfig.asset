@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MonsterConfig
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAIConfig
   creatureId: monster
-  maxHp: 1
+  maxHp: 60
   minIdleTime: 3
   maxIdleTime: 10
   wanderRadius: 20

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 004
   text: Oh home sweet home
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: 74b4b9887218aef41b7a0c973fb1e1db, type: 3}
   duration: 2

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 45321743
   text: I think this soldier don`t need this gun anymore
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: d78df8ba91adafc46a3924dff064443a, type: 3}
   duration: 4

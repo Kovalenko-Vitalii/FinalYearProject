@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 006
   text: Damn Im falling asleep so much, should take a nap
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: d555d292cb955954699c6733cb5bc49f, type: 3}
   duration: 4

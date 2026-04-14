@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 3456
   text: Where am I ???
-  voice: {fileID: 0}
+  voice: {fileID: 8300000, guid: 4ab9eb43c61d4e84a9c65c03fc0fecf1, type: 3}
   duration: 1.2
