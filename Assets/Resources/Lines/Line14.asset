@@ -16,4 +16,4 @@ MonoBehaviour:
   text: Woah, this looks like a small town, I definetly need to look there for more
     information
   voice: {fileID: 0}
-  duration: 10
+  duration: 6

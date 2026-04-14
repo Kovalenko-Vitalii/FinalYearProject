@@ -16,4 +16,4 @@ MonoBehaviour:
   text: This looks like a military blockpost, road is blocked. I should look for
     another way to get to other side
   voice: {fileID: 0}
-  duration: 10
+  duration: 6

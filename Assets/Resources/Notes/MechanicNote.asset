@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7013fd6e1e162445b96703e5d818786, type: 3}
+  m_Name: MechanicNote
+  m_EditorClassIdentifier: Assembly-CSharp::NoteData
+  id: 234236
+  noteName: Last hope
+  icon: {fileID: 0}
+  background: {fileID: 0}
+  textContent: '1986/16/01/ - army established a quarantine zone across the entire
+    island, shooting and burning anyone who looked infected... They destroyed my
+    little boat, it was docked for repairs, they deliberately destroyed the ship''s
+    vital systems so no one could escape... Oh, God, when will this all end?
+
+    
+
+    1986/01/18/
+    - I think I feel strange.
+
+    1986/01/19/ - This definitely isn''t a cold.
+
+    1986/01/20/
+    - This looks like the end for me. I left the boat repair instructions in the
+    hangar office.'
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}

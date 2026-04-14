@@ -22,5 +22,5 @@ MonoBehaviour:
     targetId: town
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: 066600cf2f766314fa14bb4d7f40be53, type: 2}
   onCompleteLines: []

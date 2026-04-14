@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Note4
   m_EditorClassIdentifier: Assembly-CSharp::NoteData
   id: 6854
-  noteName: To myself
+  noteName: Notes of a tenant
   icon: {fileID: 0}
   background: {fileID: 0}
   textContent: I am so scared, army just cam in and without any words started burning
