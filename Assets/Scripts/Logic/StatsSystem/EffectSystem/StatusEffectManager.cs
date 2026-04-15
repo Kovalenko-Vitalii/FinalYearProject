@@ -154,7 +154,7 @@ public class StatusEffectManager : MonoBehaviour, ISaveable
                   .Distinct();
 
     // Removing all effects
-    private void ClearAllInternal()
+    public void ResetToDefaultState()
     {
         var stats = PlayerStatManager.Instance;
         if (stats != null)
@@ -185,7 +185,7 @@ public class StatusEffectManager : MonoBehaviour, ISaveable
     {
         var data = state as SaveEffectsData;
 
-        ClearAllInternal();
+        ResetToDefaultState();
 
         if (data?.effectList == null) return;
 

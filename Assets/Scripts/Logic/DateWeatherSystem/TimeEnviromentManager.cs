@@ -243,4 +243,10 @@ public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
 
         ApplySun();
     }
+
+    public void ResetToDefaultState()
+    {
+        currentDay = 1;
+        currentMinutes = startTimeHours * 60 * 60;
+    }
 }

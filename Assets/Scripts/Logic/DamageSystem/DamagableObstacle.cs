@@ -12,8 +12,8 @@ public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
     [SerializeField] private bool active;
 
     [Header("Health")]
-    [SerializeField] private int maxHp = 30;
-    [SerializeField] private int hp = 30;
+    [SerializeField] private int maxHp;
+    [SerializeField] private int hp;
 
     [SerializeField] bool acceptsAxe = true;
     [SerializeField] bool acceptsPickaxe = false;
@@ -88,6 +88,11 @@ public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
     private void Break()
     {
         gameObject.SetActive(false);
+    }
+
+    public void ResetToDefaultState()
+    {
+        
     }
 }
 

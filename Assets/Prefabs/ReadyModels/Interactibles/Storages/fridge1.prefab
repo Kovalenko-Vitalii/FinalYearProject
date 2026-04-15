@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 5654623875215284198}
   - component: {fileID: 1466867598797642580}
   - component: {fileID: -1355399511671610460}
+  - component: {fileID: 3755454272077971342}
   m_Layer: 6
   m_Name: fridge1
   m_TagString: Untagged
@@ -429,6 +430,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
   outline: {fileID: 1466867598797642580}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &3755454272077971342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037373748231553624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d63b1673368614c9e7f51784f9b3df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LootSpawnpoint
+  id: 
+  activated: 0
+  lootPool:
+  - {fileID: 11400000, guid: 15eac31047e7a8e47b807eae435ef993, type: 2}
+  - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
+  - {fileID: 11400000, guid: 5a587e2015fb50f48b30d46a2e2e5ccf, type: 2}
+  - {fileID: 11400000, guid: e836465063413a141a10532f1d12fee2, type: 2}
+  - {fileID: 11400000, guid: 3101b663ae926154dbaf5e2840d0c5ac, type: 2}
+  random: 0
 --- !u!1 &3763174925705467257
 GameObject:
   m_ObjectHideFlags: 0

@@ -379,6 +379,13 @@ public class QuestManager : MonoBehaviour, ISaveable
             TryFinishActiveQuest();
         }
     }
+
+    public void ResetToDefaultState()
+    {
+        active = null;
+        defs.Clear();
+        states.Clear();
+    }
 }
 
 [Serializable]

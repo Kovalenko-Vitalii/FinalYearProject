@@ -80,7 +80,19 @@ public class StatPanelRenderer : MonoBehaviour
         foreach (var t in current)
         {
             var widget = Get();
-            var formatted = t.desc.Format(t.s.value) + (string.IsNullOrEmpty(t.desc.unit) ? "" : $" {t.desc.unit}");
+            string formatted;
+
+            if (t.s.id == StatId.Durability && data.hasDurability && data.maxDurability > 0f)
+            {
+                int currentDurability = Mathf.CeilToInt(invItem.currentDurability);
+                int maxDurability = Mathf.CeilToInt(data.maxDurability);
+                formatted = $"{currentDurability}/{maxDurability}";
+            }
+            else
+            {
+                formatted = t.desc.Format(t.s.value) + (string.IsNullOrEmpty(t.desc.unit) ? "" : $" {t.desc.unit}");
+            }
+
             float? diff = baseDict.TryGetValue(t.s.id, out var oldVal) ? t.s.value - oldVal : (float?)null;
             widget.Bind(t.desc.icon, formatted, diff, positiveColor, negativeColor);
         }

@@ -72,6 +72,11 @@ public class NoteManager : MonoBehaviour, ISaveable
                 notes.Add(found);
         }
     }
+
+    public void ResetToDefaultState()
+    {
+        notes.Clear();
+    }
 }
 
 [System.Serializable]

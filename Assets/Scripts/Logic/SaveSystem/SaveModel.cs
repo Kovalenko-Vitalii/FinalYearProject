@@ -87,6 +87,7 @@ public interface ISaveable
     string SaveId { get; }
     object CaptureState();
     void RestoreState(object state);
+    void ResetToDefaultState();
 }
 
 public static class SaveRegistry
@@ -138,6 +139,9 @@ public static class SaveRegistry
             .Where(s => !string.IsNullOrWhiteSpace(s.SaveId))
             .ToList();
 
+        foreach (var s in saveablesList)
+            s.ResetToDefaultState();
+
         var dupSaveables = saveablesList
             .GroupBy(s => s.SaveId)
             .Where(g => g.Count() > 1)
@@ -173,5 +177,18 @@ public static class SaveRegistry
             var payload = JsonUtility.FromJson(e.json, t);
             target.RestoreState(payload);
         }
+    }
+
+    public static void ResetAllToDefaults()
+    {
+        var saveables = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            )
+            .OfType<ISaveable>()
+            .Where(s => !string.IsNullOrWhiteSpace(s.SaveId));
+
+        foreach (var s in saveables)
+            s.ResetToDefaultState();
     }
 }

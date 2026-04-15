@@ -253,6 +253,11 @@ public class DoorInteractable : MonoBehaviour, IInteractable, ISaveable
 
     // --- ISaveable
     public object CaptureState() => new DoorState { isOpen = isOpen, isLocked = isLocked };
+
+    public void ResetToDefaultState()
+    {
+
+    }
 }
 
 [Serializable]

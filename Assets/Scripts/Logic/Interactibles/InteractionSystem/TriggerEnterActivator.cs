@@ -67,6 +67,11 @@ public class TriggerEnterActivator : MonoBehaviour, ISaveable
         if (state is not TriggerEnterActivatorState s) return;
         used = s.used;
     }
+
+    public void ResetToDefaultState()
+    {
+
+    }
 }
 
 [Serializable]

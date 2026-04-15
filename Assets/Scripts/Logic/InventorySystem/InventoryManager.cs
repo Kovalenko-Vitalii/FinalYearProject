@@ -387,7 +387,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
     {
         var data = state as SaveInventoryData;
 
-        ClearAllState();
+        ResetToDefaultState();
 
         if (data == null)
         {
@@ -433,7 +433,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
         data.activeHeldSlot = ActiveHeldSlot.HasValue ? (int)ActiveHeldSlot.Value : -1;
     }
 
-    private void ClearAllState()
+    public void ResetToDefaultState()
     {
         playerInventory.items.Clear();
         playerEquippedItems.Clear();

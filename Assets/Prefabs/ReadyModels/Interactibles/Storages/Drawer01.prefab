@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 8473419428033384033}
   - component: {fileID: 1531592178505866064}
   - component: {fileID: 3510001220555502711}
+  - component: {fileID: -5105575472397176056}
   m_Layer: 6
   m_Name: Drawer01
   m_TagString: Untagged
@@ -903,6 +904,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
   outline: {fileID: 1531592178505866064}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-5105575472397176056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3601313878949951114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d63b1673368614c9e7f51784f9b3df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LootSpawnpoint
+  id: 
+  activated: 0
+  lootPool:
+  - {fileID: 11400000, guid: 2723f5e0e7ead5d40837bda2773921f3, type: 2}
+  - {fileID: 11400000, guid: e836465063413a141a10532f1d12fee2, type: 2}
+  - {fileID: 11400000, guid: 5a587e2015fb50f48b30d46a2e2e5ccf, type: 2}
+  random: 0
 --- !u!1 &4625575058575721129
 GameObject:
   m_ObjectHideFlags: 0

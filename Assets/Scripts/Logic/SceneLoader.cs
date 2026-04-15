@@ -130,7 +130,7 @@ public class SceneLoader : MonoBehaviour
         if (loadedScene.IsValid())
         {
             SceneManager.SetActiveScene(loadedScene);
-            GameLog.Log(TAG, $"SetActiveScene '{sceneName}'"); 
+            GameLog.Log(TAG, $"SetActiveScene '{sceneName}'");  
         }
         else
             GameLog.Error(TAG, $"Loaded scene '{sceneName}' is NOT valid");

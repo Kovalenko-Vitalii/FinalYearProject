@@ -102,6 +102,11 @@ public class WorldObjectSpawner : MonoBehaviour, ISaveable
             SpawnItem(item, s.position, s.rotation, Vector3.zero);
         }
     }
+
+    public void ResetToDefaultState()
+    {
+        
+    }
 }
 
 // Saving items on location

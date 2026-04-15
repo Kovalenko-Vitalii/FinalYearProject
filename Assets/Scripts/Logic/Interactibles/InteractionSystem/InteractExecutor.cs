@@ -255,6 +255,11 @@ public class InteractExecutor : MonoBehaviour, ISaveable
         if (state is not InteractExecutorState s) return;
         ApplyStateImmediate(s.isActive);
     }
+
+    public void ResetToDefaultState()
+    {
+
+    }
 }
 
 [Serializable]

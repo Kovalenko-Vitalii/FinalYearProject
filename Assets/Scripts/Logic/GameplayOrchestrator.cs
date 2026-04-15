@@ -63,7 +63,7 @@ public class GameplayOrchestrator : MonoBehaviour
     {
         GameLog.Log(TAG, $"EnterMenu() from state={State} -> MainMenu. Will load '{menuScene}'");
 
-        PlayerStatManager.Instance.ResetToDefaults();
+        PlayerStatManager.Instance.ResetToDefaultState();
 
         loading?.Hide(); // Hiding loading ui
 
@@ -92,7 +92,7 @@ public class GameplayOrchestrator : MonoBehaviour
             GameLog.Warning(TAG, "PlayerTickSystem.Instance is NULL (cannot disable ticking)");
         else
             PlayerTickSystem.Instance.SetEnabled(false);
-    }
+    }   
 
     // Method used to load initial location when fresh save created
     public void StartGame() 

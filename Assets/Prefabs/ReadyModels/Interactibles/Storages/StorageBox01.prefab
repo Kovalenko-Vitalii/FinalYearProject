@@ -783,6 +783,7 @@ GameObject:
   - component: {fileID: 7844092604945487415}
   - component: {fileID: -5138962844603931283}
   - component: {fileID: -345549844888368759}
+  - component: {fileID: 8485183422991511443}
   m_Layer: 6
   m_Name: StorageBox01
   m_TagString: Untagged
@@ -1191,6 +1192,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
   outline: {fileID: -5138962844603931283}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8485183422991511443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6156139395923888280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d63b1673368614c9e7f51784f9b3df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LootSpawnpoint
+  id: 
+  activated: 0
+  lootPool:
+  - {fileID: 11400000, guid: 01be3ef2423a45c449de371f5caa33a8, type: 2}
+  - {fileID: 11400000, guid: bbc0ccbabcad0cf43bda3a7a06ffb830, type: 2}
+  - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
+  - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
+  random: 0
 --- !u!1 &7527663216066746082
 GameObject:
   m_ObjectHideFlags: 0

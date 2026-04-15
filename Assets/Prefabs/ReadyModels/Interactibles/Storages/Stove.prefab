@@ -3257,6 +3257,7 @@ GameObject:
   - component: {fileID: 6715975438877763859}
   - component: {fileID: -377868460011523459}
   - component: {fileID: -6282978175436190451}
+  - component: {fileID: 5354353453575060935}
   m_Layer: 6
   m_Name: Stove
   m_TagString: Untagged
@@ -3788,6 +3789,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
   outline: {fileID: -377868460011523459}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &5354353453575060935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953388539807486111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d63b1673368614c9e7f51784f9b3df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LootSpawnpoint
+  id: 
+  activated: 0
+  lootPool:
+  - {fileID: 11400000, guid: 15eac31047e7a8e47b807eae435ef993, type: 2}
+  random: 0
 --- !u!1 &7704798317868637442
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,8 +9,9 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
     [SerializeField] ItemData[] lootPool;
     [SerializeField] bool random; // If selected - random durability and amount else - max durability and amount
 
-    public string SaveId => id;
+    WorldContainer container;
 
+    public string SaveId => id;
 
     private void Reset()
     {
@@ -29,6 +30,8 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
     }
 #endif
 
+    void Awake() => container = GetComponent<WorldContainer>();
+    
     private void OnEnable()
     {
         if (GameplayOrchestrator.Instance != null)
@@ -46,6 +49,7 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
         SpawnLoot();
     }
 
+    
     void SpawnLoot()
     {
         if (activated)
@@ -54,6 +58,7 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
         if (lootPool == null || lootPool.Length == 0)
             return;
 
+        
         if (WorldObjectSpawner.Instance == null)
         {
             Debug.LogError("WorldObjectSpawner.Instance is missing", this);
@@ -84,12 +89,15 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
 
         var loot = new InventoryItem(candidate, amount, durability);
 
-        WorldObjectSpawner.Instance.SpawnItem(
-            loot,
-            transform.position,
-            Quaternion.identity,
-            Vector3.zero
-        );
+        if (container)
+            container.Inventory.AddItem(loot.data, loot.amount, loot.currentDurability);
+        else
+            WorldObjectSpawner.Instance.SpawnItem(
+                loot,
+                transform.position,
+                Quaternion.identity,
+                Vector3.zero
+            );
 
         activated = true;
     }
@@ -103,6 +111,11 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
     {
         if (state is not LootSpawnpointSave s) return;
         activated = s.activated;
+    }
+
+    public void ResetToDefaultState()
+    {
+
     }
 }
 

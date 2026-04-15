@@ -525,7 +525,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         RecalculateWeight();
     }
 
-    public void ResetToDefaults()
+    public void ResetToDefaultState()
     {
         currentHealth = healthCap;
         currentHunger = hungerCap;

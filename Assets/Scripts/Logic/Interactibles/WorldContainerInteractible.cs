@@ -177,6 +177,11 @@ public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInt
         if (closeSound)
             SoundManager.Instance.PlayWorldOneShot(closeSound, transform.position);
     }
+
+    public void ResetToDefaultState()
+    {
+
+    }
 }
 
 [Serializable]

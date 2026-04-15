@@ -63,6 +63,11 @@ public class NoteInteractible : MonoBehaviour, IInteractable, ISaveable
         prompt = "Note: " + (noteData != null ? noteData.NoteName : "???");
         return true;
     }
+
+    public void ResetToDefaultState()
+    {
+        
+    }
 }
 
 [Serializable]
