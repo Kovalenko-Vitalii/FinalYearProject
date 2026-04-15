@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 7001842981010249529}
   - component: {fileID: 231386714267701584}
   - component: {fileID: 2370576441761146316}
+  - component: {fileID: -8619183271155638746}
+  - component: {fileID: 3726528797461554500}
   m_Layer: 0
   m_Name: Chicken Tin
   m_TagString: Untagged
@@ -160,3 +162,35 @@ MonoBehaviour:
     currentDurability: 0
     firearmState:
       currentAmmoInMag: 0
+--- !u!114 &-8619183271155638746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581901999516452350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &3726528797461554500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581901999516452350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: -8619183271155638746}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}

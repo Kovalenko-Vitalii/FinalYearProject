@@ -218,6 +218,8 @@ GameObject:
   - component: {fileID: 2347481175234522625}
   - component: {fileID: 7794629706925282764}
   - component: {fileID: 5654623875215284198}
+  - component: {fileID: 1466867598797642580}
+  - component: {fileID: -1355399511671610460}
   m_Layer: 0
   m_Name: fridge1
   m_TagString: Untagged
@@ -274,7 +276,6 @@ MonoBehaviour:
   quickOpenDuration: 0.1
   animator: {fileID: 7794629706925282764}
   isOpenBoolName: isOpen
-  audioSource: {fileID: 5654623875215284198}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
 --- !u!95 &7794629706925282764
@@ -396,6 +397,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1466867598797642580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037373748231553624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 8
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &-1355399511671610460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037373748231553624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: 1466867598797642580}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &3763174925705467257
 GameObject:
   m_ObjectHideFlags: 0

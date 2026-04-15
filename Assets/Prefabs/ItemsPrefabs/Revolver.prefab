@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4532595477637827326}
   - component: {fileID: 6941284058218309900}
   - component: {fileID: 671670663273241030}
+  - component: {fileID: 8541566428920217881}
+  - component: {fileID: -7127642632389771101}
   m_Layer: 0
   m_Name: Revolver
   m_TagString: Untagged
@@ -155,6 +157,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab20f102aae54c64cb098f601ceb7208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldItem
-  data: {fileID: 11400000, guid: 1230f43eb2cc9444f825878eef99a72d, type: 2}
-  amount: 1
-  currentDurability: 0
+  item:
+    instanceId: 
+    data: {fileID: 0}
+    amount: 0
+    currentDurability: 0
+    firearmState:
+      currentAmmoInMag: 0
+--- !u!114 &8541566428920217881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449905402055494328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &-7127642632389771101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449905402055494328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: 8541566428920217881}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}

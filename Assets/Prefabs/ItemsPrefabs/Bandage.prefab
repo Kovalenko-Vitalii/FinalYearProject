@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 3620247528255329678}
   - component: {fileID: 8148231225898815916}
   - component: {fileID: 2921796654486861673}
+  - component: {fileID: -4528306963359177340}
+  - component: {fileID: -4916724340122798759}
   m_Layer: 0
   m_Name: Bandage
   m_TagString: Untagged
@@ -160,3 +162,35 @@ MonoBehaviour:
     currentDurability: 0
     firearmState:
       currentAmmoInMag: 0
+--- !u!114 &-4528306963359177340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4664976671318828662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &-4916724340122798759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4664976671318828662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: -4528306963359177340}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}

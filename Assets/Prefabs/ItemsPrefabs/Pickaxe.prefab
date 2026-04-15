@@ -588,6 +588,8 @@ GameObject:
   - component: {fileID: 1503043160489895870}
   - component: {fileID: 4383531173899945282}
   - component: {fileID: 7999466630458148928}
+  - component: {fileID: -4937551574493312476}
+  - component: {fileID: -6595361478818650967}
   m_Layer: 0
   m_Name: Pickaxe
   m_TagString: Untagged
@@ -975,3 +977,35 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.3051562, y: 1.2532454, z: 0.07019472}
   m_Center: {x: -0.0053315163, y: -0.039756775, z: 0.031698227}
+--- !u!114 &-4937551574493312476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010701446823456235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &-6595361478818650967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010701446823456235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: -4937551574493312476}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}

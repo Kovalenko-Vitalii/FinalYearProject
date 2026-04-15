@@ -11,10 +11,17 @@ public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
 
     [SerializeField] private bool active;
 
-    [SerializeField] int hp = 30;
+    [Header("Health")]
+    [SerializeField] private int maxHp = 30;
+    [SerializeField] private int hp = 30;
+
     [SerializeField] bool acceptsAxe = true;
     [SerializeField] bool acceptsPickaxe = false;
     [SerializeField] bool acceptsBullet = false;
+
+    public int CurrentHp => hp;
+    public int MaxHp => maxHp;
+    public float Hp01 => maxHp <= 0 ? 0f : (float)hp / maxHp;
 
     public string SaveId => id;
 
@@ -31,6 +38,12 @@ public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
     #if UNITY_EDITOR
     private void OnValidate() => SaveIdUtil.EnsureId(ref id, this);
 #endif
+
+    private void Awake()
+    {
+        maxHp = Mathf.Max(1, maxHp);
+        hp = Mathf.Clamp(hp, 0, maxHp);
+    }
 
     public object CaptureState()
     {

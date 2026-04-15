@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 953482501448946439}
   - component: {fileID: 358928071532375413}
   - component: {fileID: 7595582275663359149}
+  - component: {fileID: 6136747101559113971}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -67,7 +68,7 @@ Transform:
   m_GameObject: {fileID: 5801684083971527322}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 283.8958, y: 176.00594, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.95, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -393,6 +394,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b37895c815cb5a4e95feaf49ce08072, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDamageReceiver
+--- !u!114 &6136747101559113971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801684083971527322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 141caf6f7f82df7409754157fd556bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractableRadiusHighlighter
+  origin: {fileID: 2355787940895337946}
+  radius: 4
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  scanInterval: 0.12
 --- !u!1 &7307013414579856204
 GameObject:
   m_ObjectHideFlags: 0

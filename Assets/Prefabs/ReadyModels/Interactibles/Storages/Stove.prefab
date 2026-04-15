@@ -3255,6 +3255,8 @@ GameObject:
   - component: {fileID: 5291081683315165217}
   - component: {fileID: 3448784882320059970}
   - component: {fileID: 6715975438877763859}
+  - component: {fileID: -377868460011523459}
+  - component: {fileID: -6282978175436190451}
   m_Layer: 0
   m_Name: Stove
   m_TagString: Untagged
@@ -3633,7 +3635,6 @@ MonoBehaviour:
   quickOpenDuration: 0.1
   animator: {fileID: 3448784882320059970}
   isOpenBoolName: isOpen
-  audioSource: {fileID: 6715975438877763859}
   openSound: {fileID: 8300000, guid: deeb175f43c0bed4eb5fb5494128ce6a, type: 3}
   closeSound: {fileID: 8300000, guid: bd7f409dd100d1e4b98f58a743c93bf4, type: 3}
 --- !u!95 &3448784882320059970
@@ -3755,6 +3756,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-377868460011523459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953388539807486111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 8
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &-6282978175436190451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953388539807486111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: -377868460011523459}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &7704798317868637442
 GameObject:
   m_ObjectHideFlags: 0

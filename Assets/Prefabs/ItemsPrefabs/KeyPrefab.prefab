@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 950037697675875068}
   - component: {fileID: 5060523484624574500}
   - component: {fileID: 5942631101798509441}
+  - component: {fileID: 4719084254687366702}
+  - component: {fileID: -296415558091047469}
   m_Layer: 0
   m_Name: KeyPrefab
   m_TagString: Untagged
@@ -469,6 +471,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab20f102aae54c64cb098f601ceb7208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldItem
-  data: {fileID: 11400000, guid: 4ffe238acd9ef0d418e7f4ec593e06a1, type: 2}
-  amount: 1
-  currentDurability: -1
+  item:
+    instanceId: 
+    data: {fileID: 0}
+    amount: 0
+    currentDurability: 0
+    firearmState:
+      currentAmmoInMag: 0
+--- !u!114 &4719084254687366702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111848708531692596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &-296415558091047469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111848708531692596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: 4719084254687366702}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}

@@ -427,6 +427,8 @@ GameObject:
   - component: {fileID: 7462383858970978250}
   - component: {fileID: 5689579671673896582}
   - component: {fileID: 668460607718998836}
+  - component: {fileID: 3135262156589786472}
+  - component: {fileID: 5104178554185835289}
   m_Layer: 0
   m_Name: StorageBox02
   m_TagString: Untagged
@@ -781,7 +783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8e1e56a0e0ffd4eb6a1dac5b65e4ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldContainer
-  id: 028e51f5c9fb4e2dbda8987416b19b22
+  id: 
   slotLimit: -1
   allowedTags: []
 --- !u!114 &668460607718998836
@@ -801,9 +803,40 @@ MonoBehaviour:
   quickOpenDuration: 0.5
   animator: {fileID: 4212196682735060184}
   isOpenBoolName: isOpen
-  audioSource: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+--- !u!114 &3135262156589786472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8285390349654389882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 8
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &5104178554185835289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8285390349654389882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: 3135262156589786472}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &8482752151725814811
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4865344661429315928}
   - component: {fileID: 3393988598353276674}
   - component: {fileID: 8873475776441147179}
+  - component: {fileID: 7120734349829633085}
+  - component: {fileID: 4697000504606576171}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -74,10 +76,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
   id: 
   key: {fileID: 0}
+  questGate: {fileID: 0}
   displayName: Door
-  openHoldDuration: 0.5
-  closeHoldDuration: 0.5
-  lockedTryDuration: 0.5
+  isLocked: 0
   animator: {fileID: 3393988598353276674}
   isOpenBoolName: isOpen
   tryLockedTriggerName: tryLocked
@@ -85,6 +86,38 @@ MonoBehaviour:
   closeSound: {fileID: 8300000, guid: 16eebe95c1b716742944060137179bf5, type: 3}
   lockedSound: {fileID: 8300000, guid: a2231f26f495d6c4d8c97e709b88e1bf, type: 3}
   unlockSound: {fileID: 8300000, guid: 26c09f5bc2e7683449bf39f3c75ce634, type: 3}
+--- !u!114 &7120734349829633085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15919006502522111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &4697000504606576171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15919006502522111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a7d73385f606e45a1ac230ef30b4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableOutline
+  outline: {fileID: 7120734349829633085}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2526440175561004569
 GameObject:
   m_ObjectHideFlags: 0
