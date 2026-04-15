@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4029648717561562584}
   - component: {fileID: 5069811547610809074}
   - component: {fileID: 8392654383090131229}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NewsletterPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 626016203301198961}
   - component: {fileID: 5579761652677503007}
   - component: {fileID: 1115764352071103438}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8892161325986956966}
   - component: {fileID: 4212196682735060184}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Axis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 668460607718998836}
   - component: {fileID: 3135262156589786472}
   - component: {fileID: 5104178554185835289}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: StorageBox02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -851,7 +851,7 @@ GameObject:
   - component: {fileID: 2862302874126530218}
   - component: {fileID: 6633282994601164175}
   - component: {fileID: 5405967894351115652}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

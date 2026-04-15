@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 671670663273241030}
   - component: {fileID: 8541566428920217881}
   - component: {fileID: -7127642632389771101}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}

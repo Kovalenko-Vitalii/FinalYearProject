@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5207473798990998313}
   - component: {fileID: -4306249224874153600}
   - component: {fileID: -3532572442957602892}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: JeansBluePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

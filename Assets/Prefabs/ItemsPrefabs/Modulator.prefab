@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3919346641319554962}
   - component: {fileID: 8707938585058582774}
   - component: {fileID: 4336122723972250828}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -887,7 +887,7 @@ GameObject:
   - component: {fileID: 1487921246733748827}
   - component: {fileID: 3571244949013597444}
   - component: {fileID: 4187550792017428168}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1540,7 +1540,7 @@ GameObject:
   - component: {fileID: 7617260347525811209}
   - component: {fileID: 2366753396777866127}
   - component: {fileID: 8869953022400167337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2198,7 +2198,7 @@ GameObject:
   - component: {fileID: 7624901120980629389}
   - component: {fileID: 7531689600442594756}
   - component: {fileID: -1150977278727364180}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Modulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2634,7 +2634,7 @@ GameObject:
   - component: {fileID: 1823128333486017918}
   - component: {fileID: 7258353197391204908}
   - component: {fileID: 2414664754149735487}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}

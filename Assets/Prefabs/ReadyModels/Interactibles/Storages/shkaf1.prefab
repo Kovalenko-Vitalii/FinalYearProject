@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2432315830437490730}
   - component: {fileID: 5243268394144905582}
   - component: {fileID: 2626400544204125605}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: doorR.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 1810748761473495498}
   - component: {fileID: 3789718724615763927}
   - component: {fileID: 8826477961660074261}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: doorR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 7432962486100895042}
   - component: {fileID: 7126682074311070706}
   - component: {fileID: 5326416148435010834}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Drawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -703,7 +703,7 @@ GameObject:
   - component: {fileID: 139977935503444455}
   - component: {fileID: 7073754318861487630}
   - component: {fileID: 1977481600121750890}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shkaf1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 570513559105133238}
   - component: {fileID: 1593327755129277065}
   - component: {fileID: 1622395142104406853}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -889,6 +889,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MedicalSpawnpoint
       objectReference: {fileID: 0}
+    - target: {fileID: 1883614713159846063, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.3902207
@@ -954,6 +958,10 @@ PrefabInstance:
     - target: {fileID: 1883614713159846063, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
       propertyPath: m_Name
       value: MedicalSpawnpoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883614713159846063, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4818315742042830479, guid: e88304810ccd3e048af2cd4ea59a2eb9, type: 3}
       propertyPath: m_LocalPosition.x

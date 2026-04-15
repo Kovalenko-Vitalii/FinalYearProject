@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1002413913508569363}
   - component: {fileID: 9042394734612418638}
   - component: {fileID: 8975750393934720277}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: separator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 1081663798913673919}
   - component: {fileID: 3264316871443399600}
   - component: {fileID: 2626995333996049573}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 5654623875215284198}
   - component: {fileID: 1466867598797642580}
   - component: {fileID: -1355399511671610460}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: fridge1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 2095654792829846123}
   - component: {fileID: 3849474554235183231}
   - component: {fileID: 442151567046617268}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +530,7 @@ GameObject:
   - component: {fileID: 3248458566412067152}
   - component: {fileID: 6858082382492975082}
   - component: {fileID: 6051176729081411682}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -619,7 +619,7 @@ GameObject:
   - component: {fileID: 3182433338092142388}
   - component: {fileID: 3540150557685834951}
   - component: {fileID: 334873427985302564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: detail1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -708,7 +708,7 @@ GameObject:
   - component: {fileID: 3697624518806622850}
   - component: {fileID: 5293560525314679872}
   - component: {fileID: 7152042748817562708}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: detail2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5638250777213269958}
   - component: {fileID: 7372083028017875236}
   - component: {fileID: 5584815212680643177}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pickaxe (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +590,7 @@ GameObject:
   - component: {fileID: 7999466630458148928}
   - component: {fileID: -4937551574493312476}
   - component: {fileID: -6595361478818650967}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pickaxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}

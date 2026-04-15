@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5207473798990998313}
   - component: {fileID: -2963530934381426783}
   - component: {fileID: 1117253973852808477}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShapkaPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

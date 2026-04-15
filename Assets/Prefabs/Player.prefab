@@ -407,11 +407,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractableRadiusHighlighter
   origin: {fileID: 2355787940895337946}
-  radius: 4
+  enterRadius: 2
+  exitRadius: 2.2
   interactableMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   scanInterval: 0.12
+  triggerInteraction: 2
 --- !u!1 &7307013414579856204
 GameObject:
   m_ObjectHideFlags: 0

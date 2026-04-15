@@ -129,8 +129,6 @@ public class PlayerInteractor : MonoBehaviour
             fb.OnHoldCanceled(this);
     }
 
-
-
     private float GetInteractDuration(IInteractable interactable)
     {
         if (interactable is IHoldInteractable hold)

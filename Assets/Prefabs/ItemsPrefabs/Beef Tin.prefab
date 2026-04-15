@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5409802152710271306}
   - component: {fileID: -8919697614064262567}
   - component: {fileID: 8047087186885923129}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Beef Tin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

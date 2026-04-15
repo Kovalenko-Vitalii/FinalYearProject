@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2921796654486861673}
   - component: {fileID: -4528306963359177340}
   - component: {fileID: -4916724340122798759}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bandage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

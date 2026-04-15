@@ -34,7 +34,7 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  damageAmount: 5
+  damageAmount: 10
   damageType: 2
   swingTriggerName: Swing
   swingSound: {fileID: 8300000, guid: 6d1f0c113a613d44b8dff57911357ad9, type: 3}

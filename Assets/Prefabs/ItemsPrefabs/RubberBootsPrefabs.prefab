@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5207473798990998313}
   - component: {fileID: 4235021266985906406}
   - component: {fileID: 9106449954394215563}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RubberBootsPrefabs
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -83,7 +83,7 @@ public class PlayerInteractableRadiusHighlighter : MonoBehaviour
             }
             else if (isActive && dist <= exitRadius)
             {
-                
+                SetHighlight(target, true);
             }
         }
 
@@ -154,17 +154,4 @@ public class PlayerInteractableRadiusHighlighter : MonoBehaviour
         active.Clear();
         nearestDistance.Clear();
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Transform t = origin != null ? origin : transform;
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(t.position, enterRadius);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(t.position, exitRadius);
-    }
-#endif
 }

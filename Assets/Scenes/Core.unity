@@ -1672,12 +1672,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: debec08d65f346f4fa58c510af798ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
-  id: DateWeatherManager
+  id: TimeEnviromentManager
   currentDay: 1
   realMinutesPerDay: 20
   startTimeHours: 9
   sunriseTimeHours: 6.5
-  sunsetTimeHours: 18.5
+  sunsetTimeHours: 12
   sun: {fileID: 0}
   sunAxis: {x: 1, y: 0, z: 0}
   sunAngleOffset: -90

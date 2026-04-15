@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -765486885486582471}
   - component: {fileID: 4972174779042293847}
   - component: {fileID: -2564211051401082884}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fuel Can
   m_TagString: Untagged
   m_Icon: {fileID: 0}

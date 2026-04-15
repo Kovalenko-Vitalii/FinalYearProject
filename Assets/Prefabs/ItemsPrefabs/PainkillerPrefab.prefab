@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3719175104453878698}
   - component: {fileID: 6060771856123041784}
   - component: {fileID: -3889207277514223902}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PainkillerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

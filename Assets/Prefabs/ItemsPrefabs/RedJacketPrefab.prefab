@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5207473798990998313}
   - component: {fileID: -5328666401700536362}
   - component: {fileID: 1351086968088713529}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RedJacketPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

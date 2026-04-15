@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5207473798990998313}
   - component: {fileID: -6058387276778466604}
   - component: {fileID: -7341819642137191059}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ParkaJacketPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

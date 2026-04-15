@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1052462134480261681}
   - component: {fileID: 2438248753215189043}
   - component: {fileID: -6757153223416206754}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Vodka
   m_TagString: Untagged
   m_Icon: {fileID: 0}

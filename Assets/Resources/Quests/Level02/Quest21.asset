@@ -22,7 +22,7 @@ MonoBehaviour:
     amount: 1
     requiredTag: 0
   - type: 2
-    description: Get Modilator
+    description: Get Modulator
     targetId: 29385724
     amount: 1
     requiredTag: 0

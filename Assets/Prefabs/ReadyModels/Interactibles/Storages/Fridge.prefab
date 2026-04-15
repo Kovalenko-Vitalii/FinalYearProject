@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4595280798823593361}
   - component: {fileID: 575045604167179624}
   - component: {fileID: 9182432598832541135}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +538,7 @@ GameObject:
   - component: {fileID: 345937814656979146}
   - component: {fileID: 5941735704577673525}
   - component: {fileID: 7538626509299015239}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -889,7 +889,7 @@ GameObject:
   m_Component:
   - component: {fileID: 306452637778350363}
   - component: {fileID: 2125562885999931803}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Axis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -948,7 +948,7 @@ GameObject:
   - component: {fileID: 7793044834774695865}
   - component: {fileID: 7692947761958565770}
   - component: {fileID: 6661706240157565767}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

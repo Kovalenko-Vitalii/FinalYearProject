@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8962072521497002901}
   - component: {fileID: 5977784452455438502}
   - component: {fileID: 3585111269261652210}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -915,7 +915,7 @@ GameObject:
   - component: {fileID: 8910248770831927021}
   - component: {fileID: -6280091244698650929}
   - component: {fileID: -7828343799420503512}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NavigationModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1671,7 +1671,7 @@ GameObject:
   - component: {fileID: 1325637184704210619}
   - component: {fileID: 2100364443467071494}
   - component: {fileID: 8769521561470884566}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

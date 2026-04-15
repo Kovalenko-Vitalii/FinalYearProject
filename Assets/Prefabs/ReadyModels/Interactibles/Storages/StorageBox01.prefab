@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5540456905758270838}
   - component: {fileID: 4377581392327095532}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Axis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 4664697435139420193}
   - component: {fileID: 2988506644281887178}
   - component: {fileID: 3414728521774532746}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -424,7 +424,7 @@ GameObject:
   - component: {fileID: 3836226342669509846}
   - component: {fileID: 6343489468807083054}
   - component: {fileID: 6183750086050685128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 7844092604945487415}
   - component: {fileID: -5138962844603931283}
   - component: {fileID: -345549844888368759}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: StorageBox01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1205,7 +1205,7 @@ GameObject:
   - component: {fileID: 4870653750195368}
   - component: {fileID: 7869788029446850943}
   - component: {fileID: 6537143458021267805}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

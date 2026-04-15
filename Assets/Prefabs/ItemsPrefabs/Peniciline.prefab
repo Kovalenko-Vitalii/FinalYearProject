@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1946564432282624578}
   - component: {fileID: 9139652284727916962}
   - component: {fileID: 6437450956475148285}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Peniciline
   m_TagString: Untagged
   m_Icon: {fileID: 0}

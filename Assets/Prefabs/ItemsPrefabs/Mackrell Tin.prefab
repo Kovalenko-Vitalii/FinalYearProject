@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8128019268801298712}
   - component: {fileID: 1557001708490498008}
   - component: {fileID: -4566774207379535686}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mackrell Tin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

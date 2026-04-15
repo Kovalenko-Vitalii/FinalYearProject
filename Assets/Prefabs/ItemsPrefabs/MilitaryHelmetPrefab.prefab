@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5207473798990998313}
   - component: {fileID: 8143541964117643266}
   - component: {fileID: 5508792342206963614}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MilitaryHelmetPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
