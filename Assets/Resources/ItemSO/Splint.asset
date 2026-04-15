@@ -15,15 +15,15 @@ MonoBehaviour:
   id: 018
   itemName: Splint
   icon: {fileID: 21300000, guid: a470bdb5ae055d244a1fc7c8d27a7f47, type: 3}
-  maxStack: 1
+  maxStack: 3
   weight: 0.5
   description: One time use splint, can fix broken arm or leg.
   onClickSound: {fileID: 0}
   onPickupSound: {fileID: 0}
   onDropSound: {fileID: 0}
   hasDurability: 1
-  maxDurability: 3
-  useDuration: 4
+  maxDurability: 1
+  useDuration: 3
   tags: 4
   modules:
   - {fileID: 11400000, guid: b3f7fe1031153804d8be1d7aaf811704, type: 2}

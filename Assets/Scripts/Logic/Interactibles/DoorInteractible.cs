@@ -1,19 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback, ISaveable
+public class DoorInteractable : MonoBehaviour, IInteractable, ISaveable
 {
     [SerializeField] string id;
     [SerializeField] ItemData key;
+    [SerializeField] private QuestGate questGate;
     public bool isOpen { get; private set; }
 
     [Header("UX")]
     [SerializeField] private string displayName = "Door";
-
-    [Header("Hold Settings")]
-    [SerializeField] private float openHoldDuration = 0.35f;
-    [SerializeField] private float closeHoldDuration = 0.15f;
-    [SerializeField] private float lockedTryDuration = 0.15f;
 
     [Header("Lock")]
     public bool isLocked;
@@ -55,14 +51,16 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
 
+        if (questGate == null)
+            questGate = GetComponent<QuestGate>();
+
         isOpenHash = !string.IsNullOrEmpty(isOpenBoolName) ? Animator.StringToHash(isOpenBoolName) : 0;
         tryLockedHash = !string.IsNullOrEmpty(tryLockedTriggerName) ? Animator.StringToHash(tryLockedTriggerName) : 0;
 
         ApplyStateImmediate(isOpen, isLocked);
     }
 
-    // --- ISaveable
-    public object CaptureState() => new DoorState { isOpen = isOpen, isLocked = isLocked };
+
 
     public void RestoreState(object state)
     {
@@ -90,6 +88,12 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
     // --- IInteractable
     public bool TryGetPrompt(PlayerInteractor interactor, out string prompt)
     {
+        if (questGate != null && !questGate.IsPassed())
+        {
+            prompt = questGate.LockedPrompt;
+            return true;
+        }
+
         if (isLocked && !isOpen)
         {
             prompt = $"Open {displayName} (Locked)";
@@ -102,6 +106,9 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
 
     public bool Interact(PlayerInteractor interactor)
     {
+        if (questGate != null && !questGate.IsPassed())
+            return false;
+
         if (isLocked && !isOpen)
         {
             if (key != null && InventoryManager.Instance.playerInventory.HasItemById(key.id))
@@ -118,26 +125,6 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
         SetOpen(!isOpen);
         return true;
     }
-
-    public float GetInteractDuration(PlayerInteractor interactor)
-    {
-        if (isLocked && !isOpen) return lockedTryDuration;
-        return isOpen ? closeHoldDuration : openHoldDuration;
-    }
-
-    public void OnHoldStart(PlayerInteractor interactor, float duration)
-    {
-        if (isLocked && !isOpen)
-        {
-            bool hasKey = key != null && interactor?.PlayerInventory != null
-                          && interactor.PlayerInventory.HasItemById(key.id);
-
-            if (!hasKey)
-                PlayLockedTry();
-        }
-    }
-
-    public void OnHoldCanceled(PlayerInteractor interactor) { }
 
     private void SetOpen(bool value)
     {
@@ -180,6 +167,9 @@ public class DoorInteractable : MonoBehaviour, IInteractable, IHoldInteractable,
             AIHearingReceiver.BroadcastNoise(transform.position, AINoiseRanges.DoorSound); 
         } 
     }
+
+    // --- ISaveable
+    public object CaptureState() => new DoorState { isOpen = isOpen, isLocked = isLocked };
 }
 
 [Serializable]

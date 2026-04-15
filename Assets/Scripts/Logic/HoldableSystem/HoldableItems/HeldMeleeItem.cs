@@ -156,8 +156,6 @@ public class HeldMeleeItem : PlayerHeldItem
 
             if (damageable != null)
             {
-                GameLog.Log(TAG, $"Applying damage to {((MonoBehaviour)damageable).name}");
-
                 damageable.TakeDamage(new DamageData
                 {
                     amount = meleeData.damageAmount,

@@ -6,6 +6,9 @@ using static ItemData;
 public class InteractExecutor : MonoBehaviour, ISaveable
 {
     [SerializeField] private string id;
+
+    [SerializeField] private QuestGate questGate;
+
     [SerializeField] private string label = "Interact";
     [SerializeField] private string holdPromptSuffix = " Hold to interact.";
 
@@ -54,6 +57,12 @@ public class InteractExecutor : MonoBehaviour, ISaveable
     private void OnValidate() => SaveIdUtil.EnsureId(ref id, this);
 #endif
 
+    private void Awake()
+    {
+        if (questGate == null)
+            questGate = GetComponent<QuestGate>();
+    }
+
     public void ApplyStateImmediate(bool active)
     {
         isActive = active;
@@ -81,6 +90,8 @@ public class InteractExecutor : MonoBehaviour, ISaveable
     public bool CanExecute(ExecutePolicy policy)
     {
         if (!IsUnlocked(policy)) return false;
+        if (!IsQuestGatePassed()) return false;
+
         if (policy.HasFlag(ExecutePolicy.IgnoreRequirements)) return true;
         return HasRequiredItems();
     }
@@ -111,6 +122,12 @@ public class InteractExecutor : MonoBehaviour, ISaveable
         if (!IsUnlocked(policy))
         {
             prompt = $"{label} Locked.";
+            return true;
+        }
+
+        if (!IsQuestGatePassed())
+        {
+            prompt = questGate.LockedPrompt;
             return true;
         }
 
@@ -214,6 +231,14 @@ public class InteractExecutor : MonoBehaviour, ISaveable
 
         foreach (var action in onCompleteActions)
             action?.Execute(ctx);
+    }
+
+    private bool IsQuestGatePassed()
+    {
+        if (questGate == null)
+            return true;
+
+        return questGate.IsPassed();
     }
 
     // ---------------- ISaveable ----------------

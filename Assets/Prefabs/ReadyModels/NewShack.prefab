@@ -3485,6 +3485,10 @@ PrefabInstance:
       propertyPath: key
       value: 
       objectReference: {fileID: 11400000, guid: 4ffe238acd9ef0d418e7f4ec593e06a1, type: 2}
+    - target: {fileID: 8873475776441147179, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+      propertyPath: questGate
+      value: 
+      objectReference: {fileID: 5589915765303089824}
     - target: {fileID: 9014027484800755551, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -3493,8 +3497,30 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 7120069477796370120, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 15919006502522111, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5589915765303089824}
   m_SourcePrefab: {fileID: 100100000, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+--- !u!1 &3387422251751860811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 15919006502522111, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+  m_PrefabInstance: {fileID: 3403037792919283380}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5589915765303089824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3387422251751860811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4dd02af1b184404bb77434591de11e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestGate
+  requiredActiveQuest: {fileID: 11400000, guid: edee0bbca91f74d489a40dd9c826e2d7, type: 2}
+  lockedPrompt: Try later
 --- !u!4 &7836027947327197164 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4865344661429315928, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
@@ -3864,6 +3890,10 @@ PrefabInstance:
       propertyPath: key
       value: 
       objectReference: {fileID: 11400000, guid: 4ffe238acd9ef0d418e7f4ec593e06a1, type: 2}
+    - target: {fileID: 8873475776441147179, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+      propertyPath: questGate
+      value: 
+      objectReference: {fileID: 5589915765303089824}
     - target: {fileID: 9014027484800755551, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -3872,13 +3902,35 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 7120069477796370120, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 15919006502522111, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1809136439166477219}
   m_SourcePrefab: {fileID: 100100000, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
 --- !u!4 &2873496396500524863 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4865344661429315928, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
   m_PrefabInstance: {fileID: 7234356114619446887}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7231961650936658584 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 15919006502522111, guid: efa554dbf044b0e4c8b278cadd8e5270, type: 3}
+  m_PrefabInstance: {fileID: 7234356114619446887}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1809136439166477219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7231961650936658584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4dd02af1b184404bb77434591de11e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestGate
+  requiredActiveQuest: {fileID: 11400000, guid: edee0bbca91f74d489a40dd9c826e2d7, type: 2}
+  lockedPrompt: Try later
 --- !u!1001 &8837264024049027308
 PrefabInstance:
   m_ObjectHideFlags: 0

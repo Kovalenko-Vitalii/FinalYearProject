@@ -69,7 +69,7 @@ MonoBehaviour:
     soundVolume: 1
     lifetime: 1
   - surfaceType: 7
-    impactKind: 1
+    impactKind: 2
     effectPrefab: {fileID: 7097076223889954276, guid: b596389ea5bd7be4b81447f794d6343e, type: 3}
     soundClips:
     - {fileID: 8300000, guid: dc7d357b69aa37443a58bf3defdd4d8e, type: 3}

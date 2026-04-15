@@ -96,6 +96,16 @@ public class QuestManager : MonoBehaviour, ISaveable
         return state.stepProgress[stepIndex]; // Returning requested step progress
     }
 
+    public bool IsQuestActive(string questId)
+    {
+        return active != null && active.questId == questId;
+    }
+
+    public bool IsQuestActive(QuestData quest)
+    {
+        return quest != null && IsQuestActive(quest.questId);
+    }
+
     // ===================== EVENTS =====================
 
     private void OnSlept() => TryProgress(StepType.Sleep, targetId: null, amount: 1);

@@ -7,6 +7,8 @@ public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
     [Header("Save")]
     [SerializeField] private string id;
 
+    [SerializeField] private QuestGate questGate;
+
     [SerializeField] private bool active;
 
     [SerializeField] int hp = 30;
@@ -44,6 +46,9 @@ public class DamageableObstacle : MonoBehaviour, IDamageable, ISaveable
 
     public void TakeDamage(DamageData damage)
     {
+        if (questGate && !questGate.IsPassed())
+            return;
+
         if (!CanBeDamagedBy(damage.damageType))
             return;
 
