@@ -194,7 +194,7 @@ public class InteractExecutor : MonoBehaviour, ISaveable
             if (reqItem.data.HasTag(ItemTag.Tool))
             {
                 var tool = invManager.playerInventory.GetInventoryItemById(reqItem.data.id);
-                tool?.Damage(reqItem.durabilityCost);
+                invManager.playerInventory.DamageItem(tool.data.id, reqItem.durabilityCost);
             }
             else
             {

@@ -33,5 +33,6 @@ MonoBehaviour:
   hungerRestore: 5
   hydrationRestore: -2
   temperatureRestore: 0.2
+  energyRestore: 10
   onConsumeSound: {fileID: 8300000, guid: f5c30f8aabfd6134bbf4332c6e8144b5, type: 3}
   statusOps: []

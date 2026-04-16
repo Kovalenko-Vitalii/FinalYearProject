@@ -30,6 +30,7 @@ public class ConsumableData : ItemData, IStatProvider
     public float hungerRestore;
     public float hydrationRestore;
     public float temperatureRestore;
+    public float energyRestore;
 
     public AudioClip onConsumeSound;
 
@@ -43,5 +44,6 @@ public class ConsumableData : ItemData, IStatProvider
         if (hungerRestore != 0) yield return new StatValue { id = StatId.HungerRestore, value = hungerRestore };
         if (hydrationRestore != 0) yield return new StatValue { id = StatId.HydrationRestore, value = hydrationRestore };
         if (temperatureRestore != 0) yield return new StatValue { id = StatId.TemperatureRestore, value = temperatureRestore };
+        if (energyRestore != 0) yield return new StatValue { id = StatId.EnerguyRestore, value = energyRestore };
     }
 }

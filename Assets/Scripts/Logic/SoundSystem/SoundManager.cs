@@ -49,9 +49,17 @@ public class SoundManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        if (uiSource != null)
+            uiSource.ignoreListenerPause = true;
+
+        if (subtitleSource != null)
+            subtitleSource.ignoreListenerPause = false;
+
         LoadVolumes();
         ApplyVolumes();
     }
+
+    public void PausedSound(bool active) => AudioListener.pause = !active;
 
     public void PlayUI(UISoundId id, AudioClip overrideClip = null)
     {
@@ -84,6 +92,7 @@ public class SoundManager : MonoBehaviour
             return;
 
         AudioSource source = Instantiate(worldOneShotPrefab, position, Quaternion.identity);
+        source.ignoreListenerPause = false;
         source.pitch = pitch;
         source.volume = volumeMaster * volumeWorld;
 
@@ -120,6 +129,7 @@ public class SoundManager : MonoBehaviour
             subtitleSource.volume = volumeMaster * volumeSubtitle;
     }
 
+    
     public void SetMasterVolume(float value)
     {
         volumeMaster = Mathf.Clamp01(value);

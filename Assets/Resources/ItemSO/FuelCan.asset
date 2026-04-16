@@ -21,8 +21,8 @@ MonoBehaviour:
   onClickSound: {fileID: 0}
   onPickupSound: {fileID: 0}
   onDropSound: {fileID: 0}
-  hasDurability: 0
-  maxDurability: 0
+  hasDurability: 1
+  maxDurability: 1
   useDuration: 0
   tags: 32
   modules:

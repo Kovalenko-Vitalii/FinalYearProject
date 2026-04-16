@@ -23,10 +23,6 @@ public class EquipmentSelectionUI : MonoBehaviour
     [Header("Stats UI")]
     [SerializeField] private StatPanelRenderer statPanel;
 
-    [Header("Preview")]
-    [SerializeField] private Color previewDimColor = new Color(1f, 1f, 1f, 0.35f);
-    [SerializeField] private Color previewHiddenColor = new Color(1f, 1f, 1f, 0f);
-
     [Header("Defaults")]
     [SerializeField] private Sprite defaultIcon;
     [SerializeField] private string defaultName = "Nothing equipped";
@@ -187,19 +183,16 @@ public class EquipmentSelectionUI : MonoBehaviour
         if (descText != null)
             descText.text = selected?.data?.description ?? defaultDescription;
 
-        if (detailText != null)
-            detailText.text = BuildDetailText(selected);
-
         SetImage(
             leftPreviewIcon,
             GetPreviewSprite(index - 1),
-            index > 0 ? previewDimColor : previewHiddenColor
+            index > 0 ? Color.white : Color.clear
         );
 
         SetImage(
             rightPreviewIcon,
             GetPreviewSprite(index + 1),
-            index < options.Count - 1 ? previewDimColor : previewHiddenColor
+            index < options.Count - 1 ? Color.white : Color.clear
         );
 
         if (centerHighlight != null)
@@ -219,11 +212,8 @@ public class EquipmentSelectionUI : MonoBehaviour
         if (descText != null)
             descText.text = equippedItem?.data?.description ?? defaultDescription;
 
-        if (detailText != null)
-            detailText.text = BuildDetailText(equippedItem);
-
-        SetImage(leftPreviewIcon, null, previewHiddenColor);
-        SetImage(rightPreviewIcon, null, previewHiddenColor);
+        SetImage(leftPreviewIcon, null, Color.clear);
+        SetImage(rightPreviewIcon, null, Color.clear);
 
         if (centerHighlight != null)
             centerHighlight.SetActive(equippedItem != null);
@@ -334,31 +324,6 @@ public class EquipmentSelectionUI : MonoBehaviour
         return options[previewIndex]?.data?.icon;
     }
 
-    private string BuildDetailText(InventoryItem item)
-    {
-        if (item == null || item.data == null)
-            return "";
-
-        if (item.data is HoldableFirearmData firearmData)
-        {
-            item.EnsureRuntimeState();
-
-            int ammoInMag = item.firearmState != null ? item.firearmState.currentAmmoInMag : 0;
-            int reserveAmmo = 0;
-
-            var im = InventoryManager.Instance;
-            if (im != null && firearmData.ammoItem != null)
-                reserveAmmo = im.GetPlayerItemCount(firearmData.ammoItem);
-
-            return $"{ammoInMag}/{firearmData.magCapacity} ({reserveAmmo})";
-        }
-
-        if (item.HasDurability)
-            return $"{Mathf.CeilToInt(item.currentDurability)}";
-
-        return "";
-    }
-
     private void RenderStats(InventoryItem item)
     {
         if (statPanel == null)
@@ -417,8 +382,8 @@ public class EquipmentSelectionUI : MonoBehaviour
         if (detailText != null)
             detailText.text = "";
 
-        SetImage(leftPreviewIcon, null, previewHiddenColor);
-        SetImage(rightPreviewIcon, null, previewHiddenColor);
+        SetImage(leftPreviewIcon, null, Color.clear);
+        SetImage(rightPreviewIcon, null, Color.clear);
 
         if (centerHighlight != null)
             centerHighlight.SetActive(false);

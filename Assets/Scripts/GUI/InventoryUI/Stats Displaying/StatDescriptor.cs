@@ -4,7 +4,7 @@ public enum StatId
     // for cloth
     TemperatureResist, DamageResist, Weight,
     // for consumables
-    HpRestore, HungerRestore, HydrationRestore, TemperatureRestore, Durability
+    HpRestore, HungerRestore, HydrationRestore, TemperatureRestore, Durability, EnerguyRestore
 }
 
 [CreateAssetMenu(menuName = "GUI/Stats/Stat Descriptor")]

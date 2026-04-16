@@ -6,6 +6,9 @@ public class UIInputRouter : MonoBehaviour
 
     private void Update()
     {
+        if (!CanUseGameplayHotkeys())
+            return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (ui.AnyOpen)
@@ -41,6 +44,12 @@ public class UIInputRouter : MonoBehaviour
         {
             ui.CloseTop();
         }
+    }
+
+    private bool CanUseGameplayHotkeys()
+    {
+        var orch = GameplayOrchestrator.Instance;
+        return orch != null && orch.State == GameplayOrchestrator.GameState.Gameplay;
     }
 
 }

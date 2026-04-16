@@ -82,6 +82,8 @@ public class PauseManager : MonoBehaviour
 	{
 		EnsureRefs();
 
+		SoundManager.Instance.PausedSound(enabled);
+
 		if (characterController != null)
 			characterController.enabled = enabled;
 

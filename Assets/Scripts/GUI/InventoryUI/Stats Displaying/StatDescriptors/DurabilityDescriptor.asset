@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 7
   icon: {fileID: 21300000, guid: ef0d07de87f3e8c41bb365813317c43a, type: 3}
   unit: '%'
-  priority: 0
+  priority: 2
   hideIfZero: 1

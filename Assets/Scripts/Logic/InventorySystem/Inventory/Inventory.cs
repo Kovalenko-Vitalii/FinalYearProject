@@ -155,6 +155,19 @@ public class Inventory
         }
         return null;
     }
+    public void DamageItem(string id, float damage)
+    {
+        var item = GetInventoryItemById(id);
+        if (item.HasDurability)
+        {
+            item.Damage(damage);
+            if (item.currentDurability <= 0)
+            {
+                RemoveItemInstance(item);
+            }
+        }
+
+    }
     public InventoryItem GetItemByInstanceId(string instanceId)
     {
         if (string.IsNullOrWhiteSpace(instanceId))

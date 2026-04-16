@@ -79,6 +79,7 @@ public class InventoryItem
         if (currentDurability <= 0f)
         {
             currentDurability = 0f;
+            
             return true;
         }
 

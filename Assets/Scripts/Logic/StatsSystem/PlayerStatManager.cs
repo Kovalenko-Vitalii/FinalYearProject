@@ -168,6 +168,9 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
         if (cd.temperatureRestore != 0)
             ChangeTemperature(cd.temperatureRestore);
+
+        if (cd.temperatureRestore != 0)
+            ChangeEnergy(cd.energyRestore);
     }
 
     // Changing stats according to cap rules and sends event if changed value is big enough (for optimisation)

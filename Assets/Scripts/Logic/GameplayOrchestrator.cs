@@ -58,6 +58,9 @@ public class GameplayOrchestrator : MonoBehaviour
 
         EnterMenu();
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         GameLog.Log(TAG, $"Awake() finished. Singleton set");
     }
 
@@ -66,6 +69,8 @@ public class GameplayOrchestrator : MonoBehaviour
     {
         GameLog.Log(TAG, $"EnterMenu() from state={State} -> MainMenu. Will load '{menuScene}'");
 
+        CanvasSwitcher.Instance?.ClearAll();
+          
         PlayerStatManager.Instance.ResetToDefaultState();
 
         loading?.Hide(); // Hiding loading ui
