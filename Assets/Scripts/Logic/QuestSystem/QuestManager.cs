@@ -383,8 +383,6 @@ public class QuestManager : MonoBehaviour, ISaveable
     public void ResetToDefaultState()
     {
         active = null;
-        defs.Clear();
-        states.Clear();
     }
 }
 

@@ -40,6 +40,9 @@ public class GameplayOrchestrator : MonoBehaviour
     public enum GameState { Boot, MainMenu, Loading, Gameplay, Died }
     public GameState State { get; private set; } = GameState.Boot;
 
+    private string _pendingLoadingText;
+    private AudioClip _pendingLoadingSound;
+
     private void Awake()
     {
         GameLog.Log(TAG, $"Awake() initiated");
@@ -143,6 +146,15 @@ public class GameplayOrchestrator : MonoBehaviour
         else
         {
             yield return null;
+        }
+
+        // Enabling message for narrative
+        if (!string.IsNullOrWhiteSpace(_pendingLoadingText))
+        {
+            loading?.SetMessage(_pendingLoadingText);
+
+            if (_pendingLoadingSound != null)
+                SoundManager.Instance?.PlayUI(UISoundId.MenuOpen, _pendingLoadingSound);
         }
 
         // Turn off ticking and trigger action
@@ -271,6 +283,11 @@ public class GameplayOrchestrator : MonoBehaviour
             yield return null;
 
         loading?.ShowPressAnyKey(false);
+        loading?.SetMessage(null);
+        loading?.ShowProgress(false);
+
+        _pendingLoadingText = null;
+        _pendingLoadingSound = null;
 
         PlayerTickSystem.Instance?.SetEnabled(true);
 
@@ -328,5 +345,11 @@ public class GameplayOrchestrator : MonoBehaviour
         PlayerTickSystem.Instance?.SetEnabled(false);
 
         SaveManager.Instance?.LoadLastSlot();
+    }
+
+    public void SetLoadingNarrative(string text, AudioClip sound = null)
+    {
+        _pendingLoadingText = text;
+        _pendingLoadingSound = sound;
     }
 }

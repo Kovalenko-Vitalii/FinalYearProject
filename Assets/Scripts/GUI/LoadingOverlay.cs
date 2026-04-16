@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,9 @@ public class LoadingOverlay : MonoBehaviour
     [SerializeField] private CanvasGroup group;
     [SerializeField] private Slider progressSlider;
     [SerializeField] private GameObject pressAnyKeyRoot;
+
+    [Header("Narrative")]
+    [SerializeField] private TextMeshProUGUI messageText;
 
     [SerializeField] private float fadeTime = 0.2f;
 
@@ -21,7 +25,7 @@ public class LoadingOverlay : MonoBehaviour
         group.blocksRaycasts = false;
 
         if (progressSlider) progressSlider.value = 0f;
-
+        if (messageText) messageText.gameObject.SetActive(false);
         if (pressAnyKeyRoot) pressAnyKeyRoot.SetActive(false);
 
         gameObject.SetActive(true);
@@ -30,14 +34,20 @@ public class LoadingOverlay : MonoBehaviour
     public void Show()
     {
         transform.SetAsLastSibling();
+
         if (progressSlider) progressSlider.value = 0f;
+        if (progressSlider) progressSlider.gameObject.SetActive(true);
+
         ShowPressAnyKey(false);
+        SetMessage(null);
+
         FadeTo(1f, true);
     }
 
     public void Hide()
     {
         ShowPressAnyKey(false);
+        SetMessage(null);
         FadeTo(0f, false);
     }
 
@@ -46,6 +56,22 @@ public class LoadingOverlay : MonoBehaviour
         if (!progressSlider) return;
         progressSlider.value = Mathf.Clamp01(t);
     }
+
+    public void ShowProgress(bool show)
+    {
+        if (progressSlider)
+            progressSlider.gameObject.SetActive(show);
+    }
+
+    public void SetMessage(string text)
+    {
+        if (!messageText) return;
+
+        bool hasText = !string.IsNullOrWhiteSpace(text);
+        messageText.gameObject.SetActive(hasText);
+        messageText.text = hasText ? text : "";
+    }
+
 
     public void ShowPressAnyKey(bool show)
     {
@@ -90,7 +116,10 @@ public class LoadingOverlay : MonoBehaviour
         transform.SetAsLastSibling();
 
         if (progressSlider) progressSlider.value = 0f;
+        if (progressSlider) progressSlider.gameObject.SetActive(true);
+
         ShowPressAnyKey(false);
+        SetMessage(null);
 
         if (!gameObject.activeSelf)
             gameObject.SetActive(true);

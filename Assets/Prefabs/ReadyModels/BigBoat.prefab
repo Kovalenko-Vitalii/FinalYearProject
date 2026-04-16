@@ -1109,7 +1109,7 @@ GameObject:
   - component: {fileID: 4137150247214601405}
   - component: {fileID: 2922471859661830634}
   - component: {fileID: 5500507828291116849}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1785,7 +1785,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 6
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -16282,7 +16282,7 @@ MonoBehaviour:
   zoneId: 
   completionLines: []
   onCompleteActions:
-  - {fileID: 11400000, guid: 7908a38f0cb12444f978357920872475, type: 2}
+  - {fileID: 11400000, guid: fbc059d98c81e3f4096711e85bf95e87, type: 2}
 --- !u!114 &7658485007473900465
 MonoBehaviour:
   m_ObjectHideFlags: 0

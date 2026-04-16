@@ -1674,10 +1674,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
   id: TimeEnviromentManager
   currentDay: 1
-  realMinutesPerDay: 20
+  realMinutesPerDay: 15
   startTimeHours: 9
-  sunriseTimeHours: 6.5
-  sunsetTimeHours: 12
+  sunriseTimeHours: 8
+  sunsetTimeHours: 7
   sun: {fileID: 0}
   sunAxis: {x: 1, y: 0, z: 0}
   sunAngleOffset: -90
@@ -1708,7 +1708,7 @@ MonoBehaviour:
   currentMinutes: 0
   useDayNightTemperature: 1
   outdoorTemperature: -16
-  nightOutdoorTemperature: -28
+  nightOutdoorTemperature: -40
   dayOutdoorTemperature: -12
   temperatureOverDay:
     serializedVersion: 2
