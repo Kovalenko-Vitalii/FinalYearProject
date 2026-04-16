@@ -27,4 +27,11 @@ public class MonsterAIConfig : PassiveCreatureConfig
     public float attackCooldown = 1.0f;
     public int attackDamage = 1;
     public float attackLoseRange = 2.4f;
+
+    private void OnValidate()
+    {
+        attackRange = Mathf.Max(0.1f, attackRange);
+        attackLoseRange = Mathf.Max(attackRange + 0.2f, attackLoseRange);
+        attackCooldown = Mathf.Max(0.05f, attackCooldown);
+    }
 }

@@ -16,13 +16,13 @@ MonoBehaviour:
   itemName: Fuel Can
   icon: {fileID: 21300000, guid: aaeb7d40129c04a4ea7920b555acb992, type: 3}
   maxStack: 1
-  weight: 15
+  weight: 20
   description: Old fuel can i think it is diesel.
   onClickSound: {fileID: 0}
   onPickupSound: {fileID: 0}
   onDropSound: {fileID: 0}
-  hasDurability: 1
-  maxDurability: 100
+  hasDurability: 0
+  maxDurability: 0
   useDuration: 0
   tags: 32
   modules:

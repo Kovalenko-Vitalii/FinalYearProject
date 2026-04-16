@@ -5,18 +5,22 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
+    private const string MASTER_KEY = "audio_master";
+    private const string UI_KEY = "audio_ui";
+    private const string SUBTITLE_KEY = "audio_subtitle";
+    private const string WORLD_KEY = "audio_world";
+
     [Header("World Audio")]
     [SerializeField] private AudioSource worldOneShotPrefab;
     [SerializeField, Range(0f, 1f)] private float volumeWorld = 1f;
 
     [Header("2D Audio Sources")]
     [SerializeField] AudioSource uiSource;
-    [SerializeField] AudioSource footstepSource;
     [SerializeField] AudioSource subtitleSource;
 
     [Header("Volumes")]
+    [SerializeField, Range(0f, 1f)] private float volumeMaster = 1f;
     [SerializeField, Range(0f, 1f)] float volumeUI = 1f;
-    [SerializeField, Range(0f, 1f)] float volumeFootstep = 1f;
     [SerializeField, Range(0f, 1f)] float volumeSubtitle = 1f;
 
     [Header("Default Sounds")]
@@ -34,11 +38,19 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioClip noteClick;
     [SerializeField] AudioClip deathSound;
 
+    public float MasterVolume => volumeMaster;
+    public float UIVolume => volumeUI;
+    public float SubtitleVolume => volumeSubtitle;
+    public float WorldVolume => volumeWorld;
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        LoadVolumes();
+        ApplyVolumes();
     }
 
     public void PlayUI(UISoundId id, AudioClip overrideClip = null)
@@ -57,14 +69,6 @@ public class SoundManager : MonoBehaviour
         uiSource.PlayOneShot(clip, volumeUI);
     }
 
-    public void PlayFootstep(AudioClip clip, float volumeMul = 1f, float pitch = 1f)
-    {
-        if (footstepSource == null || clip == null) return;
-
-        footstepSource.pitch = pitch;
-        footstepSource.PlayOneShot(clip, volumeFootstep * volumeMul);
-    }
-
     public void PlaySubtitleSound(AudioClip clip)
     {
         if (!subtitleSource || !clip) return;
@@ -81,6 +85,8 @@ public class SoundManager : MonoBehaviour
 
         AudioSource source = Instantiate(worldOneShotPrefab, position, Quaternion.identity);
         source.pitch = pitch;
+        source.volume = volumeMaster * volumeWorld;
+
         source.PlayOneShot(clip, volumeWorld * volumeMul);
 
         float lifetime = clip.length / Mathf.Max(0.01f, Mathf.Abs(pitch));
@@ -104,6 +110,60 @@ public class SoundManager : MonoBehaviour
         UISoundId.DeathSound => deathSound,
         _ => null
     };
+
+    private void ApplyVolumes()
+    {
+        if (uiSource != null)
+            uiSource.volume = volumeMaster * volumeUI;
+
+        if (subtitleSource != null)
+            subtitleSource.volume = volumeMaster * volumeSubtitle;
+    }
+
+    public void SetMasterVolume(float value)
+    {
+        volumeMaster = Mathf.Clamp01(value);
+        ApplyVolumes();
+        SaveVolumes();
+    }
+
+    public void SetUIVolume(float value)
+    {
+        volumeUI = Mathf.Clamp01(value);
+        ApplyVolumes();
+        SaveVolumes();
+    }
+
+    public void SetSubtitleVolume(float value)
+    {
+        volumeSubtitle = Mathf.Clamp01(value);
+        ApplyVolumes();
+        SaveVolumes();
+    }
+
+    public void SetWorldVolume(float value)
+    {
+        volumeWorld = Mathf.Clamp01(value);
+        SaveVolumes();
+    }
+
+    // Save/Load
+    private void LoadVolumes()
+    {
+        volumeMaster = PlayerPrefs.GetFloat(MASTER_KEY, 1f);
+        volumeUI = PlayerPrefs.GetFloat(UI_KEY, 1f);
+        volumeSubtitle = PlayerPrefs.GetFloat(SUBTITLE_KEY, 1f);
+        volumeWorld = PlayerPrefs.GetFloat(WORLD_KEY, 1f);
+    }
+
+    private void SaveVolumes()
+    {
+        PlayerPrefs.SetFloat(MASTER_KEY, volumeMaster);
+        PlayerPrefs.SetFloat(UI_KEY, volumeUI);
+        PlayerPrefs.SetFloat(SUBTITLE_KEY, volumeSubtitle);
+        PlayerPrefs.SetFloat(WORLD_KEY, volumeWorld);
+        PlayerPrefs.Save();
+    }
 }
 
 public enum UISoundId

@@ -4,12 +4,11 @@ using UnityEngine;
 
 public static class AINoiseRanges
 {
-    public const float SneakStep = 2.5f;
-    public const float WalkStep = 5f;
+    public const float WalkStep = 10f;
 
-    public const float MinorSound = 3f;
+    public const float MinorSound = 4f;
 
-    public const float DoorSound = 8f;
+    public const float DoorSound = 12f;
 
     public const float Gunshot = 80f;
 }

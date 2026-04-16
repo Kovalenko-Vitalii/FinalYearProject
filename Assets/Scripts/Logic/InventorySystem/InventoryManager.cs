@@ -14,6 +14,9 @@ public class InventoryManager : MonoBehaviour, ISaveable
     [Header("Settings")]
     [SerializeField] private int playerSlotLimit = 10;
 
+    public int maxSlots => playerInventory?.maxSlots ?? -1;
+    public int currentSlots => playerInventory?.currentSlots ?? 0;
+
     [field: SerializeField] public Inventory playerInventory { get; private set; }
     public EquippedItems playerEquippedItems { get; private set; }
 
@@ -29,6 +32,8 @@ public class InventoryManager : MonoBehaviour, ISaveable
     public event Action<EquipmentSlotId?> OnActiveHeldSlotChanged;
 
     public event Action OwnedItemsChanged;
+
+
 
     private void Awake()
     {

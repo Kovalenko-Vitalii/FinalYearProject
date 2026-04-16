@@ -277,8 +277,8 @@ MonoBehaviour:
   quickOpenDuration: 0.1
   animator: {fileID: 7794629706925282764}
   isOpenBoolName: isOpen
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: deeb175f43c0bed4eb5fb5494128ce6a, type: 3}
+  closeSound: {fileID: 8300000, guid: bd7f409dd100d1e4b98f58a743c93bf4, type: 3}
 --- !u!95 &7794629706925282764
 Animator:
   serializedVersion: 7

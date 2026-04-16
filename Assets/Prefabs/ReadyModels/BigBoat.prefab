@@ -7952,7 +7952,7 @@ GameObject:
   - component: {fileID: 9093088618774035998}
   - component: {fileID: 2753488890170767189}
   - component: {fileID: 6937144550936014510}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Navigation (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8310,7 +8310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 4
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -11124,7 +11124,7 @@ GameObject:
   - component: {fileID: 4528562019856310083}
   - component: {fileID: 7556718763196061900}
   - component: {fileID: 8074619300421480573}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Modulator (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11484,7 +11484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 4
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -12206,7 +12206,7 @@ GameObject:
   - component: {fileID: 1125943885075969837}
   - component: {fileID: 6662735240337688199}
   - component: {fileID: 1071670613521369303}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12930,7 +12930,7 @@ GameObject:
   - component: {fileID: 1152863076001459725}
   - component: {fileID: 2458526623618744177}
   - component: {fileID: 5078435797966766071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15039,6 +15039,7 @@ MonoBehaviour:
   energyCost: 0
   timeHourCost: 0
   timeMinuteCost: 0
+  onInteractionFinishSound: {fileID: 0}
   questInteractIdOverride: navigation
   zoneId: 
   completionLines: []
@@ -16278,6 +16279,7 @@ MonoBehaviour:
   energyCost: 0
   timeHourCost: 0
   timeMinuteCost: 0
+  onInteractionFinishSound: {fileID: 0}
   questInteractIdOverride: final
   zoneId: 
   completionLines: []
@@ -16312,7 +16314,7 @@ GameObject:
   - component: {fileID: 1913944541018869231}
   - component: {fileID: 273960089081257415}
   - component: {fileID: 552103600621950819}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20138,7 +20140,7 @@ GameObject:
   - component: {fileID: 145827153761613783}
   - component: {fileID: 4056057664005508742}
   - component: {fileID: 2958890055820944302}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22642,7 +22644,7 @@ GameObject:
   - component: {fileID: 5057599702420981532}
   - component: {fileID: 5630535947709507968}
   - component: {fileID: 1521168631157946135}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24042,7 +24044,7 @@ GameObject:
   - component: {fileID: 7505409504054082841}
   - component: {fileID: 609803422436983641}
   - component: {fileID: 8483035308911485744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25131,6 +25133,7 @@ MonoBehaviour:
   energyCost: 0
   timeHourCost: 0
   timeMinuteCost: 0
+  onInteractionFinishSound: {fileID: 0}
   questInteractIdOverride: converter
   zoneId: 
   completionLines: []
@@ -26413,7 +26416,7 @@ GameObject:
   - component: {fileID: 2562001648256222997}
   - component: {fileID: 758381413535095891}
   - component: {fileID: 8479749306313068830}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27447,7 +27450,7 @@ GameObject:
   - component: {fileID: 8162853513383353300}
   - component: {fileID: 5796873430551319842}
   - component: {fileID: 3517941581439114703}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

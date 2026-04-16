@@ -225,6 +225,7 @@ public class MonsterBrain : AgentBrain
 
         attackAnimationPlaying = true;
         Context.Animator.SetTrigger(Animator.StringToHash("Attack"));
+        Context.Audio?.Play(AISoundType.Attack);
     }
 
     public void OnAttackHit()
@@ -233,19 +234,23 @@ public class MonsterBrain : AgentBrain
         if (target == null)
             return;
 
-        Vector3 delta = target.position - transform.position;
-        delta.y = 0f;
-
-        if (delta.sqrMagnitude > MonsterConfig.attackRange * MonsterConfig.attackRange)
+        float distance = GetDistanceToTargetSurface(target);
+        if (distance > MonsterConfig.attackRange)
             return;
 
         PlayerDamageReceiver receiver = target.GetComponentInParent<PlayerDamageReceiver>();
         if (receiver == null)
             return;
+
+        Vector3 hitPoint = target.position;
+        Collider targetCollider = target.GetComponentInChildren<Collider>();
+        if (targetCollider != null)
+            hitPoint = targetCollider.ClosestPoint(transform.position);
+
         receiver.ReceiveHit(new PlayerHitData(
             MonsterConfig.attackDamage,
             gameObject,
-            target.position
+            hitPoint
         ));
     }
 
@@ -484,7 +489,6 @@ public class MonsterBrain : AgentBrain
         {
             brain.Context.Mover.Stop();
             cooldown = 0f;
-            brain.Context.Audio?.Play(AISoundType.Attack);
         }
 
         public void Tick(float dt)
@@ -499,12 +503,6 @@ public class MonsterBrain : AgentBrain
             float distance = brain.GetDistanceToTargetSurface(target);
 
             if (distance > brain.MonsterConfig.attackLoseRange)
-            {
-                brain.GoToChase();
-                return;
-            }
-
-            if (distance > brain.MonsterConfig.attackLoseRange * brain.MonsterConfig.attackLoseRange)
             {
                 brain.GoToChase();
                 return;

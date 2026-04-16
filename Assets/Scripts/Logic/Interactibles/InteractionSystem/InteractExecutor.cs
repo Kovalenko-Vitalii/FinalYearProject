@@ -27,6 +27,9 @@ public class InteractExecutor : MonoBehaviour, ISaveable
     [Range(0, 23)] [SerializeField] private int timeHourCost;
     [Range(0, 59)] [SerializeField] private int timeMinuteCost;
 
+
+    [SerializeField] AudioClip onInteractionFinishSound;
+
     [Header("=On Complete Actions=")]
     [Header("Quest interact event")]
     [SerializeField] private string questInteractIdOverride;
@@ -108,6 +111,8 @@ public class InteractExecutor : MonoBehaviour, ISaveable
         RaiseZoneEnteredBuiltIn();
 
         PlayBuiltInLines();
+
+        SoundManager.Instance.PlayWorldOneShot(onInteractionFinishSound, transform.position);
 
         RunActions(ctx);
         return true;

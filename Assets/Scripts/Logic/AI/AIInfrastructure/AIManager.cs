@@ -638,7 +638,7 @@ public class AIManager : MonoBehaviour, ISaveable, IPlayerTick
 
     public void ResetToDefaultState()
     {
-        
+        ClearAllAIs();
     }
 
     #endregion

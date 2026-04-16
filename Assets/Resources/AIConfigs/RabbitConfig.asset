@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RabbitConfig
   m_EditorClassIdentifier: Assembly-CSharp::AIConfig
   creatureId: rabbit
-  maxHp: 30
+  maxHp: 10
   minIdleTime: 1
   maxIdleTime: 3
   wanderRadius: 8

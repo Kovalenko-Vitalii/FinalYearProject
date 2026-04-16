@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 3
   displayName: Pain Relief
   description: Your opioid receptors are triggered by taken painkiller, it shouts
-    down any pain in your brain. Be careful, can create dependency and addiction.
+    down any pain in your brain. Be careful, can turn you into junkie!
   icon: {fileID: 21300000, guid: df419239ef362a345bd678a8de641bf0, type: 3}
   isPositive: 0
   allowedParts: 00000000

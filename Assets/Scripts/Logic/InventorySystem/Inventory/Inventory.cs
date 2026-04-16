@@ -9,6 +9,9 @@ public class Inventory
     public List<InventoryItem> items = new List<InventoryItem>();
     private IInventoryPolicy policy;
 
+    public int maxSlots => policy?.MaxSlots ?? -1;
+    public int currentSlots => items?.Count ?? 0;
+
     public event Action OnChanged;
 
     public Inventory(IInventoryPolicy policy) { this.policy = policy; }
@@ -213,6 +216,8 @@ public class Inventory
 
 public interface IInventoryPolicy
 {
+    int MaxSlots { get; }
+
     bool CanAddItem(Inventory inventory, ItemData data, int amount);
     void AddItem(Inventory inventory, ItemData data, int amount, float durability);
 }
@@ -220,7 +225,7 @@ public interface IInventoryPolicy
 public class PlayerInventoryPolicy : IInventoryPolicy
 {
     private readonly int maxSlots;
-
+    public int MaxSlots => maxSlots;
     public PlayerInventoryPolicy(int maxSlots)
     {
         this.maxSlots = maxSlots;
@@ -305,6 +310,7 @@ public class PlayerInventoryPolicy : IInventoryPolicy
 public class StorageInventoryPolicy : IInventoryPolicy
 {
     private readonly int maxSlots;
+    public int MaxSlots => maxSlots;
     private readonly HashSet<string> allowTags;
 
     public StorageInventoryPolicy(int maxSlots = -1, IEnumerable<string> allowTags = null)

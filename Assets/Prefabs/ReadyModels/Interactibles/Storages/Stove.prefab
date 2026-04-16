@@ -3805,6 +3805,7 @@ MonoBehaviour:
   activated: 0
   lootPool:
   - {fileID: 11400000, guid: 15eac31047e7a8e47b807eae435ef993, type: 2}
+  - {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
   random: 0
 --- !u!1 &7704798317868637442
 GameObject:

@@ -2051,12 +2051,12 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 42db932501f380744a7f170b289ca270, type: 3}
     pitchRange: {x: 1, y: 1}
-    volumeRange: {x: 3, y: 3}
+    volumeRange: {x: 2, y: 2}
     cooldown: 0.2
   - type: 3
     clips:
     - {fileID: 8300000, guid: a1c257b41a8f99d47a5debfbac7b4d85, type: 3}
-    pitchRange: {x: 1, y: 1}
+    pitchRange: {x: 0.5, y: 1.5}
     volumeRange: {x: 2, y: 2}
     cooldown: 0.2
   - type: 0
@@ -2179,8 +2179,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 44.13823
-  MaxDistance: 488.16193
+  MinDistance: 2.3156433
+  MaxDistance: 98.1832
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

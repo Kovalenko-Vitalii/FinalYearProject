@@ -804,8 +804,8 @@ MonoBehaviour:
   quickOpenDuration: 0.5
   animator: {fileID: 4212196682735060184}
   isOpenBoolName: isOpen
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: deeb175f43c0bed4eb5fb5494128ce6a, type: 3}
+  closeSound: {fileID: 8300000, guid: bd7f409dd100d1e4b98f58a743c93bf4, type: 3}
 --- !u!114 &3135262156589786472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,6 +857,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bbc0ccbabcad0cf43bda3a7a06ffb830, type: 2}
   - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
   - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
+  - {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
   random: 0
 --- !u!1 &8482752151725814811
 GameObject:

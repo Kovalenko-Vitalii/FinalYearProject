@@ -17,8 +17,8 @@ MonoBehaviour:
   minIdleTime: 3
   maxIdleTime: 10
   wanderRadius: 20
-  walkSpeed: 3
-  runSpeed: 5
+  walkSpeed: 5
+  runSpeed: 8
   fleeDuration: 3
   fleeDistance: 10
   fleeRepathInterval: 0.25
@@ -33,13 +33,13 @@ MonoBehaviour:
   visionBlockers:
     serializedVersion: 2
     m_Bits: 4294967295
-  chaseSpeed: 6
+  chaseSpeed: 8
   chaseRepathInterval: 0.15
-  lostSightGraceTime: 3
+  lostSightGraceTime: 6
   searchDuration: 15
   searchRadius: 15
   searchRepathInterval: 0.8
-  attackRange: 2.2
-  attackCooldown: 2
-  attackDamage: 20
-  attackLoseRange: 2.4
+  attackRange: 1.2
+  attackCooldown: 3
+  attackDamage: 35
+  attackLoseRange: 2.2

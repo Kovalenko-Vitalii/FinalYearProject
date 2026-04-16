@@ -22,12 +22,16 @@ public class InteractableOutline : MonoBehaviour
     public void Show()
     {
         outline.OutlineColor = defaultColor;
+        outline.OutlineWidth = 8f;
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.enabled = true;
     }
 
     public void Show(Color color)
     {
         outline.OutlineColor = color;
+        outline.OutlineWidth = 8f;
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.enabled = true;
     }
 

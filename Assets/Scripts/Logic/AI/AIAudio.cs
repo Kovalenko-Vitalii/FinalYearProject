@@ -50,10 +50,10 @@ public class AIAudio : MonoBehaviour
         if (clip == null)
             return false;
 
-        audioSource.pitch = Random.Range(entry.pitchRange.x, entry.pitchRange.y);
-
+        var pitch = Random.Range(entry.pitchRange.x, entry.pitchRange.y);
         float volume = Random.Range(entry.volumeRange.x, entry.volumeRange.y);
-        audioSource.PlayOneShot(clip, volume);
+
+        SoundManager.Instance.PlayWorldOneShot(clip, transform.position, volume, pitch);
 
         lastPlayTime[type] = Time.time;
         return true;
