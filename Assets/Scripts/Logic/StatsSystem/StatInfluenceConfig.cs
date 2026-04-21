@@ -28,19 +28,14 @@ public class StatInfluenceConfig : ScriptableObject
     public MaxMultRule hydrationToStaminaDrain = new() { start01 = 0.7f, maxMult = 1.5f, power = 2f };
     public float hydrationToHealthDpsAtZero = 0.4f;
 
-    [Header("Temperature")]
-    public float normalTemp = 36.6f;
-    public float noSprintBelow = 34f;
-    public float noSprintAbove = 39f;
+    [Header("Temperature (0..1)")]
+    public MinMultRule temperatureToStaminaRegen = new() { start01 = 0.5f, minMult = 0.4f, power = 2f };
+    public MaxMultRule temperatureToStaminaDrain = new() { start01 = 0.5f, maxMult = 1.5f, power = 2f };
+    public float temperatureToHealthDpsAtZero = 0.5f;
 
-    [Tooltip("No penalty until delta >= this")]
-    public float tempPenaltyStartDelta = 1.5f;
-
-    [Tooltip("Full penalty at delta >= this")]
-    public float tempPenaltyFullDelta = 10f;
-
-    [Range(0.01f, 1f)] public float tempMinStaminaRegenMult = 0.5f;
-    [Min(1f)] public float tempMaxStaminaDrainMult = 1.6f;
+    [Range(0f, 1f)] public float noSprintBelowTemperature01 = 0.2f;
+    [Range(0f, 1f)] public float lowTemperatureMoveSpeedStart01 = 0.35f;
+    [Range(0.01f, 1f)] public float lowTemperatureMinMoveSpeedMult = 0.85f;
 
     [Header("Weight (load = weight/maxCarry)")]
     public float overloadStart = 1f;

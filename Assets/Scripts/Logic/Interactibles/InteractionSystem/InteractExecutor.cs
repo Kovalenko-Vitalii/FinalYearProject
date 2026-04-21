@@ -138,7 +138,7 @@ public class InteractExecutor : MonoBehaviour, ISaveable
 
         if (policy.HasFlag(ExecutePolicy.IgnoreRequirements) || HasRequiredItems())
         {
-            prompt = label + (includeHoldSuffix ? holdPromptSuffix : "");
+            prompt = label + (includeHoldSuffix ? holdPromptSuffix + "[E]" : "");
             return true;
         }
 

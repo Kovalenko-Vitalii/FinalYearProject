@@ -20,17 +20,28 @@ public static class StatInfluenceSystem
         s.HealthDegenerationPerSecond += EvalDpsFromStart01(hyd01, cfg.hydrationToStaminaRegen, cfg.hydrationToHealthDpsAtZero);
 
         // Temperature
-        float delta = Mathf.Abs(stats.Temperature - cfg.normalTemp);
-        float tempT = Mathf.InverseLerp(cfg.tempPenaltyStartDelta, cfg.tempPenaltyFullDelta, delta); // 0..1
+        float temp01 = Safe01(stats.Temperature, stats.TemperatureMax);
 
-        if (tempT > 0f)
-        {
-            s.StaminaRegenModifier *= Mathf.Lerp(1f, cfg.tempMinStaminaRegenMult, tempT);
-            s.StaminaDrainMultiplier *= Mathf.Lerp(1f, cfg.tempMaxStaminaDrainMult, tempT);
-        }
+        // Temperature
+        s.StaminaRegenModifier *= EvalMinMult01(temp01, cfg.temperatureToStaminaRegen);
+        s.StaminaDrainMultiplier *= EvalMaxMult01(temp01, cfg.temperatureToStaminaDrain);
+        s.HealthDegenerationPerSecond += EvalDpsFromStart01(temp01, cfg.temperatureToStaminaRegen, cfg.temperatureToHealthDpsAtZero);
 
-        if (stats.Temperature < cfg.noSprintBelow || stats.Temperature > cfg.noSprintAbove)
+        if (temp01 < cfg.noSprintBelowTemperature01)
             s.CanSprint = false;
+
+        float tempMoveT = 1f - Mathf.InverseLerp(
+            cfg.lowTemperatureMoveSpeedStart01,
+            1f,
+            temp01);
+
+        if (tempMoveT > 0f)
+        {
+            s.MoveSpeedMultiplier *= Mathf.Lerp(
+                1f,
+                cfg.lowTemperatureMinMoveSpeedMult,
+                tempMoveT);
+        }
 
         // Weight 
         float load = stats.CurrentWeight / Mathf.Max(0.0001f, stats.MaxCarryWeight);

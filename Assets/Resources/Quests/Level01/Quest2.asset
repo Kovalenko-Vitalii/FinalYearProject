@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Quest2
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 002
-  title: Eat and Drink
-  description: Search for some food to get energy
+  title: Tank is empty
+  description: There should be some fuel in the shack
   steps:
-  - type: 1
-    description: Eat something
-    targetId: 
+  - type: 4
+    description: Load and start boat
+    targetId: startedBoat
     amount: 1
-    requiredTag: 1
-  nextQuest: {fileID: 11400000, guid: 10b6d247e10d1b04e889d4cd094f8fcf, type: 2}
+    requiredTag: 0
+  nextQuest: {fileID: 11400000, guid: 8b6da8739810d3f4c9e13de6b5198691, type: 2}
+  onCompleteLines: []

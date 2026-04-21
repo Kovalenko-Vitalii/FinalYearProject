@@ -16,7 +16,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable, ISaveable
     public bool isOpen { get; private set; }
 
     [Header("UX")]
-    [SerializeField] private string displayName = "Door";
+    [SerializeField] private string displayName = "Open [E]";
 
     [Header("Lock")]
     public bool isLocked;

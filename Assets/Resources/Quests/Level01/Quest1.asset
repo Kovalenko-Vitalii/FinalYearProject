@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Quest1
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 001
-  title: GetToHouse
-  description: You have just arrived to your fishing house, get into the building
+  title: Fishing season!
+  description: It`s time to go to the sea, I need money for family.
   steps:
   - type: 3
-    description: Enter the house
-    targetId: zone2
+    description: Inspect boat
+    targetId: boat
     amount: 1
+    requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 50d8c4e82d38f6140a07b4e9ad71aaaa, type: 2}
+  onCompleteLines: []

@@ -22,11 +22,8 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     [SerializeField] private float hydrationCap = 100f;
 
     [Header("Temperature settings")]
-    [SerializeField] private float temperature = 36.6f;
-    [SerializeField] private float minTemperature = 30f;
-    [SerializeField] private float maxTemperature = 42f;
-    [SerializeField] private float normalTemperature = 36.6f;
-
+    [SerializeField] private float currentTemperature = 100f;
+    [SerializeField] private float temperatureCap = 100f;
 
     [Header("Energy settings")]
     [SerializeField] private float currentEnergy = 100f;
@@ -49,11 +46,11 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
     [Header("Temperature Simulation")]
     [SerializeField] private PlayerTemperatureSensor temperatureSensor;
-    [SerializeField] private float comfortableAmbientTemperature = 22f;
-    [SerializeField] private float bodyTempPerAmbientDegree = 0.08f;
-    [SerializeField] private float baseTemperatureChangePerSecond = 0.35f;
-    [SerializeField] private float sprintBodyHeatBonus = 0.25f;
-    [SerializeField] private float resistForFullProtection = 100f;
+    [SerializeField] private float baseTemperatureDeltaPerSecond = -0.10f;
+    [SerializeField] private float sprintTemperatureDeltaPerSecond = 0.15f;
+
+    [SerializeField, Range(0f, 1f)] private float maxTemperatureProtection = 0.8f;
+    [SerializeField] private float temperatureResistForMaxProtection = 100f;
 
     // Regen parameters
     [Header("Natural Change Rates (per second)")]
@@ -90,7 +87,8 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     public float Health => currentHealth;
     public float Hunger => currentHunger;
     public float Hydration => currentHydration;
-    public float Temperature => temperature;
+    public float Temperature => currentTemperature;
+    public float TemperatureMax => temperatureCap;
     public float Energy => currentEnergy;
 
     public float CurrentWeight => currentWeight + baseWeight;
@@ -100,8 +98,6 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
     public float HungerMax => hungerCap;
     public float HydrationMax => hydrationCap;
     public float EnergyMax => energyCap;
-    public float TemperatureMin => minTemperature;
-    public float TemperatureMax => maxTemperature;
 
     public float DamageResist => damageResist;
 
@@ -134,7 +130,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         OnHealthChanged?.Invoke(currentHealth);
         OnHungerChanged?.Invoke(currentHunger);
         OnHydrationChanged?.Invoke(currentHydration);
-        OnTemperatureChanged?.Invoke(temperature);
+        OnTemperatureChanged?.Invoke(currentTemperature);
         OnEnergyChanged?.Invoke(currentEnergy);
         OnTemperatureResistChanged?.Invoke(temperatureResist);
         OnDamageResistChanged?.Invoke(damageResist);
@@ -169,7 +165,7 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         if (cd.temperatureRestore != 0)
             ChangeTemperature(cd.temperatureRestore);
 
-        if (cd.temperatureRestore != 0)
+        if (cd.energyRestore != 0)
             ChangeEnergy(cd.energyRestore);
     }
 
@@ -201,10 +197,11 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
     public void ChangeTemperature(float amount)
     {
-        float old = temperature;
-        temperature = Mathf.Clamp(temperature + amount, minTemperature, maxTemperature);
-        if (!Mathf.Approximately(old, temperature))
-            OnTemperatureChanged?.Invoke(temperature);
+        float old = currentTemperature;
+        currentTemperature = Mathf.Clamp(currentTemperature + amount, 0f, temperatureCap);
+
+        if (!Mathf.Approximately(old, currentTemperature))
+            OnTemperatureChanged?.Invoke(currentTemperature);
     }
 
     public void ChangeEnergy(float amount)
@@ -393,8 +390,6 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
     public void Tick(float dt, bool isSprinting)
     {
-        TickTemperature(dt, isSprinting);
-
         var s = StatusEffectsSnapshot.Default;
 
         // Influence of stats like low water - loosing hp etc.
@@ -405,13 +400,13 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         effects?.ApplyAllTo(ref s);
 
         // Applying snapshot to stats
+        TickTemperature(dt, s, isSprinting);
         TickNaturalStats(dt, s, isSprinting);
 
         // death detect
         EvaluateDeath();
 
         CurrentSnapshot = s;
-
         // debug
         dbgSnapshot = s;
     }
@@ -427,39 +422,20 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
             temperatureSensor = null;
     }
 
-    private void TickTemperature(float dt, bool isSprinting)
+    private void TickTemperature(float dt, in StatusEffectsSnapshot s, bool isSprinting)
     {
-        TemperatureContext ctx = temperatureSensor != null
-            ? temperatureSensor.GetContext()
-            : new TemperatureContext
-            {
-                AmbientTemperature = 20f
-            };
+        float zoneDeltaPerSecond = temperatureSensor != null
+            ? temperatureSensor.GetTemperatureDeltaPerSecond()
+            : 0f;
 
-        float protect01 = Mathf.Clamp01(
-            temperatureResist / Mathf.Max(1f, resistForFullProtection));
-
-        float effectiveAmbient = Mathf.Lerp(
-            ctx.AmbientTemperature,
-            comfortableAmbientTemperature,
-            protect01);
-
-        float ambientDelta = effectiveAmbient - comfortableAmbientTemperature;
-        float targetBodyTemperature = normalTemperature + ambientDelta * bodyTempPerAmbientDegree;
+        float deltaPerSecond = baseTemperatureDeltaPerSecond + zoneDeltaPerSecond;
 
         if (isSprinting)
-            targetBodyTemperature += sprintBodyHeatBonus;
+            deltaPerSecond += sprintTemperatureDeltaPerSecond;
 
-        float old = temperature;
-        temperature = Mathf.MoveTowards(
-            temperature,
-            targetBodyTemperature,
-            baseTemperatureChangePerSecond * dt);
+        deltaPerSecond *= s.TemperatureRateModifier;
 
-        temperature = Mathf.Clamp(temperature, minTemperature, maxTemperature);
-
-        if (!Mathf.Approximately(old, temperature))
-            OnTemperatureChanged?.Invoke(temperature);
+        ChangeTemperature(deltaPerSecond * dt);
     }
 
     // Dealing with damage
@@ -534,13 +510,13 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         currentHunger = hungerCap;
         currentHydration = hydrationCap;
         currentEnergy = energyCap;
-        temperature = normalTemperature;
+        currentTemperature = temperatureCap;
 
         OnHealthChanged?.Invoke(currentHealth);
         OnHungerChanged?.Invoke(currentHunger);
         OnHydrationChanged?.Invoke(currentHydration);
         OnEnergyChanged?.Invoke(currentEnergy);
-        OnTemperatureChanged?.Invoke(temperature);
+        OnTemperatureChanged?.Invoke(currentTemperature);
 
         IsDead = false;
 

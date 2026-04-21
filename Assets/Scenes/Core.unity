@@ -596,10 +596,9 @@ MonoBehaviour:
   worldOneShotPrefab: {fileID: 5544304186281471637, guid: 2d2d0096efa2dc541bf4e950007177f9, type: 3}
   volumeWorld: 1
   uiSource: {fileID: 854153749}
-  footstepSource: {fileID: 2138294831}
   subtitleSource: {fileID: 1585495644}
+  volumeMaster: 1
   volumeUI: 1
-  volumeFootstep: 1
   volumeSubtitle: 1
   uiClick: {fileID: 8300000, guid: 0bcb08120ea75414aa3eda6558963449, type: 3}
   itemClick: {fileID: 8300000, guid: 045ed20d42c0c1746880dd24202b5093, type: 3}
@@ -1410,6 +1409,133 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229894198}
   m_CullTransparentMesh: 1
+--- !u!1 &1289894273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289894274}
+  - component: {fileID: 1289894276}
+  - component: {fileID: 1289894275}
+  m_Layer: 0
+  m_Name: Spot Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1289894274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289894273}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.0271213, y: -0.041482504, z: -0.0011264445, w: 0.9987705}
+  m_LocalPosition: {x: 0.185, y: -0.145, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 566708489628069552}
+  m_LocalEulerAnglesHint: {x: -3.111, y: -4.757, z: 0}
+--- !u!114 &1289894275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289894273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!108 &1289894276
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289894273}
+  m_Enabled: 1
+  serializedVersion: 11
+  m_Type: 0
+  m_Color: {r: 0.7169812, g: 0.66169155, b: 0.6256675, a: 1}
+  m_Intensity: 4
+  m_Range: 11.743271
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!1 &1397220221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1674,10 +1800,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
   id: TimeEnviromentManager
   currentDay: 1
-  realMinutesPerDay: 15
+  realMinutesPerDay: 7
   startTimeHours: 9
   sunriseTimeHours: 8
-  sunsetTimeHours: 7
+  sunsetTimeHours: 9
   sun: {fileID: 0}
   sunAxis: {x: 1, y: 0, z: 0}
   sunAngleOffset: -90
@@ -1706,10 +1832,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   currentMinutes: 0
-  useDayNightTemperature: 1
-  outdoorTemperature: -16
-  nightOutdoorTemperature: -40
-  dayOutdoorTemperature: -12
+  nightEnvironmentTemperature: 15
+  dayEnvironmentTemperature: 30
   temperatureOverDay:
     serializedVersion: 2
     m_Curve:
@@ -1896,135 +2020,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 352845219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2138294830
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2138294832}
-  - component: {fileID: 2138294831}
-  m_Layer: 0
-  m_Name: Audio Source(Footstep)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!82 &2138294831
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2138294830}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!4 &2138294832
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2138294830}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 566708489628069552}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &181156336314893317
 GameObject:
   m_ObjectHideFlags: 0
@@ -2055,10 +2050,10 @@ Transform:
   m_LocalScale: {x: 1, y: 0.95, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1289894274}
   - {fileID: 416666485}
   - {fileID: 1585495643}
   - {fileID: 854153750}
-  - {fileID: 2138294832}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -135, z: 0}
 --- !u!114 &686385179246249934
@@ -2194,10 +2189,8 @@ MonoBehaviour:
   hungerCap: 100
   currentHydration: 100
   hydrationCap: 100
-  temperature: 36.6
-  minTemperature: 30
-  maxTemperature: 42
-  normalTemperature: 36.6
+  currentTemperature: 100
+  temperatureCap: 100
   currentEnergy: 100
   energyCap: 100
   currentStamina: 100
@@ -2210,11 +2203,10 @@ MonoBehaviour:
   damageResistForMaxReduction: 100
   maxDamageReduction: 0.8
   temperatureSensor: {fileID: 0}
-  comfortableAmbientTemperature: 18
-  bodyTempPerAmbientDegree: 0.03
-  baseTemperatureChangePerSecond: 0.02
-  sprintBodyHeatBonus: 0.2
-  resistForFullProtection: 60
+  baseTemperatureDeltaPerSecond: -0.1
+  sprintTemperatureDeltaPerSecond: 0.15
+  maxTemperatureProtection: 0.8
+  temperatureResistForMaxProtection: 100
   healthRegenPerSecond: 0
   hungerDrainPerSecond: 0.1
   hydrationDrainPerSecond: 0.13

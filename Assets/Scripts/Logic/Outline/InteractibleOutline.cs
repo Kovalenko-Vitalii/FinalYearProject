@@ -31,7 +31,7 @@ public class InteractableOutline : MonoBehaviour
     {
         outline.OutlineColor = color;
         outline.OutlineWidth = 8f;
-        outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineMode = Outline.Mode.OutlineAndSilhouette;
         outline.enabled = true;
     }
 

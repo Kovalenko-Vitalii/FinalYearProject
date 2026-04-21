@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Note5
   m_EditorClassIdentifier: Assembly-CSharp::NoteData
   id: 658568990
-  noteName: To myself
+  noteName: Leonid`s thoughts
   icon: {fileID: 0}
   background: {fileID: 0}
-  textContent: I am so scared, army just cam in and without any words started burning
-    down corpses.. They blocked all exits an we can not escape. Mikhail next door
-    started digging in his basement way out, but soldiers killed him for that.. R.I.P
+  textContent: I really hope they won`t figure out my plan! I put my instruments
+    to old shack overnight
   onClickSound: {fileID: 0}
   onPickupSound: {fileID: 0}

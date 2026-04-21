@@ -39,10 +39,16 @@ public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
     private float currentMinutes;
 
     [Header("Outdoor Temperature")]
-    [SerializeField] private bool useDayNightTemperature = true;
-    [SerializeField] private float outdoorTemperature = -18f;
-    [SerializeField] private float nightOutdoorTemperature = -24f;
-    [SerializeField] private float dayOutdoorTemperature = -12f;
+    [SerializeField, Range(0f, 100f)] private float nightEnvironmentTemperature = 15f;
+    [SerializeField, Range(0f, 100f)] private float dayEnvironmentTemperature = 30f;
+
+    public float CurrentEnvironmentTemperature => EvaluateEnvironmentTemperature();
+
+    private float EvaluateEnvironmentTemperature()
+    {
+        float t = Mathf.Clamp01(temperatureOverDay.Evaluate(Time01));
+        return Mathf.Lerp(nightEnvironmentTemperature, dayEnvironmentTemperature, t);
+    }
 
     [SerializeField]
     private AnimationCurve temperatureOverDay = new AnimationCurve(
@@ -52,8 +58,6 @@ public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
         new Keyframe(0.75f, 0.4f),
         new Keyframe(1f, 0f)
     );
-
-    public float CurrentGlobalTemperature => EvaluateOutdoorTemperature();
 
     public int Day => currentDay;
 
@@ -206,16 +210,6 @@ public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
         ApplySun();
     }
 
-    // Temperature
-    private float EvaluateOutdoorTemperature()
-    {
-        if (!useDayNightTemperature)
-            return outdoorTemperature;
-
-        float t = Mathf.Clamp01(temperatureOverDay.Evaluate(Time01));
-        return Mathf.Lerp(nightOutdoorTemperature, dayOutdoorTemperature, t);
-    }
-
     // For save
     [Serializable]
     public struct DateWeatherSave
@@ -247,6 +241,6 @@ public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
     public void ResetToDefaultState()
     {
         currentDay = 1;
-        currentMinutes = startTimeHours * 60 * 60;
+        currentMinutes = startTimeHours * 60f;
     }
 }

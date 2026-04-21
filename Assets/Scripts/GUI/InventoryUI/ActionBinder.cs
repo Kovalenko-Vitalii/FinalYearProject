@@ -57,32 +57,12 @@ public static class ActionBinder
                 if (label != null)
                     label.text = string.IsNullOrEmpty(primary.label) ? primaryFallbackLabel : primary.label;
 
-                var itemData = invItem.data as ItemData;
-                float duration = itemData != null ? itemData.useDuration : 0f;
-
                 primaryButton.onClick.RemoveAllListeners();
-
-                if (hold != null && duration > 0f)
+                primaryButton.onClick.AddListener(() =>
                 {
-                    hold.Setup(
-                        duration,
-                        () =>
-                        {
-                            primary.execute?.Invoke();
-                            afterActionRefresh?.Invoke();
-                        },
-                        primary.holdStartSound,
-                        primary.holdStartSoundId
-                    );
-                }
-                else
-                {
-                    primaryButton.onClick.AddListener(() =>
-                    {
-                        primary.execute?.Invoke();
-                        afterActionRefresh?.Invoke();
-                    });
-                }
+                    primary.execute?.Invoke();
+                    afterActionRefresh?.Invoke();
+                });
             }
         }
 

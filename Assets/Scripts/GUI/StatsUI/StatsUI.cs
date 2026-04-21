@@ -8,8 +8,8 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private Image hungerBar;
     [SerializeField] private Image hydrationBar;
     [SerializeField] private Image energyBar;
+    [SerializeField] private Image temperatureBar;
 
-    [SerializeField] private TMP_Text temperatureText;
 
     [Header("HP")]
     [SerializeField] private Slider hpBar;
@@ -155,33 +155,10 @@ public class StatsUI : MonoBehaviour
 
     private void HandleTemperatureChanged(float value)
     {
-        if (stats == null) return;
+        if (temperatureBar == null || stats == null) return;
 
-        if (temperatureText != null)
-        {
-            temperatureText.text = $"{value:0.0}°C";
-            temperatureText.color = GetTemperatureColor(value);
-        }
-    }
-
-    private Color GetTemperatureColor(float bodyTemp)
-    {
-        var cfg = StatInfluenceProvider.Instance != null
-            ? StatInfluenceProvider.Instance.config
-            : null;
-
-        if (cfg == null)
-            return normalColor;
-
-        if (bodyTemp < cfg.noSprintBelow || bodyTemp > cfg.noSprintAbove)
-            return criticalColor;
-
-        float comfortMin = cfg.normalTemp - cfg.tempPenaltyStartDelta;
-        float comfortMax = cfg.normalTemp + cfg.tempPenaltyStartDelta;
-
-        if (bodyTemp < comfortMin || bodyTemp > comfortMax)
-            return warningColor;
-
-        return normalColor;
+        float t = Mathf.InverseLerp(0f, stats.TemperatureMax, value);
+        temperatureBar.fillAmount = t;
+        temperatureBar.color = GetStatColor(t);
     }
 }

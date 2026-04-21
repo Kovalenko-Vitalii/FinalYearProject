@@ -3,20 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class TemperatureZone : MonoBehaviour
 {
-    [SerializeField] private int priority = 0;
+    [Header("Temperature")]
+    [SerializeField] private float temperatureDeltaPerSecond = 0.25f;
 
-    [Header("Ambient")]
-    [SerializeField] private float baseTemperature = 5f;
-    [SerializeField] private float runtimeHeatBonus = 0f;
-
-    public int Priority => priority;
-
-    public float CurrentTemperature => baseTemperature + runtimeHeatBonus;
-
-    public void SetHeatBonus(float bonus)
-    {
-        runtimeHeatBonus = bonus;
-    }
+    public float TemperatureDeltaPerSecond => temperatureDeltaPerSecond;
 
     private void Reset()
     {
