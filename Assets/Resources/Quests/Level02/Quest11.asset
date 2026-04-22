@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Quest11
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 011
-  title: Find Leonid
-  description: There was a note in the house, maybe that will help
+  title: Unknown place
+  description: It must lead somewhere, I need to figure out what is going on here
   steps:
   - type: 3
-    description: Find Leoind
-    targetId: 7587456
+    description: Follow the road
+    targetId: 0453764358
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: edee0bbca91f74d489a40dd9c826e2d7, type: 2}

@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: Quest16
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 016
-  title: Town !
-  description: Woah, this looks like a small town, I definetly need to look there
-    for more information
+  title: Find parts
+  description: Looks like that boat is seriusly damaged, I nedd some parts to fix
+    it
   steps:
-  - type: 3
-    description: Go to the town
-    targetId: town
+  - type: 2
+    description: Get Navigation Module
+    targetId: 3463574584
     amount: 1
     requiredTag: 0
-  nextQuest: {fileID: 11400000, guid: 066600cf2f766314fa14bb4d7f40be53, type: 2}
+  - type: 2
+    description: Get Modulator
+    targetId: 29385724
+    amount: 1
+    requiredTag: 0
+  nextQuest: {fileID: 11400000, guid: 972f0e3500950ac4faa8a2b4af71b0c2, type: 2}
   onCompleteLines: []

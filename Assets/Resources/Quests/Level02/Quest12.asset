@@ -13,18 +13,13 @@ MonoBehaviour:
   m_Name: Quest12
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 012
-  title: Get Instruments
-  description: "Oh my god, that is a real murderer! \nI need to leave that place
-    as soon as possible,\nI`ll find all instruments to dig that tunnel"
+  title: Road blocked
+  description: There should be a way to pass that blockpost, I should look at the
+    cliffs
   steps:
   - type: 3
-    description: Locate shack
-    targetId: 465854
-    amount: 1
-    requiredTag: 0
-  - type: 2
-    description: Find Pickaxe
-    targetId: 7845
+    description: Pass the blockage
+    targetId: jumpeddown
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 007664a400892bb47b27b2d10f3bc681, type: 2}

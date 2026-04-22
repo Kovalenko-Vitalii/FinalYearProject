@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Quest15
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 015
-  title: Pass the blockade
-  description: There should be a way to pass that blockpost, I should look at the
-    cliffs
+  title: Boat
+  description: This boat looks like the one I had, need to have a closer look at
+    it
   steps:
   - type: 3
-    description: Get on the other side
-    targetId: jumpeddown
+    description: Inspect boat
+    targetId: newBoat
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 88c1ab059164c77458aa4c73d9be4727, type: 2}

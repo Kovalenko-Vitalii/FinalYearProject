@@ -1802,8 +1802,8 @@ MonoBehaviour:
   currentDay: 1
   realMinutesPerDay: 7
   startTimeHours: 9
-  sunriseTimeHours: 8
-  sunsetTimeHours: 9
+  sunriseTimeHours: 6
+  sunsetTimeHours: 22
   sun: {fileID: 0}
   sunAxis: {x: 1, y: 0, z: 0}
   sunAngleOffset: -90

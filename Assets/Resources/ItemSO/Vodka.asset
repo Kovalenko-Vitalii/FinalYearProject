@@ -22,8 +22,7 @@ MonoBehaviour:
   onPickupSound: {fileID: 0}
   onDropSound: {fileID: 0}
   hasDurability: 1
-  maxDurability: 10
-  useDuration: 1
+  maxDurability: 5
   tags: 1
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -32,7 +31,7 @@ MonoBehaviour:
   hpRestore: -3
   hungerRestore: 5
   hydrationRestore: -2
-  temperatureRestore: 0.2
+  temperatureRestore: 7
   energyRestore: 10
   onConsumeSound: {fileID: 8300000, guid: f5c30f8aabfd6134bbf4332c6e8144b5, type: 3}
   statusOps: []

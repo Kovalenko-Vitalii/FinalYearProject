@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Quest14
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 014
-  title: Follow the road
-  description: This road must lead to some town, I need to figure out where are people
+  title: Investigation
+  description: I need to find a way to get back home, place looks abandoned.. Maybe
+    I could find some old boat ?
   steps:
   - type: 3
-    description: Investigate Area
-    targetId: 0453764358
+    description: Investigate town
+    targetId: hangar
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 8b1b75113d58eec449cde3a467d4a308, type: 2}

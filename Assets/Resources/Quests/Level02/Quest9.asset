@@ -14,9 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 009
   title: Where am I
-  description: 'I need to find some information about where am I
-
-'
+  description: "This looks like abandoned village..  \n"
   steps:
   - type: 3
     description: Investigate area

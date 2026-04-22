@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Quest13
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   questId: 013
-  title: Dig the tunnel
-  description: Now I need to go back to that basement and finish Leonid`s work
+  title: Town ?
+  description: Woah, this looks like a small town, I definetly need to look there
+    for more information
   steps:
   - type: 3
-    description: Escape the area
-    targetId: 4762458546
+    description: Enter the town
+    targetId: town
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 4ad80da90ce22714f9f7d5451cadb544, type: 2}
