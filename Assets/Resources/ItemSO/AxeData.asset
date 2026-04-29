@@ -9,23 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bff3fae862b0b46b8facd77e9e83aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 55cb38a15eb531242b71da675ab8324b, type: 3}
   m_Name: AxeData
-  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  m_EditorClassIdentifier: Assembly-CSharp::HoldableMeleeData
   id: 67
   itemName: Axe
   icon: {fileID: 21300000, guid: 2090e8c6eafe62346980524dd2b78922, type: 3}
   maxStack: 1
-  weight: 3
-  description: Stay groomed and refreshed with the Dutch Axe "Dark Temptation" deodorant
-    spray!
-  onClickSound: {fileID: 0}
-  onPickupSound: {fileID: 0}
+  weight: 2.2
+  description: Old but reliable axe.. a bit rusty
+  onClickSound: {fileID: 8300000, guid: 045ed20d42c0c1746880dd24202b5093, type: 3}
+  onPickupSound: {fileID: 8300000, guid: 40681c7d513709045a8259ea7044863e, type: 3}
   onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
-  useDuration: 2
+  useDuration: 0
   tags: 32
   modules:
+  - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
-  pickupPrefab: {fileID: 5593405388829441404, guid: 213ad79df8d09bb4394be2878cfe4451, type: 3}
+  pickupPrefab: {fileID: 5460278839851603056, guid: 3e112686ac3d585418d83579b1ba9fa2, type: 3}
+  firstPersonPrefab: {fileID: 7327146195831343469, guid: 3b45cc9303e81d0499c93d27560a25d7, type: 3}
+  hitDistance: 2
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  damageAmount: 5
+  damageType: 1
+  swingTriggerName: Swing
+  swingSound: {fileID: 8300000, guid: 6d1f0c113a613d44b8dff57911357ad9, type: 3}

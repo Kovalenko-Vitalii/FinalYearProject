@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c32e206d79a344bbdd3d999553c74f, type: 3}
+  m_Name: VFX
+  m_EditorClassIdentifier: Assembly-CSharp::ImpactEffectDatabase
+  entries:
+  - surfaceType: 10
+    impactKind: 2
+    effectPrefab: {fileID: 7097076223889954276, guid: d7cf8ec7045904a46bc6e0f08ae4ac96, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: 22f1561e623055c4ea7f4cc10cae2ac1, type: 3}
+    soundVolume: 1
+    lifetime: 1
+  - surfaceType: 10
+    impactKind: 1
+    effectPrefab: {fileID: 7097076223889954276, guid: d7cf8ec7045904a46bc6e0f08ae4ac96, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: 22f1561e623055c4ea7f4cc10cae2ac1, type: 3}
+    soundVolume: 1
+    lifetime: 1
+  - surfaceType: 6
+    impactKind: 2
+    effectPrefab: {fileID: 7097076223889954276, guid: 6501d8e57828fa74082b60b79e1ad67f, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: dc7d357b69aa37443a58bf3defdd4d8e, type: 3}
+    - {fileID: 8300000, guid: 5979b3870a0c205449bab72f803ff029, type: 3}
+    - {fileID: 8300000, guid: 2581295f2effdfc4ab3a3a005edfdab2, type: 3}
+    - {fileID: 8300000, guid: 2581295f2effdfc4ab3a3a005edfdab2, type: 3}
+    - {fileID: 8300000, guid: 9ac69636739d4674b9390c2505b2efc4, type: 3}
+    - {fileID: 8300000, guid: c5c0831326d887e44ad265cc70f73cc7, type: 3}
+    soundVolume: 1
+    lifetime: 1
+  - surfaceType: 5
+    impactKind: 2
+    effectPrefab: {fileID: 7097076223889954276, guid: 1a3d51fc14106f642a69fe4767a6d1cd, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: 7e1d5199e69ffe845a774450d100d782, type: 3}
+    - {fileID: 8300000, guid: e26e39caf0f93c949995fb43530e2fb7, type: 3}
+    - {fileID: 8300000, guid: 2d02b924ef4919241815ce00d42f61fa, type: 3}
+    soundVolume: 1
+    lifetime: 1
+  - surfaceType: 5
+    impactKind: 1
+    effectPrefab: {fileID: 7097076223889954276, guid: 1a3d51fc14106f642a69fe4767a6d1cd, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: 7e1d5199e69ffe845a774450d100d782, type: 3}
+    - {fileID: 8300000, guid: e26e39caf0f93c949995fb43530e2fb7, type: 3}
+    - {fileID: 8300000, guid: 2d02b924ef4919241815ce00d42f61fa, type: 3}
+    soundVolume: 1
+    lifetime: 1
+  - surfaceType: 6
+    impactKind: 1
+    effectPrefab: {fileID: 7097076223889954276, guid: 6501d8e57828fa74082b60b79e1ad67f, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: dc7d357b69aa37443a58bf3defdd4d8e, type: 3}
+    - {fileID: 8300000, guid: 5979b3870a0c205449bab72f803ff029, type: 3}
+    - {fileID: 8300000, guid: 2581295f2effdfc4ab3a3a005edfdab2, type: 3}
+    - {fileID: 8300000, guid: 9ac69636739d4674b9390c2505b2efc4, type: 3}
+    - {fileID: 8300000, guid: c5c0831326d887e44ad265cc70f73cc7, type: 3}
+    soundVolume: 1
+    lifetime: 1
+  - surfaceType: 7
+    impactKind: 2
+    effectPrefab: {fileID: 7097076223889954276, guid: b596389ea5bd7be4b81447f794d6343e, type: 3}
+    soundClips:
+    - {fileID: 8300000, guid: dc7d357b69aa37443a58bf3defdd4d8e, type: 3}
+    - {fileID: 8300000, guid: 5979b3870a0c205449bab72f803ff029, type: 3}
+    - {fileID: 8300000, guid: 2581295f2effdfc4ab3a3a005edfdab2, type: 3}
+    - {fileID: 8300000, guid: 9ac69636739d4674b9390c2505b2efc4, type: 3}
+    - {fileID: 8300000, guid: c5c0831326d887e44ad265cc70f73cc7, type: 3}
+    soundVolume: 1
+    lifetime: 1

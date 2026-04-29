@@ -39,12 +39,19 @@ public class CanvasSwitcher : MonoBehaviour
 
     private void HandleStackChanged(IModalScreen changed, bool anyOpen)
     {
+        var orch = GameplayOrchestrator.Instance;
+        bool isGameplay = orch != null && orch.State == GameplayOrchestrator.GameState.Gameplay;
+
         bool shouldBlock = Top != null && Top.BlocksGameplay;
 
-        PauseManager.Instance.SetPlayerControl(!shouldBlock);
+        if (isGameplay)
+            PauseManager.Instance?.SetPlayerControl(!shouldBlock);     
+        else
+            PlayerTickSystem.Instance?.SetEnabled(false);
 
-        Cursor.lockState = shouldBlock ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = shouldBlock;
+        bool lockCursor = isGameplay && !shouldBlock;
+        Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !lockCursor;
     }
 
     public bool IsOpen(IModalScreen screen) => screen.Root.activeSelf;

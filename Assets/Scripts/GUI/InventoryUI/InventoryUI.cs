@@ -6,7 +6,10 @@ using static ItemData;
 
 public class InventoryUI : MonoBehaviour
 {
-    [SerializeField] private Inventory targetInventory;
+    [Header("Source")]
+    [SerializeField] private bool usePlayerInventory = true;
+
+    [Header("UI")]
     [SerializeField] private Transform content;
     [SerializeField] private GameObject itemPrefab;
 
@@ -18,12 +21,11 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Button buttonMaterials;
     [SerializeField] private Button buttonTools;
     [SerializeField] private Button buttonQuestItems;
-
     [SerializeField] private TextMeshProUGUI selectedList;
 
     private ItemTag activeFilter = ItemTag.None;
     private Inventory overrideInventory;
-
+    private Inventory subscribedInventory;
 
     private Inventory TargetInventory
     {
@@ -32,18 +34,23 @@ public class InventoryUI : MonoBehaviour
             if (overrideInventory != null)
                 return overrideInventory;
 
-            if (InventoryManager.Instance == null)
-                return null;
+            if (usePlayerInventory)
+                return InventoryManager.Instance != null ? InventoryManager.Instance.playerInventory : null;
 
-            return InventoryManager.Instance.playerInventory;
+            return null;
         }
     }
 
     public void SetTargetInventory(Inventory inventory)
     {
         overrideInventory = inventory;
-        if (isActiveAndEnabled)
-            Refresh();
+        RebindAndRefresh();
+    }
+
+    public void ClearOverrideInventory()
+    {
+        overrideInventory = null;
+        RebindAndRefresh();
     }
 
     private void Awake()
@@ -57,33 +64,87 @@ public class InventoryUI : MonoBehaviour
         AddFilterListener(buttonQuestItems, ItemTag.Quest, "Quest Items");
     }
 
+    private void OnEnable()
+    {
+        RebindAndRefresh();
+    }
+
+    private void Start()
+    {
+        RebindAndRefresh();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeFromInventory();
+    }
+
     private void AddFilterListener(Button button, ItemTag tag, string label)
     {
-        if (button == null) return;
+        if (button == null)
+            return;
+
         button.onClick.AddListener(() => SetFilter(tag, label));
     }
 
     private void SetFilter(ItemTag tag, string label)
     {
         activeFilter = tag;
-        if (selectedList != null) selectedList.text = label;
+
+        if (selectedList != null)
+            selectedList.text = label;
 
         Refresh();
     }
 
+    private void RebindAndRefresh()
+    {
+        SubscribeToInventory();
+        Refresh();
+    }
 
-    private void OnEnable()
+    private void SubscribeToInventory()
+    {
+        Inventory target = TargetInventory;
+
+        if (ReferenceEquals(subscribedInventory, target))
+            return;
+
+        UnsubscribeFromInventory();
+
+        subscribedInventory = target;
+
+        if (subscribedInventory != null)
+            subscribedInventory.OnChanged += HandleInventoryChanged;
+    }
+
+    private void UnsubscribeFromInventory()
+    {
+        if (subscribedInventory != null)
+            subscribedInventory.OnChanged -= HandleInventoryChanged;
+
+        subscribedInventory = null;
+    }
+
+    private void HandleInventoryChanged()
     {
         Refresh();
     }
 
     public void Refresh()
     {
-        var inventory = TargetInventory;
-        if (inventory == null) return;
+        SubscribeToInventory();
+
+        Inventory inventory = TargetInventory;
+
+        if (content == null || itemPrefab == null)
+            return;
 
         foreach (Transform child in content)
             Destroy(child.gameObject);
+
+        if (inventory == null)
+            return;
 
         var source = inventory.items.AsEnumerable();
 
@@ -91,16 +152,20 @@ public class InventoryUI : MonoBehaviour
         {
             source = source.Where(i =>
             {
-                var data = i.data;
+                ItemData data = i?.data;
                 return data != null && data.HasTag(activeFilter);
             });
         }
 
-        foreach (var item in source)
+        foreach (InventoryItem item in source)
         {
-            var obj = Instantiate(itemPrefab, content);
-            obj.GetComponent<InventoryItemUI>().SetItem(item, inventory);
+            if (item == null || item.data == null)
+                continue;
+
+            GameObject obj = Instantiate(itemPrefab, content);
+            InventoryItemUI ui = obj.GetComponent<InventoryItemUI>();
+            if (ui != null)
+                ui.SetItem(item, inventory);
         }
     }
-
 }

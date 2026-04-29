@@ -4,26 +4,24 @@ public class InventoryScreen : MenuScreen
 {
     [Header("Inventory Screen")]
     [SerializeField] private InventoryUI inventoryUI;
-    [SerializeField] private GearUI gearUI;
-    [SerializeField] private GearSelectionUI gearSelectionUI;
+    [SerializeField] private EquipmentOverviewUI gearUI;
+    [SerializeField] private EquipmentSelectionUI gearSelectionUI;
     [SerializeField] private ItemInfoUI itemInfoUI;
 
-    [SerializeField] private GearData.GearSlot defaultSlot = GearData.GearSlot.Head;
+    [SerializeField] private EquipmentSlotId defaultSlot = EquipmentSlotId.Head;
 
     public override void OnOpen()
     {
         base.OnOpen();
 
         if (inventoryUI != null)
-        {
             inventoryUI.Refresh();
-        }
 
         if (gearUI != null)
             gearUI.Refresh();
 
         if (gearSelectionUI != null)
-            gearSelectionUI.Open(defaultSlot);
+            gearSelectionUI.OpenSlot(defaultSlot);
 
         if (itemInfoUI != null)
             itemInfoUI.ShowDefault();

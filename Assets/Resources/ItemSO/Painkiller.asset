@@ -18,18 +18,22 @@ MonoBehaviour:
   maxStack: 1
   weight: 0.1
   description: Opioid painkiller, shuts down any pain. When abused can cause addiction.
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 8300000, guid: a6308ff5e308b3944a344b620a27e926, type: 3}
+  onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 10
-  useDuration: 2
   tags: 4
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
   - {fileID: 11400000, guid: b3f7fe1031153804d8be1d7aaf811704, type: 2}
-  pickupPrefab: {fileID: 5676821114242119214, guid: dfb0b876a05d4f84cb73158e03fb5baf, type: 3}
-  hpRestore: 1
+  pickupPrefab: {fileID: 3753796180928158292, guid: 603fabd136d77e4429afcc0c79df72d1, type: 3}
+  hpRestore: 0
   hungerRestore: 0
-  hydrationRestore: 0
+  hydrationRestore: -5
   temperatureRestore: 0
+  energyRestore: 0
+  onConsumeSound: {fileID: 8300000, guid: b8e60c7eaeaca6e4d885f8bf8bbd627f, type: 3}
   statusOps:
   - opType: 1
     effectId: 3

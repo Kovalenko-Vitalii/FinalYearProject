@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
 {
     [Header("Radial Bars")]
-    [SerializeField] private Image temperatureBar;
     [SerializeField] private Image hungerBar;
     [SerializeField] private Image hydrationBar;
     [SerializeField] private Image energyBar;
+    [SerializeField] private Image temperatureBar;
+
 
     [Header("HP")]
     [SerializeField] private Slider hpBar;
@@ -17,6 +19,7 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private Color warningColor = Color.yellow;
     [SerializeField] private Color criticalColor = Color.red;
+
 
     private PlayerStatManager stats;
 
@@ -152,8 +155,9 @@ public class StatsUI : MonoBehaviour
 
     private void HandleTemperatureChanged(float value)
     {
-        if (!temperatureBar || stats == null) return;
-        float t = Mathf.InverseLerp(stats.TemperatureMin, stats.TemperatureMax, value);
+        if (temperatureBar == null || stats == null) return;
+
+        float t = Mathf.InverseLerp(0f, stats.TemperatureMax, value);
         temperatureBar.fillAmount = t;
         temperatureBar.color = GetStatColor(t);
     }

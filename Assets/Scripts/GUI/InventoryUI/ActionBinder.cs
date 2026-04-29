@@ -20,11 +20,13 @@ public static class ActionBinder
         if (invItem == null || invItem.data is not IItemActionProvider provider)
             return;
 
+        var im = InventoryManager.Instance;
+
         var ctx = new ItemActionContext
         {
             source = source,
             item = invItem,
-            equipment = InventoryManager.Instance.playerEquipment
+            equippedItems = im != null ? im.playerEquippedItems : null
         };
 
         var actions = provider.GetActions(ctx).ToList();
@@ -42,41 +44,25 @@ public static class ActionBinder
 
         if (primaryButton != null)
         {
-            var primary = actions.Where(a => a.slot == ActionSlot.Use).FirstOrDefault();
+            var hold = primaryButton.GetComponent<HoldToUse>();
+            hold?.ClearBinding();
+
+            var primary = actions.FirstOrDefault(a => a.slot == ActionSlot.Use);
             if (primary.execute != null)
             {
                 primaryButton.gameObject.SetActive(true);
                 primaryButton.interactable = primary.interactable;
 
                 var label = primaryButton.GetComponentInChildren<TextMeshProUGUI>(true);
-                if (label) label.text = string.IsNullOrEmpty(primary.label) ? primaryFallbackLabel : primary.label;
-
-                var itemData = invItem.data as ItemData;
-                float duration = itemData != null ? itemData.useDuration : 0f;
-
-                var hold = primaryButton.GetComponent<HoldToUse>();
+                if (label != null)
+                    label.text = string.IsNullOrEmpty(primary.label) ? primaryFallbackLabel : primary.label;
 
                 primaryButton.onClick.RemoveAllListeners();
-
-                
-                if (hold != null && duration > 0f)
+                primaryButton.onClick.AddListener(() =>
                 {
-                    hold.Setup(duration, () =>
-                    {
-                        primary.execute?.Invoke();
-                        afterActionRefresh?.Invoke();
-                    },
-                    primary.holdStartSound,
-                    primary.holdStartSoundId);
-                }
-                else
-                {
-                    primaryButton.onClick.AddListener(() =>
-                    {
-                        primary.execute?.Invoke();
-                        afterActionRefresh?.Invoke();
-                    });
-                }
+                    primary.execute?.Invoke();
+                    afterActionRefresh?.Invoke();
+                });
             }
         }
 

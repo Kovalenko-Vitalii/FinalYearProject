@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2470707369489189711
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2233523556368344137}
+  - component: {fileID: 5859534396054080426}
+  m_Layer: 0
+  m_Name: ClothSpawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2233523556368344137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470707369489189711}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5859534396054080426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470707369489189711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d63b1673368614c9e7f51784f9b3df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LootSpawnpoint
+  id: 
+  activated: 0
+  lootPool:
+  - {fileID: 11400000, guid: 3851d54ed74291c4c9718147476bf1a0, type: 2}
+  - {fileID: 11400000, guid: c69d36e6c1ccd0847bae7183b35c6b27, type: 2}
+  - {fileID: 11400000, guid: 387ed71b16e371f4fba1b2acf13c8946, type: 2}
+  - {fileID: 11400000, guid: 3e38685841254354eb3e09abe0a94dee, type: 2}
+  - {fileID: 11400000, guid: bdb8a92f6b60b2e44b2ddf524e3a17d2, type: 2}
+  - {fileID: 11400000, guid: 36e3d4b7d9e9beb42914494a73ebaadc, type: 2}
+  - {fileID: 11400000, guid: 10d17342b827c564988bf2243ec4f5d1, type: 2}
+  - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
+  spawnAmount: 1
+  spawnChance: 70
+  randomAmount: 1
+  randomDurability: 1

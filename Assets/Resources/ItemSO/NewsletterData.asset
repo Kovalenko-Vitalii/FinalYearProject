@@ -18,8 +18,12 @@ MonoBehaviour:
   maxStack: 5
   weight: 0.1
   description: Black and white soviet newsletter, something about gardening.
+  onClickSound: {fileID: 8300000, guid: 06657f1213ea0014487434501425c298, type: 3}
+  onPickupSound: {fileID: 8300000, guid: 86ce01f81cfacae49b3ab6da883bb978, type: 3}
+  onDropSound: {fileID: 0}
   hasDurability: 0
   maxDurability: 0
+  useDuration: 0
   tags: 16
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}

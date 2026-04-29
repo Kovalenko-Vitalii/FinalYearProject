@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class SaveMenuUI : MonoBehaviour
 {
+    string TAG = "Save Menu UI";
     [Header("Scroll View")]
     [SerializeField] private Transform contentRoot;
     [SerializeField] private SaveSlotRowUI slotPrefab;
@@ -11,10 +12,15 @@ public class SaveMenuUI : MonoBehaviour
     [Header("Create new blank save")]
     [SerializeField] private TMP_InputField nameInput;
     [SerializeField] private Button createButton;
+    [SerializeField] private Toggle isTestLocation;
 
-    [Header("Blank save start location")]
+    [Header("Default start location")]
     [SerializeField] private string startSceneName = "Level01";
     [SerializeField] private string startSpawnId = "level01";
+
+    [Header("Test start location")]
+    [SerializeField] private string testSceneName = "TestLevel";
+    [SerializeField] private string testSpawnId = "TestStart";
 
     private void OnEnable()
     {
@@ -35,36 +41,34 @@ public class SaveMenuUI : MonoBehaviour
 
     public void RefreshList()
     {
-
         if (contentRoot == null)
         {
             Debug.LogError("[SaveMenuUI] contentRoot is NULL (assign ScrollView/Viewport/Content)");
             return;
         }
+
         if (slotPrefab == null)
         {
             Debug.LogError("[SaveMenuUI] slotPrefab is NULL (assign slot row prefab)");
             return;
         }
 
-        // Clear
         for (int i = contentRoot.childCount - 1; i >= 0; i--)
             Destroy(contentRoot.GetChild(i).gameObject);
 
         var sm = SaveManager.Instance;
         if (sm == null)
         {
-            Debug.LogError("[SaveMenuUI] SaveManager.Instance is NULL. Is SaveManager in Core scene and active?");
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL. Is SaveManager in Core scene and active?");
             return;
         }
 
-        var slots = sm.ListSlots();    
-
+        var slots = sm.ListSlots();
         if (slots == null) return;
 
         foreach (var meta in slots)
         {
-            Debug.Log($"[SaveMenuUI] Creating row for slot id={meta.id}, name={meta.displayName}");
+            GameLog.Log(TAG, $"Creating row for slot id={meta.id}, name={meta.displayName}");
             var row = Instantiate(slotPrefab, contentRoot);
             row.Bind(meta, this);
         }
@@ -75,10 +79,29 @@ public class SaveMenuUI : MonoBehaviour
         var sm = SaveManager.Instance;
         if (sm == null)
         {
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL on CreateBlankSave");
+            return;
+        }
+            
+        bool ok = sm.LoadSlot(slotId);
+
+        if (!ok)
+            GameLog.Error(TAG, $"Failed to load slot '{slotId}'");
+    }
+
+    public void DeleteSlot(string slotId)
+    {
+        var sm = SaveManager.Instance;
+        if (sm == null)
+        {
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL on CreateBlankSave");
             return;
         }
 
-        bool ok = sm.LoadSlot(slotId);
+        bool ok = sm.DeleteSlot(slotId);
+        RefreshList();
+        if (!ok)
+            GameLog.Error(TAG, $"Failed to delete slot '{slotId}'");
     }
 
     private void CreateBlankSave()
@@ -86,7 +109,7 @@ public class SaveMenuUI : MonoBehaviour
         var sm = SaveManager.Instance;
         if (sm == null)
         {
-            Debug.LogError("[SaveMenuUI] SaveManager.Instance is NULL on CreateBlankSave");
+            GameLog.Error(TAG, $"SaveManager.Instance is NULL on CreateBlankSave");
             return;
         }
 
@@ -95,9 +118,17 @@ public class SaveMenuUI : MonoBehaviour
         if (string.IsNullOrWhiteSpace(displayName))
             displayName = "New Save";
 
-        string id = sm.CreateBlankSlot(displayName, startSceneName, startSpawnId);
+        bool useTest = isTestLocation != null && isTestLocation.isOn;
 
-        if (nameInput != null) nameInput.text = "";
+        string sceneName = useTest ? testSceneName : startSceneName;
+        string spawnId = useTest ? testSpawnId : startSpawnId;
+
+        string id = sm.CreateBlankSlot(displayName, sceneName, spawnId);
+
+        Debug.Log($"[SaveMenuUI] Blank save created. id={id}, scene={sceneName}, spawn={spawnId}, test={useTest}");
+
+        if (nameInput != null)
+            nameInput.text = "";
 
         RefreshList();
     }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,149 +21,127 @@ public class ItemInfoUI : MonoBehaviour
     [SerializeField, TextArea] private string defaultDescription = "";
 
     private Inventory trackedSource;
-    private ItemData trackedItem;
-    private int trackedCount;
-    private bool subscribed;
+    private Inventory subscribedSource;
+    private InventoryItem trackedItem;
 
-    private InventoryItem trackedInvItem;
+    private bool subscribedToManager;
 
-    void Awake() => ShowDefault();
+    private void Awake()
+    {
+        ShowDefault();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeFromSource();
+        UnsubscribeFromManager();
+    }
 
     public void SetItem(InventoryItem invItem, Inventory source)
     {
-        if (invItem == null || invItem.data == null)
-        {
-            ShowDefault();
-            return;
-        }
-
+        trackedItem = invItem;
         trackedSource = source;
-        trackedItem = invItem.data;
-        trackedInvItem = invItem;
-        trackedCount = InventoryUtil.Count(trackedSource, trackedItem);
 
-        var data = invItem.data;
-        if (icon) icon.sprite = data.icon ? data.icon : defaultIcon;
-        if (itemName) itemName.text = string.IsNullOrEmpty(data.itemName) ? defaultName : data.itemName;
-        if (itemDescription) itemDescription.text = string.IsNullOrEmpty(data.description) ? defaultDescription : data.description;
+        SubscribeToManager();
+        SubscribeToSource();
 
-        if (statPanel != null) statPanel.Render(trackedInvItem);
-
-        if (buttonEquip) buttonEquip.gameObject.SetActive(true);
-        if (buttonDelete) buttonDelete.gameObject.SetActive(true);
-        if (buttonActions) buttonActions.gameObject.SetActive(false);
-
-        ActionBinder.BindFixedButtons(
-            dropButton: buttonDelete,
-            primaryButton: buttonEquip,
-            actionsButton: buttonActions,
-            invItem: trackedInvItem,
-            source: source,
-            afterActionRefresh: AfterActionRefresh,
-            primaryFallbackLabel: "Use"
-        );
-
-        Subscribe();
+        RefreshTrackedItem();
     }
-
 
     public void ShowDefault()
     {
-        if (icon) icon.sprite = defaultIcon;
-        if (itemName) itemName.text = defaultName;
-        if (itemDescription) itemDescription.text = defaultDescription;
+        if (icon != null)
+            icon.sprite = defaultIcon;
 
-        if (buttonEquip) buttonEquip.gameObject.SetActive(false);
-        if (buttonDelete) buttonDelete.gameObject.SetActive(false);
-        if (buttonActions) buttonActions.gameObject.SetActive(false);
+        if (itemName != null)
+            itemName.text = defaultName;
 
-        trackedSource = null;
+        if (itemDescription != null)
+            itemDescription.text = defaultDescription;
+
+        if (buttonEquip != null)
+        {
+            buttonEquip.onClick.RemoveAllListeners();
+            buttonEquip.gameObject.SetActive(false);
+        }
+
+        if (buttonDelete != null)
+        {
+            buttonDelete.onClick.RemoveAllListeners();
+            buttonDelete.gameObject.SetActive(false);
+        }
+
+        if (buttonActions != null)
+        {
+            buttonActions.onClick.RemoveAllListeners();
+            buttonActions.gameObject.SetActive(false);
+        }
+
+        if (statPanel != null)
+            statPanel.Clear();
+
         trackedItem = null;
-        trackedInvItem = null;
-        trackedCount = 0;
+        trackedSource = null;
 
-        statPanel.Clear();
+        UnsubscribeFromSource();
     }
 
-    private void Subscribe()
+    private void SubscribeToManager()
     {
-        if (subscribed) return;
+        if (subscribedToManager)
+            return;
+
         var im = InventoryManager.Instance;
         if (im != null)
         {
-            im.OnPlayerInventoryChanged += OnInventoryChanged;
-            if (im.playerEquipment != null)
-                im.playerEquipment.OnChanged += OnEquipmentChanged;
-            subscribed = true;
+            im.OnEquipmentChanged += OnEquipmentChanged;
+            subscribedToManager = true;
         }
     }
 
-    private void Unsubscribe()
+    private void UnsubscribeFromManager()
     {
-        if (!subscribed) return;
+        if (!subscribedToManager)
+            return;
+
         var im = InventoryManager.Instance;
         if (im != null)
-        {
-            im.OnPlayerInventoryChanged -= OnInventoryChanged;
-            if (im.playerEquipment != null)
-                im.playerEquipment.OnChanged -= OnEquipmentChanged;
-        }
-        subscribed = false;
+            im.OnEquipmentChanged -= OnEquipmentChanged;
+
+        subscribedToManager = false;
     }
 
-    private void OnDestroy() => Unsubscribe();
-
-    private void OnInventoryChanged()
+    private void SubscribeToSource()
     {
-        if (trackedSource == null || trackedItem == null) return;
-
-        int current = InventoryUtil.Count(trackedSource, trackedItem);
-        if (current == 0)
-        {
-            ShowDefault();
+        if (ReferenceEquals(subscribedSource, trackedSource))
             return;
-        }
 
-        if (current != trackedCount)
-        {
-            trackedCount = current;
-            ActionBinder.BindFixedButtons(
-                buttonDelete,
-                buttonEquip,
-                buttonActions,
-                InventoryUtil.MakeItem(trackedSource, trackedItem),
-                trackedSource,
-                AfterActionRefresh,
-                "Use"
-            );
-        }
+        UnsubscribeFromSource();
+
+        subscribedSource = trackedSource;
+        if (subscribedSource != null)
+            subscribedSource.OnChanged += OnSourceChanged;
     }
 
-    private void OnEquipmentChanged(GearData.GearSlot slot, GearData oldGear, GearData newGear)
+    private void UnsubscribeFromSource()
     {
-        if (trackedItem is not GearData g) return;
-        if (g.slot != slot) return;
+        if (subscribedSource != null)
+            subscribedSource.OnChanged -= OnSourceChanged;
 
-        if (ReferenceEquals(newGear, trackedItem) && InventoryUtil.Count(trackedSource, trackedItem) == 0)
-        {
-            ShowDefault();
-            return;
-        }
-
-        trackedCount = InventoryUtil.Count(trackedSource, trackedItem);
-
-        ActionBinder.BindFixedButtons(
-            buttonDelete,
-            buttonEquip,
-            buttonActions,
-            InventoryUtil.MakeItem(trackedSource, trackedItem),
-            trackedSource,
-            AfterActionRefresh,
-            "Use"
-        );
+        subscribedSource = null;
     }
 
-    private void AfterActionRefresh()
+    private void OnSourceChanged()
+    {
+        RefreshTrackedItem();
+    }
+
+    private void OnEquipmentChanged()
+    {
+        RefreshTrackedItem();
+    }
+
+    private void RefreshTrackedItem()
     {
         if (trackedSource == null || trackedItem == null)
         {
@@ -172,34 +149,47 @@ public class ItemInfoUI : MonoBehaviour
             return;
         }
 
-        trackedCount = InventoryUtil.Count(trackedSource, trackedItem);
-        if (trackedCount == 0)
+        if (!ContainsTrackedItem())
         {
             ShowDefault();
             return;
         }
 
-        var invItem = InventoryUtil.MakeItem(trackedSource, trackedItem);
-        if (invItem == null)
+        var data = trackedItem.data;
+        if (data == null)
         {
             ShowDefault();
             return;
         }
 
-        trackedInvItem = invItem;
+        if (icon != null)
+            icon.sprite = data.icon != null ? data.icon : defaultIcon;
+
+        if (itemName != null)
+            itemName.text = string.IsNullOrEmpty(data.itemName) ? defaultName : data.itemName;
+
+        if (itemDescription != null)
+            itemDescription.text = string.IsNullOrEmpty(data.description) ? defaultDescription : data.description;
 
         if (statPanel != null)
-            statPanel.Render(trackedInvItem);
+            statPanel.Render(trackedItem);
 
         ActionBinder.BindFixedButtons(
-            buttonDelete,
-            buttonEquip,
-            buttonActions,
-            trackedInvItem,
-            trackedSource,
-            AfterActionRefresh,
-            "Use"
+            dropButton: buttonDelete,
+            primaryButton: buttonEquip,
+            actionsButton: buttonActions,
+            invItem: trackedItem,
+            source: trackedSource,
+            afterActionRefresh: RefreshTrackedItem,
+            primaryFallbackLabel: "Use"
         );
     }
 
+    private bool ContainsTrackedItem()
+    {
+        if (trackedSource == null || trackedItem == null)
+            return false;
+
+        return trackedSource.items.Contains(trackedItem);
+    }
 }

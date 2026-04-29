@@ -16,14 +16,14 @@ MonoBehaviour:
   itemName: Blue Jeans
   icon: {fileID: 21300000, guid: ef05fdf72cf47184f8c3ae1aa2d56239, type: 3}
   maxStack: 1
-  weight: 0.4
+  weight: 0.9
   description: Become a fashion demon with this grail.
-  onClickSound: {fileID: 0}
-  onPickupSound: {fileID: 0}
+  onClickSound: {fileID: 8300000, guid: 42ea3e2ce6c76ee458e823faa088f800, type: 3}
+  onPickupSound: {fileID: 8300000, guid: a5760998cf5066d4495bcfe99356c8e3, type: 3}
   onDropSound: {fileID: 0}
   hasDurability: 1
   maxDurability: 100
-  useDuration: 5
+  useDuration: 2
   tags: 8
   modules:
   - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
@@ -31,6 +31,6 @@ MonoBehaviour:
   pickupPrefab: {fileID: 2301237298300920353, guid: 142d972c206363648a651c5f5c05d2d8, type: 3}
   temperatureResist: 4
   damageResist: 1
-  onEquipSound: {fileID: 0}
-  onUnequipSound: {fileID: 0}
+  onEquipSound: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
+  onUnequipSound: {fileID: 8300000, guid: b4a2be9728ac74b498000dd706359773, type: 3}
   slot: 2

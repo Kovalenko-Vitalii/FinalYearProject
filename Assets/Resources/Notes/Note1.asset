@@ -15,6 +15,8 @@ MonoBehaviour:
   id: 01
   noteName: Note from Anatoliy
   icon: {fileID: 0}
-  background: {fileID: 0}
+  background: {fileID: 21300000, guid: ec7419963ace99d4c8e34ef7e9ee7ad4, type: 3}
   textContent: Hello Dmitrii, I`ve fixed your boat, just put some fuel in it and
     it is ready to go. And yeah I took your tushenka..
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 0}

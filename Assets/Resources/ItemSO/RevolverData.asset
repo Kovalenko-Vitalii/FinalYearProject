@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632405b11da4e8d4ba809d4ec73fe1dd, type: 3}
+  m_Name: RevolverData
+  m_EditorClassIdentifier: Assembly-CSharp::HoldableFirearmData
+  id: 6786
+  itemName: Revolver
+  icon: {fileID: 21300000, guid: 5610f1f3676717942a6676362f2055e2, type: 3}
+  maxStack: 1
+  weight: 1.2
+  description: Old rusty Nagan revolver, hope it doesn`t explode in my hands..
+  onClickSound: {fileID: 0}
+  onPickupSound: {fileID: 8300000, guid: 40681c7d513709045a8259ea7044863e, type: 3}
+  onDropSound: {fileID: 0}
+  hasDurability: 1
+  maxDurability: 100
+  useDuration: 0
+  tags: 32
+  modules:
+  - {fileID: 11400000, guid: dd867bcaf8c7407469d4305aa8a53b68, type: 2}
+  - {fileID: 11400000, guid: d76cf2687892c8348b3ffebb2b8b1c9c, type: 2}
+  pickupPrefab: {fileID: 8449905402055494328, guid: b7df02f85152c2e42a1df7d9608ac8c0, type: 3}
+  firstPersonPrefab: {fileID: 7466473699233248179, guid: c5561adeebefcf747a6c521bb53feedc, type: 3}
+  damageAmount: 20
+  fireCooldown: 1
+  fireDistance: 30
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  damageType: 3
+  ammoItem: {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
+  ammoPerShot: 1
+  magCapacity: 6
+  reloadMode: 1
+  reloadDuration: 1.5
+  fireKickBack: 0.08
+  fireKickUp: 8
+  shotSound: {fileID: 8300000, guid: 197a1f0fb588fee4ba74e9b5c9bfb40b, type: 3}
+  dryShotSound: {fileID: 8300000, guid: 2a230a2b0b85b694c9cda88b3eaa58d7, type: 3}
+  aimSound: {fileID: 8300000, guid: 3e94189cdc4026241b1a725d0d197918, type: 3}
+  reloadSound: {fileID: 8300000, guid: 7be66c9963887944d9205f46af02d0cb, type: 3}
