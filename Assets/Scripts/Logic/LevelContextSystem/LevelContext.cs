@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class is responsibkle for storing links on static objects on content scene
 public class LevelContext : MonoBehaviour
 {
     [SerializeField] private Light directionalLight;

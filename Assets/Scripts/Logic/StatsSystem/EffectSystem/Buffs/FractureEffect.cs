@@ -15,8 +15,7 @@ public class FractureEffect : StatusEffect
         if (TargetPart == BodyPart.LeftLeg || TargetPart == BodyPart.RightLeg)
         {
             s.MoveSpeedMultiplier = Mathf.Min(s.MoveSpeedMultiplier, speedMultiplier);
-            if (speedMultiplier <= 0.6f)
-                s.CanSprint = false;
+            s.CanSprint = false;
         }
     }
 }

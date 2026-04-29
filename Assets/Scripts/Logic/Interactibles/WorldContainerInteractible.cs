@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents an interaction overlay for accessing world container
 [RequireComponent(typeof(WorldContainer))]
 public class WorldContainerInteractable : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback, ISaveable
 {

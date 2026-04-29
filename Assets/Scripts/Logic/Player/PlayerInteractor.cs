@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class is respobsible for managing interaction with other objects from player`s perspective
 public class PlayerInteractor : MonoBehaviour
 {
     [Header("Raycast")]

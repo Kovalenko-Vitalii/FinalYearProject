@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+// This class represents runtime data of inventory item with dynamic data
+
 [Serializable]
 public class InventoryItem
 {

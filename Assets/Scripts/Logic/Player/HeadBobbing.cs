@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-// I have moved it from my old game and modified so it runs in current project
+// This class is responsible for making realistic headbobbing for player`s camera when moving
 public class HeadBobbing : MonoBehaviour, IPlayerTick
 {
     [Header("Links")]

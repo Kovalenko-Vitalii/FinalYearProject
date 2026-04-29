@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class represents holdable meklee item 
 [CreateAssetMenu(menuName = "Items/HoldableMeleeData")]
 public class HoldableMeleeData : HoldableItemData
 {

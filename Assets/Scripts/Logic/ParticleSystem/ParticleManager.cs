@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class is responsible for spawning any kind of particle on the 
 public class ParticleManager : MonoBehaviour
 {
     public static ParticleManager Instance { get; private set; }
@@ -31,12 +32,12 @@ public class ParticleManager : MonoBehaviour
         if (ps == null)
         {
             Debug.LogError($"Prefab '{prefab.name}' has no ParticleSystem component.");
-            UnityEngine.Object.Destroy(instance);
+            Destroy(instance);
             return null;
         }
 
         ps.Play();
-        UnityEngine.Object.Destroy(instance, ps.main.duration + ps.main.startLifetime.constantMax);
+        Destroy(instance, ps.main.duration + ps.main.startLifetime.constantMax);
         return ps;
     }
 }

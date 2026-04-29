@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Line08
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 3456
-  text: Where am I ???
-  voice: {fileID: 8300000, guid: 4ab9eb43c61d4e84a9c65c03fc0fecf1, type: 3}
+  text: What the hell, where am I ? That storm broke my little boat !
+  voice: {fileID: 8300000, guid: a755fd96fe5c80b4da2b43ba4c418f38, type: 3}
   duration: 1.2

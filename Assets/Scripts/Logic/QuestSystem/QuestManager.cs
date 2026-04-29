@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static ItemData;
 
-// This script is responsible for managing quests
+// This class is responsible for managing quests
 public class QuestManager : MonoBehaviour, ISaveable
 {
     string TAG = "QuestManager"; 
@@ -174,7 +174,7 @@ public class QuestManager : MonoBehaviour, ISaveable
         if (quest == null) return;
         if (quest.onCompleteLines == null || quest.onCompleteLines.Count == 0) return;
 
-        var subs = SubtitleService.Instance;
+        var subs = SubtitleManager.Instance;
         if (subs == null) return;
 
         subs.PlaySequence(quest.onCompleteLines);

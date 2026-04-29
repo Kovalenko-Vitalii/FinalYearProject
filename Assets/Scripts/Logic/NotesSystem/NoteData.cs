@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This scriptable object represents static data of note
 [CreateAssetMenu(menuName = "Plot/NoteData")]
 public class NoteData : ScriptableObject
 {

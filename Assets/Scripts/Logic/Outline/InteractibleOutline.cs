@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class creates additional layer of outline management script for interactible objects
 [RequireComponent(typeof(Outline))]
 public class InteractableOutline : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class InteractableOutline : MonoBehaviour
     {
         outline.OutlineColor = defaultColor;
         outline.OutlineWidth = 8f;
-        outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineMode = Outline.Mode.OutlineAndSilhouette;
         outline.enabled = true;
     }
 

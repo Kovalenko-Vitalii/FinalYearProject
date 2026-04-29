@@ -55,4 +55,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 36e3d4b7d9e9beb42914494a73ebaadc, type: 2}
   - {fileID: 11400000, guid: 10d17342b827c564988bf2243ec4f5d1, type: 2}
   - {fileID: 11400000, guid: cd03beb3db22116459140ca82957915b, type: 2}
-  random: 1
+  spawnAmount: 1
+  spawnChance: 70
+  randomAmount: 1
+  randomDurability: 1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents a base for any kind of action that inventory item can have
 public enum ActionSlot { Use, Secondary, Drop }
 
 public struct ItemAction

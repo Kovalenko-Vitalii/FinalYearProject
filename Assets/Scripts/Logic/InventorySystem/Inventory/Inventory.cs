@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
+// This class represents a basic class for inventory that stores itemData
+[Serializable]
 public class Inventory
 {
     public List<InventoryItem> items = new List<InventoryItem>();
@@ -235,6 +236,7 @@ public interface IInventoryPolicy
     void AddItem(Inventory inventory, ItemData data, int amount, float durability);
 }
 
+// These classes represents adjustable ruled for inventory 
 public class PlayerInventoryPolicy : IInventoryPolicy
 {
     private readonly int maxSlots;

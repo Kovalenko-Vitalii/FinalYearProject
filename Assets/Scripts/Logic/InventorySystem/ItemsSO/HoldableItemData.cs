@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents base holdable item data
 public class HoldableItemData : ItemData, IEquippableItemData
 {
     public GameObject firstPersonPrefab;

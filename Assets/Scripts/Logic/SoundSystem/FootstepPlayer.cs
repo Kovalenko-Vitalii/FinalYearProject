@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// This class is responsible for footstep sound identification
 public class FootstepPlayer : MonoBehaviour, IPlayerTick
 {
     [Header("Links")]

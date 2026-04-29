@@ -3,6 +3,7 @@
 public class PainkillerEffect : StatusEffect
 {
     public float Suppression { get; private set; }
+    public bool AllowsSprintThroughLegInjury => Suppression >= 0.35f;
 
     public PainkillerEffect(float duration, float suppression, BodyPart? target = null)
         : base(StatusEffectId.Painkiller, duration, target)

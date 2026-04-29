@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class preprsents object that holds camera and position of hands
 public class HandsRig : MonoBehaviour
 {
     public static HandsRig Instance { get; private set; }

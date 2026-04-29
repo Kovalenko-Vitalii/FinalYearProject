@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents a drop action for any kind of inventory items
 [CreateAssetMenu(menuName = "Items/Actions/Drop")]
 public class DropActionModule : ActionModule
 {

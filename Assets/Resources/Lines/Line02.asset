@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Line02
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 002
-  text: I gues I am hungry and need to rest, there should be some food in the house
-    I guess
-  voice: {fileID: 8300000, guid: 2f6c7bc23e4797946ab433d8c1bee7ff, type: 3}
+  text: I am starving, hope there is some food left in the house
+  voice: {fileID: 8300000, guid: e3b2840427ab3d2458d454d1cbcefef4, type: 3}
   duration: 5

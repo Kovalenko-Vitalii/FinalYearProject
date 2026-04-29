@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// This class represents inveraction activator that worked when entered
 [RequireComponent(typeof(Collider))]
 public class TriggerEnterActivator : MonoBehaviour, ISaveable
 {

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Line03
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 003
-  text: 'Finally I got inside here. So dirty, I might clean this shack next time
-    I return '
-  voice: {fileID: 8300000, guid: 0deed4c127a216b46bf8ea65d8fbeea2, type: 3}
+  text: Finally inside, one day I will clean this mess up
+  voice: {fileID: 8300000, guid: 34629cacbae9e0a418ce2f82e2a69d80, type: 3}
   duration: 5

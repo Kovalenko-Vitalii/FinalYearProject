@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: Line10
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 463457
-  text: 'Looks like It leads outside of that willage.
-
-    I think I might need an
-    pickaxe for that!'
-  voice: {fileID: 8300000, guid: 94cec8db9092b9243ae24226c4599efd, type: 3}
+  text: Looks like this tunnel leads outside of that village, need to find a pickaxe
+    !
+  voice: {fileID: 8300000, guid: 9dd144fb1a6a05f459b6c029d4a83189, type: 3}
   duration: 5

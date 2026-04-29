@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class ticks every
 public class StatsTicker : MonoBehaviour, IPlayerTick
 {
     [SerializeField] private PlayerMovement move;

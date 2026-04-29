@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class represents holdable item controller, it switches items in hand slots
 public class PlayerItemController : MonoBehaviour
 {
     private const string TAG = "PlayerItemController";

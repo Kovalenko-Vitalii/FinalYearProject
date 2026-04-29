@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static ItemData;
 
+// This class is responsible for managing inventories, it stores player inventory, equipment and allows to interact with storage
 public class InventoryManager : MonoBehaviour, ISaveable
 {
     public static InventoryManager Instance { get; private set; }

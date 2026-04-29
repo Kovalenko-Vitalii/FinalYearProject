@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using static ItemData;
 
+// This class represents quest interaction executor that can be triggered by 2 types of activators
 public class InteractExecutor : MonoBehaviour, ISaveable
 {
     [SerializeField] private string id;
@@ -220,7 +221,7 @@ public class InteractExecutor : MonoBehaviour, ISaveable
     {
         if (completionLines == null || completionLines.Length == 0) return;
 
-        var subtitleService = SubtitleService.Instance;
+        var subtitleService = SubtitleManager.Instance;
         if (subtitleService == null) return;
 
         foreach (var line in completionLines)

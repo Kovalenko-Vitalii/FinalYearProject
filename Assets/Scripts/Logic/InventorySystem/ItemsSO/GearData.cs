@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents data for cloth
 [CreateAssetMenu(menuName = "Items/GearData")]
 public class GearData : ItemData, IStatProvider, IEquippableItemData
 {

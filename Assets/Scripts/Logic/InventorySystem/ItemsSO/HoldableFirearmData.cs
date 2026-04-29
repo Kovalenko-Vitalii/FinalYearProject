@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// This class firearm holdable data
+
 [CreateAssetMenu(menuName = "Items/HoldableFirearmData")]
 public class HoldableFirearmData : HoldableItemData
 {

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class represents damageble obstacle that manages physical object that have HP that can be destroyed by damage
 [RequireComponent(typeof(DamageableObstacle))]
 [RequireComponent(typeof(InteractableOutline))]
 public class ObstacleOutline : MonoBehaviour

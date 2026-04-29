@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// This class represents runtime melee holdable instance
 public class HeldMeleeItem : PlayerHeldItem
 {
     string TAG = "MELEE";

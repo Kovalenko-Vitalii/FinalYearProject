@@ -853,12 +853,12 @@ MonoBehaviour:
   id: 
   activated: 0
   lootPool:
-  - {fileID: 11400000, guid: 01be3ef2423a45c449de371f5caa33a8, type: 2}
-  - {fileID: 11400000, guid: bbc0ccbabcad0cf43bda3a7a06ffb830, type: 2}
-  - {fileID: 11400000, guid: 9e04d29a9fc3d394bb47e0cee156ff48, type: 2}
   - {fileID: 11400000, guid: f4e113a7faf296241b597cad89c5915b, type: 2}
-  - {fileID: 11400000, guid: 1e9d8711cbe063e44abf03126a6025bf, type: 2}
-  random: 0
+  - {fileID: 11400000, guid: 5a587e2015fb50f48b30d46a2e2e5ccf, type: 2}
+  spawnAmount: 2
+  spawnChance: 40
+  randomAmount: 1
+  randomDurability: 1
 --- !u!1 &8482752151725814811
 GameObject:
   m_ObjectHideFlags: 0

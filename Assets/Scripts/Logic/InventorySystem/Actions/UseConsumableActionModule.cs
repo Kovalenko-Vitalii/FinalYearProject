@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents a consume action for consumable item
 [CreateAssetMenu(menuName = "Items/Actions/Use Consumable")]
 public class UseConsumableActionModule : ActionModule
 {

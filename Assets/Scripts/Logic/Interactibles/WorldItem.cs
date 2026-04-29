@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class represent inventory item instnace in game world
 [RequireComponent(typeof(Collider))]
 public class WorldItem : MonoBehaviour, IInteractable
 {

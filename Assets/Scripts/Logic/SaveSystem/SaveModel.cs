@@ -82,6 +82,7 @@ public class SaveWorldState
     public List<WorldStateEntry> entries = new();
 }
 
+// Interface used for any instance that should be saved
 public interface ISaveable
 {
     string SaveId { get; }

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Line05
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 005
-  text: So glad I`ve left some food here, I`ts time to eat
-  voice: {fileID: 8300000, guid: e8040a626f6c3624a804842ba0c4a97e, type: 3}
+  text: Should be some food leftowers...
+  voice: {fileID: 8300000, guid: 821bd40fdb96cb945a5e92e4d080d97d, type: 3}
   duration: 4

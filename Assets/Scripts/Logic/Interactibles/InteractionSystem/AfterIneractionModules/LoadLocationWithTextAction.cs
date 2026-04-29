@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class represents after interaction action that loads scene
 [CreateAssetMenu(menuName = "InteractActions/Load Location With Text")]
 public class LoadLocationWithTextAction : InteractAction
 {

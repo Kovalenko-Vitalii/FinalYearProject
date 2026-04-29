@@ -1800,10 +1800,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DateWeatherManager
   id: TimeEnviromentManager
   currentDay: 1
-  realMinutesPerDay: 7
+  realMinutesPerDay: 12
   startTimeHours: 9
   sunriseTimeHours: 6
-  sunsetTimeHours: 22
+  sunsetTimeHours: 23
   sun: {fileID: 0}
   sunAxis: {x: 1, y: 0, z: 0}
   sunAngleOffset: -90
@@ -1832,8 +1832,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   currentMinutes: 0
-  nightEnvironmentTemperature: 15
-  dayEnvironmentTemperature: 30
+  nightTemperatureDeltaPerSecond: -0.25
+  dayTemperatureDeltaPerSecond: -0.1
   temperatureOverDay:
     serializedVersion: 2
     m_Curve:
@@ -1847,8 +1847,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.23
-      value: 0
+      time: 0.16750279
+      value: 0.421428
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1865,8 +1865,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.77
-      value: 0.2
+      time: 0.84500605
+      value: 0.4142799
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2208,10 +2208,10 @@ MonoBehaviour:
   maxTemperatureProtection: 0.8
   temperatureResistForMaxProtection: 100
   healthRegenPerSecond: 0
-  hungerDrainPerSecond: 0.1
-  hydrationDrainPerSecond: 0.13
-  energyDrainPerSecond: 0.05
-  staminaRegenPerSecond: 18
+  hungerDrainPerSecond: 0.13
+  hydrationDrainPerSecond: 0.15
+  energyDrainPerSecond: 0.07
+  staminaRegenPerSecond: 16.5
   minStaminaToStartSprint: 10
   dbgSnapshot:
     HealthDegenerationPerSecond: 0

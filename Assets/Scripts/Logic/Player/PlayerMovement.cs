@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class is responsible for moving character
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {

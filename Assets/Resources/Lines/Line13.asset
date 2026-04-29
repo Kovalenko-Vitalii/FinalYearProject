@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Line13
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 6896545
-  text: This looks like a military blockpost, road is blocked. I should look for
-    another way to get to other side
-  voice: {fileID: 8300000, guid: 22d013fbe0fe98846ac39f374f0f5140, type: 3}
+  text: Looks like a military blockpost, road is blocked. Need to find another way
+    to get to other side
+  voice: {fileID: 8300000, guid: 15f32bfeff33a25448df79f216ee4516, type: 3}
   duration: 6

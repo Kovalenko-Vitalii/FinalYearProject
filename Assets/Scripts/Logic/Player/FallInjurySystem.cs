@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-// This script responsible for adding injuries when player fell off some hIgh place
+// This class is responsible for adding injuries when player fell off some hIgh place
 [RequireComponent(typeof(CharacterController))]
 public class FallInjurySystem : MonoBehaviour, IPlayerTick
 {
@@ -18,7 +18,7 @@ public class FallInjurySystem : MonoBehaviour, IPlayerTick
 
     [Header("Effect tuning")]
     [SerializeField] float injuryDuration = 180f;
-    [SerializeField] float fractureSpeedMultiplier = 0.55f;
+    [SerializeField] float fractureSpeedMultiplier = 0.8f;
 
     [SerializeField] float painIntensityMin = 0.25f;
     [SerializeField] float painIntensityMax = 0.85f;

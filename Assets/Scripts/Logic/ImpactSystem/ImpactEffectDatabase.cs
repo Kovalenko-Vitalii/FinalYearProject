@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// This scriptable object stores VFX interaction data
 [CreateAssetMenu(menuName = "VFX/Impact Database")]
 public class ImpactEffectDatabase : ScriptableObject
 {

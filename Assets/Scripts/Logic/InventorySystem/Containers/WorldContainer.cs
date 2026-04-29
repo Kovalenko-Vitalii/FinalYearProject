@@ -1,6 +1,7 @@
 ﻿    using System;
     using UnityEngine;
 
+    // This class represnets an inventory of storage in game world
     public class WorldContainer : MonoBehaviour
     {
         [Header("Save")]

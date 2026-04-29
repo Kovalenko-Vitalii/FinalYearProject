@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class reperesents temperature sensor that checks whether player is in temperature zone
 public class PlayerTemperatureSensor : MonoBehaviour
 {
     private readonly List<TemperatureZone> zones = new();

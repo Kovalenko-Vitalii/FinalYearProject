@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+// This class represents slot-based storage for equipped items in player 
 public class EquippedItems
 {
     private readonly Dictionary<EquipmentSlotId, InventoryItem> slots;

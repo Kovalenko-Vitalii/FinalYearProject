@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// This class represents interactible door
 public class DoorInteractable : MonoBehaviour, IInteractable, ISaveable
 {
     [SerializeField] string id;

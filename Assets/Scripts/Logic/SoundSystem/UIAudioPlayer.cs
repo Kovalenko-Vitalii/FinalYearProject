@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// This class responsible for playing ui click sound when attached on ui button
+// In furure should be removed and implemented directly in UI for better flexibility
 public class UIAudioPlayer : MonoBehaviour
 {
-    [SerializeField] private UISoundId soundId = UISoundId.UIClick;
+    [SerializeField] UISoundId soundId = UISoundId.UIClick;
 
     public void Start()
     {

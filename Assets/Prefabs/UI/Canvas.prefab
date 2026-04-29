@@ -1112,7 +1112,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -123.460976, y: -0.8559946}
+  m_AnchoredPosition: {x: -150, y: -0.00000041723}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3450432565906205893
@@ -1143,7 +1143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: WIND
+  m_text: ENERGY
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
   m_sharedMaterial: {fileID: 600681447055792865, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
@@ -3644,8 +3644,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3682,7 +3682,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 2.7931824, z: 0, w: 0}
+  m_margin: {x: 35.269897, y: 2.7931824, z: 35.270355, w: 113.82645}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -4416,7 +4416,7 @@ MonoBehaviour:
   hungerBar: {fileID: 1067570436390324516}
   hydrationBar: {fileID: 8208849124476890408}
   energyBar: {fileID: 3966317256076629513}
-  temperatureBar: {fileID: 0}
+  temperatureBar: {fileID: 6987977831402532269}
   hpBar: {fileID: 8762131373613119369}
   hpRadialBar: {fileID: 2726204501559386551}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -4996,7 +4996,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -123.461, y: -0.8560885}
+  m_AnchoredPosition: {x: -150, y: 0.000027835}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1078839352852525708
@@ -5027,7 +5027,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: WARM
+  m_text: WARMTH
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
   m_sharedMaterial: {fileID: 600681447055792865, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
@@ -5130,7 +5130,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6007427389368012443}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.07500479}
+  m_AnchorMin: {x: 0, y: 0.07500488}
   m_AnchorMax: {x: 1, y: 0.99999964}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -7094,7 +7094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2766710009160132331
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7437,7 +7437,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8908128884173920748}
   m_HandleRect: {fileID: 5184486566080438983}
   m_Direction: 2
-  m_Value: 0.99999535
+  m_Value: 0.99999654
   m_Size: 0.924995
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -11999,7 +11999,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'NOMO closed alpha 0.6.0.0
+  m_text: 'NOMO closed alpha 0.6.1.0
 
 '
   m_isRightToLeft: 0
@@ -15977,7 +15977,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 567060627751749801}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.075004645}
+  m_AnchorMin: {x: 0, y: 0.075004734}
   m_AnchorMax: {x: 1, y: 0.99999964}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -17676,7 +17676,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6130203757808223573}
   m_HandleRect: {fileID: 246288708833966054}
   m_Direction: 2
-  m_Value: 0.99999654
+  m_Value: 0.9999977
   m_Size: 0.92499495
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -17694,7 +17694,7 @@ GameObject:
   - component: {fileID: 5112525842888935946}
   - component: {fileID: 6987977831402532269}
   m_Layer: 0
-  m_Name: Bar (1)
+  m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20120,7 +20120,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 0bf95f4e9bb777f4c86c3458f8accf99, type: 3}
-  m_Type: 3
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -21327,7 +21327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -123.460976, y: -0.8559946}
+  m_AnchoredPosition: {x: -150, y: -0.00000041723}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2665318127532652060
@@ -21358,7 +21358,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SLAKED
+  m_text: HYDRATION
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
   m_sharedMaterial: {fileID: 600681447055792865, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
@@ -24290,8 +24290,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -24328,7 +24328,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 2.7931824, z: 0, w: 0}
+  m_margin: {x: 81.76254, y: 2.7931824, z: 64.12781, w: 30.518951}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -26422,7 +26422,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7284506759356798988}
   m_HandleRect: {fileID: 7013694538091175182}
   m_Direction: 2
-  m_Value: 1.0000012
+  m_Value: 1
   m_Size: 0.92499495
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -29250,6 +29250,7 @@ GameObject:
   - component: {fileID: 2265988536812201813}
   - component: {fileID: 9077099569209741687}
   - component: {fileID: 1865892043209550446}
+  - component: {fileID: 3641757070421643106}
   m_Layer: 5
   m_Name: Button(Quit)
   m_TagString: Untagged
@@ -29358,7 +29359,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5485413900252289982}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3641757070421643106}
+        m_TargetAssemblyTypeName: ExitButton, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1865892043209550446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29372,6 +29385,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIAudioPlayer
   soundId: 0
+--- !u!114 &3641757070421643106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7941789049867529515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab4dbb74b0447704c94b30190351e9a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExitButton
 --- !u!1 &7994934007778343303
 GameObject:
   m_ObjectHideFlags: 0
@@ -29703,7 +29728,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -125.08384, y: 0.29358375}
+  m_AnchoredPosition: {x: -151.62, y: 1.1496}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3626812409478755272
@@ -29734,7 +29759,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: FULL
+  m_text: HUNGER
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 05e3efea949a68146a282b47985f34b7, type: 2}
   m_sharedMaterial: {fileID: 600681447055792865, guid: 05e3efea949a68146a282b47985f34b7, type: 2}

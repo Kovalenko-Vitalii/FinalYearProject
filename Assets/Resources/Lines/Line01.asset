@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Line01
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 001
-  text: What a beautiful day!
-  voice: {fileID: 8300000, guid: 5aff6203d61db51408a22d22bace9d6c, type: 3}
+  text: What a nice day today !
+  voice: {fileID: 8300000, guid: 049ce26f2e8ae364685df970928e6d69, type: 3}
   duration: 2

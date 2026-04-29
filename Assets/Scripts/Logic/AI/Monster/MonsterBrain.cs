@@ -360,7 +360,7 @@ public class MonsterBrain : AgentBrain
         {
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.walkSpeed);
 
-            brain.Context.Audio?.Play(AISoundType.Investigate);
+            brain.Context.Audio?.Play(AISoundType.ChaseStart);
 
             brain.Context.Mover.MoveTo(brain.Context.MonsterMemory.LastHeardPosition);
         }
@@ -435,7 +435,6 @@ public class MonsterBrain : AgentBrain
             brain.Context.Mover.SetSpeed(brain.MonsterConfig.chaseSpeed);
             brain.Context.Mover.SetStoppingDistance(0.1f);
             repathTimer = 0f;
-            brain.Context.Audio?.Play(AISoundType.ChaseStart);
         }
 
         public void Tick(float dt)

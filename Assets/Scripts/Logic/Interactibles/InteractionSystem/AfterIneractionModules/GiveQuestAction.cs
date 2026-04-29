@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This action module gives player new quest
 [CreateAssetMenu(menuName = "InteractActions/Give Quest")]
 public class GiveQuestAction : InteractAction
 {

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 007
   text: 'Last time I saw it was less rusty. Looks like that there is no fuel in it.. '
-  voice: {fileID: 8300000, guid: 2621bc8529db3a940b177a1cc8962d25, type: 3}
+  voice: {fileID: 8300000, guid: b670da08ab4d5d7459b66021cb563cb1, type: 3}
   duration: 6

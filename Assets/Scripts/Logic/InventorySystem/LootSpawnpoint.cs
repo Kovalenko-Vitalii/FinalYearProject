@@ -1,13 +1,21 @@
 using UnityEngine;
 
+// This class is responsible for spawning loot physically in the world or in continer
 public class LootSpawnpoint : MonoBehaviour, ISaveable
 {
     [Header("Save")]
     [SerializeField] private string id;
-
     [SerializeField] bool activated;
+
+    [Header("Loot")]
     [SerializeField] ItemData[] lootPool;
-    [SerializeField] bool random; // If selected - random durability and amount else - max durability and amount
+
+    [Tooltip("Spawn settings")]
+    [SerializeField, Min(1)] private int spawnAmount = 1;
+    [SerializeField, Range(1, 100)] private int spawnChance = 100;
+
+    [SerializeField] private bool randomAmount;
+    [SerializeField] private bool randomDurability;
 
     WorldContainer container;
 
@@ -49,59 +57,119 @@ public class LootSpawnpoint : MonoBehaviour, ISaveable
         SpawnLoot();
     }
 
-    
-    void SpawnLoot()
+    private void SpawnLoot()
     {
         if (activated)
             return;
 
+        activated = true;
+
         if (lootPool == null || lootPool.Length == 0)
             return;
 
-        
+        if (!RollSpawnChance())
+            return;
+
+        if (container != null)
+        {
+            SpawnIntoContainer();
+        }
+        else
+        {
+            SpawnInWorld();
+        }
+    }
+
+    private bool RollSpawnChance()
+    {
+        return Random.Range(1, 101) <= spawnChance;
+    }
+
+    private void SpawnIntoContainer()
+    {
+        for (int i = 0; i < spawnAmount; i++)
+        {
+            if (!TryCreateLoot(out InventoryItem loot))
+                continue;
+
+            container.Inventory.AddItem(
+                loot.data,
+                loot.amount,
+                loot.currentDurability
+            );
+        }
+    }
+
+    private void SpawnInWorld()
+    {
         if (WorldObjectSpawner.Instance == null)
         {
             Debug.LogError("WorldObjectSpawner.Instance is missing", this);
             return;
         }
 
-        var candidate = lootPool[Random.Range(0, lootPool.Length)];
-        if (candidate == null)
+        if (!TryCreateLoot(out InventoryItem loot))
             return;
 
-        int amount;
-        float durability;
-
-        if (random)
-        {
-            amount = Mathf.Max(1, Random.Range(1, candidate.maxStack + 1));
-
-            if (candidate.hasDurability)
-                durability = Random.Range(1f, candidate.maxDurability);
-            else
-                durability = 0f;
-        }
-        else
-        {
-            amount = Mathf.Max(1, candidate.maxStack);
-            durability = candidate.hasDurability ? candidate.maxDurability : 0f;
-        }
-
-        var loot = new InventoryItem(candidate, amount, durability);
-
-        if (container)
-            container.Inventory.AddItem(loot.data, loot.amount, loot.currentDurability);
-        else
-            WorldObjectSpawner.Instance.SpawnItem(
-                loot,
-                transform.position,
-                Quaternion.identity,
-                Vector3.zero
-            );
-
-        activated = true;
+        WorldObjectSpawner.Instance.SpawnItem(
+            loot,
+            transform.position,
+            Quaternion.identity,
+            Vector3.zero
+        );
     }
 
+    private bool TryCreateLoot(out InventoryItem loot)
+    {
+        loot = default;
+
+        ItemData candidate = GetRandomLootCandidate();
+
+        if (candidate == null)
+            return false;
+
+        int amount = GetAmount(candidate);
+        float durability = GetDurability(candidate);
+
+        loot = new InventoryItem(candidate, amount, durability);
+        return true;
+    }
+
+    private ItemData GetRandomLootCandidate()
+    {
+        for (int i = 0; i < lootPool.Length; i++)
+        {
+            ItemData candidate = lootPool[Random.Range(0, lootPool.Length)];
+
+            if (candidate != null)
+                return candidate;
+        }
+
+        return null;
+    }
+
+    private int GetAmount(ItemData item)
+    {
+        int maxAmount = Mathf.Max(1, item.maxStack);
+
+        if (randomAmount)
+            return Random.Range(1, maxAmount + 1);
+
+        return maxAmount;
+    }
+
+    private float GetDurability(ItemData item)
+    {
+        if (!item.hasDurability)
+            return 0f;
+
+        if (randomDurability)
+            return Random.Range(1f, item.maxDurability);
+
+        return item.maxDurability;
+    }
+
+    // Save/Load
     public object CaptureState()
     {
         return new LootSpawnpointSave { activated = this.activated};

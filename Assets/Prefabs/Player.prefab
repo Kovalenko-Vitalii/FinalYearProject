@@ -353,8 +353,8 @@ MonoBehaviour:
   hardImpactSpeed: 16
   injuryDuration: 180
   fractureSpeedMultiplier: 0.55
-  painIntensityMin: 0.25
-  painIntensityMax: 0.85
+  painIntensityMin: 0.35
+  painIntensityMax: 0.95
   brokenBoneSound: {fileID: 8300000, guid: 6534944769e3ea346a657bc0fc1bc6ec, type: 3}
 --- !u!114 &953482501448946439
 MonoBehaviour:

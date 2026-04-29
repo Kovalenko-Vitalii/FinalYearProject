@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// This class is storing current levelcontext and providing easy access to objects in it
 public class LevelContextRegistry : MonoBehaviour
 {
     public static LevelContextRegistry Instance { get; private set; }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents an action module for equipping equippable items
 [CreateAssetMenu(menuName = "Items/Actions/Equip")]
 public class EquipActionModule : ActionModule
 {

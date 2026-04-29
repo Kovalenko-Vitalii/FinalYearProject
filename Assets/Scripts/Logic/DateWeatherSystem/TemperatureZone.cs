@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class represents temperature zone
 [RequireComponent(typeof(Collider))]
 public class TemperatureZone : MonoBehaviour
 {

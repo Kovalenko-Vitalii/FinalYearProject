@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// This class manages in-game time, sun rotation and enviroment temperature change
 public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
 {
     public static TimeEnviromentManager Instance { get; private set; }
@@ -39,15 +40,15 @@ public class TimeEnviromentManager : MonoBehaviour, IPlayerTick, ISaveable
     private float currentMinutes;
 
     [Header("Outdoor Temperature")]
-    [SerializeField, Range(0f, 100f)] private float nightEnvironmentTemperature = 15f;
-    [SerializeField, Range(0f, 100f)] private float dayEnvironmentTemperature = 30f;
+    [SerializeField] private float nightTemperatureDeltaPerSecond = -0.20f;
+    [SerializeField] private float dayTemperatureDeltaPerSecond = 0.05f;
 
-    public float CurrentEnvironmentTemperature => EvaluateEnvironmentTemperature();
+    public float CurrentEnvironmentTemperatureDelta => EvaluateEnvironmentTemperatureDelta();
 
-    private float EvaluateEnvironmentTemperature()
+    private float EvaluateEnvironmentTemperatureDelta()
     {
         float t = Mathf.Clamp01(temperatureOverDay.Evaluate(Time01));
-        return Mathf.Lerp(nightEnvironmentTemperature, dayEnvironmentTemperature, t);
+        return Mathf.Lerp(nightTemperatureDeltaPerSecond, dayTemperatureDeltaPerSecond, t);
     }
 
     [SerializeField]

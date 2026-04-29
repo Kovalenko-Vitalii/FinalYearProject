@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class is responsible for managing all sound events
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }

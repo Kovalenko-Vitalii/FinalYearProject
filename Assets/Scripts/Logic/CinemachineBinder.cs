@@ -2,8 +2,10 @@
 using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
 
+// This class binds cinemachine to player`s head postion
 public class CinemachineBinder : MonoBehaviour
 {
+    string TAG = "CineBind";
     [SerializeField] private string headPath = "HeadPosition";
 
     public void BindForActivePlayer()
@@ -11,14 +13,14 @@ public class CinemachineBinder : MonoBehaviour
         var player = PlayerSpawner.Instance?.Player;
         if (player == null)
         {
-            Debug.LogWarning("[CineBind] Player is null, skipping bind");
+            GameLog.Error(TAG, "Player is null, skipping bind");
             return;
         }
 
         var follow = player.transform.Find(headPath);
         if (follow == null)
         {
-            Debug.LogError($"[CineBind] '{headPath}' not found under player '{player.name}'");
+            GameLog.Error(TAG, $"'{headPath}' not found under player '{player.name}'");
             return;
         }
 
@@ -36,6 +38,6 @@ public class CinemachineBinder : MonoBehaviour
         }
 
         if (bound == 0)
-            Debug.LogError("[CineBind] No CinemachineCamera found in ACTIVE scene");
+            GameLog.Error(TAG, "No CinemachineCamera found in ACTIVE scene");
     }
 }

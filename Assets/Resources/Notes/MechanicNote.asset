@@ -15,13 +15,13 @@ MonoBehaviour:
   id: 234236
   noteName: Last hope
   icon: {fileID: 0}
-  background: {fileID: 0}
+  background: {fileID: 21300000, guid: ec7419963ace99d4c8e34ef7e9ee7ad4, type: 3}
   textContent: '1986/16/01/ - army established a quarantine zone across the entire
     island, shooting and burning anyone who looked infected... They destroyed my
     little boat, it was docked for repairs, they deliberately destroyed the ship''s
     vital systems so no one could escape... Oh, God, when will this all end?
 
-    
+
 
     1986/01/18/
     - I think I feel strange.

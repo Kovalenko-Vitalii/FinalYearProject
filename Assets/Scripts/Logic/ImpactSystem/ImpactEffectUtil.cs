@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This class represents util that manages impact particles and sound
 public static class ImpactEffectUtil
 {
     public static void SpawnImpact(

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AISpawnConfig
   creatureId: monster
   prefab: {fileID: 9024693472424470051, guid: dee94163fbfcaeb429f875793b6e3c37, type: 3}
-  maxAliveCount: 2
+  maxAliveCount: 4
   respawnDelay: 300
   initialSpawnCount: 0

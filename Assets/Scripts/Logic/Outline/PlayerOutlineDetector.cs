@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// This class is responsible for detecting objects with outline around player and turning it on if in radius
 public class PlayerInteractableRadiusHighlighter : MonoBehaviour
 {
     [SerializeField] private Transform origin;

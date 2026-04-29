@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// This simple class is respobsible for applying damage to player if received
 public class PlayerDamageReceiver : MonoBehaviour
 {
     public void ReceiveHit(PlayerHitData hit)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// This class represents a service that stores picked up notes
 public class NoteManager : MonoBehaviour, ISaveable
 {
     public static NoteManager Instance { get; private set; }
@@ -79,7 +80,7 @@ public class NoteManager : MonoBehaviour, ISaveable
     }
 }
 
-[System.Serializable]
+[Serializable]
 public struct NotesCollectedState
 {
     public List<string> collectedNoteIds;

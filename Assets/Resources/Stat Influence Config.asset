@@ -15,30 +15,30 @@ MonoBehaviour:
   hungerToStaminaRegen:
     start01: 0.7
     minMult: 0.4
-    power: 2
+    power: 3
   hungerToHealthDpsAtZero: 0.2
   hydrationToStaminaRegen:
     start01: 0.7
-    minMult: 0.3
-    power: 2
+    minMult: 0.4
+    power: 3
   hydrationToStaminaDrain:
     start01: 0.7
-    maxMult: 1.5
-    power: 2
+    maxMult: 2
+    power: 3
   hydrationToHealthDpsAtZero: 0.4
   temperatureToStaminaRegen:
-    start01: 0.5
-    minMult: 0.4
+    start01: 0.8
+    minMult: 0.5
     power: 2
   temperatureToStaminaDrain:
-    start01: 0.5
+    start01: 0.7
     maxMult: 1.5
-    power: 2
+    power: 3
   temperatureToHealthDpsAtZero: 0.5
-  noSprintBelowTemperature01: 0.2
+  noSprintBelowTemperature01: 0.1
   lowTemperatureMoveSpeedStart01: 0.35
   lowTemperatureMinMoveSpeedMult: 0.85
   overloadStart: 1
   overloadFull: 1.5
   overloadMinMoveSpeedMult: 0.6
-  overloadMaxStaminaDrainMult: 2
+  overloadMaxStaminaDrainMult: 3

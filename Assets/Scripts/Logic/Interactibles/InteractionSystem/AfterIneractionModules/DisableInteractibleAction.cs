@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// This class represents action that disables interactible object
+
 [CreateAssetMenu(menuName = "InteractActions/Disable Executor")]
 public class DisableExecutorAction : InteractAction
 {

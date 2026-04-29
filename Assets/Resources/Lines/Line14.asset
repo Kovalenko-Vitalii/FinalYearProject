@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Line14
   m_EditorClassIdentifier: Assembly-CSharp::LineData
   id: 014
-  text: Woah, this looks like a small town, I definetly need to look there for more
-    information
-  voice: {fileID: 8300000, guid: 56b27289d48ae5c4d9425e3ba829137e, type: 3}
+  text: Some houses there, maybe I can find some information there
+  voice: {fileID: 8300000, guid: 0e84d9f4e7811d047b29fdf92f1b0387, type: 3}
   duration: 6

@@ -57,8 +57,31 @@ public class StatusEffectManager : MonoBehaviour, ISaveable
 
     public void ApplyAllTo(ref StatusEffectsSnapshot s)
     {
+        bool hasLegFracture = false;
+        float bestPainkillerSuppression = 0f;
+
         foreach (var e in effects)
+        {
             e.ApplyTo(ref s);
+
+            if (e is FractureEffect fracture &&
+                (fracture.TargetPart == BodyPart.LeftLeg || fracture.TargetPart == BodyPart.RightLeg))
+            {
+                hasLegFracture = true;
+            }
+
+            if (e is PainkillerEffect pk)
+            {
+                bestPainkillerSuppression = Mathf.Max(bestPainkillerSuppression, pk.Suppression);
+            }
+        }
+
+        if (hasLegFracture && bestPainkillerSuppression >= 0.35f)
+        {
+            s.CanSprint = true;
+
+            s.MoveSpeedMultiplier = Mathf.Max(s.MoveSpeedMultiplier, 0.75f);
+        }
     }
 
     // Adding effect to list

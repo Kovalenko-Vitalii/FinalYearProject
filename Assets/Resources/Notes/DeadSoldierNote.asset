@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 003
   noteName: My last sunset
   icon: {fileID: 0}
-  background: {fileID: 0}
+  background: {fileID: 21300000, guid: ec7419963ace99d4c8e34ef7e9ee7ad4, type: 3}
   textContent: 1986/01/14- I am sergant Antatolii Rubcov, me and my crew were doing
     desinfection task in this village but we got that damn disease and there is no
     other way for me, I dont want to turn into one of these creatures... Jesus forgive

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class represents an action module for equipping held equippable items
 [CreateAssetMenu(menuName = "Items/Actions/Held Equip")]
 public class HeldEquipActionModule : ActionModule
 {

@@ -28,4 +28,5 @@ MonoBehaviour:
     amount: 1
     requiredTag: 0
   nextQuest: {fileID: 11400000, guid: 972f0e3500950ac4faa8a2b4af71b0c2, type: 2}
-  onCompleteLines: []
+  onCompleteLines:
+  - {fileID: 11400000, guid: 28d1b87be72fed4449c3546b42f4169c, type: 2}

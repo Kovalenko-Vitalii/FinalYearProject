@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+// This class represents effect that consumable can apply to player
+[Serializable]
 public class ConsumableStatusOp
 {
     public enum OpType
@@ -23,6 +25,7 @@ public class ConsumableStatusOp
     public BodyPart targetPart;
 }
 
+// This class represents data for consumable item
 [CreateAssetMenu(menuName = "Items/ConsumableData")]
 public class ConsumableData : ItemData, IStatProvider
 {

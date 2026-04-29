@@ -233,7 +233,6 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
         return currentStamina > 0f;
     }
 
-
     public bool TryConsumeStamina(float amount, float regenDelay)
     {
         if (amount <= 0f) return true;
@@ -424,11 +423,15 @@ public class PlayerStatManager : MonoBehaviour, ISaveable
 
     private void TickTemperature(float dt, in StatusEffectsSnapshot s, bool isSprinting)
     {
+        float outdoorDeltaPerSecond = TimeEnviromentManager.Instance != null
+            ? TimeEnviromentManager.Instance.CurrentEnvironmentTemperatureDelta
+            : 0f;
+
         float zoneDeltaPerSecond = temperatureSensor != null
             ? temperatureSensor.GetTemperatureDeltaPerSecond()
             : 0f;
 
-        float deltaPerSecond = baseTemperatureDeltaPerSecond + zoneDeltaPerSecond;
+        float deltaPerSecond = outdoorDeltaPerSecond + zoneDeltaPerSecond;
 
         if (isSprinting)
             deltaPerSecond += sprintTemperatureDeltaPerSecond;

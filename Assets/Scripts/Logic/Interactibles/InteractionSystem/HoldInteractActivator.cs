@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// This class represents inveraction activator that worked when holded
 public class HoldInteractActivator : MonoBehaviour, IInteractable, IHoldInteractable, IHoldFeedback
 {
     [SerializeField] private InteractExecutor executor;

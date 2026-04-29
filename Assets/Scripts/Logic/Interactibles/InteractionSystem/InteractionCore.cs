@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// This script represents interaces that forms interactible objects
 public interface IInteractable
 {
     bool TryGetPrompt(PlayerInteractor interactor, out string prompt);

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
+// This class represents runtime firearm holdable instance
 public class HeldFirearmItem : PlayerHeldItem
 {
     string TAG = "FIREARM";

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// This class is responsible for operating save / load system
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
